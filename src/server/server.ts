@@ -61,12 +61,19 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
     // Resolved per call so a rotated key applies immediately. Kind and provider are re-checked here, since the route
     // hands back whatever capability the id names, and a non-Komodo one holds someone else's credential.
     const connect = async (capability: string): Promise<KomodoConnection> => {
+        // The daemon's refusal is kept for the message: it serves a connection only to the extension that contributes
+        // its card, and a bare "not connected" hid that the last time the card moved.
+        let refusal: string | undefined;
         const connection = await api.daemon
             .json<{ kind: string; config: Record<string, string | undefined> }>(`/capabilities/${encodeURIComponent(capability)}/connection`)
-            .catch(() => undefined);
+            .catch((error: unknown) => {
+                refusal = errorMessage(error);
+                return undefined;
+            });
         const { provider, url, apiKey, apiSecret } = connection?.config ?? {};
         if (connection?.kind !== "cli" || provider !== "komodo" || url === undefined || apiKey === undefined || apiSecret === undefined) {
-            throw new ORPCError("NOT_FOUND", { message: `no connected Komodo capability "${capability}"` });
+            const why = refusal === undefined ? "" : ` (${refusal})`;
+            throw new ORPCError("NOT_FOUND", { message: `no connected Komodo capability "${capability}"${why}` });
         }
         return { capability, baseUrl: url.replace(/\/+$/, ""), apiKey, apiSecret };
     };

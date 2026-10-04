@@ -13,6 +13,8 @@ What is actually running on the servers you own, read from a Komodo you already 
 - Join a running thing back to the repository it was built from.
 - Notice incidents and carry them to the rail as a badge.
 - Talk to Komodo itself: the extension ships its own backend, and the daemon core carries no Komodo feature.
+- Own the Komodo connection: the `komodo` card on the Capabilities page, its agent skill and the deployment-alert
+  automation template all come from this manifest, so connecting Komodo and getting this view are one install.
 
 ## Key files
 
@@ -20,7 +22,9 @@ What is actually running on the servers you own, read from a Komodo you already 
   cannot drift; zod only, so the web bundle never pulls the route table in.
 - [src/server/server.ts](src/server/server.ts): the backend half (`activateServer`), built to `dist/server.js`
   (`pnpm build`) and run by the daemon's backend host. Reads the Komodo credential through the daemon's
-  connection route and starts fix turns through `POST /agent`: both declared in `permissions.daemon`.
+  connection route and starts fix turns through `POST /agent`: both declared in `permissions.daemon`. The daemon
+  serves a connection only to the extension that contributes its card, which is why the card lives here.
+- [skills/komodo/SKILL.md](skills/komodo/SKILL.md): the agent's Komodo skill, mounted with the `komodo` card.
 - [src/server/komodo-client.ts](src/server/komodo-client.ts): the Komodo Core API behind one client shape.
 - [src/server/komodo-overview.ts](src/server/komodo-overview.ts): Komodo's vocabulary → the view's, pure and tested.
 - [src/server/komodo-repos.ts](src/server/komodo-repos.ts): which workspace repo belongs to which stack.

@@ -22134,9 +22134,12 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 	const i = implement(komodoContract);
 	const store = fileKomodoStore(komodoStorePath(api.workspaceRoot));
 	const connect = async (capability) => {
-		const connection = await api.daemon.json(`/capabilities/${encodeURIComponent(capability)}/connection`).catch(() => void 0);
+		let refusal;
+		const connection = await api.daemon.json(`/capabilities/${encodeURIComponent(capability)}/connection`).catch((error) => {
+			refusal = errorMessage(error);
+		});
 		const { provider, url, apiKey, apiSecret } = connection?.config ?? {};
-		if (connection?.kind !== "cli" || provider !== "komodo" || url === void 0 || apiKey === void 0 || apiSecret === void 0) throw new ORPCError$1("NOT_FOUND", { message: `no connected Komodo capability "${capability}"` });
+		if (connection?.kind !== "cli" || provider !== "komodo" || url === void 0 || apiKey === void 0 || apiSecret === void 0) throw new ORPCError$1("NOT_FOUND", { message: `no connected Komodo capability "${capability}"${refusal === void 0 ? "" : ` (${refusal})`}` });
 		return {
 			capability,
 			baseUrl: url.replace(/\/+$/, ""),

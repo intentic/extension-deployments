@@ -17481,12 +17481,77 @@ var nB = (e, t) => {
 		sandbox: ["GET /settings"],
 		daemon: ["GET /capabilities/*/connection", "POST /agent"]
 	},
-	contributes: { views: [{
-		id: "deployments",
-		label: "Deployments",
-		surface: "rail",
-		badge: !0
-	}] }
+	contributes: {
+		capabilities: [{
+			id: "komodo",
+			kind: "cli",
+			catalog: {
+				name: "Komodo",
+				icon: "box",
+				description: "Drive your Komodo stacks and deployments.",
+				category: "deploy",
+				hint: "An API key inherits its user's permissions: a read-only agent wants a non-admin user.",
+				guide: {
+					urlFromField: "url",
+					path: "/profile",
+					linkLabel: "Open your Komodo profile",
+					scopes: "the key inherits the user's permissions",
+					steps: [
+						"Set the `Komodo URL` above first.",
+						"Profile (top-right) → `Api Keys` → `New Api Key`.",
+						"Copy both the key and the secret here: shown once.",
+						"Read-only agent: make the key on a `Read`-only user."
+					]
+				}
+			},
+			fields: [
+				{
+					key: "url",
+					label: "Komodo URL",
+					placeholder: "https://komodo.example.com"
+				},
+				{
+					key: "apiKey",
+					label: "API key"
+				},
+				{
+					key: "apiSecret",
+					label: "API secret",
+					secret: !0
+				}
+			],
+			env: {
+				KOMODO_ADDRESS: "${url}",
+				KOMODO_API_KEY: "${apiKey}",
+				KOMODO_API_SECRET: "${apiSecret}"
+			},
+			hosts: ["${url}"],
+			skill: "skills/komodo/SKILL.md",
+			probe: {
+				url: "${url}/auth",
+				method: "POST",
+				headers: {
+					"X-Api-Key": "${apiKey}",
+					"X-Api-Secret": "${apiSecret}"
+				}
+			}
+		}],
+		automationTemplates: [{
+			id: "komodo-alert",
+			title: "Deployment alert",
+			icon: "box",
+			requires: ["komodo"],
+			trigger: { kind: "event" },
+			prompt: "Komodo just fired an alert, the payload is in $AUTOMATION_PAYLOAD: `level` is the severity, `target` names the resource ({type, id}), `data` carries the specifics, and `resolved` is true when this is the all-clear for an earlier alert. Use your Komodo capability to look up that resource and its recent container logs, then say what broke and what would fix it. Do not deploy, restart or stop anything unless the user asks.",
+			setup: "In Komodo: Alerters → New Alerter → endpoint type Custom → paste this URL. Narrow it with the alerter's alert-type and resource filters."
+		}],
+		views: [{
+			id: "deployments",
+			label: "Deployments",
+			surface: "rail",
+			badge: !0
+		}]
+	}
 };
 //#endregion
 //#region src/manifest.ts
