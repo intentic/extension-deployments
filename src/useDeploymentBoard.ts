@@ -6,7 +6,6 @@ import {
     DeployFixResponseSchema,
     type DeployLogsResponse,
     DeployLogsResponseSchema,
-    DEPLOYMENTS_BASE,
     type DeployOverviewResponse,
     DeployOverviewResponseSchema,
     type DeployResource,
@@ -35,7 +34,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
     const query = useQuery({
         queryKey,
         queryFn: async (): Promise<DeployOverviewResponse> =>
-            DeployOverviewResponseSchema.parse(await api.sandbox.json(`${DEPLOYMENTS_BASE}/komodo/${capability.value}/overview`)),
+            DeployOverviewResponseSchema.parse(await api.backend.json(`komodo/${capability.value}/overview`)),
         enabled,
         refetchInterval: POLL_MS,
     });
@@ -43,8 +42,8 @@ export function useDeploymentBoard(capability: Ref<string>) {
 
     const act = useMutation({
         mutationFn: (input: { resource: DeployResource; action: DeployAction }) =>
-            api.sandbox.json(
-                `${DEPLOYMENTS_BASE}/komodo/${capability.value}/action`,
+            api.backend.json(
+                `komodo/${capability.value}/action`,
                 post({ kind: input.resource.kind, id: input.resource.id, action: input.action }),
             ),
         // Execute returns as soon as accepted; the refetch may briefly show stale state until the next poll.
@@ -53,14 +52,14 @@ export function useDeploymentBoard(capability: Ref<string>) {
 
     // Binds a repo to a stack (empty `stack` unlinks); invalidates since the overview carries the link back.
     const link = useMutation({
-        mutationFn: (input: { repo: string; stack: string }) => api.sandbox.json(`${DEPLOYMENTS_BASE}/komodo/${capability.value}/link`, post(input)),
+        mutationFn: (input: { repo: string; stack: string }) => api.backend.json(`komodo/${capability.value}/link`, post(input)),
         onSuccess: invalidate,
     });
 
     const logs = useMutation({
         mutationFn: async (resource: DeployResource): Promise<DeployLogsResponse> =>
             DeployLogsResponseSchema.parse(
-                await api.sandbox.json(`${DEPLOYMENTS_BASE}/komodo/${capability.value}/logs`, post({ kind: resource.kind, id: resource.id })),
+                await api.backend.json(`komodo/${capability.value}/logs`, post({ kind: resource.kind, id: resource.id })),
             ),
     });
 
@@ -68,8 +67,8 @@ export function useDeploymentBoard(capability: Ref<string>) {
     const fix = useMutation({
         mutationFn: async ({ resource, pick }: { resource: DeployResource; pick?: AgentRunChoice | undefined }): Promise<DeployFixResponse> =>
             DeployFixResponseSchema.parse(
-                await api.sandbox.json(
-                    `${DEPLOYMENTS_BASE}/komodo/${capability.value}/fix`,
+                await api.backend.json(
+                    `komodo/${capability.value}/fix`,
                     post({
                         kind: resource.kind,
                         id: resource.id,

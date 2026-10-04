@@ -1,4 +1,4 @@
-import { type DeployOverviewResponse, DeployOverviewResponseSchema, DeploySeenResponseSchema, DEPLOYMENTS_BASE } from "./contract";
+import { type DeployOverviewResponse, DeployOverviewResponseSchema, DeploySeenResponseSchema } from "./contract";
 import type { ViewBadge } from "@intentic/extension-api";
 import { sandboxPoll, sandboxValue } from "@intentic/extension-api";
 import { incidents, incidentTooltip, topTier, unseenIncidents } from "./incidents";
@@ -25,7 +25,7 @@ const {
         const next = new Map(previous);
         for (const capability of watched.value) {
             try {
-                next.set(capability, DeployOverviewResponseSchema.parse(await api.sandbox.json(`${DEPLOYMENTS_BASE}/komodo/${capability}/overview`)));
+                next.set(capability, DeployOverviewResponseSchema.parse(await api.backend.json(`komodo/${capability}/overview`)));
             } catch {
                 // Failed fetch: this connection keeps its last known board.
             }
@@ -89,7 +89,7 @@ export const markDeploymentsSeen = async (capability: string): Promise<void> => 
             return;
         }
         const { seenAt } = DeploySeenResponseSchema.parse(
-            await api.sandbox.json(`${DEPLOYMENTS_BASE}/komodo/${capability}/seen`, { method: `POST` }),
+            await api.backend.json(`komodo/${capability}/seen`, { method: `POST` }),
         );
         const board = boards.value.get(capability);
         if (board !== undefined) {

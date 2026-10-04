@@ -37,8 +37,8 @@ describe(`watchConnections`, () => {
     it(`polls a newly seen connection at once, so its tile badges on first render`, async () => {
         const asked: string[] = [];
         bindHost({
-            sandbox: {
-                reachable: () => true,
+            sandbox: { reachable: () => true },
+            backend: {
                 json: (path: string) => {
                     asked.push(path);
                     return Promise.resolve({ reachable: true, alerts: [], resources: [], servers: [] });
@@ -49,7 +49,7 @@ describe(`watchConnections`, () => {
         watchConnections([`production`]);
         await vi.waitFor(() => expect(asked).toHaveLength(1));
 
-        expect(asked[0]).toContain(`/komodo/production/overview`);
+        expect(asked[0]).toBe(`komodo/production/overview`);
         expect(deployBadge(`production`)).toBeUndefined();
 
         // Same connection again: already watched, so no second round trip.

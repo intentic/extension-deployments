@@ -1,9 +1,9 @@
 import { access, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, dirname, join, relative } from "node:path";
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+base@1.281.0/node_modules/@intentic/base/dist/errors.js
+//#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/errors.js
 var errorMessage = (error) => error instanceof Error ? error.message : String(error);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+shared@1.15.1/node_modules/@orpc/shared/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+shared@1.15.1/node_modules/@orpc/shared/dist/index.mjs
 function resolveMaybeOptionalOptions$1(rest) {
 	return rest[0] ?? {};
 }
@@ -200,7 +200,7 @@ function getConstructor$1(value) {
 	if (!isTypescriptObject$1(value)) return null;
 	return Object.getPrototypeOf(value)?.constructor;
 }
-function isObject$2(value) {
+function isObject$1(value) {
 	if (!value || typeof value !== "object") return false;
 	const proto = Object.getPrototypeOf(value);
 	return proto === Object.prototype || !proto || !proto.constructor;
@@ -238,7 +238,7 @@ function tryDecodeURIComponent(value) {
 	}
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+client@1.15.1/node_modules/@orpc/client/dist/shared/client.lSRQX-Yb.mjs
+//#region node_modules/.pnpm/@orpc+client@1.15.1/node_modules/@orpc/client/dist/shared/client.lSRQX-Yb.mjs
 var ORPC_CLIENT_PACKAGE_NAME$1 = "@orpc/client";
 var ORPC_CLIENT_PACKAGE_VERSION$1 = "1.15.1";
 var COMMON_ORPC_ERROR_DEFS$1 = {
@@ -386,7 +386,7 @@ function isORPCErrorStatus$1(status) {
 	return status < 200 || status >= 400;
 }
 function isORPCErrorJson(json) {
-	if (!isObject$2(json)) return false;
+	if (!isObject$1(json)) return false;
 	const validKeys = [
 		"defined",
 		"code",
@@ -404,7 +404,7 @@ function createORPCErrorFromJson(json, options = {}) {
 	});
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+standard-server@1.15.1/node_modules/@orpc/standard-server/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+standard-server@1.15.1/node_modules/@orpc/standard-server/dist/index.mjs
 var EventEncoderError$1 = class extends TypeError {};
 var EventDecoderError$1 = class extends TypeError {};
 var ErrorEvent = class extends Error {
@@ -615,7 +615,7 @@ function flattenHeader(header) {
 	return header.join(", ");
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+client@1.15.1/node_modules/@orpc/client/dist/shared/client.BLtwTQUg.mjs
+//#region node_modules/.pnpm/@orpc+client@1.15.1/node_modules/@orpc/client/dist/shared/client.BLtwTQUg.mjs
 function mapEventIterator$1(iterator, maps) {
 	const mapError = async (error) => {
 		let mappedError = await maps.error(error);
@@ -651,7 +651,7 @@ function mapEventIterator$1(iterator, maps) {
 	});
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+standard-server-fetch@1.15.1/node_modules/@orpc/standard-server-fetch/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+standard-server-fetch@1.15.1/node_modules/@orpc/standard-server-fetch/dist/index.mjs
 function toEventIterator(stream, options = {}) {
 	const reader = (stream?.pipeThrough(new TextDecoderStream()).pipeThrough(new EventDecoderStream$1()))?.getReader();
 	let span;
@@ -878,7 +878,7 @@ function toFetchResponse(response, options = {}) {
 	});
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/shared/server.DZ5BIITo.mjs
+//#region node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/shared/server.DZ5BIITo.mjs
 function resolveFriendlyStandardHandleOptions(options) {
 	return {
 		...options,
@@ -886,12 +886,12 @@ function resolveFriendlyStandardHandleOptions(options) {
 	};
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+client@1.15.1/node_modules/@orpc/client/dist/shared/client.B4gi67kE.mjs
+//#region node_modules/.pnpm/@orpc+client@1.15.1/node_modules/@orpc/client/dist/shared/client.B4gi67kE.mjs
 function toHttpPath(path) {
 	return `/${path.map(encodeURIComponent).join("/")}`;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+contract@1.15.1/node_modules/@orpc/contract/dist/shared/contract.D_dZrO__.mjs
+//#region node_modules/.pnpm/@orpc+contract@1.15.1/node_modules/@orpc/contract/dist/shared/contract.D_dZrO__.mjs
 var ValidationError$1 = class extends Error {
 	issues;
 	data;
@@ -956,7 +956,7 @@ function isContractProcedure$1(item) {
 	return (typeof item === "object" || typeof item === "function") && item !== null && "~orpc" in item && typeof item["~orpc"] === "object" && item["~orpc"] !== null && "errorMap" in item["~orpc"] && "route" in item["~orpc"] && "meta" in item["~orpc"];
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+contract@1.15.1/node_modules/@orpc/contract/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+contract@1.15.1/node_modules/@orpc/contract/dist/index.mjs
 function mergeMeta$1(meta1, meta2) {
 	return {
 		...meta1,
@@ -1168,7 +1168,7 @@ function fallbackContractConfig(key, value) {
 	return value;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/shared/server.DEBcqOjg.mjs
+//#region node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/shared/server.DEBcqOjg.mjs
 var LAZY_SYMBOL = Symbol("ORPC_LAZY_SYMBOL");
 function lazy$1(loader, meta = {}) {
 	return { [LAZY_SYMBOL]: {
@@ -1448,7 +1448,7 @@ function createContractedProcedure(procedure, contract) {
 	});
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/shared/server.CMf4nKky.mjs
+//#region node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/shared/server.CMf4nKky.mjs
 var CompositeStandardHandlerPlugin = class {
 	plugins;
 	constructor(plugins = []) {
@@ -1536,7 +1536,7 @@ var StandardHandler = class {
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/adapters/fetch/index.mjs
+//#region node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/adapters/fetch/index.mjs
 var CompositeFetchHandlerPlugin = class extends CompositeStandardHandlerPlugin {
 	initRuntimeAdapter(options) {
 		for (const plugin of this.plugins) plugin.initRuntimeAdapter?.(options);
@@ -1568,7 +1568,7 @@ var FetchHandler = class {
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+openapi-client@1.15.1/node_modules/@orpc/openapi-client/dist/shared/openapi-client.t9fCAe3x.mjs
+//#region node_modules/.pnpm/@orpc+openapi-client@1.15.1/node_modules/@orpc/openapi-client/dist/shared/openapi-client.t9fCAe3x.mjs
 var StandardBracketNotationSerializer = class {
 	maxArrayIndex;
 	constructor(options = {}) {
@@ -1578,7 +1578,7 @@ var StandardBracketNotationSerializer = class {
 		if (Array.isArray(data)) data.forEach((item, i) => {
 			this.serialize(item, [...segments, i], result);
 		});
-		else if (isObject$2(data)) for (const key in data) this.serialize(data[key], [...segments, key], result);
+		else if (isObject$1(data)) for (const key in data) this.serialize(data[key], [...segments, key], result);
 		else result.push([this.stringifyPath(segments), data]);
 		return result;
 	}
@@ -1591,7 +1591,7 @@ var StandardBracketNotationSerializer = class {
 			let currentRef = ref;
 			let nextSegment = "value";
 			segments.forEach((segment, i) => {
-				if (!Array.isArray(currentRef[nextSegment]) && !isObject$2(currentRef[nextSegment])) currentRef[nextSegment] = [];
+				if (!Array.isArray(currentRef[nextSegment]) && !isObject$1(currentRef[nextSegment])) currentRef[nextSegment] = [];
 				if (i !== segments.length - 1) {
 					if (Array.isArray(currentRef[nextSegment]) && !isValidArrayIndex(segment, this.maxArrayIndex)) {
 						if (arrayPushStyles.has(currentRef[nextSegment])) {
@@ -1678,7 +1678,7 @@ function pushStyleArrayToObject(array) {
 	return obj;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+openapi-client@1.15.1/node_modules/@orpc/openapi-client/dist/shared/openapi-client.B2Q9qU5m.mjs
+//#region node_modules/.pnpm/@orpc+openapi-client@1.15.1/node_modules/@orpc/openapi-client/dist/shared/openapi-client.B2Q9qU5m.mjs
 var StandardOpenAPIJsonSerializer = class {
 	customSerializers;
 	constructor(options = {}) {
@@ -1693,7 +1693,7 @@ var StandardOpenAPIJsonSerializer = class {
 		if (data instanceof Set) return this.serialize(Array.from(data), hasBlobRef);
 		if (data instanceof Map) return this.serialize(Array.from(data.entries()), hasBlobRef);
 		if (Array.isArray(data)) return [data.map((v) => v === void 0 ? null : this.serialize(v, hasBlobRef)[0]), hasBlobRef.value];
-		if (isObject$2(data)) {
+		if (isObject$1(data)) {
 			const json = {};
 			for (const k in data) {
 				if (k === "toJSON" && typeof data[k] === "function") continue;
@@ -1754,7 +1754,7 @@ var StandardOpenAPISerializer = class {
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+server@1.15.1/node_modules/@orpc/server/dist/index.mjs
 var DEFAULT_CONFIG = {
 	initialInputValidationIndex: 0,
 	initialOutputValidationIndex: 0,
@@ -1796,7 +1796,7 @@ function createActionableClient(client) {
 			return [null, await client(input)];
 		} catch (error) {
 			if (error instanceof Error && "digest" in error && typeof error.digest === "string" && error.digest.startsWith("NEXT_")) throw error;
-			if (error instanceof Response && "options" in error && isObject$2(error.options) || isObject$2(error) && error.isNotFound === true) throw error;
+			if (error instanceof Response && "options" in error && isObject$1(error.options) || isObject$1(error) && error.isNotFound === true) throw error;
 			return [toORPCError(error).toJSON(), void 0];
 		}
 	};
@@ -2154,7 +2154,7 @@ function implement(contract, config = {}) {
 	return impl;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/rou3@0.7.12/node_modules/rou3/dist/index.mjs
+//#region node_modules/.pnpm/rou3@0.7.12/node_modules/rou3/dist/index.mjs
 var NullProtoObj = /* @__PURE__ */ (() => {
 	const e = function() {};
 	return e.prototype = Object.create(null), Object.freeze(e.prototype), e;
@@ -2319,7 +2319,7 @@ function _lookupTree(ctx, node, method, segments, index) {
 	if (node.wildcard && node.wildcard.methods) return node.wildcard.methods[method] || node.wildcard.methods[""];
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+openapi@1.15.1/node_modules/@orpc/openapi/dist/shared/openapi.DPiCV5hl.mjs
+//#region node_modules/.pnpm/@orpc+openapi@1.15.1/node_modules/@orpc/openapi/dist/shared/openapi.DPiCV5hl.mjs
 var StandardOpenAPICodec = class {
 	constructor(serializer, options = {}) {
 		this.serializer = serializer;
@@ -2330,7 +2330,7 @@ var StandardOpenAPICodec = class {
 		if (fallbackContractConfig("defaultInputStructure", procedure["~orpc"].route.inputStructure) === "compact") {
 			const data = request.method === "GET" ? this.serializer.deserialize(request.url.searchParams) : this.serializer.deserialize(await request.body());
 			if (data === void 0) return params;
-			if (isObject$2(data)) return {
+			if (isObject$1(data)) return {
 				...params,
 				...data
 			};
@@ -2404,8 +2404,8 @@ var StandardOpenAPICodec = class {
 		};
 	}
 	#isDetailedOutput(output) {
-		if (!isObject$2(output)) return false;
-		if (output.headers && !isObject$2(output.headers)) return false;
+		if (!isObject$1(output)) return false;
+		if (output.headers && !isObject$1(output.headers)) return false;
 		if (output.status !== void 0 && (typeof output.status !== "number" || !Number.isInteger(output.status) || isORPCErrorStatus$1(output.status))) return false;
 		return true;
 	}
@@ -2490,22 +2490,22 @@ var StandardOpenAPIHandler = class extends StandardHandler {
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+openapi@1.15.1/node_modules/@orpc/openapi/dist/adapters/fetch/index.mjs
+//#region node_modules/.pnpm/@orpc+openapi@1.15.1/node_modules/@orpc/openapi/dist/adapters/fetch/index.mjs
 var OpenAPIHandler = class extends FetchHandler {
 	constructor(router, options = {}) {
 		super(new StandardOpenAPIHandler(router, options), options);
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/util.js
-function getEnumValues$1(entries) {
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/util.js
+function getEnumValues(entries) {
 	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
 	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
 }
-function joinValues$1(array, separator = "|") {
-	return array.map((val) => stringifyPrimitive$1(val)).join(separator);
+function joinValues(array, separator = "|") {
+	return array.map((val) => stringifyPrimitive(val)).join(separator);
 }
-function jsonStringifyReplacer$1(_, value) {
+function jsonStringifyReplacer(_, value) {
 	if (typeof value === "bigint") return value.toString();
 	return value;
 }
@@ -2523,5468 +2523,8 @@ var Cached = class {
 		return this._value;
 	}
 };
-function cached$1(getter) {
-	return new Cached(getter);
-}
-function nullish$1(input) {
-	return input === null || input === void 0;
-}
-function cleanRegex$1(source) {
-	const start = source.startsWith("^") ? 1 : 0;
-	const end = source.endsWith("$") ? source.length - 1 : source.length;
-	return source.slice(start, end);
-}
-function floatSafeRemainder$1(val, step) {
-	const ratio = val / step;
-	const roundedRatio = Math.round(ratio);
-	const tolerance = 4 * Number.EPSILON * Math.max(Math.abs(ratio), 1);
-	if (Math.abs(ratio - roundedRatio) < tolerance) return 0;
-	return ratio - roundedRatio;
-}
-function assignProp$1(target, prop, value) {
-	Object.defineProperty(target, prop, {
-		value,
-		writable: true,
-		enumerable: true,
-		configurable: true
-	});
-}
-/**
-* Whichever object a def's `shape` currently answers from: the one the caller passed until the first read, the frozen copy after it.
-*
-* Its keys and descriptors read without invoking anything, which is what lets a discriminated union check its discriminator, and the cycle walk read a shape, without resolving a getter that references the schema being constructed. A def that answers `shape` from an accessor of its own has none.
-*/
-function rawShape(def) {
-	const desc = Object.getOwnPropertyDescriptor(def, "shape");
-	return desc?.get ? desc.get.raw : desc?.value;
-}
-function sourceShape(schema) {
-	return rawShape(schema._zod.def) ?? schema._zod.def.shape;
-}
-function deferProp(target, key, getter) {
-	Object.defineProperty(target, key, {
-		get() {
-			const value = getter();
-			assignProp$1(this, key, value);
-			return value;
-		},
-		enumerable: true,
-		configurable: true
-	});
-}
-function putProp(target, key, value) {
-	if (key in target) assignProp$1(target, key, value);
-	else target[key] = value;
-}
-/**
-* Copies `keys` of `source`'s shape onto `target`, each value passed through `wrap`.
-*
-* A key the source has resolved is copied through now, so the derived shape states it outright and nothing has to resolve it to learn what it holds. A key the source still defers stays deferred, and reads back through the source's own `shape`, so it resolves once and both shapes get that one schema.
-*/
-function mirrorShape(target, source, keys, wrap) {
-	const raw = sourceShape(source);
-	for (const key of keys) {
-		const desc = Object.getOwnPropertyDescriptor(raw, key);
-		if (!desc.enumerable) continue;
-		if (desc.get) deferProp(target, key, () => {
-			const value = source._zod.def.shape[key];
-			return wrap ? wrap(value, key) : value;
-		});
-		else putProp(target, key, wrap ? wrap(desc.value, key) : desc.value);
-	}
-}
-function mirrorProps(target, source) {
-	for (const key of Reflect.ownKeys(source)) {
-		const desc = Object.getOwnPropertyDescriptor(source, key);
-		if (!desc.enumerable) continue;
-		if (desc.get) deferProp(target, key, () => source[key]);
-		else putProp(target, key, desc.value);
-	}
-}
-function mergeDefs$1(...defs) {
-	const mergedDescriptors = {};
-	for (const def of defs) {
-		const descriptors = Object.getOwnPropertyDescriptors(def);
-		Object.assign(mergedDescriptors, descriptors);
-	}
-	return Object.defineProperties({}, mergedDescriptors);
-}
-function esc$1(str) {
-	return JSON.stringify(str);
-}
-function slugify$1(input) {
-	return input.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-").replace(/^-+|-+$/g, "");
-}
-var captureStackTrace$1 = "captureStackTrace" in Error ? Error.captureStackTrace : (..._args) => {};
-function isObject$1(data) {
-	return typeof data === "object" && data !== null && !Array.isArray(data);
-}
-var allowsEval$1 = /* @__PURE__*/ cached$1(() => {
-	if (globalConfig$1.jitless) return false;
-	if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) return false;
-	try {
-		new Function("");
-		return true;
-	} catch (_) {
-		return false;
-	}
-});
-function isPlainObject$1(o) {
-	if (isObject$1(o) === false) return false;
-	const ctor = o.constructor;
-	if (ctor === void 0) return true;
-	if (typeof ctor !== "function") return true;
-	const prot = ctor.prototype;
-	if (isObject$1(prot) === false) return false;
-	if (Object.prototype.hasOwnProperty.call(prot, "isPrototypeOf") === false) return false;
-	return true;
-}
-function shallowClone$1(o) {
-	if (isPlainObject$1(o)) return { ...o };
-	if (Array.isArray(o)) return [...o];
-	if (o instanceof Map) return new Map(o);
-	if (o instanceof Set) return new Set(o);
-	return o;
-}
-var propertyKeyTypes$1 = /* @__PURE__*/ new Set([
-	"string",
-	"number",
-	"symbol"
-]);
-function escapeRegex$1(str) {
-	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-function clone$1(inst, def, params) {
-	const cl = new inst._zod.constr(def ?? inst._zod.def);
-	if (!def || params?.parent) cl._zod.parent = inst;
-	return cl;
-}
-function normalizeParams$1(_params) {
-	const params = _params;
-	if (!params) return {};
-	if (typeof params === "string") return { error: () => params };
-	if (params?.message !== void 0) {
-		if (params?.error !== void 0) throw new Error("Cannot specify both `message` and `error` params");
-		params.error = params.message;
-	}
-	delete params.message;
-	if (typeof params.error === "string") return {
-		...params,
-		error: () => params.error
-	};
-	return params;
-}
-function stringifyPrimitive$1(value) {
-	if (typeof value === "bigint") return value.toString() + "n";
-	if (typeof value === "string") return `"${value}"`;
-	return `${value}`;
-}
-function optionalKeys$1(shape) {
-	return Object.keys(shape).filter((k) => {
-		return shape[k]._zod.optin !== void 0 && shape[k]._zod.optout === "optional";
-	});
-}
-var NUMBER_FORMAT_RANGES$1 = /*@__PURE__*/ (() => ({
-	safeint: [Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
-	int32: [-2147483648, 2147483647],
-	uint32: [0, 4294967295],
-	float32: [-34028234663852886e22, 34028234663852886e22],
-	float64: [-Number.MAX_VALUE, Number.MAX_VALUE]
-}))();
-var BIGINT_FORMAT_RANGES = {
-	int64: [/* @__PURE__*/ BigInt("-9223372036854775808"), /* @__PURE__*/ BigInt("9223372036854775807")],
-	uint64: [/* @__PURE__*/ BigInt(0), /* @__PURE__*/ BigInt("18446744073709551615")]
-};
-function pick$1(schema, mask) {
-	const currDef = schema._zod.def;
-	const checks = currDef.checks;
-	if (checks && checks.length > 0) throw new Error(".pick() cannot be used on object schemas containing refinements");
-	const newShape = {};
-	mirrorShape(newShape, schema, maskedKeys(schema, mask));
-	return clone$1(schema, mergeDefs$1(currDef, {
-		shape: newShape,
-		checks: []
-	}));
-}
-function maskedKeys(schema, mask) {
-	const raw = sourceShape(schema);
-	const keys = [];
-	for (const key of Reflect.ownKeys(mask)) {
-		if (!Object.getOwnPropertyDescriptor(raw, key)?.enumerable) throw new Error(`Unrecognized key: "${String(key)}"`);
-		if (mask[key]) keys.push(key);
-	}
-	return keys;
-}
-function omit$1(schema, mask) {
-	const currDef = schema._zod.def;
-	const checks = currDef.checks;
-	if (checks && checks.length > 0) throw new Error(".omit() cannot be used on object schemas containing refinements");
-	const omitted = new Set(maskedKeys(schema, mask));
-	const newShape = {};
-	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)).filter((key) => !omitted.has(key)));
-	return clone$1(schema, mergeDefs$1(currDef, {
-		shape: newShape,
-		checks: []
-	}));
-}
-function extend$1(schema, shape) {
-	if (!isPlainObject$1(shape)) throw new Error("Invalid input to extend: expected a plain object");
-	const checks = schema._zod.def.checks;
-	if (checks && checks.length > 0) {
-		const existingShape = sourceShape(schema);
-		for (const key of Reflect.ownKeys(shape)) if (Object.getOwnPropertyDescriptor(existingShape, key) !== void 0) throw new Error("Cannot overwrite keys on object schemas containing refinements. Use `.safeExtend()` instead.");
-	}
-	return clone$1(schema, mergeDefs$1(schema._zod.def, { shape: extended(schema, shape) }));
-}
-function extended(schema, shape) {
-	const newShape = {};
-	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)));
-	mirrorProps(newShape, shape);
-	return newShape;
-}
-function safeExtend$1(schema, shape) {
-	if (!isPlainObject$1(shape)) throw new Error("Invalid input to safeExtend: expected a plain object");
-	return clone$1(schema, mergeDefs$1(schema._zod.def, { shape: extended(schema, shape) }));
-}
-function merge$1(a, b) {
-	if (!b?._zod?.def) throw new Error("Invalid input to merge: expected an object schema. To merge a plain shape, use `.extend()`.");
-	if (a._zod.def.checks?.length) throw new Error(".merge() cannot be used on object schemas containing refinements. Use .safeExtend() instead.");
-	const newShape = {};
-	mirrorShape(newShape, a, Reflect.ownKeys(sourceShape(a)));
-	mirrorShape(newShape, b, Reflect.ownKeys(sourceShape(b)));
-	return clone$1(a, mergeDefs$1(a._zod.def, {
-		shape: newShape,
-		get catchall() {
-			return b._zod.def.catchall;
-		},
-		checks: b._zod.def.checks ?? []
-	}));
-}
-function partial$1(Class, schema, mask, name = "partial") {
-	const checks = schema._zod.def.checks;
-	if (checks && checks.length > 0) throw new Error(`.${name}() cannot be used on object schemas containing refinements`);
-	const selected = mask ? new Set(maskedKeys(schema, mask)) : void 0;
-	const newShape = {};
-	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)), Class && ((value, key) => selected && !selected.has(key) ? value : new Class({
-		type: "optional",
-		innerType: value
-	})));
-	return clone$1(schema, mergeDefs$1(schema._zod.def, {
-		shape: newShape,
-		checks: []
-	}));
-}
-function required$1(Class, schema, mask) {
-	const selected = mask ? new Set(maskedKeys(schema, mask)) : void 0;
-	const newShape = {};
-	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)), (value, key) => selected && !selected.has(key) ? value : new Class({
-		type: "nonoptional",
-		innerType: value
-	}));
-	return clone$1(schema, mergeDefs$1(schema._zod.def, { shape: newShape }));
-}
-function aborted$1(x, startIndex = 0) {
-	if (x.aborted === true) return true;
-	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue !== true) return true;
-	return false;
-}
-function explicitlyAborted$1(x, startIndex = 0) {
-	if (x.aborted === true) return true;
-	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue === false) return true;
-	return false;
-}
-function prefixIssues$1(path, issues) {
-	return issues.map((iss) => {
-		var _a;
-		(_a = iss).path ?? (_a.path = []);
-		iss.path.unshift(path);
-		return iss;
-	});
-}
-function unwrapMessage$1(message) {
-	return typeof message === "string" ? message : message?.message;
-}
-function attachSchema$1(issues, start, inst) {
-	var _a;
-	for (let i = start; i < issues.length; i++) (_a = issues[i]).schema ?? (_a.schema = inst);
-}
-function finalizeIssue$1(iss, ctx, config) {
-	var _a;
-	const traits = iss.inst?._zod?.traits;
-	if (traits?.has("$ZodType")) {
-		if (traits.has("$ZodCheck")) (_a = iss).schema ?? (_a.schema = iss.inst);
-		else iss.schema = iss.inst;
-	}
-	const schemaError = iss.schema !== iss.inst ? iss.schema?._zod.def?.error : void 0;
-	const message = iss.message ? iss.message : unwrapMessage$1(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage$1(schemaError?.(iss)) ?? unwrapMessage$1(ctx?.error?.(iss)) ?? unwrapMessage$1(config.customError?.(iss)) ?? unwrapMessage$1(config.localeError?.(iss)) ?? "Invalid input";
-	const full = {};
-	for (const k of Object.keys(iss)) {
-		if (k === "inst" || k === "schema" || k === "continue" || k === "input" || k === "__proto__") continue;
-		full[k] = iss[k];
-	}
-	full.path ?? (full.path = []);
-	full.message = message;
-	if (ctx?.reportInput) full.input = iss.input;
-	return full;
-}
-var highSurrogate$1 = /[\uD800-\uDBFF]/;
-function codePointLength$1(str) {
-	const units = str.length;
-	if (!highSurrogate$1.test(str)) return units;
-	let count = units;
-	for (let i = 0; i < units - 1; i++) if ((str.charCodeAt(i) & 64512) === 55296 && (str.charCodeAt(i + 1) & 64512) === 56320) {
-		count--;
-		i++;
-	}
-	return count;
-}
-function getLengthableOrigin$1(input) {
-	if (Array.isArray(input)) return "array";
-	if (typeof input === "string") return "string";
-	return "unknown";
-}
-function parsedType$1(data) {
-	const t = typeof data;
-	switch (t) {
-		case "number": return Number.isNaN(data) ? "nan" : "number";
-		case "object": {
-			if (data === null) return "null";
-			if (Array.isArray(data)) return "array";
-			const obj = data;
-			if (obj && Object.getPrototypeOf(obj) !== Object.prototype && "constructor" in obj && obj.constructor) return obj.constructor.name;
-		}
-	}
-	return t;
-}
-function issue$1(...args) {
-	const [iss, input, inst] = args;
-	if (typeof iss === "string") return {
-		message: iss,
-		code: "custom",
-		input,
-		inst
-	};
-	return { ...iss };
-}
-/**
-* Installs a trait's members on its prototype. Each value builds that member for the instance on first read; the built value shadows the accessor as an own property, so a detached `const { parse } = schema` keeps working.
-*
-* Call this from a `proto` initializer, which runs once per prototype — never per instance.
-*/
-function members$1(proto, table) {
-	for (const key in table) {
-		const desc = Object.getOwnPropertyDescriptor(table, key);
-		if (desc.get) Object.defineProperty(proto, key, {
-			...desc,
-			enumerable: false
-		});
-		else defineBound$1(proto, key, desc.value);
-	}
-}
-/** Shadows a prototype member with an own value, so a getter that builds from the instance runs once. */
-function own$1(inst, key, value, enumerable = true) {
-	Object.defineProperty(inst, key, {
-		configurable: true,
-		writable: true,
-		enumerable,
-		value
-	});
-	return value;
-}
-/** Like {@link own}, for a member that was never an own data property and has to stay out of `Object.keys`. */
-function hide$1(inst, key, value) {
-	return own$1(inst, key, value, false);
-}
-/** Adds members a table derives from the instance: each builds on first read and shadows as own data, and assignment shadows the same way, as when these were own properties. */
-function derived(computes, table) {
-	for (const key in computes) {
-		const compute = computes[key];
-		Object.defineProperty(table, key, {
-			configurable: true,
-			enumerable: true,
-			get() {
-				return own$1(this, key, compute(this));
-			},
-			set(value) {
-				own$1(this, key, value);
-			}
-		});
-	}
-	return table;
-}
-function defineBound$1(proto, key, fn) {
-	Object.defineProperty(proto, key, {
-		configurable: true,
-		get() {
-			return this == null ? fn : own$1(this, key, fn.bind(this));
-		},
-		set(value) {
-			own$1(this, key, value);
-		}
-	});
-}
-/** Returns the prototype to install on, or `undefined` if this group is already installed on it. */
-function claim$1(inst, sentinel) {
-	const proto = Object.getPrototypeOf(inst);
-	return sentinel in proto ? void 0 : proto;
-}
-var installing$1;
-var broke$1 = false;
-var breaker$1 = {
-	configurable: true,
-	get() {
-		broke$1 = true;
-	}
-};
-/**
-* Installs a lazily-derived internal on the `_zod` prototype of `inst`'s
-* constructor, computed from the internals object itself and cached there on
-* first read. One accessor per constructor rather than one per instance.
-*/
-function defineLazyInternal$1(inst, key, compute) {
-	const proto = Object.getPrototypeOf(inst._zod);
-	if (key in proto && installing$1 !== inst._zod) {
-		installing$1 = void 0;
-		return;
-	}
-	installing$1 = inst._zod;
-	Object.defineProperty(proto, key, {
-		configurable: true,
-		get() {
-			Object.defineProperty(this, key, breaker$1);
-			const outer = broke$1;
-			broke$1 = false;
-			try {
-				const value = compute(this);
-				if (broke$1) delete this[key];
-				else Object.defineProperty(this, key, {
-					configurable: true,
-					writable: true,
-					value
-				});
-				broke$1 = broke$1 || outer;
-				return value;
-			} catch (err) {
-				delete this[key];
-				broke$1 = broke$1 || outer;
-				throw err;
-			}
-		},
-		set(value) {
-			Object.defineProperty(this, key, {
-				configurable: true,
-				writable: true,
-				value
-			});
-		}
-	});
-}
-/**
-* Installs `key` on `inst`'s prototype, computed by `make` on first read and cached there as an own
-* data property. One accessor per constructor rather than one per instance, because an own accessor
-* puts every instance after the first into v8 dictionary mode. The key doubles as the sentinel.
-*/
-function installLazyProp$1(inst, key, make, enumerable) {
-	const proto = claim$1(inst, key);
-	if (!proto) return;
-	Object.defineProperty(proto, key, {
-		configurable: true,
-		get() {
-			const desc = {
-				configurable: true,
-				writable: true,
-				enumerable,
-				value: void 0
-			};
-			Object.defineProperty(this, key, desc);
-			desc.value = make(this);
-			Object.defineProperty(this, key, desc);
-			return desc.value;
-		},
-		set(value) {
-			Object.defineProperty(this, key, {
-				configurable: true,
-				writable: true,
-				enumerable,
-				value
-			});
-		}
-	});
-}
-/** Marks the thunk `_catch` synthesises for a constant catch value. `Function.length` cannot tell that thunk from a user callback — rest and defaulted parameters both report arity 0 — and a user callback reads `ctx.error`, whose issues only finalize correctly against the caller's per-parse error map. Provenance can say what arity cannot. A plain string key rather than `Symbol.for`, whose call at module scope no bundler can prove pure — the same shape that anchored `urlCanParse` into every build. */
-var CONSTANT_CATCH$1 = "~constantCatch";
-/** Wraps a constant catch value in a thunk tagged with {@link CONSTANT_CATCH}. */
-function constantCatch$1(value) {
-	const fn = () => value;
-	fn[CONSTANT_CATCH$1] = true;
-	return fn;
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/core.js
-var _a$3;
-var _zodDesc$2 = {
-	value: void 0,
-	enumerable: false
-};
-var _E$1 = "captureStackTrace" in Error ? Error : null;
-function newError$1(Definition) {
-	const E = _E$1;
-	if (E) {
-		const saved = E.stackTraceLimit;
-		if (typeof saved === "number") {
-			try {
-				E.stackTraceLimit = 0;
-			} catch {
-				_E$1 = null;
-				return new Definition();
-			}
-			try {
-				return new Definition();
-			} finally {
-				E.stackTraceLimit = saved;
-			}
-		}
-	}
-	return new Definition();
-}
-function $constructor$1(name, initializer, proto, params) {
-	const zodProto = {};
-	function Internals(def) {
-		this.def = def;
-		this.constr = _;
-		this.traits = /* @__PURE__ */ new Set();
-	}
-	Internals.prototype = zodProto;
-	const protoMembers = proto;
-	const initialized = protoMembers && /* @__PURE__ */ new WeakSet();
-	function init(inst, def) {
-		if (!inst._zod) {
-			_zodDesc$2.value = new Internals(def);
-			try {
-				Object.defineProperty(inst, "_zod", _zodDesc$2);
-			} finally {
-				_zodDesc$2.value = void 0;
-			}
-		} else if (inst._zod.traits.has(name)) return;
-		inst._zod.traits.add(name);
-		initializer(inst, def);
-		if (initialized) {
-			const own = Object.getPrototypeOf(inst);
-			const ctorProto = inst._zod.constr.prototype;
-			let up = own;
-			while (up && up !== ctorProto) up = Object.getPrototypeOf(up);
-			const target = up ?? own;
-			if (!initialized.has(target)) {
-				initialized.add(target);
-				members$1(target, protoMembers);
-			}
-		}
-		const proto = _.prototype;
-		for (const k in proto) {
-			if (!Object.prototype.hasOwnProperty.call(proto, k)) continue;
-			if (!(k in inst)) inst[k] = proto[k].bind(inst);
-		}
-	}
-	const Parent = params?.Parent ?? Object;
-	class Definition extends Parent {}
-	Object.defineProperty(Definition, "name", { value: name });
-	function _(def) {
-		const inst = params?.Parent ? newError$1(Definition) : this;
-		init(inst, def);
-		const deferred = inst._zod.deferred;
-		if (deferred) {
-			for (const fn of deferred) fn();
-			inst._zod.deferred = void 0;
-		}
-		const pp = globalThis.__zod_globalConfig?.postProcessor;
-		if (pp) pp(inst);
-		return inst;
-	}
-	Object.defineProperty(_, "init", { value: init });
-	Object.defineProperty(_, Symbol.hasInstance, { value: (inst) => {
-		if (params?.Parent && inst instanceof params.Parent) return true;
-		return inst?._zod?.traits?.has(name);
-	} });
-	Object.defineProperty(_, "name", { value: name });
-	return _;
-}
-var $ZodAsyncError$1 = class extends Error {
-	constructor() {
-		super(`Encountered Promise during synchronous parse. Use .parseAsync() instead.`);
-	}
-};
-var $ZodEncodeError$1 = class extends Error {
-	constructor(name) {
-		super(`Encountered unidirectional transform during encode: ${name}`);
-		this.name = "ZodEncodeError";
-	}
-};
-(_a$3 = globalThis).__zod_globalConfig ?? (_a$3.__zod_globalConfig = {});
-var globalConfig$1 = globalThis.__zod_globalConfig;
-function config$1(newConfig) {
-	if (newConfig) Object.assign(globalConfig$1, newConfig);
-	return globalConfig$1;
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/errors.js
-function _getMessage$1() {
-	const internals = this._zod;
-	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer$1, 2));
-	return internals.message;
-}
-function _setMessage$1(value) {
-	this._zod.message = value;
-}
-var _messageDesc$1 = {
-	get: _getMessage$1,
-	set: _setMessage$1,
-	enumerable: true,
-	configurable: true
-};
-var _issuesDesc$1 = {
-	value: void 0,
-	enumerable: false
-};
-var _installedToString$1 = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
-var initializer$3 = (inst, def) => {
-	inst.name = "$ZodError";
-	_issuesDesc$1.value = def;
-	Object.defineProperty(inst, "issues", _issuesDesc$1);
-	_issuesDesc$1.value = void 0;
-	Object.defineProperty(inst, "message", _messageDesc$1);
-	const proto = Object.getPrototypeOf(inst);
-	if (!_installedToString$1.has(proto)) {
-		_installedToString$1.add(proto);
-		Object.defineProperty(proto, "toString", {
-			configurable: true,
-			enumerable: false,
-			get() {
-				const value = () => this.message;
-				Object.defineProperty(this, "toString", {
-					value,
-					configurable: true,
-					writable: true
-				});
-				return value;
-			},
-			set(value) {
-				Object.defineProperty(this, "toString", {
-					value,
-					configurable: true,
-					writable: true
-				});
-			}
-		});
-	}
-};
-var $ZodError$1 = $constructor$1("$ZodError", initializer$3);
-$constructor$1("$ZodError", initializer$3, void 0, { Parent: Error });
-/** Get-or-create `obj[key]` as an own data property. A path segment naming an inherited member
-* ("toString", "constructor") would otherwise read through to the prototype, and assigning
-* "__proto__" would hit the setter instead of creating a key. */
-function node$1(obj, key, make) {
-	if (!Object.prototype.hasOwnProperty.call(obj, key)) {
-		if (key === "__proto__") Object.defineProperty(obj, key, {
-			value: make(),
-			writable: true,
-			enumerable: true,
-			configurable: true
-		});
-		else obj[key] = make();
-	}
-	return obj[key];
-}
-function flattenError$1(error, mapper = (issue) => issue.message) {
-	const fieldErrors = {};
-	const formErrors = [];
-	for (const sub of error.issues) if (sub.path.length > 0) node$1(fieldErrors, sub.path[0], () => []).push(mapper(sub));
-	else formErrors.push(mapper(sub));
-	return {
-		formErrors,
-		fieldErrors
-	};
-}
-function formatError$1(error, mapper = (issue) => issue.message) {
-	const fieldErrors = { _errors: [] };
-	const processError = (error, path = []) => {
-		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }, [...path, ...issue.path]));
-		else if (issue.code === "invalid_key") processError({ issues: issue.issues }, [...path, ...issue.path]);
-		else if (issue.code === "invalid_element") processError({ issues: issue.issues }, [...path, ...issue.path]);
-		else {
-			const fullpath = [...path, ...issue.path];
-			if (fullpath.length === 0) fieldErrors._errors.push(mapper(issue));
-			else {
-				let curr = fieldErrors;
-				let i = 0;
-				while (i < fullpath.length) {
-					const el = fullpath[i];
-					const terminal = i === fullpath.length - 1;
-					if (el === "_errors") {
-						if (terminal) curr._errors.push(mapper(issue));
-						i++;
-						continue;
-					}
-					if (!Object.prototype.hasOwnProperty.call(curr, el)) Object.defineProperty(curr, el, {
-						value: { _errors: [] },
-						enumerable: true,
-						writable: true,
-						configurable: true
-					});
-					const node = curr[el];
-					if (terminal) node._errors.push(mapper(issue));
-					curr = node;
-					i++;
-				}
-			}
-		}
-	};
-	processError(error);
-	return fieldErrors;
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/parse.js
-function finalizeParams$1(callee, params) {
-	return {
-		callee: params?.callee ?? callee,
-		Err: params?.Err
-	};
-}
-var _parse$1 = (_Err) => {
-	const fn = (schema, value, _ctx, _params) => {
-		const ctx = _ctx ? {
-			..._ctx,
-			async: false
-		} : { async: false };
-		const result = schema._zod.run({
-			value,
-			issues: []
-		}, ctx);
-		if (result instanceof Promise) throw new $ZodAsyncError$1();
-		if (result.issues.length) {
-			const e = new ((_params?.Err) ?? _Err)(result.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())));
-			captureStackTrace$1(e, _params?.callee ?? fn);
-			throw e;
-		}
-		return result.value;
-	};
-	return fn;
-};
-var _parseAsync$1 = (_Err) => {
-	const fn = async (schema, value, _ctx, params) => {
-		const ctx = _ctx ? {
-			..._ctx,
-			async: true
-		} : { async: true };
-		let result = schema._zod.run({
-			value,
-			issues: []
-		}, ctx);
-		if (result instanceof Promise) result = await result;
-		if (result.issues.length) {
-			const e = new ((params?.Err) ?? _Err)(result.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())));
-			captureStackTrace$1(e, params?.callee ?? fn);
-			throw e;
-		}
-		return result.value;
-	};
-	return fn;
-};
-var _safeParse$1 = (_Err) => (schema, value, _ctx) => {
-	const ctx = _ctx ? {
-		..._ctx,
-		async: false
-	} : { async: false };
-	const result = schema._zod.run({
-		value,
-		issues: []
-	}, ctx);
-	if (result instanceof Promise) throw new $ZodAsyncError$1();
-	return result.issues.length ? failure(_Err, result.issues, ctx) : {
-		success: true,
-		data: result.value
-	};
-};
-function failure(Err, issues, ctx) {
-	let error;
-	return {
-		success: false,
-		get error() {
-			if (!error) {
-				error = new Err(issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())));
-				issues = void 0;
-				ctx = void 0;
-			}
-			return error;
-		},
-		set error(e) {
-			error = e;
-			issues = void 0;
-			ctx = void 0;
-		}
-	};
-}
-var _safeParseAsync$1 = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? {
-		..._ctx,
-		async: true
-	} : { async: true };
-	let result = schema._zod.run({
-		value,
-		issues: []
-	}, ctx);
-	if (result instanceof Promise) result = await result;
-	return result.issues.length ? failure(_Err, result.issues, ctx) : {
-		success: true,
-		data: result.value
-	};
-};
-var COMPILE_INVALID = /* @__PURE__ */ Symbol.for("zod.compile.invalid");
-var COMPILE_FALLBACK = /* @__PURE__ */ Symbol.for("zod.compile.fallback");
-var validate = ((schema, value, _ctx) => {
-	const validator = schema._zod.bag.validator;
-	if (validator !== void 0) {
-		if (validator(value) !== COMPILE_INVALID) return true;
-		if (validator.definite === true && _ctx === void 0) return false;
-	}
-	return validateFallback(schema, value, _ctx);
-});
-function validateFallback(schema, value, _ctx) {
-	const ctx = _ctx ? {
-		..._ctx,
-		async: false,
-		abortEarly: true
-	} : {
-		async: false,
-		abortEarly: true
-	};
-	const fallbackRun = schema._zod.bag.fallbackRun;
-	let result;
-	if (fallbackRun) {
-		ctx[COMPILE_FALLBACK] = true;
-		result = fallbackRun({
-			value,
-			issues: []
-		}, ctx);
-	} else result = schema._zod.run({
-		value,
-		issues: []
-	}, ctx);
-	if (result instanceof Promise) throw new $ZodAsyncError$1();
-	return result.issues.length === 0;
-}
-var validateAsync$1 = async (schema, value, _ctx) => {
-	const ctx = _ctx ? {
-		..._ctx,
-		async: true,
-		abortEarly: true
-	} : {
-		async: true,
-		abortEarly: true
-	};
-	let result = schema._zod.run({
-		value,
-		issues: []
-	}, ctx);
-	if (result instanceof Promise) result = await result;
-	return result.issues.length === 0;
-};
-var _encode$1 = (_Err) => {
-	const parse = _parse$1(_Err);
-	const fn = (schema, value, _ctx, _params) => {
-		const ctx = _ctx ? {
-			..._ctx,
-			direction: "backward"
-		} : { direction: "backward" };
-		return parse(schema, value, ctx, finalizeParams$1(fn, _params));
-	};
-	return fn;
-};
-var _decode$1 = (_Err) => {
-	const parse = _parse$1(_Err);
-	const fn = (schema, value, _ctx, _params) => {
-		return parse(schema, value, _ctx, finalizeParams$1(fn, _params));
-	};
-	return fn;
-};
-var _encodeAsync$1 = (_Err) => {
-	const parseAsync = _parseAsync$1(_Err);
-	const fn = async (schema, value, _ctx, _params) => {
-		const ctx = _ctx ? {
-			..._ctx,
-			direction: "backward"
-		} : { direction: "backward" };
-		return await parseAsync(schema, value, ctx, finalizeParams$1(fn, _params));
-	};
-	return fn;
-};
-var _decodeAsync$1 = (_Err) => {
-	const parseAsync = _parseAsync$1(_Err);
-	const fn = async (schema, value, _ctx, _params) => {
-		return await parseAsync(schema, value, _ctx, finalizeParams$1(fn, _params));
-	};
-	return fn;
-};
-var _safeEncode$1 = (_Err) => (schema, value, _ctx) => {
-	const ctx = _ctx ? {
-		..._ctx,
-		direction: "backward"
-	} : { direction: "backward" };
-	return _safeParse$1(_Err)(schema, value, ctx);
-};
-var _safeDecode$1 = (_Err) => (schema, value, _ctx) => {
-	return _safeParse$1(_Err)(schema, value, _ctx);
-};
-var _safeEncodeAsync$1 = (_Err) => async (schema, value, _ctx) => {
-	const ctx = _ctx ? {
-		..._ctx,
-		direction: "backward"
-	} : { direction: "backward" };
-	return _safeParseAsync$1(_Err)(schema, value, ctx);
-};
-var _safeDecodeAsync$1 = (_Err) => async (schema, value, _ctx) => {
-	return _safeParseAsync$1(_Err)(schema, value, _ctx);
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/regexes.js
-/**
-* @deprecated CUID v1 is deprecated by its authors due to information leakage
-* (timestamps embedded in the id). Use {@link cuid2} instead.
-* See https://github.com/paralleldrive/cuid.
-*/
-var cuid$1 = /^[cC][0-9a-z]{6,}$/;
-var cuid2$1 = /^[0-9a-z]+$/;
-var ulid$1 = /^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$/;
-var xid$1 = /^[0-9a-vA-V]{20}$/;
-var ksuid$1 = /^[A-Za-z0-9]{27}$/;
-var nanoid$1 = /^[a-zA-Z0-9_-]{21}$/;
-function nanoidOfLength$1(length) {
-	return new RegExp(`^[a-zA-Z0-9_-]{${length}}$`);
-}
-/** ISO 8601-1 duration regex. Does not support the 8601-2 extensions like negative durations or fractional/negative components. */
-var duration$1 = /^P(?:(\d+W)|(?!.*W)(?=\d|T\d)(\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+([.,]\d+)?S)?)?)$/;
-/** A regex for any UUID-like identifier: 8-4-4-4-12 hex pattern */
-var guid$1 = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/;
-/** Returns a regex for validating an RFC 9562/4122 UUID.
-*
-* @param version Optionally specify a version 1-8. If no version is specified, all versions are supported. */
-var uuid$1 = (version) => {
-	if (!version) return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
-	return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
-};
-/** Practical email validation */
-var email$1 = /^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
-var _emoji$3 = `^(?=[\\s\\S]*[\\p{Extended_Pictographic}\\p{Regional_Indicator}\\u20E3])[\\p{Extended_Pictographic}\\p{Emoji_Component}]+$`;
-function emoji$1() {
-	return new RegExp(_emoji$3, "u");
-}
-var ipv4$1 = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
-var ipv6$1 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
-var cidrv4$2 = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/;
-var cidrv6$2 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/;
-var base64$1 = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$/;
-var base64url$1 = /^(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3})?$/;
-var httpProtocol$1 = /^https?$/;
-var e164$1 = /^\+[1-9]\d{6,14}$/;
-var dateSource$1 = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
-/** Anchors a pattern source. The interpolation lives here rather than at the call site because
-* esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
-* will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */
-function anchor$1(source) {
-	return new RegExp(`^${source}$`);
-}
-var date$1 = /*@__PURE__*/ anchor$1(dateSource$1);
-function timeSource$1(args) {
-	const hhmm = `(?:[01]\\d|2[0-3]):[0-5]\\d`;
-	return typeof args.precision === "number" ? args.precision === -1 ? `${hhmm}` : args.precision === 0 ? `${hhmm}:[0-5]\\d` : `${hhmm}:[0-5]\\d\\.\\d{${args.precision}}` : args.seconds ? `${hhmm}:[0-5]\\d(?:\\.\\d+)?` : `${hhmm}(?::[0-5]\\d(?:\\.\\d+)?)?`;
-}
-function time$1(args) {
-	return new RegExp(`^${timeSource$1(args)}$`);
-}
-function datetime$2(args) {
-	const opts = ["Z"];
-	if (args.offset) opts.push(`([+-](?:[01]\\d|2[0-3]):[0-5]\\d)`);
-	const qualified = `${timeSource$1({
-		precision: args.precision,
-		seconds: true
-	})}(?:${opts.join("|")})`;
-	const timeRegex = args.local ? `${qualified}|${timeSource$1({ precision: args.precision })}` : qualified;
-	return new RegExp(`^${dateSource$1}T(?:${timeRegex})$`);
-}
-var anyString = /^[\s\S]{0,}$/;
-var integer$1 = /^-?\d+$/;
-var number$4 = /^-?\d+(?:\.\d+)?$/;
-var boolean$3 = /^(?:true|false)$/i;
-var lowercase$1 = /^[^A-Z]*$/;
-var uppercase$1 = /^[^a-z]*$/;
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/checks.js
-var $ZodCheck$1 = /*@__PURE__*/ $constructor$1("$ZodCheck", (inst, def) => {
-	var _a;
-	inst._zod ?? (inst._zod = {});
-	inst._zod.def = def;
-	(_a = inst._zod).onattach ?? (_a.onattach = []);
-});
-/** Default `when` for length-based checks: run only on non-nullish values with a `length`. */
-var _whenHasLength$1 = (payload) => {
-	const val = payload.value;
-	return !nullish$1(val) && val.length !== void 0;
-};
-var numericOriginMap$1 = {
-	number: "number",
-	bigint: "bigint",
-	object: "date"
-};
-var $ZodCheckLessThan$1 = /*@__PURE__*/ $constructor$1("$ZodCheckLessThan", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	const origin = numericOriginMap$1[typeof def.value];
-	inst._zod.check = (payload) => {
-		if (def.inclusive ? payload.value <= def.value : payload.value < def.value) return;
-		payload.issues.push({
-			origin: numericOriginMap$1[typeof payload.value] ?? origin,
-			code: "too_big",
-			maximum: typeof def.value === "object" ? def.value.getTime() : def.value,
-			input: payload.value,
-			inclusive: def.inclusive,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckGreaterThan$1 = /*@__PURE__*/ $constructor$1("$ZodCheckGreaterThan", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	const origin = numericOriginMap$1[typeof def.value];
-	inst._zod.check = (payload) => {
-		if (def.inclusive ? payload.value >= def.value : payload.value > def.value) return;
-		payload.issues.push({
-			origin: numericOriginMap$1[typeof payload.value] ?? origin,
-			code: "too_small",
-			minimum: typeof def.value === "object" ? def.value.getTime() : def.value,
-			input: payload.value,
-			inclusive: def.inclusive,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckMultipleOf$1 = /*@__PURE__*/ $constructor$1("$ZodCheckMultipleOf", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		if (typeof payload.value !== typeof def.value) throw new Error("Cannot mix number and bigint in multiple_of check.");
-		if (typeof payload.value === "bigint" ? def.value !== BigInt(0) && payload.value % def.value === BigInt(0) : floatSafeRemainder$1(payload.value, def.value) === 0) return;
-		payload.issues.push({
-			origin: typeof payload.value,
-			code: "not_multiple_of",
-			divisor: def.value,
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckNumberFormat$1 = /*@__PURE__*/ $constructor$1("$ZodCheckNumberFormat", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	def.format = def.format || "float64";
-	const isInt = def.format?.includes("int");
-	const origin = isInt ? "int" : "number";
-	const [minimum, maximum] = NUMBER_FORMAT_RANGES$1[def.format];
-	inst._zod.check = (payload) => {
-		const input = payload.value;
-		if (isInt) {
-			if (!Number.isInteger(input)) {
-				payload.issues.push({
-					expected: origin,
-					format: def.format,
-					code: "invalid_type",
-					continue: false,
-					input,
-					inst
-				});
-				return;
-			}
-			if (!Number.isSafeInteger(input)) {
-				if (input > 0) payload.issues.push({
-					input,
-					code: "too_big",
-					maximum: Number.MAX_SAFE_INTEGER,
-					note: "Integers must be within the safe integer range.",
-					inst,
-					origin,
-					inclusive: true,
-					continue: !def.abort
-				});
-				else payload.issues.push({
-					input,
-					code: "too_small",
-					minimum: Number.MIN_SAFE_INTEGER,
-					note: "Integers must be within the safe integer range.",
-					inst,
-					origin,
-					inclusive: true,
-					continue: !def.abort
-				});
-				return;
-			}
-		}
-		if (input < minimum) payload.issues.push({
-			origin: "number",
-			input,
-			code: "too_small",
-			minimum,
-			inclusive: true,
-			inst,
-			continue: !def.abort
-		});
-		if (input > maximum) payload.issues.push({
-			origin: "number",
-			input,
-			code: "too_big",
-			maximum,
-			inclusive: true,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckMaxLength$1 = /*@__PURE__*/ $constructor$1("$ZodCheckMaxLength", (inst, def) => {
-	var _a;
-	$ZodCheck$1.init(inst, def);
-	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength$1);
-	inst._zod.check = (payload) => {
-		const input = payload.value;
-		const units = input.length;
-		if ((typeof input === "string" && units > def.maximum ? codePointLength$1(input) : units) <= def.maximum) return;
-		const origin = getLengthableOrigin$1(input);
-		payload.issues.push({
-			origin,
-			code: "too_big",
-			maximum: def.maximum,
-			inclusive: true,
-			input,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckMinLength$1 = /*@__PURE__*/ $constructor$1("$ZodCheckMinLength", (inst, def) => {
-	var _a;
-	$ZodCheck$1.init(inst, def);
-	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength$1);
-	inst._zod.check = (payload) => {
-		const input = payload.value;
-		const units = input.length;
-		if ((typeof input === "string" && units >= def.minimum && units < def.minimum * 2 ? codePointLength$1(input) : units) >= def.minimum) return;
-		const origin = getLengthableOrigin$1(input);
-		payload.issues.push({
-			origin,
-			code: "too_small",
-			minimum: def.minimum,
-			inclusive: true,
-			input,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckLengthEquals$1 = /*@__PURE__*/ $constructor$1("$ZodCheckLengthEquals", (inst, def) => {
-	var _a;
-	$ZodCheck$1.init(inst, def);
-	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength$1);
-	inst._zod.check = (payload) => {
-		const input = payload.value;
-		const units = input.length;
-		const length = typeof input === "string" && units >= def.length && units <= def.length * 2 ? codePointLength$1(input) : units;
-		if (length === def.length) return;
-		const origin = getLengthableOrigin$1(input);
-		const tooBig = length > def.length;
-		payload.issues.push({
-			origin,
-			...tooBig ? {
-				code: "too_big",
-				maximum: def.length
-			} : {
-				code: "too_small",
-				minimum: def.length
-			},
-			inclusive: true,
-			exact: true,
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckStringFormat$1 = /*@__PURE__*/ $constructor$1("$ZodCheckStringFormat", (inst, def) => {
-	var _a, _b;
-	$ZodCheck$1.init(inst, def);
-	if (def.pattern) (_a = inst._zod).check ?? (_a.check = (payload) => {
-		def.pattern.lastIndex = 0;
-		if (def.pattern.test(payload.value)) return;
-		payload.issues.push({
-			origin: "string",
-			code: "invalid_format",
-			format: def.format,
-			input: payload.value,
-			...def.pattern ? { pattern: def.pattern.toString() } : {},
-			inst,
-			continue: !def.abort
-		});
-	});
-	else (_b = inst._zod).check ?? (_b.check = () => {});
-});
-var $ZodCheckRegex$1 = /*@__PURE__*/ $constructor$1("$ZodCheckRegex", (inst, def) => {
-	$ZodCheckStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		def.pattern.lastIndex = 0;
-		if (def.pattern.test(payload.value)) return;
-		payload.issues.push({
-			origin: "string",
-			code: "invalid_format",
-			format: "regex",
-			input: payload.value,
-			pattern: def.pattern.toString(),
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckLowerCase$1 = /*@__PURE__*/ $constructor$1("$ZodCheckLowerCase", (inst, def) => {
-	def.pattern ?? (def.pattern = lowercase$1);
-	$ZodCheckStringFormat$1.init(inst, def);
-});
-var $ZodCheckUpperCase$1 = /*@__PURE__*/ $constructor$1("$ZodCheckUpperCase", (inst, def) => {
-	def.pattern ?? (def.pattern = uppercase$1);
-	$ZodCheckStringFormat$1.init(inst, def);
-});
-var $ZodCheckIncludes$1 = /*@__PURE__*/ $constructor$1("$ZodCheckIncludes", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	const escapedRegex = escapeRegex$1(def.includes);
-	def.pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position},}${escapedRegex}` : escapedRegex);
-	inst._zod.check = (payload) => {
-		if (payload.value.includes(def.includes, def.position)) return;
-		payload.issues.push({
-			origin: "string",
-			code: "invalid_format",
-			format: "includes",
-			includes: def.includes,
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckStartsWith$1 = /*@__PURE__*/ $constructor$1("$ZodCheckStartsWith", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	const pattern = new RegExp(`^${escapeRegex$1(def.prefix)}.*`);
-	def.pattern ?? (def.pattern = pattern);
-	inst._zod.check = (payload) => {
-		if (payload.value.startsWith(def.prefix)) return;
-		payload.issues.push({
-			origin: "string",
-			code: "invalid_format",
-			format: "starts_with",
-			prefix: def.prefix,
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckEndsWith$1 = /*@__PURE__*/ $constructor$1("$ZodCheckEndsWith", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	const pattern = new RegExp(`.*${escapeRegex$1(def.suffix)}$`);
-	def.pattern ?? (def.pattern = pattern);
-	inst._zod.check = (payload) => {
-		if (payload.value.endsWith(def.suffix)) return;
-		payload.issues.push({
-			origin: "string",
-			code: "invalid_format",
-			format: "ends_with",
-			suffix: def.suffix,
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCheckOverwrite$1 = /*@__PURE__*/ $constructor$1("$ZodCheckOverwrite", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		payload.value = def.tx(payload.value);
-	};
-});
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/doc.js
-var Doc$1 = class {
-	constructor(args = [], closed = {}) {
-		this.content = [];
-		this.indent = 0;
-		this.args = args;
-		this.closed = closed;
-	}
-	indented(fn) {
-		this.indent += 1;
-		try {
-			fn(this);
-		} finally {
-			this.indent -= 1;
-		}
-	}
-	write(arg) {
-		if (typeof arg === "function") {
-			arg(this, { execution: "sync" });
-			arg(this, { execution: "async" });
-			return;
-		}
-		const lines = arg.split("\n").filter((x) => x);
-		const minIndent = Math.min(...lines.map((x) => x.length - x.trimStart().length));
-		const dedented = lines.map((x) => x.slice(minIndent)).map((x) => " ".repeat(this.indent * 2) + x);
-		for (const line of dedented) this.content.push(line);
-	}
-	compile() {
-		const F = Function;
-		const content = this?.content ?? [``];
-		return new F(...Object.keys(this.closed), `return function (${this.args.join(", ")}) {\n${content.join("\n")}\n};`)(...Object.values(this.closed));
-	}
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/versions.js
-var version$1 = {
-	major: 4,
-	minor: 6,
-	patch: 5
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/schemas.js
-var $ZodType$1 = /*@__PURE__*/ $constructor$1("$ZodType", (inst, def) => {
-	var _a;
-	inst ?? (inst = {});
-	inst._zod.def = def;
-	inst._zod.bag = inst._zod.bag || {};
-	inst._zod.version = version$1;
-	const defChecks = inst._zod.def.checks;
-	const checks = inst._zod.traits.has("$ZodCheck") ? [inst, ...defChecks ?? []] : defChecks?.length ? [...defChecks] : [];
-	for (const ch of checks) for (const fn of ch._zod.onattach) fn(inst);
-	if (checks.length === 0) {
-		(_a = inst._zod).deferred ?? (_a.deferred = []);
-		inst._zod.deferred?.push(() => {
-			inst._zod.run = inst._zod.parse;
-		});
-	} else {
-		const runChecks = (payload, checks, ctx) => {
-			if (payload.memo) return payload;
-			let isAborted = aborted$1(payload);
-			let asyncResult;
-			for (const ch of checks) {
-				if (ch._zod.def.when) {
-					if (explicitlyAborted$1(payload)) continue;
-					if (!ch._zod.def.when(payload)) continue;
-				} else if (isAborted) continue;
-				const currLen = payload.issues.length;
-				const _ = ch._zod.check(payload);
-				if (_ instanceof Promise && ctx?.async === false) throw new $ZodAsyncError$1();
-				if (asyncResult || _ instanceof Promise) asyncResult = (asyncResult ?? Promise.resolve()).then(async () => {
-					await _;
-					if (payload.issues.length === currLen) return;
-					attachSchema$1(payload.issues, currLen, inst);
-					if (!isAborted) isAborted = aborted$1(payload, currLen);
-				});
-				else {
-					if (payload.issues.length === currLen) continue;
-					attachSchema$1(payload.issues, currLen, inst);
-					if (!isAborted) isAborted = aborted$1(payload, currLen);
-				}
-			}
-			if (asyncResult) return asyncResult.then(() => {
-				return payload;
-			});
-			return payload;
-		};
-		const handleCanaryResult = (canary, payload, ctx) => {
-			if (aborted$1(canary)) {
-				canary.aborted = true;
-				return canary;
-			}
-			const checkResult = runChecks(payload, checks, ctx);
-			if (checkResult instanceof Promise) {
-				if (ctx.async === false) throw new $ZodAsyncError$1();
-				return checkResult.then((checkResult) => inst._zod.parse(checkResult, ctx));
-			}
-			return inst._zod.parse(checkResult, ctx);
-		};
-		inst._zod.run = (payload, ctx) => {
-			if (ctx.skipChecks) return inst._zod.parse(payload, ctx);
-			if (ctx.direction === "backward") {
-				const canary = inst._zod.parse({
-					value: payload.value,
-					issues: []
-				}, {
-					...ctx,
-					skipChecks: true
-				});
-				if (canary instanceof Promise) return canary.then((canary) => {
-					return handleCanaryResult(canary, payload, ctx);
-				});
-				return handleCanaryResult(canary, payload, ctx);
-			}
-			const result = inst._zod.parse(payload, ctx);
-			if (result instanceof Promise) {
-				if (ctx.async === false) throw new $ZodAsyncError$1();
-				return result.then((result) => runChecks(result, checks, ctx));
-			}
-			return runChecks(result, checks, ctx);
-		};
-	}
-}, {
-	get "~standard"() {
-		return hide$1(this, "~standard", standardProps$1(this));
-	},
-	set "~standard"(value) {
-		own$1(this, "~standard", value);
-	}
-});
-/** The Standard Schema surface for `inst`. Shared so wrappers can extend it without forcing it. */
-var toStandardResult$1 = (r, ctx) => r.issues.length ? { issues: r.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())) } : { value: r.value };
-async function validateAsync(inst, value) {
-	const ctx = { async: true };
-	return toStandardResult$1(await inst._zod.run({
-		value,
-		issues: []
-	}, ctx), ctx);
-}
-function standardProps$1(inst) {
-	return {
-		validate: (value) => {
-			const ctx = { async: false };
-			try {
-				const r = inst._zod.run({
-					value,
-					issues: []
-				}, ctx);
-				if (!(r instanceof Promise)) return toStandardResult$1(r, ctx);
-			} catch (_) {}
-			return validateAsync(inst, value);
-		},
-		vendor: "zod",
-		version: 1
-	};
-}
-var $ZodString$1 = /*@__PURE__*/ $constructor$1("$ZodString", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.pattern = def.pattern ?? anyString;
-	inst._zod.parse = (payload, _) => {
-		if (def.coerce) try {
-			payload.value = String(payload.value);
-		} catch (_) {}
-		if (typeof payload.value === "string") return payload;
-		payload.issues.push({
-			expected: "string",
-			code: "invalid_type",
-			input: payload.value,
-			inst
-		});
-		return payload;
-	};
-});
-var $ZodStringFormat$1 = /*@__PURE__*/ $constructor$1("$ZodStringFormat", (inst, def) => {
-	$ZodCheckStringFormat$1.init(inst, def);
-	$ZodString$1.init(inst, def);
-});
-var $ZodGUID$1 = /*@__PURE__*/ $constructor$1("$ZodGUID", (inst, def) => {
-	def.pattern ?? (def.pattern = guid$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodUUID$1 = /*@__PURE__*/ $constructor$1("$ZodUUID", (inst, def) => {
-	if (def.version) {
-		const v = {
-			v1: 1,
-			v2: 2,
-			v3: 3,
-			v4: 4,
-			v5: 5,
-			v6: 6,
-			v7: 7,
-			v8: 8
-		}[def.version];
-		if (v === void 0) throw new Error(`Invalid UUID version: "${def.version}"`);
-		def.pattern ?? (def.pattern = uuid$1(v));
-	} else def.pattern ?? (def.pattern = uuid$1());
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodEmail$1 = /*@__PURE__*/ $constructor$1("$ZodEmail", (inst, def) => {
-	def.pattern ?? (def.pattern = email$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-function canParseURL(input) {
-	try {
-		if (typeof URL !== "undefined" && typeof URL.canParse === "function") return URL.canParse(input);
-		new URL(input);
-		return true;
-	} catch {
-		return false;
-	}
-}
-function validateURL(trimmed, def) {
-	if (!("normalize" in def) && !("hostname" in def) && !("protocol" in def)) return canParseURL(trimmed) || 2;
-	return parseURLObject$1(trimmed, def);
-}
-/** Parses a URL while preserving the non-normalizing HTTP guard. */
-function parseURLObject$1(trimmed, def) {
-	if (!def.normalize && def.protocol?.source === httpProtocol$1.source && !/^https?:\/\//i.test(trimmed)) return 1;
-	try {
-		if (typeof URL !== "undefined") {
-			const URLStatic = URL;
-			if (typeof URLStatic.parse === "function") return URLStatic.parse(trimmed) ?? 2;
-		}
-		return new URL(trimmed);
-	} catch {
-		return 2;
-	}
-}
-var asciiTabOrNewline$1 = /[\t\n\r]/g;
-/** The URL parser deletes every ASCII tab, LF and CR from its input before it parses, so `new URL("https://exa\nmple.com")` reports on `example.com`. Applying the same deletion to the returned value closes the half of that divergence which can move the host; the parser's other rewrite, stripping C0 controls at the edges, cannot. */
-function stripTabAndNewline$1(value) {
-	return value.replace(asciiTabOrNewline$1, "");
-}
-function urlHostnameOk$1(url, hostname) {
-	hostname.lastIndex = 0;
-	return hostname.test(url.hostname);
-}
-function urlProtocolOk$1(url, protocol) {
-	protocol.lastIndex = 0;
-	return protocol.test(url.protocol.endsWith(":") ? url.protocol.slice(0, -1) : url.protocol);
-}
-var $ZodURL$1 = /*@__PURE__*/ $constructor$1("$ZodURL", (inst, def) => {
-	$ZodStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		try {
-			const trimmed = payload.value.trim();
-			const url = validateURL(trimmed, def);
-			if (url === 1) {
-				payload.issues.push({
-					code: "invalid_format",
-					format: "url",
-					note: "Invalid URL format",
-					input: payload.value,
-					inst,
-					continue: !def.abort
-				});
-				return;
-			}
-			if (url === 2) {
-				payload.issues.push({
-					code: "invalid_format",
-					format: "url",
-					input: payload.value,
-					inst,
-					continue: !def.abort
-				});
-				return;
-			}
-			if (url === true) {
-				payload.value = stripTabAndNewline$1(trimmed);
-				return;
-			}
-			if (def.hostname && !urlHostnameOk$1(url, def.hostname)) payload.issues.push({
-				code: "invalid_format",
-				format: "url",
-				note: "Invalid hostname",
-				pattern: def.hostname.source,
-				input: payload.value,
-				inst,
-				continue: !def.abort
-			});
-			if (def.protocol && !urlProtocolOk$1(url, def.protocol)) payload.issues.push({
-				code: "invalid_format",
-				format: "url",
-				note: "Invalid protocol",
-				pattern: def.protocol.source,
-				input: payload.value,
-				inst,
-				continue: !def.abort
-			});
-			payload.value = def.normalize ? url.href : stripTabAndNewline$1(trimmed);
-			return;
-		} catch (_) {
-			payload.issues.push({
-				code: "invalid_format",
-				format: "url",
-				input: payload.value,
-				inst,
-				continue: !def.abort
-			});
-		}
-	};
-});
-var $ZodEmoji$1 = /*@__PURE__*/ $constructor$1("$ZodEmoji", (inst, def) => {
-	def.pattern ?? (def.pattern = emoji$1());
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodNanoID$1 = /*@__PURE__*/ $constructor$1("$ZodNanoID", (inst, def) => {
-	if (def.length !== void 0 && (!Number.isInteger(def.length) || def.length < 1)) throw new Error(`Invalid nanoid length: ${def.length}`);
-	def.pattern ?? (def.pattern = def.length === void 0 ? nanoid$1 : nanoidOfLength$1(def.length));
-	$ZodStringFormat$1.init(inst, def);
-});
-/**
-* @deprecated CUID v1 is deprecated by its authors due to information leakage
-* (timestamps embedded in the id). Use {@link $ZodCUID2} instead.
-* See https://github.com/paralleldrive/cuid.
-*/
-var $ZodCUID$1 = /*@__PURE__*/ $constructor$1("$ZodCUID", (inst, def) => {
-	def.pattern ?? (def.pattern = cuid$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodCUID2$1 = /*@__PURE__*/ $constructor$1("$ZodCUID2", (inst, def) => {
-	def.pattern ?? (def.pattern = cuid2$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodULID$1 = /*@__PURE__*/ $constructor$1("$ZodULID", (inst, def) => {
-	def.pattern ?? (def.pattern = ulid$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodXID$1 = /*@__PURE__*/ $constructor$1("$ZodXID", (inst, def) => {
-	def.pattern ?? (def.pattern = xid$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodKSUID$1 = /*@__PURE__*/ $constructor$1("$ZodKSUID", (inst, def) => {
-	def.pattern ?? (def.pattern = ksuid$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodISODateTime$1 = /*@__PURE__*/ $constructor$1("$ZodISODateTime", (inst, def) => {
-	def.pattern ?? (def.pattern = datetime$2(def));
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodISODate$1 = /*@__PURE__*/ $constructor$1("$ZodISODate", (inst, def) => {
-	def.pattern ?? (def.pattern = date$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodISOTime$1 = /*@__PURE__*/ $constructor$1("$ZodISOTime", (inst, def) => {
-	def.pattern ?? (def.pattern = time$1(def));
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodISODuration$1 = /*@__PURE__*/ $constructor$1("$ZodISODuration", (inst, def) => {
-	def.pattern ?? (def.pattern = duration$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-var $ZodIPv4$1 = /*@__PURE__*/ $constructor$1("$ZodIPv4", (inst, def) => {
-	def.pattern ?? (def.pattern = ipv4$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-/** An IPv6 address is written with hex digits, colons and dots, and nothing else. The guard is what makes the check below an IPv6 check: `new URL("http://[...]")` parses an authority, not an address, so `@` and `\` re-delimit it and `"::@1\\"` validates against the host `0.0.0.1`. The URL parser also deletes ASCII tab, LF and CR rather than failing, which is how `"::1\n"` validated as `::1`. */
-var ipv6Alphabet$1 = /^[0-9a-fA-F:.]+$/;
-function isValidIPv6$1(value) {
-	if (!ipv6Alphabet$1.test(value)) return false;
-	return canParseURL(`http://[${value}]`);
-}
-var $ZodIPv6$1 = /*@__PURE__*/ $constructor$1("$ZodIPv6", (inst, def) => {
-	def.pattern ?? (def.pattern = ipv6$1);
-	$ZodStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		if (!isValidIPv6$1(payload.value)) payload.issues.push({
-			code: "invalid_format",
-			format: "ipv6",
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodCIDRv4$1 = /*@__PURE__*/ $constructor$1("$ZodCIDRv4", (inst, def) => {
-	def.pattern ?? (def.pattern = cidrv4$2);
-	$ZodStringFormat$1.init(inst, def);
-});
-function isValidCIDRv6$1(value) {
-	const parts = value.split("/");
-	if (parts.length !== 2) return false;
-	const [address, prefix] = parts;
-	if (!prefix) return false;
-	const prefixNum = Number(prefix);
-	if (`${prefixNum}` !== prefix) return false;
-	if (prefixNum < 0 || prefixNum > 128) return false;
-	return isValidIPv6$1(address);
-}
-var $ZodCIDRv6$1 = /*@__PURE__*/ $constructor$1("$ZodCIDRv6", (inst, def) => {
-	def.pattern ?? (def.pattern = cidrv6$2);
-	$ZodStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		if (!isValidCIDRv6$1(payload.value)) payload.issues.push({
-			code: "invalid_format",
-			format: "cidrv6",
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-function isValidBase64$1(data) {
-	if (data === "") return true;
-	if (/\s/.test(data)) return false;
-	if (data.length % 4 !== 0) return false;
-	try {
-		atob(data);
-		return true;
-	} catch {
-		return false;
-	}
-}
-var base64Charset = /^[0-9a-zA-Z+/]*={0,2}$/;
-var $ZodBase64$1 = /*@__PURE__*/ $constructor$1("$ZodBase64", (inst, def) => {
-	def.pattern ?? (def.pattern = base64Charset);
-	$ZodStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		if (isValidBase64$1(payload.value)) return;
-		payload.issues.push({
-			code: "invalid_format",
-			format: "base64",
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var base64urlCharset = /^[A-Za-z0-9_-]*$/;
-function isValidBase64URL$1(data) {
-	if (!base64urlCharset.test(data)) return false;
-	const base64 = data.replace(/[-_]/g, (c) => c === "-" ? "+" : "/");
-	return isValidBase64$1(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
-}
-var $ZodBase64URL$1 = /*@__PURE__*/ $constructor$1("$ZodBase64URL", (inst, def) => {
-	def.pattern ?? (def.pattern = base64urlCharset);
-	$ZodStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		if (isValidBase64URL$1(payload.value)) return;
-		payload.issues.push({
-			code: "invalid_format",
-			format: "base64url",
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodE164$1 = /*@__PURE__*/ $constructor$1("$ZodE164", (inst, def) => {
-	def.pattern ?? (def.pattern = e164$1);
-	$ZodStringFormat$1.init(inst, def);
-});
-function isValidJWT$1(token, algorithm = null) {
-	try {
-		const tokensParts = token.split(".");
-		if (tokensParts.length !== 3) return false;
-		const [header] = tokensParts;
-		if (!header) return false;
-		const parsedHeader = JSON.parse(atob(header));
-		if ("typ" in parsedHeader && parsedHeader?.typ !== "JWT") return false;
-		if (!parsedHeader.alg) return false;
-		if (algorithm && (!("alg" in parsedHeader) || parsedHeader.alg !== algorithm)) return false;
-		return true;
-	} catch {
-		return false;
-	}
-}
-var $ZodJWT$1 = /*@__PURE__*/ $constructor$1("$ZodJWT", (inst, def) => {
-	$ZodStringFormat$1.init(inst, def);
-	inst._zod.check = (payload) => {
-		if (isValidJWT$1(payload.value, def.alg)) return;
-		payload.issues.push({
-			code: "invalid_format",
-			format: "jwt",
-			input: payload.value,
-			inst,
-			continue: !def.abort
-		});
-	};
-});
-var $ZodNumber$1 = /*@__PURE__*/ $constructor$1("$ZodNumber", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.pattern = number$4;
-	inst._zod.parse = (payload, _ctx) => {
-		if (def.coerce) try {
-			payload.value = Number(payload.value);
-		} catch (_) {}
-		const input = payload.value;
-		if (typeof input === "number" && !Number.isNaN(input) && Number.isFinite(input)) return payload;
-		const received = typeof input === "number" ? Number.isNaN(input) ? "NaN" : !Number.isFinite(input) ? String(input) : void 0 : void 0;
-		payload.issues.push({
-			expected: "number",
-			code: "invalid_type",
-			input,
-			inst,
-			...received ? { received } : {}
-		});
-		return payload;
-	};
-});
-var $ZodNumberFormat$1 = /*@__PURE__*/ $constructor$1("$ZodNumberFormat", (inst, def) => {
-	$ZodCheckNumberFormat$1.init(inst, def);
-	$ZodNumber$1.init(inst, def);
-});
-var $ZodBoolean$1 = /*@__PURE__*/ $constructor$1("$ZodBoolean", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.pattern = boolean$3;
-	inst._zod.parse = (payload, _ctx) => {
-		if (def.coerce) try {
-			payload.value = Boolean(payload.value);
-		} catch (_) {}
-		const input = payload.value;
-		if (typeof input === "boolean") return payload;
-		payload.issues.push({
-			expected: "boolean",
-			code: "invalid_type",
-			input,
-			inst
-		});
-		return payload;
-	};
-});
-var $ZodUnknown$1 = /*@__PURE__*/ $constructor$1("$ZodUnknown", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.parse = (payload) => payload;
-});
-var $ZodNever$1 = /*@__PURE__*/ $constructor$1("$ZodNever", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.parse = (payload, _ctx) => {
-		payload.issues.push({
-			expected: "never",
-			code: "invalid_type",
-			input: payload.value,
-			inst
-		});
-		return payload;
-	};
-});
-function handleArrayResult$1(result, final, index) {
-	if (result.issues.length) final.issues.push(...prefixIssues$1(index, result.issues));
-	final.value[index] = result.value;
-}
-var $ZodArray$1 = /*@__PURE__*/ $constructor$1("$ZodArray", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	const memo = globalConfig$1.memoizer;
-	memo?.attach(inst);
-	inst._zod.parse = (payload, ctx) => {
-		const input = payload.value;
-		if (!Array.isArray(input)) {
-			payload.issues.push({
-				expected: "array",
-				code: "invalid_type",
-				input,
-				inst
-			});
-			return payload;
-		}
-		payload.value = memo ? memo.alloc(inst, payload, Array(input.length), ctx) : Array(input.length);
-		const proms = [];
-		const abortEarly = ctx?.abortEarly;
-		for (let i = 0; i < input.length; i++) {
-			const item = input[i];
-			const result = def.element._zod.run({
-				value: item,
-				issues: []
-			}, ctx);
-			if (result instanceof Promise) proms.push(result.then((result) => handleArrayResult$1(result, payload, i)));
-			else {
-				handleArrayResult$1(result, payload, i);
-				if (abortEarly && result.issues.length !== 0 && aborted$1(result)) break;
-			}
-		}
-		if (proms.length) return Promise.all(proms).then(() => payload);
-		return payload;
-	};
-});
-function handlePropertyResult$1(result, final, key, input, optin, optout) {
-	const isPresent = key in input;
-	const isOptionalOut = optout === "optional";
-	if (!isPresent && isOptionalOut && optin === "optional") return;
-	if (result.issues.length) {
-		if (optin !== void 0 && isOptionalOut && !isPresent) return;
-		final.issues.push(...prefixIssues$1(key, result.issues));
-	}
-	if (!isPresent && optin === void 0) {
-		if (!result.issues.length) final.issues.push({
-			code: "invalid_type",
-			expected: "nonoptional",
-			input: void 0,
-			path: [key]
-		});
-		return;
-	}
-	if (result.value === void 0) {
-		if (isPresent || optin === "defaulted" && !isOptionalOut) final.value[key] = void 0;
-	} else final.value[key] = result.value;
-}
-var NO_SYMBOL_KEYS$1 = [];
-function normalizeDef$1(def) {
-	const keys = Object.keys(def.shape);
-	const ownSymbols = Object.getOwnPropertySymbols(def.shape);
-	const symbolKeys = ownSymbols.length ? ownSymbols : NO_SYMBOL_KEYS$1;
-	const allKeys = symbolKeys.length ? [...keys, ...symbolKeys] : keys;
-	for (const k of allKeys) if (!def.shape?.[k]?._zod?.traits?.has("$ZodType")) throw new Error(`Invalid element at key "${String(k)}": expected a Zod schema`);
-	const okeys = optionalKeys$1(def.shape);
-	return {
-		...def,
-		allKeys,
-		symbolKeys,
-		keySet: new Set(keys),
-		numKeys: keys.length,
-		optionalKeys: new Set(okeys)
-	};
-}
-function handleCatchall$1(proms, input, payload, ctx, def, inst, abortEarly) {
-	const unrecognized = [];
-	const keySet = def.keySet;
-	const _catchall = def.catchall._zod;
-	const t = _catchall.def.type;
-	const optin = _catchall.optin;
-	const optout = _catchall.optout;
-	let seen = 0;
-	for (const key in input) {
-		if (abortEarly && payload.issues.length !== seen) {
-			if (aborted$1(payload, seen)) break;
-			seen = payload.issues.length;
-		}
-		if (keySet.has(key)) continue;
-		if (key === "__proto__") {
-			if (t === "never") unrecognized.push(key);
-			continue;
-		}
-		if (t === "never") {
-			unrecognized.push(key);
-			continue;
-		}
-		const r = _catchall.run({
-			value: input[key],
-			issues: []
-		}, ctx);
-		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult$1(r, payload, key, input, optin, optout)));
-		else handlePropertyResult$1(r, payload, key, input, optin, optout);
-	}
-	if (unrecognized.length) payload.issues.push({
-		code: "unrecognized_keys",
-		keys: unrecognized,
-		input,
-		inst,
-		continue: true
-	});
-	if (!proms.length) return payload;
-	return Promise.all(proms).then(() => {
-		return payload;
-	});
-}
-var $ZodObject$1 = /*@__PURE__*/ $constructor$1("$ZodObject", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	const desc = Object.getOwnPropertyDescriptor(def, "shape");
-	const sh = desc?.get ? desc.get.raw : def.shape ?? {};
-	if (sh) {
-		const get = () => {
-			const newSh = { ...sh };
-			Object.defineProperty(def, "shape", { value: newSh });
-			get.raw = newSh;
-			return newSh;
-		};
-		get.raw = sh;
-		Object.defineProperty(def, "shape", { get });
-	}
-	const _normalized = cached$1(() => normalizeDef$1(def));
-	defineLazyInternal$1(inst, "propValues", (zod) => {
-		const shape = zod.def.shape;
-		const propValues = {};
-		for (const key in shape) {
-			const field = shape[key]._zod;
-			if (field.values) {
-				if (!Object.prototype.hasOwnProperty.call(propValues, key)) assignProp$1(propValues, key, /* @__PURE__ */ new Set());
-				for (const v of field.values) propValues[key].add(v);
-				if (field.optin !== void 0) propValues[key].add(void 0);
-			}
-		}
-		return propValues;
-	});
-	const isObject = isObject$1;
-	const catchall = def.catchall;
-	let value;
-	const memo = globalConfig$1.memoizer;
-	memo?.attach(inst);
-	inst._zod.parse = (payload, ctx) => {
-		value ?? (value = _normalized.value);
-		const input = payload.value;
-		if (!isObject(input)) {
-			payload.issues.push({
-				expected: "object",
-				code: "invalid_type",
-				input,
-				inst
-			});
-			return payload;
-		}
-		payload.value = memo ? memo.alloc(inst, payload, {}, ctx) : {};
-		const proms = [];
-		const shape = value.shape;
-		const abortEarly = ctx?.abortEarly;
-		let seen = payload.issues.length;
-		for (const key of value.allKeys) {
-			if (abortEarly && payload.issues.length !== seen) {
-				if (aborted$1(payload, seen)) break;
-				seen = payload.issues.length;
-			}
-			if (key === "__proto__") continue;
-			const el = shape[key];
-			const optin = el._zod.optin;
-			const optout = el._zod.optout;
-			const r = el._zod.run({
-				value: input[key],
-				issues: []
-			}, ctx);
-			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult$1(r, payload, key, input, optin, optout)));
-			else handlePropertyResult$1(r, payload, key, input, optin, optout);
-		}
-		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
-		return handleCatchall$1(proms, input, payload, ctx, _normalized.value, inst, abortEarly === true);
-	};
-});
-var $ZodObjectJIT$1 = /*@__PURE__*/ $constructor$1("$ZodObjectJIT", (inst, def) => {
-	$ZodObject$1.init(inst, def);
-	const superParse = inst._zod.parse;
-	const _normalized = cached$1(() => normalizeDef$1(def));
-	const memo = globalConfig$1.memoizer;
-	const generateFastpass = (shape) => {
-		const normalized = _normalized.value;
-		const syms = normalized.symbolKeys;
-		const doc = new Doc$1(["payload", "ctx"], {
-			shape,
-			inst,
-			memo,
-			syms
-		});
-		const parseStr = (k) => `shape[${k}]._zod.run({ value: input[${k}], issues: [] }, ctx)`;
-		const prefixStr = (id, k) => `
-          let ${id}_ab = false;
-          for (let i = 0; i < ${id}.issues.length; i++) {
-            const iss = ${id}.issues[i];
-            iss.path = iss.path ? [${k}, ...iss.path] : [${k}];
-            payload.issues.push(iss);
-            if (iss.continue !== true) ${id}_ab = true;
-          }
-          if (${id}_ab && ctx && ctx.abortEarly) {
-            payload.value = newResult;
-            return payload;
-          }`;
-		doc.write(`const input = payload.value;`);
-		const ids = Object.create(null);
-		let counter = 0;
-		for (const key of normalized.allKeys) ids[key] = `key_${counter++}`;
-		doc.write(memo ? `const newResult = memo.alloc(inst, payload, {}, ctx);` : `const newResult = {};`);
-		for (const key of normalized.allKeys) {
-			if (key === "__proto__") continue;
-			const id = ids[key];
-			const k = typeof key === "symbol" ? `syms[${syms.indexOf(key)}]` : esc$1(key);
-			const isPresent = `${k} in input`;
-			const schema = shape[key];
-			const optin = schema?._zod?.optin;
-			const isOptionalIn = optin !== void 0;
-			const isOptionalOut = schema?._zod?.optout === "optional";
-			doc.write(`const ${id} = ${parseStr(k)};`);
-			if (isOptionalIn && isOptionalOut) {
-				const assign = optin === "optional" ? `${id}_present` : `${id}.value !== undefined || ${id}_present`;
-				doc.write(`
-        const ${id}_present = ${isPresent};
-        if (!${id}.issues.length || ${id}_present) {
-          if (${id}.issues.length) {${prefixStr(id, k)}
-          }
-
-          if (${assign}) {
-            newResult[${k}] = ${id}.value;
-          }
-        }
-
-      `);
-			} else if (!isOptionalIn) doc.write(`
-        const ${id}_present = ${isPresent};
-        if (${id}.issues.length) {${prefixStr(id, k)}
-        }
-        if (!${id}_present && !${id}.issues.length) {
-          payload.issues.push({
-            code: "invalid_type",
-            expected: "nonoptional",
-            input: undefined,
-            path: [${k}]
-          });
-          if (ctx && ctx.abortEarly) {
-            payload.value = newResult;
-            return payload;
-          }
-        }
-
-        if (${id}_present) {
-          newResult[${k}] = ${id}.value;
-        }
-
-      `);
-			else {
-				doc.write(`
-        if (${id}.issues.length) {${prefixStr(id, k)}
-        }
-      `);
-				if (optin === "defaulted") doc.write(`newResult[${k}] = ${id}.value;`);
-				else doc.write(`
-        if (${id}.value !== undefined || ${isPresent}) {
-          newResult[${k}] = ${id}.value;
-        }
-      `);
-			}
-		}
-		doc.write(`payload.value = newResult;`);
-		doc.write(`return payload;`);
-		return doc.compile();
-	};
-	let fastpass;
-	const isObject = isObject$1;
-	const jit = !globalConfig$1.jitless;
-	const fastEnabled = jit && allowsEval$1.value;
-	const catchall = def.catchall;
-	let value;
-	inst._zod.parse = (payload, ctx) => {
-		value ?? (value = _normalized.value);
-		const input = payload.value;
-		if (!isObject(input)) {
-			payload.issues.push({
-				expected: "object",
-				code: "invalid_type",
-				input,
-				inst
-			});
-			return payload;
-		}
-		if (jit && fastEnabled && ctx?.async === false && ctx.jitless !== true) {
-			if (!fastpass) fastpass = generateFastpass(def.shape);
-			payload = fastpass(payload, ctx);
-			if (!catchall) return payload;
-			return handleCatchall$1([], input, payload, ctx, value, inst, ctx?.abortEarly === true);
-		}
-		return superParse(payload, ctx);
-	};
-});
-function handleUnionResults$1(results, final, inst, ctx) {
-	for (const result of results) if (result.issues.length === 0) {
-		final.value = result.value;
-		return final;
-	}
-	const nonaborted = results.filter((r) => !aborted$1(r));
-	if (nonaborted.length === 1) {
-		final.value = nonaborted[0].value;
-		return nonaborted[0];
-	}
-	final.issues.push({
-		code: "invalid_union",
-		input: final.value,
-		inst,
-		errors: results.map((result) => result.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())))
-	});
-	return final;
-}
-var $ZodUnion$1 = /*@__PURE__*/ $constructor$1("$ZodUnion", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "optin", (zod) => zod.def.options.some((o) => o._zod.optin === "defaulted") ? "defaulted" : zod.def.options.some((o) => o._zod.optin !== void 0) ? "optional" : void 0);
-	defineLazyInternal$1(inst, "optout", (zod) => zod.def.options.some((o) => o._zod.optout === "optional") ? "optional" : void 0);
-	defineLazyInternal$1(inst, "values", (zod) => {
-		if (zod.def.options.every((o) => o._zod.values)) return new Set(zod.def.options.flatMap((option) => Array.from(option._zod.values)));
-	});
-	defineLazyInternal$1(inst, "pattern", (zod) => {
-		if (zod.def.options.every((o) => o._zod.pattern)) {
-			const patterns = zod.def.options.map((o) => o._zod.pattern);
-			return new RegExp(`^(${patterns.map((p) => cleanRegex$1(p.source)).join("|")})$`);
-		}
-	});
-	const first = def.options.length === 1 ? def.options[0]._zod.run : null;
-	inst._zod.parse = (payload, ctx) => {
-		if (first) return first(payload, ctx);
-		let async = false;
-		const results = [];
-		for (const option of def.options) {
-			const result = option._zod.run({
-				value: payload.value,
-				issues: []
-			}, ctx);
-			if (result instanceof Promise) {
-				results.push(result);
-				async = true;
-			} else {
-				if (result.issues.length === 0) return result;
-				results.push(result);
-			}
-		}
-		if (!async) return handleUnionResults$1(results, payload, inst, ctx);
-		return Promise.all(results).then((results) => {
-			return handleUnionResults$1(results, payload, inst, ctx);
-		});
-	};
-});
-var $ZodIntersection$1 = /*@__PURE__*/ $constructor$1("$ZodIntersection", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.parse = (payload, ctx) => {
-		const input = payload.value;
-		const left = def.left._zod.run({
-			value: input,
-			issues: []
-		}, ctx);
-		const right = def.right._zod.run({
-			value: input,
-			issues: []
-		}, ctx);
-		if (left instanceof Promise || right instanceof Promise) return Promise.all([left, right]).then(([left, right]) => {
-			return handleIntersectionResults$1(payload, left, right);
-		});
-		return handleIntersectionResults$1(payload, left, right);
-	};
-});
-function mergeValues$1(a, b) {
-	if (a === b) return {
-		valid: true,
-		data: a
-	};
-	if (a instanceof Date && b instanceof Date && +a === +b) return {
-		valid: true,
-		data: a
-	};
-	if (isPlainObject$1(a) && isPlainObject$1(b)) {
-		const bKeys = Object.keys(b);
-		const sharedKeys = Object.keys(a).filter((key) => bKeys.indexOf(key) !== -1);
-		const newObj = {
-			...a,
-			...b
-		};
-		if (Object.prototype.hasOwnProperty.call(newObj, "__proto__")) delete newObj.__proto__;
-		for (const key of sharedKeys) {
-			if (key === "__proto__") continue;
-			const sharedValue = mergeValues$1(a[key], b[key]);
-			if (!sharedValue.valid) return {
-				valid: false,
-				mergeErrorPath: [key, ...sharedValue.mergeErrorPath]
-			};
-			newObj[key] = sharedValue.data;
-		}
-		return {
-			valid: true,
-			data: newObj
-		};
-	}
-	if (Array.isArray(a) && Array.isArray(b)) {
-		if (a.length !== b.length) return {
-			valid: false,
-			mergeErrorPath: []
-		};
-		const newArray = [];
-		for (let index = 0; index < a.length; index++) {
-			const itemA = a[index];
-			const itemB = b[index];
-			const sharedValue = mergeValues$1(itemA, itemB);
-			if (!sharedValue.valid) return {
-				valid: false,
-				mergeErrorPath: [index, ...sharedValue.mergeErrorPath]
-			};
-			newArray.push(sharedValue.data);
-		}
-		return {
-			valid: true,
-			data: newArray
-		};
-	}
-	return {
-		valid: false,
-		mergeErrorPath: []
-	};
-}
-function handleIntersectionResults$1(result, left, right) {
-	const unrecKeys = /* @__PURE__ */ new Map();
-	let unrecIssue;
-	const keyIssues = /* @__PURE__ */ new Map();
-	const collect = (iss, side) => {
-		let keys;
-		if (iss.code === "unrecognized_keys" && !iss.path?.length) {
-			unrecIssue ?? (unrecIssue = iss);
-			keys = iss.keys;
-		} else if (iss.code === "invalid_key" && iss.origin === "record" && iss.path?.length === 1) {
-			const k = String(iss.path[0]);
-			if (!keyIssues.has(k)) keyIssues.set(k, iss);
-			keys = [k];
-		} else return false;
-		for (const k of keys) {
-			if (!unrecKeys.has(k)) unrecKeys.set(k, {});
-			unrecKeys.get(k)[side] = true;
-		}
-		return true;
-	};
-	for (const iss of left.issues) if (!collect(iss, "l")) result.issues.push(iss);
-	for (const iss of right.issues) if (!collect(iss, "r")) result.issues.push(iss);
-	const bothKeys = [...unrecKeys].filter(([, f]) => f.l && f.r).map(([k]) => k);
-	if (bothKeys.length) {
-		const aggregated = unrecIssue ? bothKeys.filter((k) => unrecIssue.keys.includes(k)) : [];
-		if (aggregated.length) result.issues.push({
-			...unrecIssue,
-			keys: aggregated
-		});
-		for (const k of bothKeys) if (!aggregated.includes(k) && keyIssues.has(k)) result.issues.push(keyIssues.get(k));
-	}
-	const merged = mergeValues$1(left.value, right.value);
-	if (!merged.valid) {
-		if (aborted$1(result)) return result;
-		throw new Error(`Unmergable intersection. Error path: ${JSON.stringify(merged.mergeErrorPath)}`);
-	}
-	result.value = merged.data;
-	return result;
-}
-var $ZodRecord$1 = /*@__PURE__*/ $constructor$1("$ZodRecord", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	const memo = globalConfig$1.memoizer;
-	memo?.attach(inst);
-	inst._zod.parse = (payload, ctx) => {
-		const input = payload.value;
-		if (!isPlainObject$1(input)) {
-			payload.issues.push({
-				expected: "record",
-				code: "invalid_type",
-				input,
-				inst
-			});
-			return payload;
-		}
-		const proms = [];
-		const values = def.keyType._zod.values;
-		if (values && !def.partial) {
-			payload.value = memo ? memo.alloc(inst, payload, {}, ctx) : {};
-			const recordKeys = /* @__PURE__ */ new Set();
-			for (const key of values) if (typeof key === "string" || typeof key === "number" || typeof key === "symbol") {
-				recordKeys.add(typeof key === "number" ? key.toString() : key);
-				if (key === "__proto__") continue;
-				const keyResult = def.keyType._zod.run({
-					value: key,
-					issues: []
-				}, ctx);
-				if (keyResult instanceof Promise) throw new Error("Async schemas not supported in object keys currently");
-				if (keyResult.issues.length) {
-					payload.issues.push({
-						code: "invalid_key",
-						origin: "record",
-						issues: keyResult.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())),
-						input: key,
-						path: [key],
-						inst
-					});
-					continue;
-				}
-				const outKey = keyResult.value;
-				if (outKey === "__proto__") continue;
-				const result = def.valueType._zod.run({
-					value: input[key],
-					issues: []
-				}, ctx);
-				if (result instanceof Promise) proms.push(result.then((result) => {
-					if (result.issues.length) payload.issues.push(...prefixIssues$1(key, result.issues));
-					payload.value[outKey] = result.value;
-				}));
-				else {
-					if (result.issues.length) payload.issues.push(...prefixIssues$1(key, result.issues));
-					payload.value[outKey] = result.value;
-				}
-			}
-			let unrecognized;
-			for (const key in input) if (!recordKeys.has(key)) {
-				if (def.mode === "loose") {
-					if (key === "__proto__") continue;
-					payload.value[key] = input[key];
-				} else {
-					unrecognized = unrecognized ?? [];
-					unrecognized.push(key);
-				}
-			}
-			if (unrecognized && unrecognized.length > 0) payload.issues.push({
-				code: "unrecognized_keys",
-				input,
-				inst,
-				keys: unrecognized,
-				continue: true
-			});
-		} else {
-			payload.value = memo ? memo.alloc(inst, payload, {}, ctx) : {};
-			let unrecognized;
-			for (const key of Reflect.ownKeys(input)) {
-				if (key === "__proto__") continue;
-				if (!Object.prototype.propertyIsEnumerable.call(input, key)) continue;
-				let keyResult = def.keyType._zod.run({
-					value: key,
-					issues: []
-				}, ctx);
-				if (keyResult instanceof Promise) throw new Error("Async schemas not supported in object keys currently");
-				if (typeof key === "string" && number$4.test(key) && keyResult.issues.length) {
-					const retryResult = def.keyType._zod.run({
-						value: Number(key),
-						issues: []
-					}, ctx);
-					if (retryResult instanceof Promise) throw new Error("Async schemas not supported in object keys currently");
-					if (retryResult.issues.length === 0) keyResult = retryResult;
-				}
-				if (keyResult.issues.length) {
-					if (def.mode === "loose") payload.value[key] = input[key];
-					else if (values) {
-						unrecognized = unrecognized ?? [];
-						unrecognized.push(key);
-					} else payload.issues.push({
-						code: "invalid_key",
-						origin: "record",
-						issues: keyResult.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())),
-						input: key,
-						path: [key],
-						inst
-					});
-					continue;
-				}
-				const outKey = keyResult.value;
-				if (outKey === "__proto__") continue;
-				const result = def.valueType._zod.run({
-					value: input[key],
-					issues: []
-				}, ctx);
-				if (result instanceof Promise) proms.push(result.then((result) => {
-					if (result.issues.length) payload.issues.push(...prefixIssues$1(key, result.issues));
-					payload.value[outKey] = result.value;
-				}));
-				else {
-					if (result.issues.length) payload.issues.push(...prefixIssues$1(key, result.issues));
-					payload.value[outKey] = result.value;
-				}
-			}
-			if (unrecognized && unrecognized.length > 0) payload.issues.push({
-				code: "unrecognized_keys",
-				input,
-				inst,
-				keys: unrecognized,
-				continue: true
-			});
-		}
-		if (proms.length) return Promise.all(proms).then(() => payload);
-		return payload;
-	};
-});
-var $ZodEnum$1 = /*@__PURE__*/ $constructor$1("$ZodEnum", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	const values = getEnumValues$1(def.entries);
-	const valuesSet = new Set(values);
-	inst._zod.values = valuesSet;
-	defineLazyInternal$1(inst, "pattern", (zod) => {
-		const patternValues = getEnumValues$1(zod.def.entries).filter((k) => propertyKeyTypes$1.has(typeof k));
-		return new RegExp(patternValues.length ? `^(${patternValues.map((o) => escapeRegex$1(o.toString())).join("|")})$` : "^[^\\s\\S]$");
-	});
-	inst._zod.parse = (payload, _ctx) => {
-		const input = payload.value;
-		if (valuesSet.has(input)) return payload;
-		payload.issues.push({
-			code: "invalid_value",
-			values,
-			input,
-			inst
-		});
-		return payload;
-	};
-});
-var $ZodLiteral$1 = /*@__PURE__*/ $constructor$1("$ZodLiteral", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	const values = new Set(def.values);
-	inst._zod.values = values;
-	defineLazyInternal$1(inst, "pattern", (zod) => {
-		const vals = zod.def.values;
-		return new RegExp(vals.length ? `^(${vals.map((o) => typeof o === "string" ? escapeRegex$1(o) : o ? escapeRegex$1(o.toString()) : String(o)).join("|")})$` : "^[^\\s\\S]$");
-	});
-	inst._zod.parse = (payload, _ctx) => {
-		const input = payload.value;
-		if (values.has(input)) return payload;
-		payload.issues.push({
-			code: "invalid_value",
-			values: def.values,
-			input,
-			inst
-		});
-		return payload;
-	};
-});
-var $ZodTransform$1 = /*@__PURE__*/ $constructor$1("$ZodTransform", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.optin = "optional";
-	globalConfig$1.memoizer?.guard(inst);
-	inst._zod.parse = (payload, ctx) => {
-		if (ctx.direction === "backward") throw new $ZodEncodeError$1(inst.constructor.name);
-		const _out = def.transform(payload.value, payload);
-		if (ctx.async) return (_out instanceof Promise ? _out : Promise.resolve(_out)).then((output) => {
-			payload.value = output;
-			return payload;
-		});
-		if (_out instanceof Promise) throw new $ZodAsyncError$1();
-		payload.value = _out;
-		return payload;
-	};
-});
-function handleOptionalResult$1(payload, result) {
-	payload.value = result.issues.length ? void 0 : result.value;
-	return payload;
-}
-var $ZodOptional$1 = /*@__PURE__*/ $constructor$1("$ZodOptional", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "optin", (zod) => zod.def.innerType._zod.optin === "defaulted" ? "defaulted" : "optional");
-	inst._zod.optout = "optional";
-	defineLazyInternal$1(inst, "values", (zod) => {
-		const values = zod.def.innerType._zod.values;
-		return values ? /* @__PURE__ */ new Set([...values, void 0]) : void 0;
-	});
-	defineLazyInternal$1(inst, "pattern", (zod) => {
-		const pattern = zod.def.innerType._zod.pattern;
-		return pattern ? new RegExp(`^(${cleanRegex$1(pattern.source)})?$`) : void 0;
-	});
-	inst._zod.parse = (payload, ctx) => {
-		if (payload.value === void 0) {
-			if (def.innerType._zod.optin !== "defaulted") return payload;
-			const result = def.innerType._zod.run({
-				value: payload.value,
-				issues: []
-			}, ctx);
-			if (result instanceof Promise) return result.then((result) => handleOptionalResult$1(payload, result));
-			return handleOptionalResult$1(payload, result);
-		}
-		return def.innerType._zod.run(payload, ctx);
-	};
-});
-var $ZodExactOptional$1 = /*@__PURE__*/ $constructor$1("$ZodExactOptional", (inst, def) => {
-	$ZodOptional$1.init(inst, def);
-	defineLazyInternal$1(inst, "values", (zod) => zod.def.innerType._zod.values);
-	defineLazyInternal$1(inst, "pattern", (zod) => zod.def.innerType._zod.pattern);
-	inst._zod.parse = (payload, ctx) => {
-		return def.innerType._zod.run(payload, ctx);
-	};
-});
-var $ZodNullable$1 = /*@__PURE__*/ $constructor$1("$ZodNullable", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "optin", (zod) => zod.def.innerType._zod.optin);
-	defineLazyInternal$1(inst, "optout", (zod) => zod.def.innerType._zod.optout);
-	defineLazyInternal$1(inst, "pattern", (zod) => {
-		const pattern = zod.def.innerType._zod.pattern;
-		return pattern ? new RegExp(`^(${cleanRegex$1(pattern.source)}|null)$`) : void 0;
-	});
-	defineLazyInternal$1(inst, "values", (zod) => {
-		return zod.def.innerType._zod.values ? /* @__PURE__ */ new Set([...zod.def.innerType._zod.values, null]) : void 0;
-	});
-	inst._zod.parse = (payload, ctx) => {
-		if (payload.value === null) return payload;
-		return def.innerType._zod.run(payload, ctx);
-	};
-});
-var $ZodDefault$1 = /*@__PURE__*/ $constructor$1("$ZodDefault", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.optin = "defaulted";
-	defineLazyInternal$1(inst, "values", (zod) => zod.def.innerType._zod.values);
-	inst._zod.parse = (payload, ctx) => {
-		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
-		if (payload.value === void 0) {
-			payload.value = def.defaultValue;
-			/**
-			* $ZodDefault returns the default value immediately in forward direction.
-			* It doesn't pass the default value into the validator ("prefault"). There's no reason to pass the default value through validation. The validity of the default is enforced by TypeScript statically. Otherwise, it's the responsibility of the user to ensure the default is valid. In the case of pipes with divergent in/out types, you can specify the default on the `in` schema of your ZodPipe to set a "prefault" for the pipe.   */
-			return payload;
-		}
-		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then((result) => handleDefaultResult$1(result, def));
-		return handleDefaultResult$1(result, def);
-	};
-});
-function handleDefaultResult$1(payload, def) {
-	if (payload.value === void 0) payload.value = def.defaultValue;
-	return payload;
-}
-var $ZodPrefault$1 = /*@__PURE__*/ $constructor$1("$ZodPrefault", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	inst._zod.optin = "defaulted";
-	defineLazyInternal$1(inst, "values", (zod) => zod.def.innerType._zod.values);
-	inst._zod.parse = (payload, ctx) => {
-		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
-		if (payload.value === void 0) payload.value = def.defaultValue;
-		return def.innerType._zod.run(payload, ctx);
-	};
-});
-var $ZodNonOptional$1 = /*@__PURE__*/ $constructor$1("$ZodNonOptional", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "values", (zod) => {
-		const v = zod.def.innerType._zod.values;
-		return v ? new Set([...v].filter((x) => x !== void 0)) : void 0;
-	});
-	inst._zod.parse = (payload, ctx) => {
-		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then((result) => handleNonOptionalResult$1(result, inst));
-		return handleNonOptionalResult$1(result, inst);
-	};
-});
-function handleNonOptionalResult$1(payload, inst) {
-	if (!payload.issues.length && payload.value === void 0) payload.issues.push({
-		code: "invalid_type",
-		expected: "nonoptional",
-		input: payload.value,
-		inst
-	});
-	return payload;
-}
-function handleCatchResult$1(payload, result, def, ctx) {
-	if (!result.issues.length) {
-		payload.value = result.value;
-		if (result.memo) payload.memo = true;
-		return payload;
-	}
-	payload.value = def.catchValue({
-		...result,
-		value: payload.value,
-		error: { issues: result.issues.map((iss) => finalizeIssue$1(iss, ctx, config$1())) },
-		input: payload.value
-	});
-	return payload;
-}
-var $ZodCatch$1 = /*@__PURE__*/ $constructor$1("$ZodCatch", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "optin", (zod) => zod.def.innerType._zod.optin === "defaulted" ? "defaulted" : "optional");
-	defineLazyInternal$1(inst, "optout", (zod) => zod.def.innerType._zod.optout);
-	defineLazyInternal$1(inst, "values", (zod) => zod.def.innerType._zod.values);
-	inst._zod.parse = (payload, ctx) => {
-		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
-		const result = def.innerType._zod.run({
-			value: payload.value,
-			issues: []
-		}, ctx);
-		if (result instanceof Promise) return result.then((result) => handleCatchResult$1(payload, result, def, ctx));
-		return handleCatchResult$1(payload, result, def, ctx);
-	};
-});
-var $ZodPipe$1 = /*@__PURE__*/ $constructor$1("$ZodPipe", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "values", (zod) => zod.def.in._zod.values);
-	defineLazyInternal$1(inst, "optin", (zod) => zod.def.in._zod.optin);
-	defineLazyInternal$1(inst, "optout", (zod) => zod.def.out._zod.optout);
-	defineLazyInternal$1(inst, "propValues", (zod) => zod.def.in._zod.propValues);
-	inst._zod.parse = (payload, ctx) => {
-		if (ctx.direction === "backward") {
-			const right = def.out._zod.run(payload, ctx);
-			if (right instanceof Promise) return right.then((right) => handlePipeResult$1(right, def.in, ctx));
-			return handlePipeResult$1(right, def.in, ctx);
-		}
-		const left = def.in._zod.run(payload, ctx);
-		if (left instanceof Promise) return left.then((left) => handlePipeResult$1(left, def.out, ctx));
-		return handlePipeResult$1(left, def.out, ctx);
-	};
-});
-function handlePipeResult$1(left, next, ctx) {
-	if (left.issues.some((iss) => iss.code !== "unrecognized_keys")) {
-		left.aborted = true;
-		return left;
-	}
-	return next._zod.run({
-		value: left.value,
-		issues: left.issues
-	}, ctx);
-}
-var $ZodReadonly$1 = /*@__PURE__*/ $constructor$1("$ZodReadonly", (inst, def) => {
-	$ZodType$1.init(inst, def);
-	defineLazyInternal$1(inst, "propValues", (zod) => zod.def.innerType._zod.propValues);
-	defineLazyInternal$1(inst, "values", (zod) => zod.def.innerType._zod.values);
-	defineLazyInternal$1(inst, "optin", (zod) => zod.def.innerType?._zod?.optin);
-	defineLazyInternal$1(inst, "optout", (zod) => zod.def.innerType?._zod?.optout);
-	inst._zod.parse = (payload, ctx) => {
-		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
-		const result = def.innerType._zod.run(payload, ctx);
-		if (result instanceof Promise) return result.then(handleReadonlyResult$1);
-		return handleReadonlyResult$1(result);
-	};
-});
-function handleReadonlyResult$1(payload) {
-	if (!payload.memo) payload.value = Object.freeze(payload.value);
-	return payload;
-}
-var $ZodCustom$1 = /*@__PURE__*/ $constructor$1("$ZodCustom", (inst, def) => {
-	$ZodCheck$1.init(inst, def);
-	$ZodType$1.init(inst, def);
-	inst._zod.parse = (payload, _) => {
-		return payload;
-	};
-	inst._zod.check = (payload) => {
-		const input = payload.value;
-		const r = def.fn(input);
-		if (r instanceof Promise) return r.then((r) => handleRefineResult$1(r, payload, input, inst));
-		handleRefineResult$1(r, payload, input, inst);
-	};
-});
-function handleRefineResult$1(result, payload, input, inst) {
-	if (!result) {
-		const _iss = {
-			code: "custom",
-			input,
-			inst,
-			path: [...inst._zod.def.path ?? []],
-			continue: !inst._zod.def.abort
-		};
-		if (inst._zod.def.params) _iss.params = inst._zod.def.params;
-		payload.issues.push(issue$1(_iss));
-	}
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/memoizer.js
-var $ZodCyclicError$1 = class extends Error {
-	constructor() {
-		super(`Cannot parse a reference cycle that closes through a transform`);
-		this.name = "ZodCyclicError";
-	}
-};
-/** Keyed off the context object every schema in one parse call already shares. */
-var STATE$2 = "~memo";
-var NO_ISSUES$1 = [];
-function isRef(value) {
-	return value !== null && typeof value === "object";
-}
-function cloneIssues$1(issues) {
-	return issues.map((iss) => iss.path ? {
-		...iss,
-		path: iss.path.slice()
-	} : { ...iss });
-}
-var recursive$1 = /*@__PURE__*/ new WeakMap();
-/** What the walk established, in order of certainty: ordered so the strongest answer among children wins. */
-var NONE = 0;
-var ASSUMED = 1;
-var PROVEN = 2;
-/** Whether this schema's subtree contains a cycle, so one parse can re-enter it. */
-function isRecursive$1(inst, stack, resolve) {
-	const cached = recursive$1.get(inst);
-	if (cached !== void 0) return cached ? PROVEN : NONE;
-	if (stack.has(inst)) return PROVEN;
-	stack.add(inst);
-	let result = NONE;
-	const check = (child) => {
-		if (result !== PROVEN && child?._zod) {
-			const answer = isRecursive$1(child, stack, resolve);
-			if (answer > result) result = answer;
-		}
-	};
-	const shape = (sh, spread) => {
-		let answer = NONE;
-		for (const key of Reflect.ownKeys(sh)) {
-			const desc = Object.getOwnPropertyDescriptor(sh, key);
-			if (spread && !desc.enumerable) continue;
-			const child = desc.get ? ASSUMED : desc.value?._zod ? isRecursive$1(desc.value, stack, resolve) : NONE;
-			if (child > answer) answer = child;
-		}
-		return answer;
-	};
-	const merge = (answer) => {
-		if (answer > result) result = answer;
-	};
-	const def = inst._zod.def;
-	switch (def.type) {
-		case "object": {
-			const raw = rawShape(def);
-			merge(raw ? shape(raw, true) : ASSUMED);
-			check(def.catchall);
-			break;
-		}
-		case "array":
-			check(def.element);
-			break;
-		case "tuple":
-			for (const el of def.items) check(el);
-			check(def.rest);
-			break;
-		case "record":
-		case "map":
-			check(def.keyType);
-			check(def.valueType);
-			break;
-		case "set":
-			check(def.valueType);
-			break;
-		case "union":
-			for (const el of def.options) check(el);
-			break;
-		case "intersection":
-			check(def.left);
-			check(def.right);
-			break;
-		case "optional":
-		case "nullable":
-		case "default":
-		case "prefault":
-		case "catch":
-		case "readonly":
-		case "nonoptional":
-		case "promise":
-		case "success":
-			check(def.innerType);
-			break;
-		case "pipe":
-			check(def.in);
-			check(def.out);
-			break;
-		case "function":
-			check(def.input);
-			check(def.output);
-			break;
-		case "lazy": {
-			const inner = def._cachedInner ?? (resolve ? inst._zod.innerType : void 0);
-			merge(inner ? isRecursive$1(inner, stack, false) : ASSUMED);
-			break;
-		}
-		case "template_literal":
-		case "string":
-		case "number":
-		case "int":
-		case "boolean":
-		case "bigint":
-		case "symbol":
-		case "undefined":
-		case "null":
-		case "void":
-		case "never":
-		case "any":
-		case "unknown":
-		case "date":
-		case "nan":
-		case "enum":
-		case "literal":
-		case "file":
-		case "transform":
-		case "custom": break;
-		default: for (const key in def) {
-			const desc = Object.getOwnPropertyDescriptor(def, key);
-			if (!desc || desc.get) continue;
-			const value = desc.value;
-			if (!value || typeof value !== "object") continue;
-			if (value._zod) check(value);
-			else if (Array.isArray(value)) for (const el of value) check(el);
-		}
-	}
-	stack.delete(inst);
-	return settle(inst, result);
-}
-/** An assumed answer must not outlive the resolution that settles it, so only a certain one is cached. */
-function settle(inst, answer) {
-	if (answer !== ASSUMED) recursive$1.set(inst, answer === PROVEN);
-	return answer;
-}
-function bucketFor$1(state, inst) {
-	let bucket = state.buckets.get(inst);
-	if (!bucket) {
-		bucket = /* @__PURE__ */ new WeakMap();
-		state.buckets.set(inst, bucket);
-	}
-	return bucket;
-}
-var handoff$1;
-var open$1 = [];
-var memo$1 = {
-	alloc(_inst, payload, empty) {
-		const bucket = handoff$1;
-		if (!bucket) return empty;
-		handoff$1 = void 0;
-		const entry = {
-			value: empty,
-			issues: null
-		};
-		bucket.set(payload.value, entry);
-		open$1.push(entry);
-		return empty;
-	},
-	guard(inst) {
-		var _a;
-		(_a = inst._zod).deferred ?? (_a.deferred = []);
-		inst._zod.deferred.push(() => {
-			const base = inst._zod.parse;
-			const wrapped = (payload, ctx) => {
-				if (ctx.direction !== "backward" && isBackEdge$1(ctx, payload.value)) throw new $ZodCyclicError$1();
-				return base(payload, ctx);
-			};
-			inst._zod.parse = wrapped;
-			if (inst._zod.run === base) inst._zod.run = wrapped;
-		});
-	},
-	attach(inst) {
-		var _a;
-		let isRecursiveInst;
-		let rechecked = false;
-		let lastCtx;
-		let lastBucket;
-		(_a = inst._zod).deferred ?? (_a.deferred = []);
-		inst._zod.deferred.push(() => {
-			const base = inst._zod.parse;
-			const wrapped = (payload, ctx) => {
-				if (isRecursiveInst === void 0) {
-					const walked = isRecursive$1(inst, /* @__PURE__ */ new Set(), false);
-					if (walked === NONE) {
-						inst._zod.parse = base;
-						if (inst._zod.run === wrapped) inst._zod.run = base;
-						return base(payload, ctx);
-					}
-					if (walked === PROVEN || rechecked) isRecursiveInst = true;
-					else rechecked = true;
-				}
-				const input = payload.value;
-				if (!isRef(input)) return base(payload, ctx);
-				let state = ctx[STATE$2];
-				if (!state) {
-					state = {
-						buckets: /* @__PURE__ */ new WeakMap(),
-						backEdges: void 0
-					};
-					ctx[STATE$2] = state;
-				}
-				let bucket;
-				if (lastCtx === ctx) bucket = lastBucket;
-				else {
-					bucket = bucketFor$1(state, inst);
-					lastCtx = ctx;
-					lastBucket = bucket;
-				}
-				const hit = bucket.get(input);
-				if (hit) {
-					payload.value = hit.value;
-					if (hit.issues) {
-						if (hit.issues.length) payload.issues.push(...cloneIssues$1(hit.issues));
-					} else {
-						payload.memo = true;
-						state.backEdges ?? (state.backEdges = /* @__PURE__ */ new WeakSet());
-						state.backEdges.add(hit.value);
-					}
-					return payload;
-				}
-				handoff$1 = bucket;
-				const depth = open$1.length;
-				const result = base(payload, ctx);
-				handoff$1 = void 0;
-				const entry = open$1.length > depth ? open$1.pop() : void 0;
-				if (result instanceof Promise) return result.then((r) => {
-					if (entry) entry.issues = r.issues.length ? cloneIssues$1(r.issues) : NO_ISSUES$1;
-					return r;
-				});
-				if (entry) entry.issues = result.issues.length ? cloneIssues$1(result.issues) : NO_ISSUES$1;
-				return result;
-			};
-			inst._zod.parse = wrapped;
-			if (inst._zod.run === base) inst._zod.run = wrapped;
-		});
-	}
-};
-/** The memoizer that gives containers cycle support. `zod` installs it by default; `zod/mini` opts in with `config({ memoizer: memoizer() })`. */
-function memoizer$1() {
-	return memo$1;
-}
-/** Whether this value is a node a back-edge resolved to before it finished. */
-function isBackEdge$1(ctx, value) {
-	const backEdges = ctx[STATE$2]?.backEdges;
-	return backEdges !== void 0 && isRef(value) && backEdges.has(value);
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/locales/en.js
-var error$1 = () => {
-	const Sizable = {
-		string: {
-			unit: "characters",
-			verb: "to have"
-		},
-		file: {
-			unit: "bytes",
-			verb: "to have"
-		},
-		array: {
-			unit: "items",
-			verb: "to have"
-		},
-		set: {
-			unit: "items",
-			verb: "to have"
-		},
-		map: {
-			unit: "entries",
-			verb: "to have"
-		}
-	};
-	function getSizing(origin) {
-		return Sizable[origin] ?? null;
-	}
-	const FormatDictionary = {
-		regex: "input",
-		email: "email address",
-		url: "URL",
-		emoji: "emoji",
-		uuid: "UUID",
-		uuidv4: "UUIDv4",
-		uuidv6: "UUIDv6",
-		nanoid: "nanoid",
-		guid: "GUID",
-		cuid: "cuid",
-		cuid2: "cuid2",
-		ulid: "ULID",
-		xid: "XID",
-		ksuid: "KSUID",
-		datetime: "ISO datetime",
-		date: "ISO date",
-		time: "ISO time",
-		duration: "ISO duration",
-		ipv4: "IPv4 address",
-		ipv6: "IPv6 address",
-		mac: "MAC address",
-		cidrv4: "IPv4 range",
-		cidrv6: "IPv6 range",
-		base64: "base64-encoded string",
-		base64url: "base64url-encoded string",
-		json_string: "JSON string",
-		e164: "E.164 number",
-		currency_code: "currency code",
-		credit_card: "credit card number",
-		iban: "IBAN",
-		jwt: "JWT",
-		template_literal: "input"
-	};
-	const TypeDictionary = { nan: "NaN" };
-	function getTypeName(type, input) {
-		if (type === "number" && typeof input === "number" && !Number.isFinite(input)) return String(input);
-		return TypeDictionary[type] ?? type;
-	}
-	return (issue) => {
-		switch (issue.code) {
-			case "invalid_type": return `Invalid input: expected ${getTypeName(issue.expected)}, received ${getTypeName(parsedType$1(issue.input), issue.input)}`;
-			case "invalid_value":
-				if (issue.values.length === 1) return `Invalid input: expected ${stringifyPrimitive$1(issue.values[0])}`;
-				return `Invalid option: expected one of ${joinValues$1(issue.values, "|")}`;
-			case "too_big": {
-				const adj = issue.exact ? "exactly " : issue.inclusive ? "<=" : "<";
-				const sizing = getSizing(issue.origin);
-				if (sizing) return `Too big: expected ${issue.origin ?? "value"} to have ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elements"}`;
-				return `Too big: expected ${issue.origin ?? "value"} to be ${adj}${issue.maximum.toString()}`;
-			}
-			case "too_small": {
-				const adj = issue.exact ? "exactly " : issue.inclusive ? ">=" : ">";
-				const sizing = getSizing(issue.origin);
-				if (sizing) return `Too small: expected ${issue.origin} to have ${adj}${issue.minimum.toString()} ${sizing.unit}`;
-				return `Too small: expected ${issue.origin} to be ${adj}${issue.minimum.toString()}`;
-			}
-			case "invalid_format": {
-				const _issue = issue;
-				if (_issue.format === "starts_with") return `Invalid string: must start with "${_issue.prefix}"`;
-				if (_issue.format === "ends_with") return `Invalid string: must end with "${_issue.suffix}"`;
-				if (_issue.format === "includes") return `Invalid string: must include "${_issue.includes}"`;
-				if (_issue.format === "regex") return `Invalid string: must match pattern ${_issue.pattern}`;
-				return `Invalid ${FormatDictionary[_issue.format] ?? issue.format}`;
-			}
-			case "not_multiple_of": return `Invalid number: must be a multiple of ${issue.divisor}`;
-			case "unrecognized_keys": return `Unrecognized key${issue.keys.length > 1 ? "s" : ""}: ${joinValues$1(issue.keys, ", ")}`;
-			case "invalid_key": return `Invalid key in ${issue.origin}`;
-			case "invalid_union":
-				if (issue.options && Array.isArray(issue.options) && issue.options.length > 0) return `Invalid discriminator value. Expected ${issue.options.map((o) => `'${o}'`).join(" | ")}`;
-				if (issue.inclusive === false) return "Invalid input: more than one option matched";
-				return "Invalid input";
-			case "invalid_element": return `Invalid value in ${issue.origin}`;
-			default: return `Invalid input`;
-		}
-	};
-};
-function en_default$1() {
-	return { localeError: error$1() };
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/registries.js
-var _a$2;
-var $ZodRegistry$1 = class {
-	constructor() {
-		this._map = /* @__PURE__ */ new WeakMap();
-		this._idmap = /* @__PURE__ */ new Map();
-	}
-	add(schema, ..._meta) {
-		const meta = _meta[0];
-		this._map.set(schema, meta);
-		if (meta && typeof meta === "object" && "id" in meta) this._idmap.set(meta.id, schema);
-		return this;
-	}
-	clear() {
-		this._map = /* @__PURE__ */ new WeakMap();
-		this._idmap = /* @__PURE__ */ new Map();
-		return this;
-	}
-	remove(schema) {
-		const meta = this._map.get(schema);
-		if (meta && typeof meta === "object" && "id" in meta) this._idmap.delete(meta.id);
-		this._map.delete(schema);
-		return this;
-	}
-	get(schema) {
-		const p = schema._zod.parent;
-		if (p) {
-			const pm = { ...this.get(p) ?? {} };
-			delete pm.id;
-			const f = {
-				...pm,
-				...this._map.get(schema)
-			};
-			return Object.keys(f).length ? f : void 0;
-		}
-		return this._map.get(schema);
-	}
-	has(schema) {
-		return this._map.has(schema);
-	}
-};
-function registry$1() {
-	return new $ZodRegistry$1();
-}
-(_a$2 = globalThis).__zod_globalRegistry ?? (_a$2.__zod_globalRegistry = registry$1());
-var globalRegistry$1 = globalThis.__zod_globalRegistry;
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/api.js
-function snapshotChecks(def) {
-	if (def.checks) def.checks = [...def.checks];
-	return def;
-}
-// @__NO_SIDE_EFFECTS__
-function _string$1(Class, params) {
-	return new Class(snapshotChecks({
-		type: "string",
-		...normalizeParams$1(params)
-	}));
-}
-// @__NO_SIDE_EFFECTS__
-function _email$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "email",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _guid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "guid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _uuid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "uuid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _uuidv4$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "uuid",
-		check: "string_format",
-		abort: false,
-		version: "v4",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _uuidv6$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "uuid",
-		check: "string_format",
-		abort: false,
-		version: "v6",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _uuidv7$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "uuid",
-		check: "string_format",
-		abort: false,
-		version: "v7",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _url$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "url",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _emoji$2(Class, params) {
-	return new Class({
-		type: "string",
-		format: "emoji",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _nanoid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "nanoid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-/**
-* @deprecated CUID v1 is deprecated by its authors due to information leakage
-* (timestamps embedded in the id). Use {@link _cuid2} instead.
-* See https://github.com/paralleldrive/cuid.
-*/
-// @__NO_SIDE_EFFECTS__
-function _cuid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "cuid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _cuid2$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "cuid2",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _ulid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "ulid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _xid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "xid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _ksuid$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "ksuid",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _ipv4$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "ipv4",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _ipv6$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "ipv6",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _cidrv4$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "cidrv4",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _cidrv6$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "cidrv6",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _base64$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "base64",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _base64url$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "base64url",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _e164$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "e164",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _jwt$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "jwt",
-		check: "string_format",
-		abort: false,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _isoDateTime$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "datetime",
-		check: "string_format",
-		offset: false,
-		local: false,
-		precision: null,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _isoDate$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "date",
-		check: "string_format",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _isoTime$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "time",
-		check: "string_format",
-		precision: null,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _isoDuration$1(Class, params) {
-	return new Class({
-		type: "string",
-		format: "duration",
-		check: "string_format",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _number$1(Class, params) {
-	return new Class(snapshotChecks({
-		type: "number",
-		checks: [],
-		...normalizeParams$1(params)
-	}));
-}
-// @__NO_SIDE_EFFECTS__
-function _int$1(Class, params) {
-	return new Class({
-		type: "number",
-		check: "number_format",
-		abort: false,
-		format: "safeint",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _boolean$1(Class, params) {
-	return new Class({
-		type: "boolean",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _unknown$1(Class) {
-	return new Class({ type: "unknown" });
-}
-// @__NO_SIDE_EFFECTS__
-function _never$1(Class, params) {
-	return new Class({
-		type: "never",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _lt$1(value, params) {
-	return new $ZodCheckLessThan$1({
-		check: "less_than",
-		...normalizeParams$1(params),
-		value,
-		inclusive: false
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _lte$1(value, params) {
-	return new $ZodCheckLessThan$1({
-		check: "less_than",
-		...normalizeParams$1(params),
-		value,
-		inclusive: true
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _gt$1(value, params) {
-	return new $ZodCheckGreaterThan$1({
-		check: "greater_than",
-		...normalizeParams$1(params),
-		value,
-		inclusive: false
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _gte$1(value, params) {
-	return new $ZodCheckGreaterThan$1({
-		check: "greater_than",
-		...normalizeParams$1(params),
-		value,
-		inclusive: true
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _multipleOf$1(value, params) {
-	return new $ZodCheckMultipleOf$1({
-		check: "multiple_of",
-		...normalizeParams$1(params),
-		value
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _maxLength$1(maximum, params) {
-	return new $ZodCheckMaxLength$1({
-		check: "max_length",
-		...normalizeParams$1(params),
-		maximum
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _minLength$1(minimum, params) {
-	return new $ZodCheckMinLength$1({
-		check: "min_length",
-		...normalizeParams$1(params),
-		minimum
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _length$1(length, params) {
-	return new $ZodCheckLengthEquals$1({
-		check: "length_equals",
-		...normalizeParams$1(params),
-		length
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _regex$1(pattern, params) {
-	return new $ZodCheckRegex$1({
-		check: "string_format",
-		format: "regex",
-		...normalizeParams$1(params),
-		pattern
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _lowercase$1(params) {
-	return new $ZodCheckLowerCase$1({
-		check: "string_format",
-		format: "lowercase",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _uppercase$1(params) {
-	return new $ZodCheckUpperCase$1({
-		check: "string_format",
-		format: "uppercase",
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _includes$1(includes, params) {
-	return new $ZodCheckIncludes$1({
-		check: "string_format",
-		format: "includes",
-		...normalizeParams$1(params),
-		includes
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _startsWith$1(prefix, params) {
-	return new $ZodCheckStartsWith$1({
-		check: "string_format",
-		format: "starts_with",
-		...normalizeParams$1(params),
-		prefix
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _endsWith$1(suffix, params) {
-	return new $ZodCheckEndsWith$1({
-		check: "string_format",
-		format: "ends_with",
-		...normalizeParams$1(params),
-		suffix
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _overwrite$1(tx) {
-	return new $ZodCheckOverwrite$1({
-		check: "overwrite",
-		tx
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _normalize$1(form) {
-	return /* @__PURE__ */ _overwrite$1((input) => input.normalize(form));
-}
-// @__NO_SIDE_EFFECTS__
-function _trim$1() {
-	return /* @__PURE__ */ _overwrite$1((input) => input.trim());
-}
-// @__NO_SIDE_EFFECTS__
-function _toLowerCase$1() {
-	return /* @__PURE__ */ _overwrite$1((input) => input.toLowerCase());
-}
-// @__NO_SIDE_EFFECTS__
-function _toUpperCase$1() {
-	return /* @__PURE__ */ _overwrite$1((input) => input.toUpperCase());
-}
-// @__NO_SIDE_EFFECTS__
-function _slugify$1() {
-	return /* @__PURE__ */ _overwrite$1((input) => slugify$1(input));
-}
-// @__NO_SIDE_EFFECTS__
-function _array$1(Class, element, params) {
-	return new Class({
-		type: "array",
-		element,
-		...normalizeParams$1(params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _refine$1(Class, fn, _params) {
-	return new Class({
-		type: "custom",
-		check: "custom",
-		fn,
-		...normalizeParams$1(_params)
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function _superRefine$1(fn, params) {
-	const ch = /* @__PURE__ */ _check$1((payload) => {
-		payload.addIssue = (issue) => {
-			if (typeof issue === "string") payload.issues.push(issue$1(issue, payload.value, ch._zod.def));
-			else {
-				const _issue = issue;
-				if (_issue.fatal) _issue.continue = false;
-				_issue.code ?? (_issue.code = "custom");
-				if (!("input" in _issue)) _issue.input = payload.value;
-				_issue.inst ?? (_issue.inst = ch);
-				_issue.continue ?? (_issue.continue = !ch._zod.def.abort);
-				payload.issues.push(issue$1(_issue));
-			}
-		};
-		return fn(payload.value, payload);
-	}, params);
-	return ch;
-}
-// @__NO_SIDE_EFFECTS__
-function _check$1(fn, params) {
-	const ch = new $ZodCheck$1({
-		check: "custom",
-		...normalizeParams$1(params)
-	});
-	ch._zod.check = fn;
-	return ch;
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/to-json-schema.js
-function assignProps$1(target, ...sources) {
-	for (const source of sources) for (const key of Reflect.ownKeys(source)) if (Object.prototype.propertyIsEnumerable.call(source, key)) assignProp$1(target, key, source[key]);
-	return target;
-}
-function initializeContext$1(params) {
-	let target = params?.target ?? "draft-2020-12";
-	if (target === "draft-4") target = "draft-04";
-	if (target === "draft-7") target = "draft-07";
-	return {
-		processors: params.processors ?? {},
-		metadataRegistry: params?.metadata ?? globalRegistry$1,
-		target,
-		unrepresentable: params?.unrepresentable ?? "throw",
-		override: params?.override ?? (() => {}),
-		io: params?.io ?? "output",
-		counter: 0,
-		seen: /* @__PURE__ */ new Map(),
-		sharedDefsExtractedFor: void 0,
-		sharedEmitDoneFor: void 0,
-		cycles: params?.cycles ?? "ref",
-		reused: params?.reused ?? "inline",
-		intersections: [],
-		deferred: [],
-		external: params?.external ?? void 0
-	};
-}
-/**
-* Applies the `unrepresentable` setting at a site that has no JSON Schema equivalent. Throws
-* `message` unless the setting (or the handler's return value) says otherwise. Returns `true` if a
-* custom JSON Schema was written into `json`, in which case the caller must not write its own.
-*/
-function handleUnrepresentable$1(schema, ctx, json, params, message) {
-	const result = typeof ctx.unrepresentable === "function" ? ctx.unrepresentable({
-		zodSchema: schema,
-		path: params.path,
-		message
-	}) : ctx.unrepresentable;
-	if (result === "any") return false;
-	if (result === void 0 || result === "throw") throw new Error(message);
-	Object.assign(json, result);
-	return true;
-}
-function processSchema(schema, ctx, _params = {
-	path: [],
-	schemaPath: []
-}) {
-	var _a;
-	const def = schema._zod.def;
-	const seen = ctx.seen.get(schema);
-	if (seen) {
-		seen.count++;
-		if (_params.schemaPath.includes(schema)) seen.cycle = _params.path;
-		return seen.schema;
-	}
-	const result = {
-		schema: {},
-		count: 1,
-		cycle: void 0,
-		path: _params.path
-	};
-	ctx.seen.set(schema, result);
-	ctx.sharedDefsExtractedFor = void 0;
-	ctx.sharedEmitDoneFor = void 0;
-	const overrideSchema = schema._zod.toJSONSchema?.();
-	if (overrideSchema) result.schema = overrideSchema;
-	else {
-		const params = {
-			..._params,
-			schemaPath: [..._params.schemaPath, schema],
-			path: _params.path
-		};
-		if (schema._zod.processJSONSchema) schema._zod.processJSONSchema(ctx, result.schema, params);
-		else {
-			const _json = result.schema;
-			const processor = ctx.processors[def.type];
-			if (!processor) throw new Error(`[toJSONSchema]: Non-representable type encountered: ${def.type}`);
-			processor(schema, ctx, _json, params);
-		}
-		const parent = schema._zod.parent;
-		if (parent) {
-			if (!result.ref) result.ref = parent;
-			processSchema(parent, ctx, params);
-			ctx.seen.get(parent).isParent = true;
-		}
-	}
-	const meta = ctx.metadataRegistry.get(schema);
-	if (meta) assignProps$1(result.schema, meta);
-	if (ctx.io === "input" && isTransforming$1(schema)) {
-		delete result.schema.examples;
-		delete result.schema.default;
-	}
-	if (ctx.io === "input" && "_prefault" in result.schema) (_a = result.schema).default ?? (_a.default = result.schema._prefault);
-	delete result.schema._prefault;
-	return ctx.seen.get(schema).schema;
-}
-function encodeJSONPointerSegment$1(segment) {
-	return segment.replace(/~/g, "~0").replace(/\//g, "~1");
-}
-function extractDefs$1(ctx, schema) {
-	const root = ctx.seen.get(schema);
-	if (!root) throw new Error("Unprocessed schema. This is a bug in Zod.");
-	if (ctx.external && ctx.sharedDefsExtractedFor === ctx.external) return;
-	const idToSchema = /* @__PURE__ */ new Map();
-	for (const entry of ctx.seen.entries()) {
-		const id = ctx.metadataRegistry.get(entry[0])?.id;
-		if (id) {
-			const existing = idToSchema.get(id);
-			if (existing && existing !== entry[0]) throw new Error(`Duplicate schema id "${id}" detected during JSON Schema conversion. Two different schemas cannot share the same id when converted together.`);
-			idToSchema.set(id, entry[0]);
-		}
-	}
-	const makeURI = (entry) => {
-		const defsSegment = ctx.target === "draft-2020-12" ? "$defs" : "definitions";
-		if (ctx.external) {
-			const externalId = ctx.external.registry.get(entry[0])?.id;
-			const uriGenerator = ctx.external.uri ?? ((id) => id);
-			if (externalId) return { ref: uriGenerator(externalId) };
-			const id = entry[1].defId ?? entry[1].schema.id ?? `schema${ctx.counter++}`;
-			entry[1].defId = id;
-			return {
-				defId: id,
-				ref: `${uriGenerator("__shared")}#/${defsSegment}/${encodeJSONPointerSegment$1(id)}`
-			};
-		}
-		const uriPrefix = `#`;
-		const defUriPrefix = `${uriPrefix}/${defsSegment}/`;
-		if (entry[1] === root && !entry[1].schema.id) return { ref: uriPrefix };
-		const defId = entry[1].schema.id ?? `__schema${ctx.counter++}`;
-		return {
-			defId,
-			ref: defUriPrefix + encodeJSONPointerSegment$1(defId)
-		};
-	};
-	const extractToDef = (entry) => {
-		if (entry[1].schema.$ref) return;
-		const seen = entry[1];
-		const { ref, defId } = makeURI(entry);
-		seen.def = { ...seen.schema };
-		if (defId) seen.defId = defId;
-		const schema = seen.schema;
-		for (const key in schema) delete schema[key];
-		schema.$ref = ref;
-	};
-	if (ctx.cycles === "throw") for (const entry of ctx.seen.entries()) {
-		const seen = entry[1];
-		if (seen.cycle) throw new Error(`Cycle detected: #/${seen.cycle?.join("/")}/<root>
-
-Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.`);
-	}
-	for (const entry of ctx.seen.entries()) {
-		const seen = entry[1];
-		if (schema === entry[0]) {
-			extractToDef(entry);
-			continue;
-		}
-		if (ctx.external) {
-			const ext = ctx.external.registry.get(entry[0])?.id;
-			if (schema !== entry[0] && ext) {
-				extractToDef(entry);
-				continue;
-			}
-		}
-		if (ctx.metadataRegistry.get(entry[0])?.id) {
-			extractToDef(entry);
-			continue;
-		}
-		if (seen.cycle) {
-			extractToDef(entry);
-			continue;
-		}
-		if (seen.count > 1) {
-			if (ctx.reused === "ref") extractToDef(entry);
-		}
-	}
-	if (ctx.external) ctx.sharedDefsExtractedFor = ctx.external;
-}
-/** Rewrites `anyOf: [{type: "a"}, {type: "b"}]` to `type: ["a", "b"]`, which every JSON Schema draft treats as equivalent and most consumers render far better for the nullable case. Only branches that are a bare type assertion qualify — anything carrying a constraint, `$ref`, `const` or metadata is left alone. Runs after `flattenRef`, so a branch an override decorated or `$defs` extraction turned into a `$ref` is no longer bare and correctly stays in `anyOf`. `oneOf` is excluded: `integer` and `number` overlap, so "exactly one" and "at least one" are not the same there. OpenAPI 3.0 is excluded: its `type` must be a single string. */
-function compactTypeUnion$1(schema) {
-	const options = schema.anyOf;
-	if (!Array.isArray(options) || options.length === 0 || schema.type !== void 0) return;
-	const types = [];
-	for (const option of options) {
-		if (!option || typeof option !== "object") return;
-		compactTypeUnion$1(option);
-		const keys = Object.keys(option);
-		if (keys.length !== 1 || keys[0] !== "type") return;
-		const type = option.type;
-		for (const member of Array.isArray(type) ? type : [type]) {
-			if (typeof member !== "string") return;
-			if (!types.includes(member)) types.push(member);
-		}
-	}
-	delete schema.anyOf;
-	schema.type = types.length === 1 ? types[0] : types;
-}
-/** Keywords `foldIntersection` knows how to combine. Anything else — `$ref`, `patternProperties`,
-* an annotation like `description` — makes a member unfoldable, so a constraint this does not
-* understand leaves the `allOf` alone instead of being silently dropped or misattributed. */
-var FOLDABLE_KEYS$1 = /* @__PURE__ */ new Set([
-	"type",
-	"properties",
-	"required",
-	"additionalProperties"
-]);
-var UNION_KEYS$1 = ["oneOf", "anyOf"];
-/** A member's constraint on a key it does not declare itself. A `catchall` states one; `false`, an absent `additionalProperties`, and the empty schema a loose object emits state nothing. */
-function undeclaredConstraint$1(member) {
-	const extra = member.additionalProperties;
-	if (extra === void 0 || extra === false || typeof extra !== "object" || extra === null) return null;
-	return Object.keys(extra).length ? extra : null;
-}
-/** Combines object members into the single object they describe together, or returns `null` if any of them carries a keyword outside {@link FOLDABLE_KEYS}. */
-function foldObjects$1(members) {
-	const objects = [];
-	for (const member of members) {
-		if (typeof member !== "object" || member.type !== "object") return null;
-		for (const key in member) if (!FOLDABLE_KEYS$1.has(key)) return null;
-		objects.push(member);
-	}
-	const properties = {};
-	const required = /* @__PURE__ */ new Set();
-	for (const object of objects) {
-		for (const key in object.properties) {
-			if (Object.prototype.hasOwnProperty.call(properties, key)) continue;
-			const parts = [];
-			for (const other of objects) {
-				const part = other.properties?.[key] ?? undeclaredConstraint$1(other);
-				if (part === null || part === void 0) continue;
-				if (!parts.some((seen) => JSON.stringify(seen) === JSON.stringify(part))) parts.push(part);
-			}
-			assignProp$1(properties, key, parts.length === 1 ? parts[0] : foldObjects$1(parts) ?? { allOf: parts });
-		}
-		for (const key of object.required ?? []) required.add(key);
-	}
-	const folded = {
-		type: "object",
-		properties
-	};
-	if (required.size) folded.required = [...required];
-	if (objects.every((object) => object.additionalProperties === false)) folded.additionalProperties = false;
-	else {
-		const constraints = [];
-		for (const object of objects) {
-			const constraint = undeclaredConstraint$1(object);
-			if (constraint && !constraints.some((seen) => JSON.stringify(seen) === JSON.stringify(constraint))) constraints.push(constraint);
-		}
-		if (constraints.length === 1) folded.additionalProperties = constraints[0];
-		else if (constraints.length > 1) folded.additionalProperties = { allOf: constraints };
-	}
-	return folded;
-}
-/** `additionalProperties` in an `allOf` member sees only that member's own `properties`, so two
-* closed object members reject each other's keys and the schema validates nothing. Zod's parser
-* pools the key sets instead — `handleIntersectionResults` reports a key as unrecognized only when
-* *every* side rejects it — so the emitted schema has to pool them too, and folding the members
-* into one object is the encoding that says so on every target.
-*
-* This runs from `finalize`, after `extractDefs`, which is what keeps it clear of the `$ref`
-* machinery: a member extracted into `$defs` is already a `$ref` by now and declines to fold, so it
-* keeps its reference and its own closedness rather than being inlined as a stale copy. */
-function foldIntersection$1(json) {
-	const allOf = json.allOf;
-	if (!Array.isArray(allOf) || allOf.length < 2) return;
-	for (const key of FOLDABLE_KEYS$1) if (key in json) return;
-	const unions = allOf.filter((m) => UNION_KEYS$1.some((k) => Array.isArray(m[k])));
-	let folded = null;
-	if (!unions.length) folded = foldObjects$1(allOf);
-	else {
-		const union = unions[0];
-		const keyword = UNION_KEYS$1.find((k) => Array.isArray(union[k]));
-		if (Object.keys(union).length !== 1) return;
-		const rest = allOf.filter((m) => m !== union);
-		const branches = union[keyword].map((branch) => foldObjects$1([...rest, branch]));
-		if (branches.some((b) => !b)) return;
-		folded = { [keyword]: branches };
-	}
-	if (!folded) return;
-	delete json.allOf;
-	assignProps$1(json, folded);
-}
-function finalize$1(ctx, schema) {
-	const root = ctx.seen.get(schema);
-	if (!root) throw new Error("Unprocessed schema. This is a bug in Zod.");
-	const flattenRef = (zodSchema) => {
-		const seen = ctx.seen.get(zodSchema);
-		if (seen.ref === null) return;
-		const schema = seen.def ?? seen.schema;
-		const _cached = { ...schema };
-		const ref = seen.ref;
-		seen.ref = null;
-		if (ref) {
-			flattenRef(ref);
-			const refSeen = ctx.seen.get(ref);
-			const refSchema = refSeen.schema;
-			if (refSchema.$ref && (ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0")) {
-				schema.allOf = schema.allOf ?? [];
-				schema.allOf.push(refSchema);
-			} else assignProps$1(schema, refSchema);
-			assignProps$1(schema, _cached);
-			if (zodSchema._zod.parent === ref) for (const key in schema) {
-				if (key === "$ref" || key === "allOf") continue;
-				if (!(key in _cached)) delete schema[key];
-			}
-			if (refSchema.$ref && refSeen.def) for (const key in schema) {
-				if (key === "$ref" || key === "allOf") continue;
-				if (key in refSeen.def && JSON.stringify(schema[key]) === JSON.stringify(refSeen.def[key])) delete schema[key];
-			}
-		}
-		const parent = zodSchema._zod.parent;
-		if (parent && parent !== ref) {
-			flattenRef(parent);
-			const parentSeen = ctx.seen.get(parent);
-			if (parentSeen?.schema.$ref) {
-				schema.$ref = parentSeen.schema.$ref;
-				if (parentSeen.def) for (const key in schema) {
-					if (key === "$ref" || key === "allOf") continue;
-					if (key in parentSeen.def && JSON.stringify(schema[key]) === JSON.stringify(parentSeen.def[key])) delete schema[key];
-				}
-			}
-		}
-		ctx.override({
-			zodSchema,
-			jsonSchema: schema,
-			path: seen.path ?? []
-		});
-	};
-	if (!ctx.external || ctx.sharedEmitDoneFor !== ctx.external) {
-		for (const entry of [...ctx.seen.entries()].reverse()) flattenRef(entry[0]);
-		if (ctx.target !== "openapi-3.0") for (const entry of ctx.seen.entries()) compactTypeUnion$1(entry[1].def ?? entry[1].schema);
-		for (const rewrite of ctx.deferred) rewrite();
-		if (ctx.intersections.length) {
-			const carriers = /* @__PURE__ */ new Map();
-			for (const seen of ctx.seen.values()) for (const json of [seen.schema, seen.def]) {
-				const allOf = json?.allOf;
-				if (!Array.isArray(allOf)) continue;
-				const existing = carriers.get(allOf);
-				if (existing) existing.push(json);
-				else carriers.set(allOf, [json]);
-			}
-			for (const allOf of ctx.intersections) for (const json of carriers.get(allOf) ?? []) foldIntersection$1(json);
-		}
-	}
-	const result = {};
-	if (ctx.target === "draft-2020-12") result.$schema = "https://json-schema.org/draft/2020-12/schema";
-	else if (ctx.target === "draft-07") result.$schema = "http://json-schema.org/draft-07/schema#";
-	else if (ctx.target === "draft-04") result.$schema = "http://json-schema.org/draft-04/schema#";
-	else if (ctx.target === "openapi-3.0") {}
-	if (ctx.external?.uri) {
-		const id = ctx.external.registry.get(schema)?.id;
-		if (!id) throw new Error("Schema is missing an `id` property");
-		result.$id = ctx.external.uri(id);
-	}
-	assignProps$1(result, root.defId ? root.schema : root.def ?? root.schema);
-	const rootMetaId = ctx.metadataRegistry.get(schema)?.id;
-	if (rootMetaId !== void 0 && result.id === rootMetaId) delete result.id;
-	const defs = ctx.external?.defs ?? {};
-	if (!ctx.external || ctx.sharedEmitDoneFor !== ctx.external) for (const entry of ctx.seen.entries()) {
-		const seen = entry[1];
-		if (seen.def && seen.defId) {
-			if (seen.def.id === seen.defId) delete seen.def.id;
-			assignProp$1(defs, seen.defId, seen.def);
-		}
-	}
-	if (ctx.external) ctx.sharedEmitDoneFor = ctx.external;
-	if (ctx.external) {} else if (Object.keys(defs).length > 0) {
-		if (ctx.target === "draft-2020-12") result.$defs = defs;
-		else result.definitions = defs;
-	}
-	try {
-		const finalized = JSON.parse(JSON.stringify(result));
-		Object.defineProperty(finalized, "~standard", {
-			value: {
-				...schema["~standard"],
-				jsonSchema: {
-					input: createStandardJSONSchemaMethod$1(schema, "input", ctx.processors),
-					output: createStandardJSONSchemaMethod$1(schema, "output", ctx.processors)
-				}
-			},
-			enumerable: false,
-			writable: false
-		});
-		return finalized;
-	} catch (_err) {
-		throw new Error("Error converting schema to JSON.");
-	}
-}
-function isTransforming$1(_schema, _ctx) {
-	const ctx = _ctx ?? { seen: /* @__PURE__ */ new Set() };
-	if (ctx.seen.has(_schema)) return false;
-	ctx.seen.add(_schema);
-	const def = _schema._zod.def;
-	if (def.type === "transform") return true;
-	if (def.type === "array") return isTransforming$1(def.element, ctx);
-	if (def.type === "set") return isTransforming$1(def.valueType, ctx);
-	if (def.type === "lazy") return isTransforming$1(def.getter(), ctx);
-	if (def.type === "promise" || def.type === "optional" || def.type === "nonoptional" || def.type === "nullable" || def.type === "readonly" || def.type === "default" || def.type === "prefault" || def.type === "catch") return isTransforming$1(def.innerType, ctx);
-	if (def.type === "intersection") return isTransforming$1(def.left, ctx) || isTransforming$1(def.right, ctx);
-	if (def.type === "record" || def.type === "map") return isTransforming$1(def.keyType, ctx) || isTransforming$1(def.valueType, ctx);
-	if (def.type === "pipe") {
-		if (_schema._zod.traits.has("$ZodCodec")) return true;
-		return isTransforming$1(def.in, ctx) || isTransforming$1(def.out, ctx);
-	}
-	if (def.type === "object") {
-		for (const key in def.shape) if (isTransforming$1(def.shape[key], ctx)) return true;
-		return false;
-	}
-	if (def.type === "union") {
-		for (const option of def.options) if (isTransforming$1(option, ctx)) return true;
-		return false;
-	}
-	if (def.type === "tuple") {
-		for (const item of def.items) if (isTransforming$1(item, ctx)) return true;
-		if (def.rest && isTransforming$1(def.rest, ctx)) return true;
-		return false;
-	}
-	return false;
-}
-/**
-* Creates a toJSONSchema method for a schema instance.
-* This encapsulates the logic of initializing context, processing, extracting defs, and finalizing.
-*/
-var createToJSONSchemaMethod$1 = (schema, processors = {}) => (params) => {
-	const ctx = initializeContext$1({
-		...params,
-		processors
-	});
-	processSchema(schema, ctx);
-	extractDefs$1(ctx, schema);
-	return finalize$1(ctx, schema);
-};
-var createStandardJSONSchemaMethod$1 = (schema, io, processors = {}) => (params) => {
-	const { libraryOptions, target } = params ?? {};
-	const ctx = initializeContext$1({
-		...libraryOptions ?? {},
-		target,
-		io,
-		processors
-	});
-	processSchema(schema, ctx);
-	extractDefs$1(ctx, schema);
-	return finalize$1(ctx, schema);
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/json-schema-processors.js
-var narrowMin = (agg, key, value) => {
-	if (agg[key] === void 0 || value > agg[key]) agg[key] = value;
-};
-var narrowMax = (agg, key, value) => {
-	if (agg[key] === void 0 || value < agg[key]) agg[key] = value;
-};
-var narrowBoth = (agg, value) => {
-	narrowMin(agg, "minimum", value);
-	narrowMax(agg, "maximum", value);
-};
-var addDivisor = (agg, value) => {
-	agg.multipleOf ?? (agg.multipleOf = []);
-	if (!agg.multipleOf.includes(value)) agg.multipleOf.push(value);
-};
-var addPattern = (agg, pattern) => {
-	agg.patterns ?? (agg.patterns = /* @__PURE__ */ new Set());
-	agg.patterns.add(pattern);
-};
-var intersectMime = (agg, mime) => {
-	agg.mime = agg.mime ? agg.mime.filter((m) => mime.includes(m)) : [...mime];
-};
-var setFormat = (agg, format) => {
-	agg.format = format;
-	if (format.includes("int")) agg.isInt = true;
-};
-var minContributor = (agg, def) => narrowMin(agg, "minimum", def.minimum);
-var maxContributor = (agg, def) => narrowMax(agg, "maximum", def.maximum);
-var formatContributor = (ranges) => (agg, def) => {
-	setFormat(agg, def.format);
-	const [minimum, maximum] = ranges[def.format];
-	narrowMin(agg, "minimum", minimum);
-	narrowMax(agg, "maximum", maximum);
-};
-var contributors = {
-	greater_than: (agg, def) => narrowMin(agg, def.inclusive ? "minimum" : "exclusiveMinimum", def.value),
-	less_than: (agg, def) => narrowMax(agg, def.inclusive ? "maximum" : "exclusiveMaximum", def.value),
-	multiple_of: (agg, def) => addDivisor(agg, def.value),
-	number_format: formatContributor(NUMBER_FORMAT_RANGES$1),
-	bigint_format: formatContributor(BIGINT_FORMAT_RANGES),
-	min_length: minContributor,
-	max_length: maxContributor,
-	length_equals: (agg, def) => narrowBoth(agg, def.length),
-	min_size: minContributor,
-	max_size: maxContributor,
-	size_equals: (agg, def) => narrowBoth(agg, def.size),
-	string_format: (agg, def) => {
-		setFormat(agg, def.format);
-		if (def.pattern) addPattern(agg, def.pattern);
-		if (def.format === "base64" || def.format === "base64url") agg.contentEncoding = def.format;
-		if (def.local || def.precision === -1) agg.laxFormat = true;
-	},
-	mime_type: (agg, def) => intersectMime(agg, def.mime)
-};
-function aggregateChecks(schema) {
-	const agg = {};
-	const def = schema._zod.def;
-	const list = schema._zod.traits.has("$ZodCheck") ? [schema, ...def.checks ?? []] : def.checks ?? [];
-	for (const ch of list) contributors[ch._zod.def.check]?.(agg, ch._zod.def);
-	const bag = schema._zod.bag;
-	if (bag.minimum !== void 0) narrowMin(agg, "minimum", bag.minimum);
-	if (bag.exclusiveMinimum !== void 0) narrowMin(agg, "exclusiveMinimum", bag.exclusiveMinimum);
-	if (bag.maximum !== void 0) narrowMax(agg, "maximum", bag.maximum);
-	if (bag.exclusiveMaximum !== void 0) narrowMax(agg, "exclusiveMaximum", bag.exclusiveMaximum);
-	if (bag.multipleOf !== void 0) addDivisor(agg, bag.multipleOf);
-	if (bag.format !== void 0) {
-		agg.format ?? (agg.format = bag.format);
-		if (bag.format.includes("int")) agg.isInt = true;
-	}
-	if (bag.mime) intersectMime(agg, bag.mime);
-	for (const pattern of bag.patterns ?? []) addPattern(agg, pattern);
-	return agg;
-}
-var formatMap$1 = {
-	guid: "uuid",
-	url: "uri",
-	datetime: "date-time",
-	json_string: "json-string",
-	regex: ""
-};
-var exactPatterns = /* @__PURE__ */ new Map([[base64Charset, base64$1], [base64urlCharset, base64url$1]]);
-var exactPattern = (p) => exactPatterns.get(p) ?? p;
-var stringProcessor$1 = (schema, ctx, _json, _params) => {
-	const json = _json;
-	json.type = "string";
-	const { minimum, maximum, format, patterns, contentEncoding, laxFormat } = aggregateChecks(schema);
-	if (typeof minimum === "number") json.minLength = minimum;
-	if (typeof maximum === "number") json.maxLength = maximum;
-	if (format) {
-		json.format = formatMap$1[format] ?? format;
-		if (json.format === "") delete json.format;
-		if (format === "time" || laxFormat) delete json.format;
-	}
-	if (contentEncoding) json.contentEncoding = contentEncoding;
-	if (patterns && patterns.size > 0) {
-		const patternList = [...patterns].map(exactPattern);
-		if (patternList.length === 1) json.pattern = patternList[0].source;
-		else if (patternList.length > 1) json.allOf = [...patternList.map((regex) => ({
-			...ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0" ? { type: "string" } : {},
-			pattern: regex.source
-		}))];
-	}
-};
-var numberProcessor$1 = (schema, ctx, _json, params) => {
-	const json = _json;
-	const { minimum, maximum, multipleOf, exclusiveMaximum, exclusiveMinimum, isInt } = aggregateChecks(schema);
-	json.type = isInt ? "integer" : "number";
-	const exMin = typeof exclusiveMinimum === "number" && exclusiveMinimum >= (minimum ?? Number.NEGATIVE_INFINITY);
-	const exMax = typeof exclusiveMaximum === "number" && exclusiveMaximum <= (maximum ?? Number.POSITIVE_INFINITY);
-	const legacy = ctx.target === "draft-04" || ctx.target === "openapi-3.0";
-	if (exMin) {
-		if (legacy) {
-			json.minimum = exclusiveMinimum;
-			json.exclusiveMinimum = true;
-		} else json.exclusiveMinimum = exclusiveMinimum;
-	} else if (typeof minimum === "number") json.minimum = minimum;
-	if (exMax) {
-		if (legacy) {
-			json.maximum = exclusiveMaximum;
-			json.exclusiveMaximum = true;
-		} else json.exclusiveMaximum = exclusiveMaximum;
-	} else if (typeof maximum === "number") json.maximum = maximum;
-	if (multipleOf) {
-		const divisors = /* @__PURE__ */ new Set();
-		for (const divisor of multipleOf) if (Number.isFinite(divisor) && divisor !== 0) divisors.add(Math.abs(divisor));
-		else handleUnrepresentable$1(schema, ctx, json, params, `A multipleOf divisor of ${divisor} cannot be represented in JSON Schema`);
-		const [first, ...rest] = divisors;
-		if (first !== void 0) json.multipleOf = first;
-		if (rest.length) json.allOf = [...json.allOf ?? [], ...rest.map((m) => ({ multipleOf: m }))];
-	}
-};
-var booleanProcessor$1 = (_schema, _ctx, json, _params) => {
-	json.type = "boolean";
-};
-var neverProcessor$1 = (_schema, _ctx, json, _params) => {
-	json.not = {};
-};
-var enumProcessor$1 = (schema, _ctx, json, _params) => {
-	const def = schema._zod.def;
-	const values = getEnumValues$1(def.entries);
-	if (values.length === 0) {
-		json.not = {};
-		return;
-	}
-	if (values.every((v) => typeof v === "number")) json.type = "number";
-	if (values.every((v) => typeof v === "string")) json.type = "string";
-	json.enum = values;
-};
-var literalProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	if (def.values.length === 0) {
-		json.not = {};
-		return;
-	}
-	const vals = [];
-	for (const val of def.values) if (val === void 0) {
-		if (handleUnrepresentable$1(schema, ctx, json, params, "Literal `undefined` cannot be represented in JSON Schema")) return;
-	} else if (typeof val === "bigint") {
-		if (handleUnrepresentable$1(schema, ctx, json, params, "BigInt literals cannot be represented in JSON Schema")) return;
-		vals.push(Number(val));
-	} else vals.push(val);
-	if (vals.length === 0) {} else if (vals.length === 1) {
-		const val = vals[0];
-		json.type = val === null ? "null" : typeof val;
-		if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") json.enum = [val];
-		else json.const = val;
-	} else {
-		if (vals.every((v) => typeof v === "number")) json.type = "number";
-		if (vals.every((v) => typeof v === "string")) json.type = "string";
-		if (vals.every((v) => typeof v === "boolean")) json.type = "boolean";
-		if (vals.every((v) => v === null)) json.type = "null";
-		json.enum = vals;
-	}
-};
-var customProcessor$1 = (schema, ctx, json, params) => {
-	handleUnrepresentable$1(schema, ctx, json, params, "Custom types cannot be represented in JSON Schema");
-};
-var transformProcessor$1 = (schema, ctx, json, params) => {
-	handleUnrepresentable$1(schema, ctx, json, params, "Transforms cannot be represented in JSON Schema");
-};
-var arrayProcessor$1 = (schema, ctx, _json, params) => {
-	const json = _json;
-	const def = schema._zod.def;
-	const { minimum, maximum } = aggregateChecks(schema);
-	if (typeof minimum === "number") json.minItems = minimum;
-	if (typeof maximum === "number") json.maxItems = maximum;
-	json.type = "array";
-	json.items = processSchema(def.element, ctx, {
-		...params,
-		path: [...params.path, "items"]
-	});
-};
-function inputOptin$1(schema) {
-	const def = schema._zod.def;
-	if (def.type === "pipe" && def.in._zod.traits.has("$ZodTransform")) return inputOptin$1(def.out);
-	if (def.type === "catch") return inputOptin$1(def.innerType);
-	return schema._zod.optin;
-}
-var objectProcessor$1 = (schema, ctx, _json, params) => {
-	const json = _json;
-	const def = schema._zod.def;
-	const shape = def.shape;
-	if (Object.getOwnPropertySymbols(shape).length && handleUnrepresentable$1(schema, ctx, json, params, "Symbol keys cannot be represented in JSON Schema")) return;
-	json.type = "object";
-	json.properties = {};
-	for (const key in shape) assignProp$1(json.properties, key, processSchema(shape[key], ctx, {
-		...params,
-		path: [
-			...params.path,
-			"properties",
-			key
-		]
-	}));
-	const requiredKeys = [];
-	for (const key of Object.keys(shape)) {
-		const field = def.shape[key];
-		if (ctx.io === "input" ? inputOptin$1(field) === void 0 : field._zod.optout === void 0) requiredKeys.push(key);
-	}
-	if (requiredKeys.length > 0) json.required = requiredKeys;
-	if (def.catchall?._zod.def.type === "never") json.additionalProperties = false;
-	else if (!def.catchall) {
-		if (ctx.io === "output") json.additionalProperties = false;
-	} else if (def.catchall) json.additionalProperties = processSchema(def.catchall, ctx, {
-		...params,
-		path: [...params.path, "additionalProperties"]
-	});
-};
-var unionProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	const isExclusive = def.inclusive === false;
-	const options = def.options.map((x, i) => processSchema(x, ctx, {
-		...params,
-		path: [
-			...params.path,
-			isExclusive ? "oneOf" : "anyOf",
-			i
-		]
-	}));
-	if (isExclusive) json.oneOf = options;
-	else json.anyOf = options;
-};
-var intersectionProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	const a = processSchema(def.left, ctx, {
-		...params,
-		path: [
-			...params.path,
-			"allOf",
-			0
-		]
-	});
-	const b = processSchema(def.right, ctx, {
-		...params,
-		path: [
-			...params.path,
-			"allOf",
-			1
-		]
-	});
-	const isSimpleIntersection = (val) => "allOf" in val && Object.keys(val).length === 1;
-	const allOf = [...isSimpleIntersection(a) ? a.allOf : [a], ...isSimpleIntersection(b) ? b.allOf : [b]];
-	json.allOf = allOf;
-	ctx.intersections.push(allOf);
-};
-/** JSON object keys are always strings, so a numeric record key schema is re-expressed over the
-* numeric-string form the record parser matches. Deferred to `finalize`, after the flatten: a key
-* behind a wrapper only carries its own `type` before then, and a union key only has its branches.
-*
-* A numeric bound cannot apply to a property name, so `minimum` and its siblings are dropped rather
-* than carried over: keeping them beside `type: "string"` reproduces the match-nothing schema this
-* exists to fix. A key that carries one therefore emits wider than the record parses — `z.record(z.number().min(5), V)`
-* accepts `"3"` — which is the deliberate trade, since throwing on it would reject an ordinary schema
-* outright. */
-function stringifyKeyNames$1(bySchema, json, visited) {
-	if (json.$ref) {
-		if (visited.has(json)) return json;
-		visited.add(json);
-		const def = bySchema.get(json)?.def;
-		if (!def) return json;
-		const inlined = stringifyKeyNames$1(bySchema, def, visited);
-		return inlined === def ? json : inlined;
-	}
-	for (const keyword of ["anyOf", "oneOf"]) {
-		const branches = json[keyword];
-		if (!Array.isArray(branches)) continue;
-		const mapped = branches.map((branch) => stringifyKeyNames$1(bySchema, branch, visited));
-		if (mapped.some((branch, i) => branch !== branches[i])) json = {
-			...json,
-			[keyword]: mapped
-		};
-	}
-	const types = Array.isArray(json.type) ? json.type : [json.type];
-	const numericType = !types.includes("string") && types.some((t) => t === "number" || t === "integer");
-	const values = json.enum ?? (json.const !== void 0 ? [json.const] : void 0);
-	if (!numericType && !values?.some((v) => typeof v === "number")) return json;
-	const { minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, format, id, ...rest } = json;
-	if (rest.enum) rest.enum = rest.enum.map((v) => typeof v === "number" ? String(v) : v);
-	else if (typeof rest.const === "number") rest.const = String(rest.const);
-	if (!numericType) return rest;
-	rest.type = "string";
-	if (!values) rest.pattern = (types.includes("number") ? number$4 : integer$1).source;
-	return rest;
-}
-/** Every record of one conversion, so the carriers are found in a single pass rather than once per record. */
-var pendingRecords$1 = /* @__PURE__ */ new WeakMap();
-function rewriteKeyNames$1(ctx) {
-	const bySchema = /* @__PURE__ */ new Map();
-	for (const entry of ctx.seen.values()) if (entry.def && !bySchema.has(entry.schema)) bySchema.set(entry.schema, entry);
-	const rewrites = /* @__PURE__ */ new Map();
-	for (const record of pendingRecords$1.get(ctx) ?? []) {
-		const seen = ctx.seen.get(record);
-		const names = (seen?.def ?? seen?.schema)?.propertyNames;
-		if (!names || names === true || rewrites.has(names)) continue;
-		const rewritten = stringifyKeyNames$1(bySchema, names, /* @__PURE__ */ new Set());
-		if (rewritten !== names) rewrites.set(names, rewritten);
-	}
-	if (!rewrites.size) return;
-	for (const entry of ctx.seen.values()) for (const carrier of [entry.schema, entry.def]) {
-		const rewritten = carrier && rewrites.get(carrier.propertyNames);
-		if (rewritten) carrier.propertyNames = rewritten;
-	}
-}
-var recordProcessor$1 = (schema, ctx, _json, params) => {
-	const json = _json;
-	const def = schema._zod.def;
-	json.type = "object";
-	const keyType = def.keyType;
-	const patterns = aggregateChecks(keyType).patterns;
-	if (def.mode === "loose" && patterns && patterns.size > 0) {
-		const valueSchema = processSchema(def.valueType, ctx, {
-			...params,
-			path: [
-				...params.path,
-				"patternProperties",
-				"*"
-			]
-		});
-		json.patternProperties = {};
-		for (const pattern of patterns) assignProp$1(json.patternProperties, exactPattern(pattern).source, valueSchema);
-	} else {
-		if (ctx.target === "draft-07" || ctx.target === "draft-2020-12") {
-			json.propertyNames = processSchema(def.keyType, ctx, {
-				...params,
-				path: [...params.path, "propertyNames"]
-			});
-			let pending = pendingRecords$1.get(ctx);
-			if (!pending) {
-				pending = [];
-				pendingRecords$1.set(ctx, pending);
-				ctx.deferred.push(() => rewriteKeyNames$1(ctx));
-			}
-			pending.push(schema);
-		}
-		json.additionalProperties = processSchema(def.valueType, ctx, {
-			...params,
-			path: [...params.path, "additionalProperties"]
-		});
-	}
-	const keyValues = keyType._zod.values;
-	const omittableOnInput = ctx.io === "input" && inputOptin$1(def.valueType) !== void 0;
-	if (keyValues && !def.partial && !omittableOnInput) {
-		const validKeyValues = [...keyValues].filter((v) => typeof v === "string" || typeof v === "number");
-		if (validKeyValues.length > 0) json.required = validKeyValues.map(String);
-	}
-};
-var nullableProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	const inner = processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	if (ctx.target === "openapi-3.0") {
-		seen.ref = def.innerType;
-		json.nullable = true;
-	} else json.anyOf = [inner, { type: "null" }];
-};
-var nonoptionalProcessor$1 = (schema, ctx, _json, params) => {
-	const def = schema._zod.def;
-	processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-};
-/** Round-trips a default value through JSON so the emitted schema is guaranteed to be valid JSON.
-* A BigInt has no reliable encoding, so it goes through `unrepresentable` like any other
-* unrepresentable value. Returns a sentinel when the caller must not write a default of its own. */
-var UNREPRESENTABLE_DEFAULT$1 = Symbol();
-function serializeDefaultValue$1(value, schema, ctx, json, params) {
-	let unrepresentable = false;
-	const serialized = JSON.stringify(value, (_, val) => {
-		if (typeof val !== "bigint") return val;
-		unrepresentable = true;
-		return null;
-	});
-	if (!unrepresentable) return JSON.parse(serialized);
-	handleUnrepresentable$1(schema, ctx, json, params, "BigInt defaults cannot be represented in JSON Schema");
-	return UNREPRESENTABLE_DEFAULT$1;
-}
-var defaultProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-	const value = serializeDefaultValue$1(def.defaultValue, schema, ctx, json, params);
-	if (value !== UNREPRESENTABLE_DEFAULT$1) json.default = value;
-};
-var prefaultProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-	if (ctx.io !== "input") return;
-	const value = serializeDefaultValue$1(def.defaultValue, schema, ctx, json, params);
-	if (value !== UNREPRESENTABLE_DEFAULT$1) json._prefault = value;
-};
-var catchProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-	let catchValue;
-	try {
-		catchValue = def.catchValue(void 0);
-	} catch {
-		handleUnrepresentable$1(schema, ctx, json, params, "Dynamic catch values are not supported in JSON Schema");
-		return;
-	}
-	json.default = catchValue;
-};
-var pipeProcessor$1 = (schema, ctx, _json, params) => {
-	const def = schema._zod.def;
-	const inIsTransform = def.in._zod.traits.has("$ZodTransform");
-	const innerType = ctx.io === "input" ? inIsTransform ? def.out : def.in : def.out;
-	processSchema(innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = innerType;
-};
-var readonlyProcessor$1 = (schema, ctx, json, params) => {
-	const def = schema._zod.def;
-	processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-	json.readOnly = true;
-};
-var optionalProcessor$1 = (schema, ctx, _json, params) => {
-	const def = schema._zod.def;
-	processSchema(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/errors.js
-var _installedErrorProtos$1 = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
-function _lazyMethod$1(proto, key, make) {
-	Object.defineProperty(proto, key, {
-		configurable: true,
-		enumerable: false,
-		get() {
-			const value = make(this);
-			Object.defineProperty(this, key, {
-				value,
-				configurable: true,
-				writable: true
-			});
-			return value;
-		},
-		set(value) {
-			Object.defineProperty(this, key, {
-				value,
-				configurable: true,
-				writable: true
-			});
-		}
-	});
-}
-var initializer$2 = (inst, issues) => {
-	$ZodError$1.init(inst, issues);
-	inst.name = "ZodError";
-	const proto = Object.getPrototypeOf(inst);
-	if (_installedErrorProtos$1.has(proto)) return;
-	_installedErrorProtos$1.add(proto);
-	_lazyMethod$1(proto, "format", (self) => (mapper) => formatError$1(self, mapper));
-	_lazyMethod$1(proto, "flatten", (self) => (mapper) => flattenError$1(self, mapper));
-	_lazyMethod$1(proto, "addIssue", (self) => (issue) => {
-		self.issues.push(issue);
-		self.message = JSON.stringify(self.issues, jsonStringifyReplacer$1, 2);
-	});
-	_lazyMethod$1(proto, "addIssues", (self) => (issues) => {
-		self.issues.push(...issues);
-		self.message = JSON.stringify(self.issues, jsonStringifyReplacer$1, 2);
-	});
-	Object.defineProperty(proto, "isEmpty", {
-		configurable: true,
-		enumerable: false,
-		get() {
-			return this.issues.length === 0;
-		}
-	});
-};
-var ZodRealError$1 = /*@__PURE__*/ $constructor$1("ZodError", initializer$2, void 0, { Parent: Error });
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/parse.js
-var parse$1 = /* @__PURE__ */ _parse$1(ZodRealError$1);
-var parseAsync$1 = /* @__PURE__ */ _parseAsync$1(ZodRealError$1);
-var safeParse$2 = /* @__PURE__ */ _safeParse$1(ZodRealError$1);
-var safeParseAsync$2 = /* @__PURE__ */ _safeParseAsync$1(ZodRealError$1);
-var encode$1 = /* @__PURE__ */ _encode$1(ZodRealError$1);
-var decode$1 = /* @__PURE__ */ _decode$1(ZodRealError$1);
-var encodeAsync$1 = /* @__PURE__ */ _encodeAsync$1(ZodRealError$1);
-var decodeAsync$1 = /* @__PURE__ */ _decodeAsync$1(ZodRealError$1);
-var safeEncode$1 = /* @__PURE__ */ _safeEncode$1(ZodRealError$1);
-var safeDecode$1 = /* @__PURE__ */ _safeDecode$1(ZodRealError$1);
-var safeEncodeAsync$1 = /* @__PURE__ */ _safeEncodeAsync$1(ZodRealError$1);
-var safeDecodeAsync$1 = /* @__PURE__ */ _safeDecodeAsync$1(ZodRealError$1);
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/schemas.js
-function _ensureDefaultLocale$1() {
-	if (!globalConfig$1.localeError) config$1(en_default$1());
-}
-function _ensureDefaultMemoizer$1() {
-	if (!globalConfig$1.memoizer) config$1({ memoizer: memoizer$1() });
-}
-var ZodType$1 = /*@__PURE__*/ $constructor$1("ZodType", (inst, def) => {
-	_ensureDefaultLocale$1();
-	$ZodType$1.init(inst, def);
-	inst.def = def;
-	inst.type = def.type;
-	return inst;
-}, {
-	check(...chks) {
-		const def = this.def;
-		return this.clone(mergeDefs$1(def, { checks: [...def.checks ?? [], ...chks.map((ch) => typeof ch === "function" ? { _zod: {
-			check: ch,
-			def: { check: "custom" },
-			onattach: []
-		} } : ch)] }), { parent: true });
-	},
-	with(...chks) {
-		return this.check(...chks);
-	},
-	clone(def, params) {
-		return clone$1(this, def, params);
-	},
-	brand() {
-		return this;
-	},
-	register(reg, meta) {
-		reg.add(this, meta);
-		return this;
-	},
-	refine(check, params) {
-		return this.check(refine$1(check, params));
-	},
-	superRefine(refinement, params) {
-		return this.check(superRefine$1(refinement, params));
-	},
-	overwrite(fn) {
-		return this.check(/* @__PURE__ */ _overwrite$1(fn));
-	},
-	optional() {
-		return optional$1(this);
-	},
-	exactOptional() {
-		return exactOptional$1(this);
-	},
-	nullable() {
-		return nullable$1(this);
-	},
-	nullish() {
-		return optional$1(nullable$1(this));
-	},
-	nonoptional(params) {
-		return nonoptional$1(this, params);
-	},
-	array() {
-		return array$1(this);
-	},
-	or(arg) {
-		return union$1([this, arg]);
-	},
-	and(arg) {
-		return intersection$1(this, arg);
-	},
-	transform(tx) {
-		return pipe$1(this, transform$1(tx));
-	},
-	default(d) {
-		return _default$1(this, d);
-	},
-	prefault(d) {
-		return prefault$1(this, d);
-	},
-	catch(params) {
-		return _catch$1(this, params);
-	},
-	pipe(target) {
-		return pipe$1(this, target);
-	},
-	readonly() {
-		return readonly$1(this);
-	},
-	describe(description) {
-		const cl = this.clone();
-		globalRegistry$1.add(cl, { description });
-		return cl;
-	},
-	meta(...args) {
-		if (args.length === 0) return globalRegistry$1.get(this);
-		const cl = this.clone();
-		globalRegistry$1.add(cl, args[0]);
-		return cl;
-	},
-	isOptional() {
-		return this.safeParse(void 0).success;
-	},
-	isNullable() {
-		return this.safeParse(null).success;
-	},
-	apply(fn, ...args) {
-		return args.length === 0 ? fn(this) : fn(this, ...args);
-	},
-	get "~standard"() {
-		return hide$1(this, "~standard", {
-			...standardProps$1(this),
-			jsonSchema: {
-				input: createStandardJSONSchemaMethod$1(this, "input"),
-				output: createStandardJSONSchemaMethod$1(this, "output")
-			}
-		});
-	},
-	set "~standard"(value) {
-		own$1(this, "~standard", value);
-	},
-	parse: function _parse(data, params) {
-		return parse$1(this, data, params, { callee: _parse });
-	},
-	parseAsync: async function _parseAsync(data, params) {
-		return await parseAsync$1(this, data, params, { callee: _parseAsync });
-	},
-	safeParse(data, params) {
-		return safeParse$2(this, data, params);
-	},
-	async safeParseAsync(data, params) {
-		return safeParseAsync$2(this, data, params);
-	},
-	get spa() {
-		return this?.safeParseAsync;
-	},
-	set spa(value) {
-		own$1(this, "spa", value);
-	},
-	validate(data, params) {
-		return validate(this, data, params);
-	},
-	validateAsync(data, params) {
-		return validateAsync$1(this, data, params);
-	},
-	encode: function _encode(data, params) {
-		return encode$1(this, data, params, { callee: _encode });
-	},
-	decode: function _decode(data, params) {
-		return decode$1(this, data, params, { callee: _decode });
-	},
-	encodeAsync: async function _encodeAsync(data, params) {
-		return await encodeAsync$1(this, data, params, { callee: _encodeAsync });
-	},
-	decodeAsync: async function _decodeAsync(data, params) {
-		return await decodeAsync$1(this, data, params, { callee: _decodeAsync });
-	},
-	safeEncode(data, params) {
-		return safeEncode$1(this, data, params);
-	},
-	safeDecode(data, params) {
-		return safeDecode$1(this, data, params);
-	},
-	async safeEncodeAsync(data, params) {
-		return safeEncodeAsync$1(this, data, params);
-	},
-	async safeDecodeAsync(data, params) {
-		return safeDecodeAsync$1(this, data, params);
-	},
-	toJSONSchema(params) {
-		return createToJSONSchemaMethod$1(this, {})(params);
-	},
-	get description() {
-		return globalRegistry$1.get(this)?.description;
-	},
-	get _def() {
-		return this._zod.def;
-	}
-});
-/** @internal */
-var _ZodString$1 = /*@__PURE__*/ $constructor$1("_ZodString", (inst, def) => {
-	$ZodString$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => stringProcessor$1(inst, ctx, json, params);
-}, /*@__PURE__*/ derived({
-	format: (inst) => aggregateChecks(inst).format ?? null,
-	minLength: (inst) => aggregateChecks(inst).minimum ?? null,
-	maxLength: (inst) => aggregateChecks(inst).maximum ?? null
-}, {
-	regex(...args) {
-		return this.check(/* @__PURE__ */ _regex$1(...args));
-	},
-	includes(...args) {
-		return this.check(/* @__PURE__ */ _includes$1(...args));
-	},
-	startsWith(...args) {
-		return this.check(/* @__PURE__ */ _startsWith$1(...args));
-	},
-	endsWith(...args) {
-		return this.check(/* @__PURE__ */ _endsWith$1(...args));
-	},
-	min(...args) {
-		return this.check(/* @__PURE__ */ _minLength$1(...args));
-	},
-	max(...args) {
-		return this.check(/* @__PURE__ */ _maxLength$1(...args));
-	},
-	length(...args) {
-		return this.check(/* @__PURE__ */ _length$1(...args));
-	},
-	nonempty(...args) {
-		return this.check(/* @__PURE__ */ _minLength$1(1, ...args));
-	},
-	lowercase(params) {
-		return this.check(/* @__PURE__ */ _lowercase$1(params));
-	},
-	uppercase(params) {
-		return this.check(/* @__PURE__ */ _uppercase$1(params));
-	},
-	trim() {
-		return this.check(/* @__PURE__ */ _trim$1());
-	},
-	normalize(...args) {
-		return this.check(/* @__PURE__ */ _normalize$1(...args));
-	},
-	toLowerCase() {
-		return this.check(/* @__PURE__ */ _toLowerCase$1());
-	},
-	toUpperCase() {
-		return this.check(/* @__PURE__ */ _toUpperCase$1());
-	},
-	slugify() {
-		return this.check(/* @__PURE__ */ _slugify$1());
-	}
-}));
-var ZodString$1 = /*@__PURE__*/ $constructor$1("ZodString", (inst, def) => {
-	$ZodString$1.init(inst, def);
-	_ZodString$1.init(inst, def);
-}, {
-	email(params) {
-		return this.check(/* @__PURE__ */ _email$1(ZodEmail$1, params));
-	},
-	url(params) {
-		return this.check(/* @__PURE__ */ _url$1(ZodURL$1, params));
-	},
-	jwt(params) {
-		return this.check(/* @__PURE__ */ _jwt$1(ZodJWT$1, params));
-	},
-	emoji(params) {
-		return this.check(/* @__PURE__ */ _emoji$2(ZodEmoji$1, params));
-	},
-	guid(params) {
-		return this.check(/* @__PURE__ */ _guid$1(ZodGUID$1, params));
-	},
-	uuid(params) {
-		return this.check(/* @__PURE__ */ _uuid$1(ZodUUID$1, params));
-	},
-	uuidv4(params) {
-		return this.check(/* @__PURE__ */ _uuidv4$1(ZodUUID$1, params));
-	},
-	uuidv6(params) {
-		return this.check(/* @__PURE__ */ _uuidv6$1(ZodUUID$1, params));
-	},
-	uuidv7(params) {
-		return this.check(/* @__PURE__ */ _uuidv7$1(ZodUUID$1, params));
-	},
-	nanoid(params) {
-		return this.check(/* @__PURE__ */ _nanoid$1(ZodNanoID$1, params));
-	},
-	cuid(params) {
-		return this.check(/* @__PURE__ */ _cuid$1(ZodCUID$1, params));
-	},
-	cuid2(params) {
-		return this.check(/* @__PURE__ */ _cuid2$1(ZodCUID2$1, params));
-	},
-	ulid(params) {
-		return this.check(/* @__PURE__ */ _ulid$1(ZodULID$1, params));
-	},
-	base64(params) {
-		return this.check(/* @__PURE__ */ _base64$1(ZodBase64$1, params));
-	},
-	base64url(params) {
-		return this.check(/* @__PURE__ */ _base64url$1(ZodBase64URL$1, params));
-	},
-	xid(params) {
-		return this.check(/* @__PURE__ */ _xid$1(ZodXID$1, params));
-	},
-	ksuid(params) {
-		return this.check(/* @__PURE__ */ _ksuid$1(ZodKSUID$1, params));
-	},
-	ipv4(params) {
-		return this.check(/* @__PURE__ */ _ipv4$1(ZodIPv4$1, params));
-	},
-	ipv6(params) {
-		return this.check(/* @__PURE__ */ _ipv6$1(ZodIPv6$1, params));
-	},
-	cidrv4(params) {
-		return this.check(/* @__PURE__ */ _cidrv4$1(ZodCIDRv4$1, params));
-	},
-	cidrv6(params) {
-		return this.check(/* @__PURE__ */ _cidrv6$1(ZodCIDRv6$1, params));
-	},
-	e164(params) {
-		return this.check(/* @__PURE__ */ _e164$1(ZodE164$1, params));
-	},
-	datetime(params) {
-		return this.check(/* @__PURE__ */ _isoDateTime$1(ZodISODateTime$1, params));
-	},
-	date(params) {
-		return this.check(/* @__PURE__ */ _isoDate$1(ZodISODate$1, params));
-	},
-	time(params) {
-		return this.check(/* @__PURE__ */ _isoTime$1(ZodISOTime$1, params));
-	},
-	duration(params) {
-		return this.check(/* @__PURE__ */ _isoDuration$1(ZodISODuration$1, params));
-	}
-});
-function string$2(params) {
-	return /* @__PURE__ */ _string$1(ZodString$1, params);
-}
-var ZodStringFormat$1 = /*@__PURE__*/ $constructor$1("ZodStringFormat", (inst, def) => {
-	$ZodStringFormat$1.init(inst, def);
-	_ZodString$1.init(inst, def);
-});
-var ZodISODateTime$1 = /*@__PURE__*/ $constructor$1("ZodISODateTime", (inst, def) => {
-	$ZodISODateTime$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodISODate$1 = /*@__PURE__*/ $constructor$1("ZodISODate", (inst, def) => {
-	$ZodISODate$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodISOTime$1 = /*@__PURE__*/ $constructor$1("ZodISOTime", (inst, def) => {
-	$ZodISOTime$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodISODuration$1 = /*@__PURE__*/ $constructor$1("ZodISODuration", (inst, def) => {
-	$ZodISODuration$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodEmail$1 = /*@__PURE__*/ $constructor$1("ZodEmail", (inst, def) => {
-	$ZodEmail$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodGUID$1 = /*@__PURE__*/ $constructor$1("ZodGUID", (inst, def) => {
-	$ZodGUID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodUUID$1 = /*@__PURE__*/ $constructor$1("ZodUUID", (inst, def) => {
-	$ZodUUID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodURL$1 = /*@__PURE__*/ $constructor$1("ZodURL", (inst, def) => {
-	$ZodURL$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodEmoji$1 = /*@__PURE__*/ $constructor$1("ZodEmoji", (inst, def) => {
-	$ZodEmoji$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodNanoID$1 = /*@__PURE__*/ $constructor$1("ZodNanoID", (inst, def) => {
-	$ZodNanoID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-/**
-* @deprecated CUID v1 is deprecated by its authors due to information leakage
-* (timestamps embedded in the id). Use {@link ZodCUID2} instead.
-* See https://github.com/paralleldrive/cuid.
-*/
-var ZodCUID$1 = /*@__PURE__*/ $constructor$1("ZodCUID", (inst, def) => {
-	$ZodCUID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodCUID2$1 = /*@__PURE__*/ $constructor$1("ZodCUID2", (inst, def) => {
-	$ZodCUID2$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodULID$1 = /*@__PURE__*/ $constructor$1("ZodULID", (inst, def) => {
-	$ZodULID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodXID$1 = /*@__PURE__*/ $constructor$1("ZodXID", (inst, def) => {
-	$ZodXID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodKSUID$1 = /*@__PURE__*/ $constructor$1("ZodKSUID", (inst, def) => {
-	$ZodKSUID$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodIPv4$1 = /*@__PURE__*/ $constructor$1("ZodIPv4", (inst, def) => {
-	$ZodIPv4$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodIPv6$1 = /*@__PURE__*/ $constructor$1("ZodIPv6", (inst, def) => {
-	$ZodIPv6$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodCIDRv4$1 = /*@__PURE__*/ $constructor$1("ZodCIDRv4", (inst, def) => {
-	$ZodCIDRv4$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodCIDRv6$1 = /*@__PURE__*/ $constructor$1("ZodCIDRv6", (inst, def) => {
-	$ZodCIDRv6$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodBase64$1 = /*@__PURE__*/ $constructor$1("ZodBase64", (inst, def) => {
-	$ZodBase64$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodBase64URL$1 = /*@__PURE__*/ $constructor$1("ZodBase64URL", (inst, def) => {
-	$ZodBase64URL$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodE164$1 = /*@__PURE__*/ $constructor$1("ZodE164", (inst, def) => {
-	$ZodE164$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodJWT$1 = /*@__PURE__*/ $constructor$1("ZodJWT", (inst, def) => {
-	$ZodJWT$1.init(inst, def);
-	ZodStringFormat$1.init(inst, def);
-});
-var ZodNumber$1 = /*@__PURE__*/ $constructor$1("ZodNumber", (inst, def) => {
-	$ZodNumber$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => numberProcessor$1(inst, ctx, json, params);
-	inst.isFinite = true;
-}, /*@__PURE__*/ derived({
-	minValue: (inst) => {
-		const { minimum, exclusiveMinimum } = aggregateChecks(inst);
-		return Math.max(minimum ?? Number.NEGATIVE_INFINITY, exclusiveMinimum ?? Number.NEGATIVE_INFINITY);
-	},
-	maxValue: (inst) => {
-		const { maximum, exclusiveMaximum } = aggregateChecks(inst);
-		return Math.min(maximum ?? Number.POSITIVE_INFINITY, exclusiveMaximum ?? Number.POSITIVE_INFINITY);
-	},
-	isInt: (inst) => {
-		const { isInt, multipleOf } = aggregateChecks(inst);
-		return !!isInt || !!multipleOf?.some(Number.isSafeInteger);
-	},
-	format: (inst) => aggregateChecks(inst).format ?? null
-}, {
-	gt(value, params) {
-		return this.check(/* @__PURE__ */ _gt$1(value, params));
-	},
-	gte(value, params) {
-		return this.check(/* @__PURE__ */ _gte$1(value, params));
-	},
-	min(value, params) {
-		return this.check(/* @__PURE__ */ _gte$1(value, params));
-	},
-	lt(value, params) {
-		return this.check(/* @__PURE__ */ _lt$1(value, params));
-	},
-	lte(value, params) {
-		return this.check(/* @__PURE__ */ _lte$1(value, params));
-	},
-	max(value, params) {
-		return this.check(/* @__PURE__ */ _lte$1(value, params));
-	},
-	int(params) {
-		return this.check(int$1(params));
-	},
-	safe(params) {
-		return this.check(int$1(params));
-	},
-	positive(params) {
-		return this.check(/* @__PURE__ */ _gt$1(0, params));
-	},
-	nonnegative(params) {
-		return this.check(/* @__PURE__ */ _gte$1(0, params));
-	},
-	negative(params) {
-		return this.check(/* @__PURE__ */ _lt$1(0, params));
-	},
-	nonpositive(params) {
-		return this.check(/* @__PURE__ */ _lte$1(0, params));
-	},
-	multipleOf(value, params) {
-		return this.check(/* @__PURE__ */ _multipleOf$1(value, params));
-	},
-	step(value, params) {
-		return this.check(/* @__PURE__ */ _multipleOf$1(value, params));
-	},
-	finite() {
-		return this;
-	}
-}));
-function number$3(params) {
-	return /* @__PURE__ */ _number$1(ZodNumber$1, params);
-}
-var ZodNumberFormat$1 = /*@__PURE__*/ $constructor$1("ZodNumberFormat", (inst, def) => {
-	$ZodNumberFormat$1.init(inst, def);
-	ZodNumber$1.init(inst, def);
-});
-function int$1(params) {
-	return /* @__PURE__ */ _int$1(ZodNumberFormat$1, params);
-}
-var ZodBoolean$1 = /*@__PURE__*/ $constructor$1("ZodBoolean", (inst, def) => {
-	$ZodBoolean$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => booleanProcessor$1(inst, ctx, json, params);
-});
-function boolean$2(params) {
-	return /* @__PURE__ */ _boolean$1(ZodBoolean$1, params);
-}
-var ZodUnknown$1 = /*@__PURE__*/ $constructor$1("ZodUnknown", (inst, def) => {
-	$ZodUnknown$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => void 0;
-});
-function unknown$1() {
-	return /* @__PURE__ */ _unknown$1(ZodUnknown$1);
-}
-var ZodNever$1 = /*@__PURE__*/ $constructor$1("ZodNever", (inst, def) => {
-	$ZodNever$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => neverProcessor$1(inst, ctx, json, params);
-});
-function never$1(params) {
-	return /* @__PURE__ */ _never$1(ZodNever$1, params);
-}
-var ZodArray$1 = /*@__PURE__*/ $constructor$1("ZodArray", (inst, def) => {
-	_ensureDefaultMemoizer$1();
-	$ZodArray$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => arrayProcessor$1(inst, ctx, json, params);
-	inst.element = def.element;
-}, {
-	min(n, params) {
-		return this.check(/* @__PURE__ */ _minLength$1(n, params));
-	},
-	nonempty(params) {
-		return this.check(/* @__PURE__ */ _minLength$1(1, params));
-	},
-	max(n, params) {
-		return this.check(/* @__PURE__ */ _maxLength$1(n, params));
-	},
-	length(n, params) {
-		return this.check(/* @__PURE__ */ _length$1(n, params));
-	},
-	unwrap() {
-		return this.element;
-	}
-});
-function array$1(element, params) {
-	return /* @__PURE__ */ _array$1(ZodArray$1, element, params);
-}
-var ZodObject$1 = /*@__PURE__*/ $constructor$1("ZodObject", (inst, def) => {
-	_ensureDefaultMemoizer$1();
-	$ZodObjectJIT$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => objectProcessor$1(inst, ctx, json, params);
-	installLazyProp$1(inst, "shape", (self) => self._zod.def.shape, false);
-}, {
-	keyof() {
-		return _enum$1(Object.keys(this._zod.def.shape));
-	},
-	catchall(catchall) {
-		return this.clone(mergeDefs$1(this._zod.def, { catchall }));
-	},
-	passthrough() {
-		return this.clone(mergeDefs$1(this._zod.def, { catchall: unknown$1() }));
-	},
-	loose() {
-		return this.clone(mergeDefs$1(this._zod.def, { catchall: unknown$1() }));
-	},
-	strict() {
-		return this.clone(mergeDefs$1(this._zod.def, { catchall: never$1() }));
-	},
-	strip() {
-		return this.clone(mergeDefs$1(this._zod.def, { catchall: void 0 }));
-	},
-	extend(incoming) {
-		return extend$1(this, incoming);
-	},
-	safeExtend(incoming) {
-		return safeExtend$1(this, incoming);
-	},
-	merge(other) {
-		return merge$1(this, other);
-	},
-	pick(mask) {
-		return pick$1(this, mask);
-	},
-	omit(mask) {
-		return omit$1(this, mask);
-	},
-	partial(...args) {
-		return partial$1(ZodOptional$1, this, args[0]);
-	},
-	exactPartial(...args) {
-		return partial$1(ZodExactOptional$1, this, args[0], "exactPartial");
-	},
-	required(...args) {
-		return required$1(ZodNonOptional$1, this, args[0]);
-	}
-});
-function object$1(shape, params) {
-	return new ZodObject$1({
-		type: "object",
-		shape: shape ?? {},
-		...normalizeParams$1(params)
-	});
-}
-var ZodUnion$1 = /*@__PURE__*/ $constructor$1("ZodUnion", (inst, def) => {
-	$ZodUnion$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => unionProcessor$1(inst, ctx, json, params);
-	inst.options = def.options;
-});
-function union$1(options, params) {
-	return new ZodUnion$1({
-		type: "union",
-		options,
-		...normalizeParams$1(params)
-	});
-}
-var ZodIntersection$1 = /*@__PURE__*/ $constructor$1("ZodIntersection", (inst, def) => {
-	$ZodIntersection$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => intersectionProcessor$1(inst, ctx, json, params);
-});
-function intersection$1(left, right) {
-	return new ZodIntersection$1({
-		type: "intersection",
-		left,
-		right
-	});
-}
-var ZodRecord$1 = /*@__PURE__*/ $constructor$1("ZodRecord", (inst, def) => {
-	_ensureDefaultMemoizer$1();
-	$ZodRecord$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => recordProcessor$1(inst, ctx, json, params);
-	inst.keyType = def.keyType;
-	inst.valueType = def.valueType;
-});
-function record$1(keyType, valueType, params) {
-	if (!valueType || !valueType._zod) return new ZodRecord$1({
-		type: "record",
-		keyType: string$2(),
-		valueType: keyType,
-		...normalizeParams$1(valueType)
-	});
-	return new ZodRecord$1({
-		type: "record",
-		keyType,
-		valueType,
-		...normalizeParams$1(params)
-	});
-}
-var ZodEnum$1 = /*@__PURE__*/ $constructor$1("ZodEnum", (inst, def) => {
-	$ZodEnum$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => enumProcessor$1(inst, ctx, json, params);
-	inst.enum = def.entries;
-	inst.options = [...inst._zod.values];
-	const keys = new Set(Object.keys(def.entries));
-	inst.extract = (values, params) => {
-		const newEntries = {};
-		for (const value of values) if (keys.has(value)) newEntries[value] = def.entries[value];
-		else throw new Error(`Key ${value} not found in enum`);
-		return new ZodEnum$1({
-			...def,
-			checks: [],
-			...normalizeParams$1(params),
-			entries: newEntries
-		});
-	};
-	inst.exclude = (values, params) => {
-		const newEntries = { ...def.entries };
-		for (const value of values) if (keys.has(value)) delete newEntries[value];
-		else throw new Error(`Key ${value} not found in enum`);
-		return new ZodEnum$1({
-			...def,
-			checks: [],
-			...normalizeParams$1(params),
-			entries: newEntries
-		});
-	};
-});
-function _enum$1(values, params) {
-	return new ZodEnum$1({
-		type: "enum",
-		entries: Array.isArray(values) ? Object.fromEntries(values.map((v) => [v, v])) : values,
-		...normalizeParams$1(params)
-	});
-}
-var ZodLiteral$1 = /*@__PURE__*/ $constructor$1("ZodLiteral", (inst, def) => {
-	$ZodLiteral$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => literalProcessor$1(inst, ctx, json, params);
-	inst.values = new Set(def.values);
-	Object.defineProperty(inst, "value", { get() {
-		if (def.values.length > 1) throw new Error("This schema contains multiple valid literal values. Use `.values` instead.");
-		return def.values[0];
-	} });
-});
-function literal$1(value, params) {
-	return new ZodLiteral$1({
-		type: "literal",
-		values: Array.isArray(value) ? value : [value],
-		...normalizeParams$1(params)
-	});
-}
-var ZodTransform$1 = /*@__PURE__*/ $constructor$1("ZodTransform", (inst, def) => {
-	_ensureDefaultMemoizer$1();
-	$ZodTransform$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => transformProcessor$1(inst, ctx, json, params);
-	inst._zod.parse = (payload, _ctx) => {
-		if (_ctx.direction === "backward") throw new $ZodEncodeError$1(inst.constructor.name);
-		payload.addIssue = (issue) => {
-			if (typeof issue === "string") payload.issues.push(issue$1(issue, payload.value, def));
-			else {
-				const _issue = issue;
-				if (_issue.fatal) _issue.continue = false;
-				_issue.code ?? (_issue.code = "custom");
-				if (!("input" in _issue)) _issue.input = payload.value;
-				_issue.inst ?? (_issue.inst = inst);
-				payload.issues.push(issue$1(_issue));
-			}
-		};
-		const output = def.transform(payload.value, payload);
-		if (output instanceof Promise) return output.then((output) => {
-			payload.value = output;
-			return payload;
-		});
-		payload.value = output;
-		return payload;
-	};
-});
-function transform$1(fn) {
-	return new ZodTransform$1({
-		type: "transform",
-		transform: fn
-	});
-}
-var ZodOptional$1 = /*@__PURE__*/ $constructor$1("ZodOptional", (inst, def) => {
-	$ZodOptional$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-});
-function optional$1(innerType) {
-	return new ZodOptional$1({
-		type: "optional",
-		innerType
-	});
-}
-var ZodExactOptional$1 = /*@__PURE__*/ $constructor$1("ZodExactOptional", (inst, def) => {
-	$ZodExactOptional$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-});
-function exactOptional$1(innerType) {
-	return new ZodExactOptional$1({
-		type: "optional",
-		innerType
-	});
-}
-var ZodNullable$1 = /*@__PURE__*/ $constructor$1("ZodNullable", (inst, def) => {
-	$ZodNullable$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => nullableProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-});
-function nullable$1(innerType) {
-	return new ZodNullable$1({
-		type: "nullable",
-		innerType
-	});
-}
-var ZodDefault$1 = /*@__PURE__*/ $constructor$1("ZodDefault", (inst, def) => {
-	$ZodDefault$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => defaultProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-	inst.removeDefault = inst.unwrap;
-});
-function _default$1(innerType, defaultValue) {
-	return new ZodDefault$1({
-		type: "default",
-		innerType,
-		get defaultValue() {
-			return typeof defaultValue === "function" ? defaultValue() : shallowClone$1(defaultValue);
-		}
-	});
-}
-var ZodPrefault$1 = /*@__PURE__*/ $constructor$1("ZodPrefault", (inst, def) => {
-	$ZodPrefault$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => prefaultProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-});
-function prefault$1(innerType, defaultValue) {
-	return new ZodPrefault$1({
-		type: "prefault",
-		innerType,
-		get defaultValue() {
-			return typeof defaultValue === "function" ? defaultValue() : shallowClone$1(defaultValue);
-		}
-	});
-}
-var ZodNonOptional$1 = /*@__PURE__*/ $constructor$1("ZodNonOptional", (inst, def) => {
-	$ZodNonOptional$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => nonoptionalProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-});
-function nonoptional$1(innerType, params) {
-	return new ZodNonOptional$1({
-		type: "nonoptional",
-		innerType,
-		...normalizeParams$1(params)
-	});
-}
-var ZodCatch$1 = /*@__PURE__*/ $constructor$1("ZodCatch", (inst, def) => {
-	$ZodCatch$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => catchProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-	inst.removeCatch = inst.unwrap;
-});
-function _catch$1(innerType, catchValue) {
-	return new ZodCatch$1({
-		type: "catch",
-		innerType,
-		catchValue: typeof catchValue === "function" ? catchValue : constantCatch$1(catchValue)
-	});
-}
-var ZodPipe$1 = /*@__PURE__*/ $constructor$1("ZodPipe", (inst, def) => {
-	$ZodPipe$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => pipeProcessor$1(inst, ctx, json, params);
-	inst.in = def.in;
-	inst.out = def.out;
-});
-function pipe$1(in_, out) {
-	return new ZodPipe$1({
-		type: "pipe",
-		in: in_,
-		out
-	});
-}
-var ZodReadonly$1 = /*@__PURE__*/ $constructor$1("ZodReadonly", (inst, def) => {
-	$ZodReadonly$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => readonlyProcessor$1(inst, ctx, json, params);
-	inst.unwrap = () => inst._zod.def.innerType;
-});
-function readonly$1(innerType) {
-	return new ZodReadonly$1({
-		type: "readonly",
-		innerType
-	});
-}
-var ZodCustom$1 = /*@__PURE__*/ $constructor$1("ZodCustom", (inst, def) => {
-	$ZodCustom$1.init(inst, def);
-	ZodType$1.init(inst, def);
-	inst._zod.processJSONSchema = (ctx, json, params) => customProcessor$1(inst, ctx, json, params);
-});
-function refine$1(fn, _params = {}) {
-	return /* @__PURE__ */ _refine$1(ZodCustom$1, fn, _params);
-}
-function superRefine$1(fn, params) {
-	return /* @__PURE__ */ _superRefine$1(fn, params);
-}
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/util.js
-function getEnumValues(entries) {
-	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
-	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
-}
-function joinValues(array, separator = "|") {
-	return array.map((val) => stringifyPrimitive(val)).join(separator);
-}
-function jsonStringifyReplacer(_, value) {
-	if (typeof value === "bigint") return value.toString();
-	return value;
-}
 function cached(getter) {
-	return { get value() {
-		{
-			const value = getter();
-			Object.defineProperty(this, "value", { value });
-			return value;
-		}
-	} };
+	return new Cached(getter);
 }
 function nullish(input) {
 	return input === null || input === void 0;
@@ -8026,6 +2566,58 @@ function assignProp(target, prop, value) {
 		enumerable: true,
 		configurable: true
 	});
+}
+/**
+* Whichever object a def's `shape` currently answers from: the one the caller passed until the first read, the frozen copy after it.
+*
+* Its keys and descriptors read without invoking anything, which is what lets a discriminated union check its discriminator, and the cycle walk read a shape, without resolving a getter that references the schema being constructed. A def that answers `shape` from an accessor of its own has none.
+*/
+function rawShape(def) {
+	const desc = Object.getOwnPropertyDescriptor(def, "shape");
+	return desc?.get ? desc.get.raw : desc?.value;
+}
+function sourceShape(schema) {
+	return rawShape(schema._zod.def) ?? schema._zod.def.shape;
+}
+function deferProp(target, key, getter) {
+	Object.defineProperty(target, key, {
+		get() {
+			const value = getter();
+			assignProp(this, key, value);
+			return value;
+		},
+		enumerable: true,
+		configurable: true
+	});
+}
+function putProp(target, key, value) {
+	if (key in target) assignProp(target, key, value);
+	else target[key] = value;
+}
+/**
+* Copies `keys` of `source`'s shape onto `target`, each value passed through `wrap`.
+*
+* A key the source has resolved is copied through now, so the derived shape states it outright and nothing has to resolve it to learn what it holds. A key the source still defers stays deferred, and reads back through the source's own `shape`, so it resolves once and both shapes get that one schema.
+*/
+function mirrorShape(target, source, keys, wrap) {
+	const raw = sourceShape(source);
+	for (const key of keys) {
+		const desc = Object.getOwnPropertyDescriptor(raw, key);
+		if (!desc.enumerable) continue;
+		if (desc.get) deferProp(target, key, () => {
+			const value = source._zod.def.shape[key];
+			return wrap ? wrap(value, key) : value;
+		});
+		else putProp(target, key, wrap ? wrap(desc.value, key) : desc.value);
+	}
+}
+function mirrorProps(target, source) {
+	for (const key of Reflect.ownKeys(source)) {
+		const desc = Object.getOwnPropertyDescriptor(source, key);
+		if (!desc.enumerable) continue;
+		if (desc.get) deferProp(target, key, () => source[key]);
+		else putProp(target, key, desc.value);
+	}
 }
 function mergeDefs(...defs) {
 	const mergedDescriptors = {};
@@ -8117,39 +2709,39 @@ var NUMBER_FORMAT_RANGES = /*@__PURE__*/ (() => ({
 	float32: [-34028234663852886e22, 34028234663852886e22],
 	float64: [-Number.MAX_VALUE, Number.MAX_VALUE]
 }))();
+var BIGINT_FORMAT_RANGES = {
+	int64: [/* @__PURE__*/ BigInt("-9223372036854775808"), /* @__PURE__*/ BigInt("9223372036854775807")],
+	uint64: [/* @__PURE__*/ BigInt(0), /* @__PURE__*/ BigInt("18446744073709551615")]
+};
 function pick(schema, mask) {
 	const currDef = schema._zod.def;
 	const checks = currDef.checks;
 	if (checks && checks.length > 0) throw new Error(".pick() cannot be used on object schemas containing refinements");
-	return clone(schema, mergeDefs(schema._zod.def, {
-		get shape() {
-			const newShape = {};
-			for (const key of Reflect.ownKeys(mask)) {
-				if (!Object.prototype.hasOwnProperty.call(currDef.shape, key)) throw new Error(`Unrecognized key: "${String(key)}"`);
-				if (!mask[key]) continue;
-				assignProp(newShape, key, currDef.shape[key]);
-			}
-			assignProp(this, "shape", newShape);
-			return newShape;
-		},
+	const newShape = {};
+	mirrorShape(newShape, schema, maskedKeys(schema, mask));
+	return clone(schema, mergeDefs(currDef, {
+		shape: newShape,
 		checks: []
 	}));
+}
+function maskedKeys(schema, mask) {
+	const raw = sourceShape(schema);
+	const keys = [];
+	for (const key of Reflect.ownKeys(mask)) {
+		if (!Object.getOwnPropertyDescriptor(raw, key)?.enumerable) throw new Error(`Unrecognized key: "${String(key)}"`);
+		if (mask[key]) keys.push(key);
+	}
+	return keys;
 }
 function omit(schema, mask) {
 	const currDef = schema._zod.def;
 	const checks = currDef.checks;
 	if (checks && checks.length > 0) throw new Error(".omit() cannot be used on object schemas containing refinements");
-	return clone(schema, mergeDefs(schema._zod.def, {
-		get shape() {
-			const newShape = { ...schema._zod.def.shape };
-			for (const key of Reflect.ownKeys(mask)) {
-				if (!Object.prototype.hasOwnProperty.call(currDef.shape, key)) throw new Error(`Unrecognized key: "${String(key)}"`);
-				if (!mask[key]) continue;
-				delete newShape[key];
-			}
-			assignProp(this, "shape", newShape);
-			return newShape;
-		},
+	const omitted = new Set(maskedKeys(schema, mask));
+	const newShape = {};
+	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)).filter((key) => !omitted.has(key)));
+	return clone(schema, mergeDefs(currDef, {
+		shape: newShape,
 		checks: []
 	}));
 }
@@ -8157,41 +2749,29 @@ function extend(schema, shape) {
 	if (!isPlainObject(shape)) throw new Error("Invalid input to extend: expected a plain object");
 	const checks = schema._zod.def.checks;
 	if (checks && checks.length > 0) {
-		const existingShape = schema._zod.def.shape;
+		const existingShape = sourceShape(schema);
 		for (const key of Reflect.ownKeys(shape)) if (Object.getOwnPropertyDescriptor(existingShape, key) !== void 0) throw new Error("Cannot overwrite keys on object schemas containing refinements. Use `.safeExtend()` instead.");
 	}
-	return clone(schema, mergeDefs(schema._zod.def, { get shape() {
-		const _shape = {
-			...schema._zod.def.shape,
-			...shape
-		};
-		assignProp(this, "shape", _shape);
-		return _shape;
-	} }));
+	return clone(schema, mergeDefs(schema._zod.def, { shape: extended(schema, shape) }));
+}
+function extended(schema, shape) {
+	const newShape = {};
+	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)));
+	mirrorProps(newShape, shape);
+	return newShape;
 }
 function safeExtend(schema, shape) {
 	if (!isPlainObject(shape)) throw new Error("Invalid input to safeExtend: expected a plain object");
-	return clone(schema, mergeDefs(schema._zod.def, { get shape() {
-		const _shape = {
-			...schema._zod.def.shape,
-			...shape
-		};
-		assignProp(this, "shape", _shape);
-		return _shape;
-	} }));
+	return clone(schema, mergeDefs(schema._zod.def, { shape: extended(schema, shape) }));
 }
 function merge(a, b) {
 	if (!b?._zod?.def) throw new Error("Invalid input to merge: expected an object schema. To merge a plain shape, use `.extend()`.");
 	if (a._zod.def.checks?.length) throw new Error(".merge() cannot be used on object schemas containing refinements. Use .safeExtend() instead.");
+	const newShape = {};
+	mirrorShape(newShape, a, Reflect.ownKeys(sourceShape(a)));
+	mirrorShape(newShape, b, Reflect.ownKeys(sourceShape(b)));
 	return clone(a, mergeDefs(a._zod.def, {
-		get shape() {
-			const _shape = {
-				...a._zod.def.shape,
-				...b._zod.def.shape
-			};
-			assignProp(this, "shape", _shape);
-			return _shape;
-		},
+		shape: newShape,
 		get catchall() {
 			return b._zod.def.catchall;
 		},
@@ -8201,47 +2781,25 @@ function merge(a, b) {
 function partial(Class, schema, mask, name = "partial") {
 	const checks = schema._zod.def.checks;
 	if (checks && checks.length > 0) throw new Error(`.${name}() cannot be used on object schemas containing refinements`);
+	const selected = mask ? new Set(maskedKeys(schema, mask)) : void 0;
+	const newShape = {};
+	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)), Class && ((value, key) => selected && !selected.has(key) ? value : new Class({
+		type: "optional",
+		innerType: value
+	})));
 	return clone(schema, mergeDefs(schema._zod.def, {
-		get shape() {
-			const oldShape = schema._zod.def.shape;
-			const shape = { ...oldShape };
-			if (mask) for (const key of Reflect.ownKeys(mask)) {
-				if (!Object.prototype.hasOwnProperty.call(oldShape, key)) throw new Error(`Unrecognized key: "${String(key)}"`);
-				if (!mask[key]) continue;
-				shape[key] = Class ? new Class({
-					type: "optional",
-					innerType: oldShape[key]
-				}) : oldShape[key];
-			}
-			else for (const key of Reflect.ownKeys(oldShape)) shape[key] = Class ? new Class({
-				type: "optional",
-				innerType: oldShape[key]
-			}) : oldShape[key];
-			assignProp(this, "shape", shape);
-			return shape;
-		},
+		shape: newShape,
 		checks: []
 	}));
 }
 function required(Class, schema, mask) {
-	return clone(schema, mergeDefs(schema._zod.def, { get shape() {
-		const oldShape = schema._zod.def.shape;
-		const shape = { ...oldShape };
-		if (mask) for (const key of Reflect.ownKeys(mask)) {
-			if (!Object.prototype.hasOwnProperty.call(shape, key)) throw new Error(`Unrecognized key: "${String(key)}"`);
-			if (!mask[key]) continue;
-			shape[key] = new Class({
-				type: "nonoptional",
-				innerType: oldShape[key]
-			});
-		}
-		else for (const key of Reflect.ownKeys(oldShape)) shape[key] = new Class({
-			type: "nonoptional",
-			innerType: oldShape[key]
-		});
-		assignProp(this, "shape", shape);
-		return shape;
-	} }));
+	const selected = mask ? new Set(maskedKeys(schema, mask)) : void 0;
+	const newShape = {};
+	mirrorShape(newShape, schema, Reflect.ownKeys(sourceShape(schema)), (value, key) => selected && !selected.has(key) ? value : new Class({
+		type: "nonoptional",
+		innerType: value
+	}));
+	return clone(schema, mergeDefs(schema._zod.def, { shape: newShape }));
 }
 function aborted(x, startIndex = 0) {
 	if (x.aborted === true) return true;
@@ -8277,11 +2835,15 @@ function finalizeIssue(iss, ctx, config) {
 	}
 	const schemaError = iss.schema !== iss.inst ? iss.schema?._zod.def?.error : void 0;
 	const message = iss.message ? iss.message : unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(schemaError?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
-	const { inst: _inst, schema: _schema, continue: _continue, input: _input, ...rest } = iss;
-	rest.path ?? (rest.path = []);
-	rest.message = message;
-	if (ctx?.reportInput) rest.input = _input;
-	return rest;
+	const full = {};
+	for (const k of Object.keys(iss)) {
+		if (k === "inst" || k === "schema" || k === "continue" || k === "input" || k === "__proto__") continue;
+		full[k] = iss[k];
+	}
+	full.path ?? (full.path = []);
+	full.message = message;
+	if (ctx?.reportInput) full.input = iss.input;
+	return full;
 }
 var highSurrogate = /[\uD800-\uDBFF]/;
 function codePointLength(str) {
@@ -8350,6 +2912,23 @@ function own(inst, key, value, enumerable = true) {
 /** Like {@link own}, for a member that was never an own data property and has to stay out of `Object.keys`. */
 function hide(inst, key, value) {
 	return own(inst, key, value, false);
+}
+/** Adds members a table derives from the instance: each builds on first read and shadows as own data, and assignment shadows the same way, as when these were own properties. */
+function derived(computes, table) {
+	for (const key in computes) {
+		const compute = computes[key];
+		Object.defineProperty(table, key, {
+			configurable: true,
+			enumerable: true,
+			get() {
+				return own(this, key, compute(this));
+			},
+			set(value) {
+				own(this, key, value);
+			}
+		});
+	}
+	return table;
 }
 function defineBound(proto, key, fn) {
 	Object.defineProperty(proto, key, {
@@ -8459,9 +3038,9 @@ function constantCatch(value) {
 	return fn;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/core.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/core.js
 var _a$1;
-var _zodDesc$1 = {
+var _zodDesc = {
 	value: void 0,
 	enumerable: false
 };
@@ -8498,14 +3077,13 @@ function $constructor(name, initializer, proto, params) {
 	const initialized = protoMembers && /* @__PURE__ */ new WeakSet();
 	function init(inst, def) {
 		if (!inst._zod) {
-			_zodDesc$1.value = new Internals(def);
+			_zodDesc.value = new Internals(def);
 			try {
-				Object.defineProperty(inst, "_zod", _zodDesc$1);
+				Object.defineProperty(inst, "_zod", _zodDesc);
 			} finally {
-				_zodDesc$1.value = void 0;
+				_zodDesc.value = void 0;
 			}
-		}
-		if (inst._zod.traits.has(name)) return;
+		} else if (inst._zod.traits.has(name)) return;
 		inst._zod.traits.add(name);
 		initializer(inst, def);
 		if (initialized) {
@@ -8566,7 +3144,7 @@ function config(newConfig) {
 	return globalConfig;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/errors.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/errors.js
 function _getMessage() {
 	const internals = this._zod;
 	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -8581,10 +3159,6 @@ var _messageDesc = {
 	enumerable: true,
 	configurable: true
 };
-var _zodDesc = {
-	value: void 0,
-	enumerable: false
-};
 var _issuesDesc = {
 	value: void 0,
 	enumerable: false
@@ -8592,11 +3166,8 @@ var _issuesDesc = {
 var _installedToString = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
 var initializer$1 = (inst, def) => {
 	inst.name = "$ZodError";
-	_zodDesc.value = inst._zod;
-	Object.defineProperty(inst, "_zod", _zodDesc);
 	_issuesDesc.value = def;
 	Object.defineProperty(inst, "issues", _issuesDesc);
-	_zodDesc.value = void 0;
 	_issuesDesc.value = void 0;
 	Object.defineProperty(inst, "message", _messageDesc);
 	const proto = Object.getPrototypeOf(inst);
@@ -8625,7 +3196,7 @@ var initializer$1 = (inst, def) => {
 	}
 };
 var $ZodError = $constructor("$ZodError", initializer$1);
-var $ZodRealError = $constructor("$ZodError", initializer$1, void 0, { Parent: Error });
+$constructor("$ZodError", initializer$1, void 0, { Parent: Error });
 /** Get-or-create `obj[key]` as an own data property. A path segment naming an inherited member
 * ("toString", "constructor") would otherwise read through to the prototype, and assigning
 * "__proto__" would hit the setter instead of creating a key. */
@@ -8689,7 +3260,7 @@ function formatError(error, mapper = (issue) => issue.message) {
 	return fieldErrors;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/parse.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/parse.js
 function finalizeParams(callee, params) {
 	return {
 		callee: params?.callee ?? callee,
@@ -8746,15 +3317,30 @@ var _safeParse = (_Err) => (schema, value, _ctx) => {
 		issues: []
 	}, ctx);
 	if (result instanceof Promise) throw new $ZodAsyncError();
-	return result.issues.length ? {
-		success: false,
-		error: new (_Err ?? $ZodError)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
-	} : {
+	return result.issues.length ? failure$1(_Err, result.issues, ctx) : {
 		success: true,
 		data: result.value
 	};
 };
-var safeParse$1 = /* @__PURE__*/ _safeParse($ZodRealError);
+function failure$1(Err, issues, ctx) {
+	let error;
+	return {
+		success: false,
+		get error() {
+			if (!error) {
+				error = new Err(issues.map((iss) => finalizeIssue(iss, ctx, config())));
+				issues = void 0;
+				ctx = void 0;
+			}
+			return error;
+		},
+		set error(e) {
+			error = e;
+			issues = void 0;
+			ctx = void 0;
+		}
+	};
+}
 var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 	const ctx = _ctx ? {
 		..._ctx,
@@ -8765,15 +3351,61 @@ var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 		issues: []
 	}, ctx);
 	if (result instanceof Promise) result = await result;
-	return result.issues.length ? {
-		success: false,
-		error: new _Err(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
-	} : {
+	return result.issues.length ? failure$1(_Err, result.issues, ctx) : {
 		success: true,
 		data: result.value
 	};
 };
-var safeParseAsync$1 = /* @__PURE__*/ _safeParseAsync($ZodRealError);
+var COMPILE_INVALID = /* @__PURE__ */ Symbol.for("zod.compile.invalid");
+var COMPILE_FALLBACK = /* @__PURE__ */ Symbol.for("zod.compile.fallback");
+var validate = ((schema, value, _ctx) => {
+	const validator = schema._zod.bag.validator;
+	if (validator !== void 0) {
+		if (validator(value) !== COMPILE_INVALID) return true;
+		if (validator.definite === true && _ctx === void 0) return false;
+	}
+	return validateFallback(schema, value, _ctx);
+});
+function validateFallback(schema, value, _ctx) {
+	const ctx = _ctx ? {
+		..._ctx,
+		async: false,
+		abortEarly: true
+	} : {
+		async: false,
+		abortEarly: true
+	};
+	const fallbackRun = schema._zod.bag.fallbackRun;
+	let result;
+	if (fallbackRun) {
+		ctx[COMPILE_FALLBACK] = true;
+		result = fallbackRun({
+			value,
+			issues: []
+		}, ctx);
+	} else result = schema._zod.run({
+		value,
+		issues: []
+	}, ctx);
+	if (result instanceof Promise) throw new $ZodAsyncError();
+	return result.issues.length === 0;
+}
+var validateAsync$1 = async (schema, value, _ctx) => {
+	const ctx = _ctx ? {
+		..._ctx,
+		async: true,
+		abortEarly: true
+	} : {
+		async: true,
+		abortEarly: true
+	};
+	let result = schema._zod.run({
+		value,
+		issues: []
+	}, ctx);
+	if (result instanceof Promise) result = await result;
+	return result.issues.length === 0;
+};
 var _encode = (_Err) => {
 	const parse = _parse(_Err);
 	const fn = (schema, value, _ctx, _params) => {
@@ -8831,7 +3463,7 @@ var _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
 	return _safeParseAsync(_Err)(schema, value, _ctx);
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/regexes.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/regexes.js
 /**
 * @deprecated CUID v1 is deprecated by its authors due to information leakage
 * (timestamps embedded in the id). Use {@link cuid2} instead.
@@ -8858,8 +3490,8 @@ var uuid = (version) => {
 	return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
 };
 /** Practical email validation */
-var email = /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
-var _emoji$1 = `^[\\p{Extended_Pictographic}\\p{Emoji_Component}]+$`;
+var email = /^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
+var _emoji$1 = `^(?=[\\s\\S]*[\\p{Extended_Pictographic}\\p{Regional_Indicator}\\u20E3])[\\p{Extended_Pictographic}\\p{Emoji_Component}]+$`;
 function emoji() {
 	return new RegExp(_emoji$1, "u");
 }
@@ -8868,7 +3500,7 @@ var ipv6 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|(
 var cidrv4$1 = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/;
 var cidrv6$1 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/;
 var base64 = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$/;
-var base64url = /^[A-Za-z0-9_-]*$/;
+var base64url = /^(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3})?$/;
 var httpProtocol = /^https?$/;
 var e164 = /^\+[1-9]\d{6,14}$/;
 var dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
@@ -8896,17 +3528,14 @@ function datetime$1(args) {
 	const timeRegex = args.local ? `${qualified}|${timeSource({ precision: args.precision })}` : qualified;
 	return new RegExp(`^${dateSource}T(?:${timeRegex})$`);
 }
-var string$1 = (params) => {
-	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
-	return new RegExp(`^${regex}$`);
-};
+var anyString = /^[\s\S]{0,}$/;
 var integer = /^-?\d+$/;
 var number$2 = /^-?\d+(?:\.\d+)?$/;
 var boolean$1 = /^(?:true|false)$/i;
 var lowercase = /^[^A-Z]*$/;
 var uppercase = /^[^a-z]*$/;
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/checks.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/checks.js
 var $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -8926,14 +3555,6 @@ var numericOriginMap = {
 var $ZodCheckLessThan = /*@__PURE__*/ $constructor("$ZodCheckLessThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		const curr = (def.inclusive ? bag.maximum : bag.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
-		if (def.value < curr) {
-			if (def.inclusive) bag.maximum = def.value;
-			else bag.exclusiveMaximum = def.value;
-		}
-	});
 	inst._zod.check = (payload) => {
 		if (def.inclusive ? payload.value <= def.value : payload.value < def.value) return;
 		payload.issues.push({
@@ -8950,14 +3571,6 @@ var $ZodCheckLessThan = /*@__PURE__*/ $constructor("$ZodCheckLessThan", (inst, d
 var $ZodCheckGreaterThan = /*@__PURE__*/ $constructor("$ZodCheckGreaterThan", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const origin = numericOriginMap[typeof def.value];
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		const curr = (def.inclusive ? bag.minimum : bag.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
-		if (def.value > curr) {
-			if (def.inclusive) bag.minimum = def.value;
-			else bag.exclusiveMinimum = def.value;
-		}
-	});
 	inst._zod.check = (payload) => {
 		if (def.inclusive ? payload.value >= def.value : payload.value > def.value) return;
 		payload.issues.push({
@@ -8973,10 +3586,6 @@ var $ZodCheckGreaterThan = /*@__PURE__*/ $constructor("$ZodCheckGreaterThan", (i
 });
 var $ZodCheckMultipleOf = /*@__PURE__*/ $constructor("$ZodCheckMultipleOf", (inst, def) => {
 	$ZodCheck.init(inst, def);
-	inst._zod.onattach.push((inst) => {
-		var _a;
-		(_a = inst._zod.bag).multipleOf ?? (_a.multipleOf = def.value);
-	});
 	inst._zod.check = (payload) => {
 		if (typeof payload.value !== typeof def.value) throw new Error("Cannot mix number and bigint in multiple_of check.");
 		if (typeof payload.value === "bigint" ? def.value !== BigInt(0) && payload.value % def.value === BigInt(0) : floatSafeRemainder(payload.value, def.value) === 0) return;
@@ -8996,13 +3605,6 @@ var $ZodCheckNumberFormat = /*@__PURE__*/ $constructor("$ZodCheckNumberFormat", 
 	const isInt = def.format?.includes("int");
 	const origin = isInt ? "int" : "number";
 	const [minimum, maximum] = NUMBER_FORMAT_RANGES[def.format];
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.format = def.format;
-		bag.minimum = minimum;
-		bag.maximum = maximum;
-		if (isInt) bag.pattern = integer;
-	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		if (isInt) {
@@ -9065,10 +3667,6 @@ var $ZodCheckMaxLength = /*@__PURE__*/ $constructor("$ZodCheckMaxLength", (inst,
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength);
-	inst._zod.onattach.push((inst) => {
-		const curr = inst._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
-		if (def.maximum < curr) inst._zod.bag.maximum = def.maximum;
-	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		const units = input.length;
@@ -9089,10 +3687,6 @@ var $ZodCheckMinLength = /*@__PURE__*/ $constructor("$ZodCheckMinLength", (inst,
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength);
-	inst._zod.onattach.push((inst) => {
-		const curr = inst._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
-		if (def.minimum > curr) inst._zod.bag.minimum = def.minimum;
-	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		const units = input.length;
@@ -9113,12 +3707,6 @@ var $ZodCheckLengthEquals = /*@__PURE__*/ $constructor("$ZodCheckLengthEquals", 
 	var _a;
 	$ZodCheck.init(inst, def);
 	(_a = inst._zod.def).when ?? (_a.when = _whenHasLength);
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.minimum = def.length;
-		bag.maximum = def.length;
-		bag.length = def.length;
-	});
 	inst._zod.check = (payload) => {
 		const input = payload.value;
 		const units = input.length;
@@ -9146,14 +3734,6 @@ var $ZodCheckLengthEquals = /*@__PURE__*/ $constructor("$ZodCheckLengthEquals", 
 var $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat", (inst, def) => {
 	var _a, _b;
 	$ZodCheck.init(inst, def);
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.format = def.format;
-		if (def.pattern) {
-			bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
-			bag.patterns.add(def.pattern);
-		}
-	});
 	if (def.pattern) (_a = inst._zod).check ?? (_a.check = (payload) => {
 		def.pattern.lastIndex = 0;
 		if (def.pattern.test(payload.value)) return;
@@ -9196,13 +3776,7 @@ var $ZodCheckUpperCase = /*@__PURE__*/ $constructor("$ZodCheckUpperCase", (inst,
 var $ZodCheckIncludes = /*@__PURE__*/ $constructor("$ZodCheckIncludes", (inst, def) => {
 	$ZodCheck.init(inst, def);
 	const escapedRegex = escapeRegex(def.includes);
-	const pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position},}${escapedRegex}` : escapedRegex);
-	def.pattern = pattern;
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
-		bag.patterns.add(pattern);
-	});
+	def.pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position},}${escapedRegex}` : escapedRegex);
 	inst._zod.check = (payload) => {
 		if (payload.value.includes(def.includes, def.position)) return;
 		payload.issues.push({
@@ -9220,11 +3794,6 @@ var $ZodCheckStartsWith = /*@__PURE__*/ $constructor("$ZodCheckStartsWith", (ins
 	$ZodCheck.init(inst, def);
 	const pattern = new RegExp(`^${escapeRegex(def.prefix)}.*`);
 	def.pattern ?? (def.pattern = pattern);
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
-		bag.patterns.add(pattern);
-	});
 	inst._zod.check = (payload) => {
 		if (payload.value.startsWith(def.prefix)) return;
 		payload.issues.push({
@@ -9242,11 +3811,6 @@ var $ZodCheckEndsWith = /*@__PURE__*/ $constructor("$ZodCheckEndsWith", (inst, d
 	$ZodCheck.init(inst, def);
 	const pattern = new RegExp(`.*${escapeRegex(def.suffix)}$`);
 	def.pattern ?? (def.pattern = pattern);
-	inst._zod.onattach.push((inst) => {
-		const bag = inst._zod.bag;
-		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
-		bag.patterns.add(pattern);
-	});
 	inst._zod.check = (payload) => {
 		if (payload.value.endsWith(def.suffix)) return;
 		payload.issues.push({
@@ -9267,7 +3831,7 @@ var $ZodCheckOverwrite = /*@__PURE__*/ $constructor("$ZodCheckOverwrite", (inst,
 	};
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/doc.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/doc.js
 var Doc = class {
 	constructor(args = [], closed = {}) {
 		this.content = [];
@@ -9277,8 +3841,11 @@ var Doc = class {
 	}
 	indented(fn) {
 		this.indent += 1;
-		fn(this);
-		this.indent -= 1;
+		try {
+			fn(this);
+		} finally {
+			this.indent -= 1;
+		}
 	}
 	write(arg) {
 		if (typeof arg === "function") {
@@ -9298,14 +3865,14 @@ var Doc = class {
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/versions.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/versions.js
 var version = {
 	major: 4,
-	minor: 5,
-	patch: 4
+	minor: 6,
+	patch: 5
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/schemas.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/schemas.js
 var $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -9394,15 +3961,26 @@ var $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	}
 });
 /** The Standard Schema surface for `inst`. Shared so wrappers can extend it without forcing it. */
-var toStandardResult = (r) => r.success ? { value: r.data } : { issues: r.error?.issues };
+var toStandardResult = (r, ctx) => r.issues.length ? { issues: r.issues.map((iss) => finalizeIssue(iss, ctx, config())) } : { value: r.value };
+async function validateAsync(inst, value) {
+	const ctx = { async: true };
+	return toStandardResult(await inst._zod.run({
+		value,
+		issues: []
+	}, ctx), ctx);
+}
 function standardProps(inst) {
 	return {
 		validate: (value) => {
+			const ctx = { async: false };
 			try {
-				return toStandardResult(safeParse$1(inst, value));
-			} catch (_) {
-				return safeParseAsync$1(inst, value).then(toStandardResult);
-			}
+				const r = inst._zod.run({
+					value,
+					issues: []
+				}, ctx);
+				if (!(r instanceof Promise)) return toStandardResult(r, ctx);
+			} catch (_) {}
+			return validateAsync(inst, value);
 		},
 		vendor: "zod",
 		version: 1
@@ -9410,7 +3988,7 @@ function standardProps(inst) {
 }
 var $ZodString = /*@__PURE__*/ $constructor("$ZodString", (inst, def) => {
 	$ZodType.init(inst, def);
-	inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string$1(inst._zod.bag);
+	inst._zod.pattern = def.pattern ?? anyString;
 	inst._zod.parse = (payload, _) => {
 		if (def.coerce) try {
 			payload.value = String(payload.value);
@@ -9454,10 +4032,27 @@ var $ZodEmail = /*@__PURE__*/ $constructor("$ZodEmail", (inst, def) => {
 	def.pattern ?? (def.pattern = email);
 	$ZodStringFormat.init(inst, def);
 });
-/** Parses a URL for `$ZodURL`, applying the one guard the URL constructor cannot express. Returns the parsed URL, or a code naming the stage that rejected it — the runtime needs that distinction to pick an issue note, and compiled code only needs to know it is not a URL. */
+function canParseURL(input) {
+	try {
+		if (typeof URL !== "undefined" && typeof URL.canParse === "function") return URL.canParse(input);
+		new URL(input);
+		return true;
+	} catch {
+		return false;
+	}
+}
+function validateURL(trimmed, def) {
+	if (!("normalize" in def) && !("hostname" in def) && !("protocol" in def)) return canParseURL(trimmed) || 2;
+	return parseURLObject(trimmed, def);
+}
+/** Parses a URL while preserving the non-normalizing HTTP guard. */
 function parseURLObject(trimmed, def) {
 	if (!def.normalize && def.protocol?.source === httpProtocol.source && !/^https?:\/\//i.test(trimmed)) return 1;
 	try {
+		if (typeof URL !== "undefined") {
+			const URLStatic = URL;
+			if (typeof URLStatic.parse === "function") return URLStatic.parse(trimmed) ?? 2;
+		}
 		return new URL(trimmed);
 	} catch {
 		return 2;
@@ -9481,7 +4076,7 @@ var $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 	inst._zod.check = (payload) => {
 		try {
 			const trimmed = payload.value.trim();
-			const url = parseURLObject(trimmed, def);
+			const url = validateURL(trimmed, def);
 			if (url === 1) {
 				payload.issues.push({
 					code: "invalid_format",
@@ -9501,6 +4096,10 @@ var $ZodURL = /*@__PURE__*/ $constructor("$ZodURL", (inst, def) => {
 					inst,
 					continue: !def.abort
 				});
+				return;
+			}
+			if (url === true) {
+				payload.value = stripTabAndNewline(trimmed);
 				return;
 			}
 			if (def.hostname && !urlHostnameOk(url, def.hostname)) payload.issues.push({
@@ -9571,12 +4170,6 @@ var $ZodKSUID = /*@__PURE__*/ $constructor("$ZodKSUID", (inst, def) => {
 var $ZodISODateTime = /*@__PURE__*/ $constructor("$ZodISODateTime", (inst, def) => {
 	def.pattern ?? (def.pattern = datetime$1(def));
 	$ZodStringFormat.init(inst, def);
-	if (def.local || def.precision === -1) {
-		inst._zod.bag.laxFormat = true;
-		inst._zod.onattach.push((s) => {
-			s._zod.bag.laxFormat = true;
-		});
-	}
 });
 var $ZodISODate = /*@__PURE__*/ $constructor("$ZodISODate", (inst, def) => {
 	def.pattern ?? (def.pattern = date);
@@ -9593,23 +4186,16 @@ var $ZodISODuration = /*@__PURE__*/ $constructor("$ZodISODuration", (inst, def) 
 var $ZodIPv4 = /*@__PURE__*/ $constructor("$ZodIPv4", (inst, def) => {
 	def.pattern ?? (def.pattern = ipv4);
 	$ZodStringFormat.init(inst, def);
-	inst._zod.bag.format = `ipv4`;
 });
 /** An IPv6 address is written with hex digits, colons and dots, and nothing else. The guard is what makes the check below an IPv6 check: `new URL("http://[...]")` parses an authority, not an address, so `@` and `\` re-delimit it and `"::@1\\"` validates against the host `0.0.0.1`. The URL parser also deletes ASCII tab, LF and CR rather than failing, which is how `"::1\n"` validated as `::1`. */
 var ipv6Alphabet = /^[0-9a-fA-F:.]+$/;
 function isValidIPv6(value) {
 	if (!ipv6Alphabet.test(value)) return false;
-	try {
-		new URL(`http://[${value}]`);
-		return true;
-	} catch {
-		return false;
-	}
+	return canParseURL(`http://[${value}]`);
 }
 var $ZodIPv6 = /*@__PURE__*/ $constructor("$ZodIPv6", (inst, def) => {
 	def.pattern ?? (def.pattern = ipv6);
 	$ZodStringFormat.init(inst, def);
-	inst._zod.bag.format = `ipv6`;
 	inst._zod.check = (payload) => {
 		if (!isValidIPv6(payload.value)) payload.issues.push({
 			code: "invalid_format",
@@ -9658,10 +4244,10 @@ function isValidBase64(data) {
 		return false;
 	}
 }
+var base64Charset = /^[0-9a-zA-Z+/]*={0,2}$/;
 var $ZodBase64 = /*@__PURE__*/ $constructor("$ZodBase64", (inst, def) => {
-	def.pattern ?? (def.pattern = base64);
+	def.pattern ?? (def.pattern = base64Charset);
 	$ZodStringFormat.init(inst, def);
-	inst._zod.bag.contentEncoding = "base64";
 	inst._zod.check = (payload) => {
 		if (isValidBase64(payload.value)) return;
 		payload.issues.push({
@@ -9673,15 +4259,15 @@ var $ZodBase64 = /*@__PURE__*/ $constructor("$ZodBase64", (inst, def) => {
 		});
 	};
 });
+var base64urlCharset = /^[A-Za-z0-9_-]*$/;
 function isValidBase64URL(data) {
-	if (!base64url.test(data)) return false;
+	if (!base64urlCharset.test(data)) return false;
 	const base64 = data.replace(/[-_]/g, (c) => c === "-" ? "+" : "/");
 	return isValidBase64(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
 }
 var $ZodBase64URL = /*@__PURE__*/ $constructor("$ZodBase64URL", (inst, def) => {
-	def.pattern ?? (def.pattern = base64url);
+	def.pattern ?? (def.pattern = base64urlCharset);
 	$ZodStringFormat.init(inst, def);
-	inst._zod.bag.contentEncoding = "base64url";
 	inst._zod.check = (payload) => {
 		if (isValidBase64URL(payload.value)) return;
 		payload.issues.push({
@@ -9727,7 +4313,7 @@ var $ZodJWT = /*@__PURE__*/ $constructor("$ZodJWT", (inst, def) => {
 });
 var $ZodNumber = /*@__PURE__*/ $constructor("$ZodNumber", (inst, def) => {
 	$ZodType.init(inst, def);
-	inst._zod.pattern = inst._zod.bag.pattern ?? number$2;
+	inst._zod.pattern = number$2;
 	inst._zod.parse = (payload, _ctx) => {
 		if (def.coerce) try {
 			payload.value = Number(payload.value);
@@ -9804,6 +4390,7 @@ var $ZodArray = /*@__PURE__*/ $constructor("$ZodArray", (inst, def) => {
 		}
 		payload.value = memo ? memo.alloc(inst, payload, Array(input.length), ctx) : Array(input.length);
 		const proms = [];
+		const abortEarly = ctx?.abortEarly;
 		for (let i = 0; i < input.length; i++) {
 			const item = input[i];
 			const result = def.element._zod.run({
@@ -9811,7 +4398,10 @@ var $ZodArray = /*@__PURE__*/ $constructor("$ZodArray", (inst, def) => {
 				issues: []
 			}, ctx);
 			if (result instanceof Promise) proms.push(result.then((result) => handleArrayResult(result, payload, i)));
-			else handleArrayResult(result, payload, i);
+			else {
+				handleArrayResult(result, payload, i);
+				if (abortEarly && result.issues.length !== 0 && aborted(result)) break;
+			}
 		}
 		if (proms.length) return Promise.all(proms).then(() => payload);
 		return payload;
@@ -9835,7 +4425,7 @@ function handlePropertyResult(result, final, key, input, optin, optout) {
 		return;
 	}
 	if (result.value === void 0) {
-		if (isPresent) final.value[key] = void 0;
+		if (isPresent || optin === "defaulted" && !isOptionalOut) final.value[key] = void 0;
 	} else final.value[key] = result.value;
 }
 var NO_SYMBOL_KEYS = [];
@@ -9855,14 +4445,19 @@ function normalizeDef(def) {
 		optionalKeys: new Set(okeys)
 	};
 }
-function handleCatchall(proms, input, payload, ctx, def, inst) {
+function handleCatchall(proms, input, payload, ctx, def, inst, abortEarly) {
 	const unrecognized = [];
 	const keySet = def.keySet;
 	const _catchall = def.catchall._zod;
 	const t = _catchall.def.type;
 	const optin = _catchall.optin;
 	const optout = _catchall.optout;
+	let seen = 0;
 	for (const key in input) {
+		if (abortEarly && payload.issues.length !== seen) {
+			if (aborted(payload, seen)) break;
+			seen = payload.issues.length;
+		}
 		if (keySet.has(key)) continue;
 		if (key === "__proto__") {
 			if (t === "never") unrecognized.push(key);
@@ -9891,18 +4486,19 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 		return payload;
 	});
 }
-var propShapes = /* @__PURE__ */ new WeakMap();
 var $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 	$ZodType.init(inst, def);
-	if (!Object.getOwnPropertyDescriptor(def, "shape")?.get) {
-		const sh = def.shape;
-		propShapes.set(def, sh);
-		Object.defineProperty(def, "shape", { get: () => {
+	const desc = Object.getOwnPropertyDescriptor(def, "shape");
+	const sh = desc?.get ? desc.get.raw : def.shape ?? {};
+	if (sh) {
+		const get = () => {
 			const newSh = { ...sh };
 			Object.defineProperty(def, "shape", { value: newSh });
-			propShapes.set(def, newSh);
+			get.raw = newSh;
 			return newSh;
-		} });
+		};
+		get.raw = sh;
+		Object.defineProperty(def, "shape", { get });
 	}
 	const _normalized = cached(() => normalizeDef(def));
 	defineLazyInternal(inst, "propValues", (zod) => {
@@ -9938,7 +4534,13 @@ var $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 		payload.value = memo ? memo.alloc(inst, payload, {}, ctx) : {};
 		const proms = [];
 		const shape = value.shape;
+		const abortEarly = ctx?.abortEarly;
+		let seen = payload.issues.length;
 		for (const key of value.allKeys) {
+			if (abortEarly && payload.issues.length !== seen) {
+				if (aborted(payload, seen)) break;
+				seen = payload.issues.length;
+			}
 			if (key === "__proto__") continue;
 			const el = shape[key];
 			const optin = el._zod.optin;
@@ -9951,7 +4553,7 @@ var $ZodObject = /*@__PURE__*/ $constructor("$ZodObject", (inst, def) => {
 			else handlePropertyResult(r, payload, key, input, optin, optout);
 		}
 		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
-		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
+		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst, abortEarly === true);
 	};
 });
 var $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
@@ -9970,10 +4572,16 @@ var $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
 		});
 		const parseStr = (k) => `shape[${k}]._zod.run({ value: input[${k}], issues: [] }, ctx)`;
 		const prefixStr = (id, k) => `
+          let ${id}_ab = false;
           for (let i = 0; i < ${id}.issues.length; i++) {
             const iss = ${id}.issues[i];
             iss.path = iss.path ? [${k}, ...iss.path] : [${k}];
             payload.issues.push(iss);
+            if (iss.continue !== true) ${id}_ab = true;
+          }
+          if (${id}_ab && ctx && ctx.abortEarly) {
+            payload.value = newResult;
+            return payload;
           }`;
 		doc.write(`const input = payload.value;`);
 		const ids = Object.create(null);
@@ -10015,6 +4623,10 @@ var $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
             input: undefined,
             path: [${k}]
           });
+          if (ctx && ctx.abortEarly) {
+            payload.value = newResult;
+            return payload;
+          }
         }
 
         if (${id}_present) {
@@ -10022,26 +4634,25 @@ var $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
         }
 
       `);
-			else doc.write(`
+			else {
+				doc.write(`
         if (${id}.issues.length) {${prefixStr(id, k)}
         }
-        
-        if (${id}.value === undefined) {
-          if (${isPresent}) {
-            newResult[${k}] = undefined;
-          }
-        } else {
+      `);
+				if (optin === "defaulted") doc.write(`newResult[${k}] = ${id}.value;`);
+				else doc.write(`
+        if (${id}.value !== undefined || ${isPresent}) {
           newResult[${k}] = ${id}.value;
         }
-
       `);
+			}
 		}
 		doc.write(`payload.value = newResult;`);
 		doc.write(`return payload;`);
 		return doc.compile();
 	};
 	let fastpass;
-	const isObject$4 = isObject;
+	const isObject$2 = isObject;
 	const jit = !globalConfig.jitless;
 	const fastEnabled = jit && allowsEval.value;
 	const catchall = def.catchall;
@@ -10049,7 +4660,7 @@ var $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
 	inst._zod.parse = (payload, ctx) => {
 		value ?? (value = _normalized.value);
 		const input = payload.value;
-		if (!isObject$4(input)) {
+		if (!isObject$2(input)) {
 			payload.issues.push({
 				expected: "object",
 				code: "invalid_type",
@@ -10062,7 +4673,7 @@ var $ZodObjectJIT = /*@__PURE__*/ $constructor("$ZodObjectJIT", (inst, def) => {
 			if (!fastpass) fastpass = generateFastpass(def.shape);
 			payload = fastpass(payload, ctx);
 			if (!catchall) return payload;
-			return handleCatchall([], input, payload, ctx, value, inst);
+			return handleCatchall([], input, payload, ctx, value, inst, ctx?.abortEarly === true);
 		}
 		return superParse(payload, ctx);
 	};
@@ -10122,39 +4733,42 @@ var $ZodUnion = /*@__PURE__*/ $constructor("$ZodUnion", (inst, def) => {
 		});
 	};
 });
+function discriminatorMap(def) {
+	const map = /* @__PURE__ */ new Map();
+	for (const option of def.options) {
+		const values = option._zod.propValues?.[def.discriminator];
+		if (!values || values.size === 0) throw new Error(`Invalid discriminated union option at index "${def.options.indexOf(option)}"`);
+		for (const value of values) if (map.has(value)) {
+			if (value !== void 0) throw new Error(`Duplicate discriminator value "${String(value)}"`);
+			map.set(value, null);
+		} else map.set(value, option);
+	}
+	return map;
+}
 var $ZodDiscriminatedUnion = /*@__PURE__*/ $constructor("$ZodDiscriminatedUnion", (inst, def) => {
 	def.inclusive = false;
 	$ZodUnion.init(inst, def);
 	const _super = inst._zod.parse;
 	defineLazyInternal(inst, "propValues", (zod) => {
 		const propValues = {};
+		let undefinedCount = 0;
 		for (const option of zod.def.options) {
 			const pv = option._zod.propValues;
 			if (!pv || Object.keys(pv).length === 0) throw new Error(`Invalid discriminated union option at index "${zod.def.options.indexOf(option)}"`);
+			if (pv[zod.def.discriminator]?.has(void 0)) undefinedCount++;
 			for (const [k, v] of Object.entries(pv)) {
 				if (!Object.prototype.hasOwnProperty.call(propValues, k)) assignProp(propValues, k, /* @__PURE__ */ new Set());
 				for (const val of v) propValues[k].add(val);
 			}
 		}
+		if (!zod.def.unionFallback && undefinedCount > 1) propValues[zod.def.discriminator]?.delete(void 0);
 		return propValues;
 	});
 	def.options.forEach((option, i) => {
-		const propShape = propShapes.get(option._zod.def);
+		const propShape = rawShape(option._zod.def);
 		if (propShape && !Object.prototype.hasOwnProperty.call(propShape, def.discriminator)) throw new Error(`Invalid discriminated union option at index "${i}"`);
 	});
-	const disc = cached(() => {
-		const opts = def.options;
-		const map = /* @__PURE__ */ new Map();
-		for (const o of opts) {
-			const values = o._zod.propValues?.[def.discriminator];
-			if (!values || values.size === 0) throw new Error(`Invalid discriminated union option at index "${def.options.indexOf(o)}"`);
-			for (const v of values) {
-				if (map.has(v)) throw new Error(`Duplicate discriminator value "${String(v)}"`);
-				map.set(v, o);
-			}
-		}
-		return map;
-	});
+	const disc = cached(() => discriminatorMap(def));
 	inst._zod.parse = (payload, ctx) => {
 		const input = payload.value;
 		if (!isObject(input)) {
@@ -10166,15 +4780,16 @@ var $ZodDiscriminatedUnion = /*@__PURE__*/ $constructor("$ZodDiscriminatedUnion"
 			});
 			return payload;
 		}
-		const opt = disc.value.get(input?.[def.discriminator]);
-		if (opt) return opt._zod.run(payload, ctx);
+		const value = input?.[def.discriminator];
+		const opt = disc.value.get(value);
+		if (opt && (value !== void 0 || ctx.direction !== "backward")) return opt._zod.run(payload, ctx);
 		if (def.unionFallback || ctx.direction === "backward") return _super(payload, ctx);
 		payload.issues.push({
 			code: "invalid_union",
 			errors: [],
 			note: "No matching discriminator",
 			discriminator: def.discriminator,
-			options: Array.from(disc.value.keys()),
+			options: Array.from(disc.value.keys()).filter((value) => disc.value.get(value) !== null),
 			input,
 			path: [def.discriminator],
 			inst
@@ -10338,6 +4953,8 @@ var $ZodTuple = /*@__PURE__*/ $constructor("$ZodTuple", (inst, def) => {
 			});
 		}
 		const itemResults = new Array(items.length);
+		const abortEarly = def.rest ? ctx?.abortEarly : void 0;
+		let itemAborted = false;
 		for (let i = 0; i < items.length; i++) {
 			const r = items[i]._zod.run({
 				value: input[i],
@@ -10346,12 +4963,20 @@ var $ZodTuple = /*@__PURE__*/ $constructor("$ZodTuple", (inst, def) => {
 			if (r instanceof Promise) proms.push(r.then((rr) => {
 				itemResults[i] = rr;
 			}));
-			else itemResults[i] = r;
+			else {
+				itemResults[i] = r;
+				if (abortEarly && !itemAborted && r.issues.length) itemAborted = aborted(r);
+			}
 		}
-		if (def.rest) {
+		if (def.rest && !itemAborted) {
 			let i = items.length - 1;
 			const rest = input.slice(items.length);
+			let seen = payload.issues.length;
 			for (const el of rest) {
+				if (abortEarly && payload.issues.length !== seen) {
+					if (aborted(payload, seen)) break;
+					seen = payload.issues.length;
+				}
 				i++;
 				const result = def.rest._zod.run({
 					value: el,
@@ -10531,8 +5156,10 @@ var $ZodEnum = /*@__PURE__*/ $constructor("$ZodEnum", (inst, def) => {
 	const values = getEnumValues(def.entries);
 	const valuesSet = new Set(values);
 	inst._zod.values = valuesSet;
-	const patternValues = values.filter((k) => propertyKeyTypes.has(typeof k));
-	inst._zod.pattern = new RegExp(patternValues.length ? `^(${patternValues.map((o) => escapeRegex(o.toString())).join("|")})$` : "^[^\\s\\S]$");
+	defineLazyInternal(inst, "pattern", (zod) => {
+		const patternValues = getEnumValues(zod.def.entries).filter((k) => propertyKeyTypes.has(typeof k));
+		return new RegExp(patternValues.length ? `^(${patternValues.map((o) => escapeRegex(o.toString())).join("|")})$` : "^[^\\s\\S]$");
+	});
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
 		if (valuesSet.has(input)) return payload;
@@ -10549,7 +5176,10 @@ var $ZodLiteral = /*@__PURE__*/ $constructor("$ZodLiteral", (inst, def) => {
 	$ZodType.init(inst, def);
 	const values = new Set(def.values);
 	inst._zod.values = values;
-	inst._zod.pattern = new RegExp(def.values.length ? `^(${def.values.map((o) => typeof o === "string" ? escapeRegex(o) : o ? escapeRegex(o.toString()) : String(o)).join("|")})$` : "^[^\\s\\S]$");
+	defineLazyInternal(inst, "pattern", (zod) => {
+		const vals = zod.def.values;
+		return new RegExp(vals.length ? `^(${vals.map((o) => typeof o === "string" ? escapeRegex(o) : o ? escapeRegex(o.toString()) : String(o)).join("|")})$` : "^[^\\s\\S]$");
+	});
 	inst._zod.parse = (payload, _ctx) => {
 		const input = payload.value;
 		if (values.has(input)) return payload;
@@ -10842,7 +5472,7 @@ function handleRefineResult(result, payload, input, inst) {
 	}
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/memoizer.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/memoizer.js
 var $ZodCyclicError = class extends Error {
 	constructor() {
 		super(`Cannot parse a reference cycle that closes through a transform`);
@@ -10852,6 +5482,9 @@ var $ZodCyclicError = class extends Error {
 /** Keyed off the context object every schema in one parse call already shares. */
 var STATE$1 = "~memo";
 var NO_ISSUES = [];
+function isRef(value) {
+	return value !== null && typeof value === "object";
+}
 function cloneIssues(issues) {
 	return issues.map((iss) => iss.path ? {
 		...iss,
@@ -10859,22 +5492,44 @@ function cloneIssues(issues) {
 	} : { ...iss });
 }
 var recursive = /*@__PURE__*/ new WeakMap();
+/** What the walk established, in order of certainty: ordered so the strongest answer among children wins. */
+var NONE = 0;
+var ASSUMED = 1;
+var PROVEN = 2;
 /** Whether this schema's subtree contains a cycle, so one parse can re-enter it. */
-function isRecursive(inst, stack) {
+function isRecursive(inst, stack, resolve) {
 	const cached = recursive.get(inst);
-	if (cached !== void 0) return cached;
-	if (stack.has(inst)) return true;
+	if (cached !== void 0) return cached ? PROVEN : NONE;
+	if (stack.has(inst)) return PROVEN;
 	stack.add(inst);
-	let result = false;
+	let result = NONE;
 	const check = (child) => {
-		if (!result && child?._zod && isRecursive(child, stack)) result = true;
+		if (result !== PROVEN && child?._zod) {
+			const answer = isRecursive(child, stack, resolve);
+			if (answer > result) result = answer;
+		}
+	};
+	const shape = (sh, spread) => {
+		let answer = NONE;
+		for (const key of Reflect.ownKeys(sh)) {
+			const desc = Object.getOwnPropertyDescriptor(sh, key);
+			if (spread && !desc.enumerable) continue;
+			const child = desc.get ? ASSUMED : desc.value?._zod ? isRecursive(desc.value, stack, resolve) : NONE;
+			if (child > answer) answer = child;
+		}
+		return answer;
+	};
+	const merge = (answer) => {
+		if (answer > result) result = answer;
 	};
 	const def = inst._zod.def;
 	switch (def.type) {
-		case "object":
-			for (const key of Reflect.ownKeys(def.shape)) check(def.shape[key]);
+		case "object": {
+			const raw = rawShape(def);
+			merge(raw ? shape(raw, true) : ASSUMED);
 			check(def.catchall);
 			break;
+		}
 		case "array":
 			check(def.element);
 			break;
@@ -10916,9 +5571,11 @@ function isRecursive(inst, stack) {
 			check(def.input);
 			check(def.output);
 			break;
-		case "lazy":
-			check(inst._zod.innerType);
+		case "lazy": {
+			const inner = def._cachedInner ?? (resolve ? inst._zod.innerType : void 0);
+			merge(inner ? isRecursive(inner, stack, false) : ASSUMED);
 			break;
+		}
 		case "template_literal":
 		case "string":
 		case "number":
@@ -10949,13 +5606,17 @@ function isRecursive(inst, stack) {
 		}
 	}
 	stack.delete(inst);
-	recursive.set(inst, result);
-	return result;
+	return settle(inst, result);
+}
+/** An assumed answer must not outlive the resolution that settles it, so only a certain one is cached. */
+function settle(inst, answer) {
+	if (answer !== ASSUMED) recursive.set(inst, answer === PROVEN);
+	return answer;
 }
 function bucketFor(state, inst) {
 	let bucket = state.buckets.get(inst);
 	if (!bucket) {
-		bucket = /* @__PURE__ */ new Map();
+		bucket = /* @__PURE__ */ new WeakMap();
 		state.buckets.set(inst, bucket);
 	}
 	return bucket;
@@ -10991,6 +5652,7 @@ var memo = {
 	attach(inst) {
 		var _a;
 		let isRecursiveInst;
+		let rechecked = false;
 		let lastCtx;
 		let lastBucket;
 		(_a = inst._zod).deferred ?? (_a.deferred = []);
@@ -10998,19 +5660,21 @@ var memo = {
 			const base = inst._zod.parse;
 			const wrapped = (payload, ctx) => {
 				if (isRecursiveInst === void 0) {
-					isRecursiveInst = isRecursive(inst, /* @__PURE__ */ new Set());
-					if (!isRecursiveInst) {
+					const walked = isRecursive(inst, /* @__PURE__ */ new Set(), false);
+					if (walked === NONE) {
 						inst._zod.parse = base;
 						if (inst._zod.run === wrapped) inst._zod.run = base;
 						return base(payload, ctx);
 					}
+					if (walked === PROVEN || rechecked) isRecursiveInst = true;
+					else rechecked = true;
 				}
 				const input = payload.value;
-				if (input === null || typeof input !== "object") return base(payload, ctx);
+				if (!isRef(input)) return base(payload, ctx);
 				let state = ctx[STATE$1];
 				if (!state) {
 					state = {
-						buckets: /* @__PURE__ */ new Map(),
+						buckets: /* @__PURE__ */ new WeakMap(),
 						backEdges: void 0
 					};
 					ctx[STATE$1] = state;
@@ -11029,7 +5693,7 @@ var memo = {
 						if (hit.issues.length) payload.issues.push(...cloneIssues(hit.issues));
 					} else {
 						payload.memo = true;
-						state.backEdges ?? (state.backEdges = /* @__PURE__ */ new Set());
+						state.backEdges ?? (state.backEdges = /* @__PURE__ */ new WeakSet());
 						state.backEdges.add(hit.value);
 					}
 					return payload;
@@ -11058,10 +5722,10 @@ function memoizer() {
 /** Whether this value is a node a back-edge resolved to before it finished. */
 function isBackEdge(ctx, value) {
 	const backEdges = ctx[STATE$1]?.backEdges;
-	return backEdges !== void 0 && value !== null && typeof value === "object" && backEdges.has(value);
+	return backEdges !== void 0 && isRef(value) && backEdges.has(value);
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/locales/en.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/locales/en.js
 var error = () => {
 	const Sizable = {
 		string: {
@@ -11116,7 +5780,9 @@ var error = () => {
 		base64url: "base64url-encoded string",
 		json_string: "JSON string",
 		e164: "E.164 number",
+		currency_code: "currency code",
 		credit_card: "credit card number",
+		iban: "IBAN",
 		jwt: "JWT",
 		template_literal: "input"
 	};
@@ -11167,7 +5833,7 @@ function en_default() {
 	return { localeError: error() };
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/registries.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/registries.js
 var _a;
 var $ZodRegistry = class {
 	constructor() {
@@ -11214,13 +5880,17 @@ function registry() {
 (_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
 var globalRegistry = globalThis.__zod_globalRegistry;
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/api.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/api.js
+function snapshotChecks(def) {
+	if (def.checks) def.checks = [...def.checks];
+	return def;
+}
 // @__NO_SIDE_EFFECTS__
 function _string(Class, params) {
-	return new Class({
+	return new Class(snapshotChecks({
 		type: "string",
 		...normalizeParams(params)
-	});
+	}));
 }
 // @__NO_SIDE_EFFECTS__
 function _email(Class, params) {
@@ -11492,20 +6162,20 @@ function _isoDuration(Class, params) {
 }
 // @__NO_SIDE_EFFECTS__
 function _number(Class, params) {
-	return new Class({
+	return new Class(snapshotChecks({
 		type: "number",
 		checks: [],
 		...normalizeParams(params)
-	});
+	}));
 }
 // @__NO_SIDE_EFFECTS__
 function _coercedNumber(Class, params) {
-	return new Class({
+	return new Class(snapshotChecks({
 		type: "number",
 		coerce: true,
 		checks: [],
 		...normalizeParams(params)
-	});
+	}));
 }
 // @__NO_SIDE_EFFECTS__
 function _int(Class, params) {
@@ -11702,10 +6372,10 @@ function _refine(Class, fn, _params) {
 // @__NO_SIDE_EFFECTS__
 function _superRefine(fn, params) {
 	const ch = /* @__PURE__ */ _check((payload) => {
-		payload.addIssue = (issue$3) => {
-			if (typeof issue$3 === "string") payload.issues.push(issue(issue$3, payload.value, ch._zod.def));
+		payload.addIssue = (issue$2) => {
+			if (typeof issue$2 === "string") payload.issues.push(issue(issue$2, payload.value, ch._zod.def));
 			else {
-				const _issue = issue$3;
+				const _issue = issue$2;
 				if (_issue.fatal) _issue.continue = false;
 				_issue.code ?? (_issue.code = "custom");
 				if (!("input" in _issue)) _issue.input = payload.value;
@@ -11793,7 +6463,7 @@ function _stringbool(Classes, _params) {
 	return codec;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/to-json-schema.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/to-json-schema.js
 function assignProps(target, ...sources) {
 	for (const source of sources) for (const key of Reflect.ownKeys(source)) if (Object.prototype.propertyIsEnumerable.call(source, key)) assignProp(target, key, source[key]);
 	return target;
@@ -11836,7 +6506,7 @@ function handleUnrepresentable(schema, ctx, json, params, message) {
 	Object.assign(json, result);
 	return true;
 }
-function process(schema, ctx, _params = {
+function processSchema(schema, ctx, _params = {
 	path: [],
 	schemaPath: []
 }) {
@@ -11875,7 +6545,7 @@ function process(schema, ctx, _params = {
 		const parent = schema._zod.parent;
 		if (parent) {
 			if (!result.ref) result.ref = parent;
-			process(parent, ctx, params);
+			processSchema(parent, ctx, params);
 			ctx.seen.get(parent).isParent = true;
 		}
 	}
@@ -11965,10 +6635,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			continue;
 		}
 		if (seen.count > 1) {
-			if (ctx.reused === "ref") {
-				extractToDef(entry);
-				continue;
-			}
+			if (ctx.reused === "ref") extractToDef(entry);
 		}
 	}
 	if (ctx.external) ctx.sharedDefsExtractedFor = ctx.external;
@@ -12223,7 +6890,7 @@ var createToJSONSchemaMethod = (schema, processors = {}) => (params) => {
 		...params,
 		processors
 	});
-	process(schema, ctx);
+	processSchema(schema, ctx);
 	extractDefs(ctx, schema);
 	return finalize(ctx, schema);
 };
@@ -12235,12 +6902,84 @@ var createStandardJSONSchemaMethod = (schema, io, processors = {}) => (params) =
 		io,
 		processors
 	});
-	process(schema, ctx);
+	processSchema(schema, ctx);
 	extractDefs(ctx, schema);
 	return finalize(ctx, schema);
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/core/json-schema-processors.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/json-schema-processors.js
+var narrowMin = (agg, key, value) => {
+	if (agg[key] === void 0 || value > agg[key]) agg[key] = value;
+};
+var narrowMax = (agg, key, value) => {
+	if (agg[key] === void 0 || value < agg[key]) agg[key] = value;
+};
+var narrowBoth = (agg, value) => {
+	narrowMin(agg, "minimum", value);
+	narrowMax(agg, "maximum", value);
+};
+var addDivisor = (agg, value) => {
+	agg.multipleOf ?? (agg.multipleOf = []);
+	if (!agg.multipleOf.includes(value)) agg.multipleOf.push(value);
+};
+var addPattern = (agg, pattern) => {
+	agg.patterns ?? (agg.patterns = /* @__PURE__ */ new Set());
+	agg.patterns.add(pattern);
+};
+var intersectMime = (agg, mime) => {
+	agg.mime = agg.mime ? agg.mime.filter((m) => mime.includes(m)) : [...mime];
+};
+var setFormat = (agg, format) => {
+	agg.format = format;
+	if (format.includes("int")) agg.isInt = true;
+};
+var minContributor = (agg, def) => narrowMin(agg, "minimum", def.minimum);
+var maxContributor = (agg, def) => narrowMax(agg, "maximum", def.maximum);
+var formatContributor = (ranges) => (agg, def) => {
+	setFormat(agg, def.format);
+	const [minimum, maximum] = ranges[def.format];
+	narrowMin(agg, "minimum", minimum);
+	narrowMax(agg, "maximum", maximum);
+};
+var contributors = {
+	greater_than: (agg, def) => narrowMin(agg, def.inclusive ? "minimum" : "exclusiveMinimum", def.value),
+	less_than: (agg, def) => narrowMax(agg, def.inclusive ? "maximum" : "exclusiveMaximum", def.value),
+	multiple_of: (agg, def) => addDivisor(agg, def.value),
+	number_format: formatContributor(NUMBER_FORMAT_RANGES),
+	bigint_format: formatContributor(BIGINT_FORMAT_RANGES),
+	min_length: minContributor,
+	max_length: maxContributor,
+	length_equals: (agg, def) => narrowBoth(agg, def.length),
+	min_size: minContributor,
+	max_size: maxContributor,
+	size_equals: (agg, def) => narrowBoth(agg, def.size),
+	string_format: (agg, def) => {
+		setFormat(agg, def.format);
+		if (def.pattern) addPattern(agg, def.pattern);
+		if (def.format === "base64" || def.format === "base64url") agg.contentEncoding = def.format;
+		if (def.local || def.precision === -1) agg.laxFormat = true;
+	},
+	mime_type: (agg, def) => intersectMime(agg, def.mime)
+};
+function aggregateChecks(schema) {
+	const agg = {};
+	const def = schema._zod.def;
+	const list = schema._zod.traits.has("$ZodCheck") ? [schema, ...def.checks ?? []] : def.checks ?? [];
+	for (const ch of list) contributors[ch._zod.def.check]?.(agg, ch._zod.def);
+	const bag = schema._zod.bag;
+	if (bag.minimum !== void 0) narrowMin(agg, "minimum", bag.minimum);
+	if (bag.exclusiveMinimum !== void 0) narrowMin(agg, "exclusiveMinimum", bag.exclusiveMinimum);
+	if (bag.maximum !== void 0) narrowMax(agg, "maximum", bag.maximum);
+	if (bag.exclusiveMaximum !== void 0) narrowMax(agg, "exclusiveMaximum", bag.exclusiveMaximum);
+	if (bag.multipleOf !== void 0) addDivisor(agg, bag.multipleOf);
+	if (bag.format !== void 0) {
+		agg.format ?? (agg.format = bag.format);
+		if (bag.format.includes("int")) agg.isInt = true;
+	}
+	if (bag.mime) intersectMime(agg, bag.mime);
+	for (const pattern of bag.patterns ?? []) addPattern(agg, pattern);
+	return agg;
+}
 var formatMap = {
 	guid: "uuid",
 	url: "uri",
@@ -12248,10 +6987,12 @@ var formatMap = {
 	json_string: "json-string",
 	regex: ""
 };
+var exactPatterns = /* @__PURE__ */ new Map([[base64Charset, base64], [base64urlCharset, base64url]]);
+var exactPattern = (p) => exactPatterns.get(p) ?? p;
 var stringProcessor = (schema, ctx, _json, _params) => {
 	const json = _json;
 	json.type = "string";
-	const { minimum, maximum, format, patterns, contentEncoding, laxFormat } = schema._zod.bag;
+	const { minimum, maximum, format, patterns, contentEncoding, laxFormat } = aggregateChecks(schema);
 	if (typeof minimum === "number") json.minLength = minimum;
 	if (typeof maximum === "number") json.maxLength = maximum;
 	if (format) {
@@ -12261,7 +7002,7 @@ var stringProcessor = (schema, ctx, _json, _params) => {
 	}
 	if (contentEncoding) json.contentEncoding = contentEncoding;
 	if (patterns && patterns.size > 0) {
-		const patternList = [...patterns];
+		const patternList = [...patterns].map(exactPattern);
 		if (patternList.length === 1) json.pattern = patternList[0].source;
 		else if (patternList.length > 1) json.allOf = [...patternList.map((regex) => ({
 			...ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0" ? { type: "string" } : {},
@@ -12271,9 +7012,8 @@ var stringProcessor = (schema, ctx, _json, _params) => {
 };
 var numberProcessor = (schema, ctx, _json, params) => {
 	const json = _json;
-	const { minimum, maximum, format, multipleOf, exclusiveMaximum, exclusiveMinimum } = schema._zod.bag;
-	if (typeof format === "string" && format.includes("int")) json.type = "integer";
-	else json.type = "number";
+	const { minimum, maximum, multipleOf, exclusiveMaximum, exclusiveMinimum, isInt } = aggregateChecks(schema);
+	json.type = isInt ? "integer" : "number";
 	const exMin = typeof exclusiveMinimum === "number" && exclusiveMinimum >= (minimum ?? Number.NEGATIVE_INFINITY);
 	const exMax = typeof exclusiveMaximum === "number" && exclusiveMaximum <= (maximum ?? Number.POSITIVE_INFINITY);
 	const legacy = ctx.target === "draft-04" || ctx.target === "openapi-3.0";
@@ -12289,40 +7029,20 @@ var numberProcessor = (schema, ctx, _json, params) => {
 			json.exclusiveMaximum = true;
 		} else json.exclusiveMaximum = exclusiveMaximum;
 	} else if (typeof maximum === "number") json.maximum = maximum;
-	if (typeof multipleOf === "number") {
-		if (Number.isFinite(multipleOf) && multipleOf !== 0) json.multipleOf = Math.abs(multipleOf);
-		else handleUnrepresentable(schema, ctx, json, params, `A multipleOf divisor of ${multipleOf} cannot be represented in JSON Schema`);
+	if (multipleOf) {
+		const divisors = /* @__PURE__ */ new Set();
+		for (const divisor of multipleOf) if (Number.isFinite(divisor) && divisor !== 0) divisors.add(Math.abs(divisor));
+		else handleUnrepresentable(schema, ctx, json, params, `A multipleOf divisor of ${divisor} cannot be represented in JSON Schema`);
+		const [first, ...rest] = divisors;
+		if (first !== void 0) json.multipleOf = first;
+		if (rest.length) json.allOf = [...json.allOf ?? [], ...rest.map((m) => ({ multipleOf: m }))];
 	}
 };
 var booleanProcessor = (_schema, _ctx, json, _params) => {
 	json.type = "boolean";
 };
-var bigintProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "BigInt cannot be represented in JSON Schema");
-};
-var symbolProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Symbols cannot be represented in JSON Schema");
-};
-var nullProcessor = (_schema, ctx, json, _params) => {
-	if (ctx.target === "openapi-3.0") {
-		json.type = "string";
-		json.nullable = true;
-		json.enum = [null];
-	} else json.type = "null";
-};
-var undefinedProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Undefined cannot be represented in JSON Schema");
-};
-var voidProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Void cannot be represented in JSON Schema");
-};
 var neverProcessor = (_schema, _ctx, json, _params) => {
 	json.not = {};
-};
-var anyProcessor = (_schema, _ctx, _json, _params) => {};
-var unknownProcessor = (_schema, _ctx, _json, _params) => {};
-var dateProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Date cannot be represented in JSON Schema");
 };
 var enumProcessor = (schema, _ctx, json, _params) => {
 	const def = schema._zod.def;
@@ -12361,62 +7081,20 @@ var literalProcessor = (schema, ctx, json, params) => {
 		json.enum = vals;
 	}
 };
-var nanProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "NaN cannot be represented in JSON Schema");
-};
-var templateLiteralProcessor = (schema, _ctx, json, _params) => {
-	const _json = json;
-	const pattern = schema._zod.pattern;
-	if (!pattern) throw new Error("Pattern not found in template literal");
-	_json.type = "string";
-	_json.pattern = pattern.source;
-};
-var fileProcessor = (schema, _ctx, json, _params) => {
-	const _json = json;
-	const file = {
-		type: "string",
-		format: "binary",
-		contentEncoding: "binary"
-	};
-	const { minimum, maximum, mime } = schema._zod.bag;
-	if (minimum !== void 0) file.minLength = minimum;
-	if (maximum !== void 0) file.maxLength = maximum;
-	if (mime) {
-		if (mime.length === 1) {
-			file.contentMediaType = mime[0];
-			Object.assign(_json, file);
-		} else {
-			Object.assign(_json, file);
-			_json.anyOf = mime.map((m) => ({ contentMediaType: m }));
-		}
-	} else Object.assign(_json, file);
-};
-var successProcessor = (_schema, _ctx, json, _params) => {
-	json.type = "boolean";
-};
 var customProcessor = (schema, ctx, json, params) => {
 	handleUnrepresentable(schema, ctx, json, params, "Custom types cannot be represented in JSON Schema");
-};
-var functionProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Function types cannot be represented in JSON Schema");
 };
 var transformProcessor = (schema, ctx, json, params) => {
 	handleUnrepresentable(schema, ctx, json, params, "Transforms cannot be represented in JSON Schema");
 };
-var mapProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Map cannot be represented in JSON Schema");
-};
-var setProcessor = (schema, ctx, json, params) => {
-	handleUnrepresentable(schema, ctx, json, params, "Set cannot be represented in JSON Schema");
-};
 var arrayProcessor = (schema, ctx, _json, params) => {
 	const json = _json;
 	const def = schema._zod.def;
-	const { minimum, maximum } = schema._zod.bag;
+	const { minimum, maximum } = aggregateChecks(schema);
 	if (typeof minimum === "number") json.minItems = minimum;
 	if (typeof maximum === "number") json.maxItems = maximum;
 	json.type = "array";
-	json.items = process(def.element, ctx, {
+	json.items = processSchema(def.element, ctx, {
 		...params,
 		path: [...params.path, "items"]
 	});
@@ -12434,7 +7112,7 @@ var objectProcessor = (schema, ctx, _json, params) => {
 	if (Object.getOwnPropertySymbols(shape).length && handleUnrepresentable(schema, ctx, json, params, "Symbol keys cannot be represented in JSON Schema")) return;
 	json.type = "object";
 	json.properties = {};
-	for (const key in shape) assignProp(json.properties, key, process(shape[key], ctx, {
+	for (const key in shape) assignProp(json.properties, key, processSchema(shape[key], ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -12442,17 +7120,16 @@ var objectProcessor = (schema, ctx, _json, params) => {
 			key
 		]
 	}));
-	const allKeys = new Set(Object.keys(shape));
-	const requiredKeys = new Set([...allKeys].filter((key) => {
+	const requiredKeys = [];
+	for (const key of Object.keys(shape)) {
 		const field = def.shape[key];
-		if (ctx.io === "input") return inputOptin(field) === void 0;
-		else return field._zod.optout === void 0;
-	}));
-	if (requiredKeys.size > 0) json.required = Array.from(requiredKeys);
+		if (ctx.io === "input" ? inputOptin(field) === void 0 : field._zod.optout === void 0) requiredKeys.push(key);
+	}
+	if (requiredKeys.length > 0) json.required = requiredKeys;
 	if (def.catchall?._zod.def.type === "never") json.additionalProperties = false;
 	else if (!def.catchall) {
 		if (ctx.io === "output") json.additionalProperties = false;
-	} else if (def.catchall) json.additionalProperties = process(def.catchall, ctx, {
+	} else if (def.catchall) json.additionalProperties = processSchema(def.catchall, ctx, {
 		...params,
 		path: [...params.path, "additionalProperties"]
 	});
@@ -12460,7 +7137,7 @@ var objectProcessor = (schema, ctx, _json, params) => {
 var unionProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
 	const isExclusive = def.inclusive === false;
-	const options = def.options.map((x, i) => process(x, ctx, {
+	const options = def.options.map((x, i) => processSchema(x, ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -12473,7 +7150,7 @@ var unionProcessor = (schema, ctx, json, params) => {
 };
 var intersectionProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
-	const a = process(def.left, ctx, {
+	const a = processSchema(def.left, ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -12481,7 +7158,7 @@ var intersectionProcessor = (schema, ctx, json, params) => {
 			0
 		]
 	});
-	const b = process(def.right, ctx, {
+	const b = processSchema(def.right, ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -12500,7 +7177,7 @@ var tupleProcessor = (schema, ctx, _json, params) => {
 	json.type = "array";
 	const prefixPath = ctx.target === "draft-2020-12" ? "prefixItems" : "items";
 	const restPath = ctx.target === "draft-2020-12" ? "items" : ctx.target === "openapi-3.0" ? "items" : "additionalItems";
-	const prefixItems = def.items.map((x, i) => process(x, ctx, {
+	const prefixItems = def.items.map((x, i) => processSchema(x, ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -12508,7 +7185,7 @@ var tupleProcessor = (schema, ctx, _json, params) => {
 			i
 		]
 	}));
-	const rest = def.rest ? process(def.rest, ctx, {
+	const rest = def.rest ? processSchema(def.rest, ctx, {
 		...params,
 		path: [
 			...params.path,
@@ -12542,7 +7219,7 @@ var tupleProcessor = (schema, ctx, _json, params) => {
 		if (minItems > 0) json.minItems = minItems;
 		if (isClosed) json.maxItems = maxItems;
 	}
-	const { minimum, maximum } = schema._zod.bag;
+	const { minimum, maximum } = aggregateChecks(schema);
 	if (typeof minimum === "number") json.minItems = minimum;
 	if (typeof maximum === "number") json.maxItems = maximum;
 };
@@ -12609,9 +7286,9 @@ var recordProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
 	json.type = "object";
 	const keyType = def.keyType;
-	const patterns = keyType._zod.bag?.patterns;
+	const patterns = aggregateChecks(keyType).patterns;
 	if (def.mode === "loose" && patterns && patterns.size > 0) {
-		const valueSchema = process(def.valueType, ctx, {
+		const valueSchema = processSchema(def.valueType, ctx, {
 			...params,
 			path: [
 				...params.path,
@@ -12620,10 +7297,10 @@ var recordProcessor = (schema, ctx, _json, params) => {
 			]
 		});
 		json.patternProperties = {};
-		for (const pattern of patterns) assignProp(json.patternProperties, pattern.source, valueSchema);
+		for (const pattern of patterns) assignProp(json.patternProperties, exactPattern(pattern).source, valueSchema);
 	} else {
 		if (ctx.target === "draft-07" || ctx.target === "draft-2020-12") {
-			json.propertyNames = process(def.keyType, ctx, {
+			json.propertyNames = processSchema(def.keyType, ctx, {
 				...params,
 				path: [...params.path, "propertyNames"]
 			});
@@ -12635,7 +7312,7 @@ var recordProcessor = (schema, ctx, _json, params) => {
 			}
 			pending.push(schema);
 		}
-		json.additionalProperties = process(def.valueType, ctx, {
+		json.additionalProperties = processSchema(def.valueType, ctx, {
 			...params,
 			path: [...params.path, "additionalProperties"]
 		});
@@ -12649,7 +7326,7 @@ var recordProcessor = (schema, ctx, _json, params) => {
 };
 var nullableProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
-	const inner = process(def.innerType, ctx, params);
+	const inner = processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	if (ctx.target === "openapi-3.0") {
 		seen.ref = def.innerType;
@@ -12658,7 +7335,7 @@ var nullableProcessor = (schema, ctx, json, params) => {
 };
 var nonoptionalProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
+	processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 };
@@ -12679,7 +7356,7 @@ function serializeDefaultValue(value, schema, ctx, json, params) {
 }
 var defaultProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
+	processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 	const value = serializeDefaultValue(def.defaultValue, schema, ctx, json, params);
@@ -12687,7 +7364,7 @@ var defaultProcessor = (schema, ctx, json, params) => {
 };
 var prefaultProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
+	processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 	if (ctx.io !== "input") return;
@@ -12696,7 +7373,7 @@ var prefaultProcessor = (schema, ctx, json, params) => {
 };
 var catchProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
+	processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 	let catchValue;
@@ -12712,112 +7389,31 @@ var pipeProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
 	const inIsTransform = def.in._zod.traits.has("$ZodTransform");
 	const innerType = ctx.io === "input" ? inIsTransform ? def.out : def.in : def.out;
-	process(innerType, ctx, params);
+	processSchema(innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = innerType;
 };
 var readonlyProcessor = (schema, ctx, json, params) => {
 	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
+	processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 	json.readOnly = true;
 };
-var promiseProcessor = (schema, ctx, _json, params) => {
-	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
-	const seen = ctx.seen.get(schema);
-	seen.ref = def.innerType;
-};
 var optionalProcessor = (schema, ctx, _json, params) => {
 	const def = schema._zod.def;
-	process(def.innerType, ctx, params);
+	processSchema(def.innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 };
 var lazyProcessor = (schema, ctx, _json, params) => {
 	const innerType = schema._zod.innerType;
-	process(innerType, ctx, params);
+	processSchema(innerType, ctx, params);
 	const seen = ctx.seen.get(schema);
 	seen.ref = innerType;
 };
-var allProcessors = {
-	string: stringProcessor,
-	number: numberProcessor,
-	boolean: booleanProcessor,
-	bigint: bigintProcessor,
-	symbol: symbolProcessor,
-	null: nullProcessor,
-	undefined: undefinedProcessor,
-	void: voidProcessor,
-	never: neverProcessor,
-	any: anyProcessor,
-	unknown: unknownProcessor,
-	date: dateProcessor,
-	enum: enumProcessor,
-	literal: literalProcessor,
-	nan: nanProcessor,
-	template_literal: templateLiteralProcessor,
-	file: fileProcessor,
-	success: successProcessor,
-	custom: customProcessor,
-	function: functionProcessor,
-	transform: transformProcessor,
-	map: mapProcessor,
-	set: setProcessor,
-	array: arrayProcessor,
-	object: objectProcessor,
-	union: unionProcessor,
-	intersection: intersectionProcessor,
-	tuple: tupleProcessor,
-	record: recordProcessor,
-	nullable: nullableProcessor,
-	nonoptional: nonoptionalProcessor,
-	default: defaultProcessor,
-	prefault: prefaultProcessor,
-	catch: catchProcessor,
-	pipe: pipeProcessor,
-	readonly: readonlyProcessor,
-	promise: promiseProcessor,
-	optional: optionalProcessor,
-	lazy: lazyProcessor
-};
-function toJSONSchema(input, params) {
-	if ("_idmap" in input) {
-		const registry = input;
-		const ctx = initializeContext({
-			...params,
-			processors: allProcessors
-		});
-		const defs = {};
-		for (const entry of registry._idmap.entries()) {
-			const [_, schema] = entry;
-			process(schema, ctx);
-		}
-		const schemas = {};
-		ctx.external = {
-			registry,
-			uri: params?.uri,
-			defs
-		};
-		for (const entry of registry._idmap.entries()) {
-			const [key, schema] = entry;
-			extractDefs(ctx, schema);
-			assignProp(schemas, key, finalize(ctx, schema));
-		}
-		if (Object.keys(defs).length > 0) schemas.__shared = { [ctx.target === "draft-2020-12" ? "$defs" : "definitions"]: defs };
-		return { schemas };
-	}
-	const ctx = initializeContext({
-		...params,
-		processors: allProcessors
-	});
-	process(input, ctx);
-	extractDefs(ctx, input);
-	return finalize(ctx, input);
-}
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/classic/errors.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/errors.js
 var _installedErrorProtos = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
 function _lazyMethod(proto, key, make) {
 	Object.defineProperty(proto, key, {
@@ -12867,7 +7463,7 @@ var initializer = (inst, issues) => {
 };
 var ZodRealError = /*@__PURE__*/ $constructor("ZodError", initializer, void 0, { Parent: Error });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/classic/parse.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/parse.js
 var parse = /* @__PURE__ */ _parse(ZodRealError);
 var parseAsync = /* @__PURE__ */ _parseAsync(ZodRealError);
 var safeParse = /* @__PURE__ */ _safeParse(ZodRealError);
@@ -12881,7 +7477,7 @@ var safeDecode = /* @__PURE__ */ _safeDecode(ZodRealError);
 var safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
 var safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/classic/schemas.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/schemas.js
 function _ensureDefaultLocale() {
 	if (!globalConfig.localeError) config(en_default());
 }
@@ -13017,6 +7613,12 @@ var ZodType = /*@__PURE__*/ $constructor("ZodType", (inst, def) => {
 	set spa(value) {
 		own(this, "spa", value);
 	},
+	validate(data, params) {
+		return validate(this, data, params);
+	},
+	validateAsync(data, params) {
+		return validateAsync$1(this, data, params);
+	},
 	encode: function _encode(data, params) {
 		return encode(this, data, params, { callee: _encode });
 	},
@@ -13056,10 +7658,10 @@ var _ZodString = /*@__PURE__*/ $constructor("_ZodString", (inst, def) => {
 	$ZodString.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => stringProcessor(inst, ctx, json, params);
-	const bag = inst._zod.bag;
-	inst.format = bag.format ?? null;
-	inst.minLength = bag.minimum ?? null;
-	inst.maxLength = bag.maximum ?? null;
+}, /*@__PURE__*/ derived({
+	format: (inst) => aggregateChecks(inst).format ?? null,
+	minLength: (inst) => aggregateChecks(inst).minimum ?? null,
+	maxLength: (inst) => aggregateChecks(inst).maximum ?? null
 }, {
 	regex(...args) {
 		return this.check(/* @__PURE__ */ _regex(...args));
@@ -13106,7 +7708,7 @@ var _ZodString = /*@__PURE__*/ $constructor("_ZodString", (inst, def) => {
 	slugify() {
 		return this.check(/* @__PURE__ */ _slugify());
 	}
-});
+}));
 var ZodString = /*@__PURE__*/ $constructor("ZodString", (inst, def) => {
 	$ZodString.init(inst, def);
 	_ZodString.init(inst, def);
@@ -13307,12 +7909,21 @@ var ZodNumber = /*@__PURE__*/ $constructor("ZodNumber", (inst, def) => {
 	$ZodNumber.init(inst, def);
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => numberProcessor(inst, ctx, json, params);
-	const bag = inst._zod.bag;
-	inst.minValue = Math.max(bag.minimum ?? Number.NEGATIVE_INFINITY, bag.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null;
-	inst.maxValue = Math.min(bag.maximum ?? Number.POSITIVE_INFINITY, bag.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null;
-	inst.isInt = (bag.format ?? "").includes("int") || Number.isSafeInteger(bag.multipleOf ?? .5);
 	inst.isFinite = true;
-	inst.format = bag.format ?? null;
+}, /*@__PURE__*/ derived({
+	minValue: (inst) => {
+		const { minimum, exclusiveMinimum } = aggregateChecks(inst);
+		return Math.max(minimum ?? Number.NEGATIVE_INFINITY, exclusiveMinimum ?? Number.NEGATIVE_INFINITY);
+	},
+	maxValue: (inst) => {
+		const { maximum, exclusiveMaximum } = aggregateChecks(inst);
+		return Math.min(maximum ?? Number.POSITIVE_INFINITY, exclusiveMaximum ?? Number.POSITIVE_INFINITY);
+	},
+	isInt: (inst) => {
+		const { isInt, multipleOf } = aggregateChecks(inst);
+		return !!isInt || !!multipleOf?.some(Number.isSafeInteger);
+	},
+	format: (inst) => aggregateChecks(inst).format ?? null
 }, {
 	gt(value, params) {
 		return this.check(/* @__PURE__ */ _gt(value, params));
@@ -13359,7 +7970,7 @@ var ZodNumber = /*@__PURE__*/ $constructor("ZodNumber", (inst, def) => {
 	finite() {
 		return this;
 	}
-});
+}));
 function number$1(params) {
 	return /* @__PURE__ */ _number(ZodNumber, params);
 }
@@ -13431,34 +8042,19 @@ var ZodObject = /*@__PURE__*/ $constructor("ZodObject", (inst, def) => {
 		return _enum(Object.keys(this._zod.def.shape));
 	},
 	catchall(catchall) {
-		return this.clone({
-			...this._zod.def,
-			catchall
-		});
+		return this.clone(mergeDefs(this._zod.def, { catchall }));
 	},
 	passthrough() {
-		return this.clone({
-			...this._zod.def,
-			catchall: unknown()
-		});
+		return this.clone(mergeDefs(this._zod.def, { catchall: unknown() }));
 	},
 	loose() {
-		return this.clone({
-			...this._zod.def,
-			catchall: unknown()
-		});
+		return this.clone(mergeDefs(this._zod.def, { catchall: unknown() }));
 	},
 	strict() {
-		return this.clone({
-			...this._zod.def,
-			catchall: never()
-		});
+		return this.clone(mergeDefs(this._zod.def, { catchall: never() }));
 	},
 	strip() {
-		return this.clone({
-			...this._zod.def,
-			catchall: void 0
-		});
+		return this.clone(mergeDefs(this._zod.def, { catchall: void 0 }));
 	},
 	extend(incoming) {
 		return extend(this, incoming);
@@ -13614,7 +8210,7 @@ var ZodEnum = /*@__PURE__*/ $constructor("ZodEnum", (inst, def) => {
 	ZodType.init(inst, def);
 	inst._zod.processJSONSchema = (ctx, json, params) => enumProcessor(inst, ctx, json, params);
 	inst.enum = def.entries;
-	inst.options = Object.values(def.entries);
+	inst.options = [...inst._zod.values];
 	const keys = new Set(Object.keys(def.entries));
 	inst.extract = (values, params) => {
 		const newEntries = {};
@@ -13670,10 +8266,10 @@ var ZodTransform = /*@__PURE__*/ $constructor("ZodTransform", (inst, def) => {
 	inst._zod.processJSONSchema = (ctx, json, params) => transformProcessor(inst, ctx, json, params);
 	inst._zod.parse = (payload, _ctx) => {
 		if (_ctx.direction === "backward") throw new $ZodEncodeError(inst.constructor.name);
-		payload.addIssue = (issue$2) => {
-			if (typeof issue$2 === "string") payload.issues.push(issue(issue$2, payload.value, def));
+		payload.addIssue = (issue$1) => {
+			if (typeof issue$1 === "string") payload.issues.push(issue(issue$1, payload.value, def));
 			else {
-				const _issue = issue$2;
+				const _issue = issue$1;
 				if (_issue.fatal) _issue.continue = false;
 				_issue.code ?? (_issue.code = "custom");
 				if (!("input" in _issue)) _issue.input = payload.value;
@@ -13849,96 +8445,22 @@ var stringbool = (...args) => /* @__PURE__ */ _stringbool({
 	String: ZodString
 }, ...args);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/classic/iso.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/iso.js
 function datetime(params) {
 	return /* @__PURE__ */ _isoDateTime(ZodISODateTime, params);
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/zod@4.5.4/node_modules/zod/v4/classic/coerce.js
+//#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/coerce.js
 function number(params) {
 	return /* @__PURE__ */ _coercedNumber(ZodNumber, params);
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/protocol/routes.js
-var procedureRoute = (value) => {
-	if (typeof value !== "object" || value === null || !("~orpc" in value)) return;
-	const { route } = value["~orpc"];
-	if (route?.method === void 0 || route.path === void 0) return;
-	return {
-		method: route.method,
-		path: route.path
-	};
-};
-var contractRoutes = (contract) => {
-	const routes = [];
-	for (const [group, procedures] of Object.entries(contract)) {
-		if (typeof procedures !== "object" || procedures === null) continue;
-		for (const [name, procedure] of Object.entries(procedures)) {
-			const route = procedureRoute(procedure);
-			if (route !== void 0) routes.push({
-				name: `${group}.${name}`,
-				method: route.method,
-				path: route.path
-			});
-		}
-	}
-	return routes.toSorted((a, b) => a.name.localeCompare(b.name));
-};
-var UNORDERED = /* @__PURE__ */ new Set([
-	"required",
-	"enum",
-	"anyOf",
-	"oneOf",
-	"allOf"
-]);
-var canonical = (value, key) => {
-	if (Array.isArray(value)) {
-		const items = value.map((item) => canonical(item));
-		return key !== void 0 && UNORDERED.has(key) ? items.toSorted((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))) : items;
-	}
-	if (typeof value !== "object" || value === null) return value;
-	return Object.entries(value).toSorted(([a], [b]) => a.localeCompare(b)).map(([name, nested]) => [name, canonical(nested, name)]);
-};
-var fingerprint = (value) => {
-	const text = JSON.stringify(canonical(value));
-	let hash = 2166136261;
-	for (let i = 0; i < text.length; i++) {
-		hash ^= text.charCodeAt(i);
-		hash = Math.imul(hash, 16777619) >>> 0;
-	}
-	return hash.toString(36);
-};
-var procedureShape = (value) => {
-	if (typeof value !== "object" || value === null || !("~orpc" in value)) return;
-	const { inputSchema, outputSchema } = value["~orpc"];
-	try {
-		return fingerprint({
-			in: inputSchema === void 0 ? void 0 : toJSONSchema(inputSchema, { io: "input" }),
-			out: outputSchema === void 0 ? void 0 : toJSONSchema(outputSchema, { io: "output" })
-		});
-	} catch {
-		return;
-	}
-};
-var routeShapes = (contract) => {
-	const shapes = {};
-	for (const [group, procedures] of Object.entries(contract)) {
-		if (typeof procedures !== "object" || procedures === null) continue;
-		for (const [name, procedure] of Object.entries(procedures)) {
-			if (procedureRoute(procedure) === void 0) continue;
-			const shape = procedureShape(procedure);
-			if (shape !== void 0) shapes[`${group}.${name}`] = shape;
-		}
-	}
-	return shapes;
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+shared@1.14.13/node_modules/@orpc/shared/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+shared@1.15.4/node_modules/@orpc/shared/dist/index.mjs
 function resolveMaybeOptionalOptions(rest) {
 	return rest[0] ?? {};
 }
 var ORPC_SHARED_PACKAGE_NAME = "@orpc/shared";
-var ORPC_SHARED_PACKAGE_VERSION = "1.14.13";
+var ORPC_SHARED_PACKAGE_VERSION = "1.15.4";
 function sequential(fn) {
 	let lastOperationPromise = Promise.resolve();
 	return (...args) => {
@@ -14024,9 +8546,9 @@ function isTypescriptObject(value) {
 	return !!value && (typeof value === "object" || typeof value === "function");
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+client@1.14.13/node_modules/@orpc/client/dist/shared/client.DexhfmWd.mjs
+//#region node_modules/.pnpm/@orpc+client@1.15.4/node_modules/@orpc/client/dist/shared/client.DS9vjH_1.mjs
 var ORPC_CLIENT_PACKAGE_NAME = "@orpc/client";
-var ORPC_CLIENT_PACKAGE_VERSION = "1.14.13";
+var ORPC_CLIENT_PACKAGE_VERSION = "1.15.4";
 var COMMON_ORPC_ERROR_DEFS = {
 	BAD_REQUEST: {
 		status: 400,
@@ -14166,7 +8688,7 @@ function isORPCErrorStatus(status) {
 	return status < 200 || status >= 400;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+standard-server@1.14.13/node_modules/@orpc/standard-server/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+standard-server@1.15.4/node_modules/@orpc/standard-server/dist/index.mjs
 var EventEncoderError = class extends TypeError {};
 TransformStream;
 var LINE_ENDING_REGEX = /\r\n|[\n\r]/;
@@ -14197,7 +8719,7 @@ function getEventMeta(container) {
 	return isTypescriptObject(container) ? Reflect.get(container, EVENT_SOURCE_META_SYMBOL) : void 0;
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+client@1.14.13/node_modules/@orpc/client/dist/shared/client.BLtwTQUg.mjs
+//#region node_modules/.pnpm/@orpc+client@1.15.4/node_modules/@orpc/client/dist/shared/client.BLtwTQUg.mjs
 function mapEventIterator(iterator, maps) {
 	const mapError = async (error) => {
 		let mappedError = await maps.error(error);
@@ -14233,7 +8755,7 @@ function mapEventIterator(iterator, maps) {
 	});
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+contract@1.14.13/node_modules/@orpc/contract/dist/shared/contract.D_dZrO__.mjs
+//#region node_modules/.pnpm/@orpc+contract@1.15.4/node_modules/@orpc/contract/dist/shared/contract.D_dZrO__.mjs
 var ValidationError = class extends Error {
 	issues;
 	data;
@@ -14265,7 +8787,7 @@ function isContractProcedure(item) {
 	return (typeof item === "object" || typeof item === "function") && item !== null && "~orpc" in item && typeof item["~orpc"] === "object" && item["~orpc"] !== null && "errorMap" in item["~orpc"] && "route" in item["~orpc"] && "meta" in item["~orpc"];
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@orpc+contract@1.14.13/node_modules/@orpc/contract/dist/index.mjs
+//#region node_modules/.pnpm/@orpc+contract@1.15.4/node_modules/@orpc/contract/dist/index.mjs
 function mergeMeta(meta1, meta2) {
 	return {
 		...meta1,
@@ -14489,7 +9011,606 @@ function eventIterator(yields, returns) {
 	} };
 }
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/ids/conversation-ids.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/needs-action.js
+var NeedsActionSchema = object({
+	subject: string(),
+	detail: string()
+});
+object({
+	type: literal("runner-hello"),
+	token: string(),
+	version: string(),
+	image: string(),
+	channel: string().optional(),
+	overlayHash: string().optional(),
+	definitionToml: string().optional()
+});
+var runnerTranslatorPath = "/system/runners/translator";
+object({
+	agent: string().optional(),
+	account: string().optional(),
+	model: string().optional()
+});
+union([
+	object({
+		ok: literal(true),
+		kind: literal("oauth"),
+		accessToken: string(),
+		account: string().optional()
+	}),
+	object({
+		ok: literal(true),
+		kind: literal("parent-translator"),
+		model: string(),
+		trial: boolean().optional()
+	}),
+	object({
+		ok: literal(true),
+		kind: literal("endpoint"),
+		baseUrl: string(),
+		authToken: string(),
+		model: string(),
+		trial: boolean().optional()
+	}),
+	object({
+		ok: literal(false),
+		code: _enum([
+			"subscription-required",
+			"claude-reauth",
+			"trial-unavailable"
+		]).optional(),
+		message: string()
+	})
+]);
+object({
+	account: string().min(1),
+	rejected: string().min(1)
+});
+object({ accessToken: string().optional() });
+var RunnerFactsSchema = object({
+	cpus: number$1().int().positive(),
+	memoryMb: number$1().int().positive(),
+	freeDiskMb: number$1().int().nonnegative(),
+	load: number$1().nonnegative()
+});
+var RunnerParitySchema = _enum([
+	"current",
+	"outdated",
+	"unknown"
+]);
+object({
+	id: string(),
+	host: string().optional(),
+	online: boolean(),
+	version: string().optional(),
+	image: string().optional(),
+	channel: string().optional(),
+	overlayHash: string().optional(),
+	facts: RunnerFactsSchema.optional(),
+	lastSeen: number$1().optional(),
+	parity: RunnerParitySchema,
+	drift: array(NeedsActionSchema).optional()
+});
+var RunnerSyncSchema = object({
+	op: _enum(["pull", "push"]),
+	conversationId: string().min(1),
+	branch: string().min(1),
+	repos: array(object({
+		repo: string().min(1),
+		dir: string(),
+		mainBranch: string().min(1)
+	}))
+});
+var RunnerSyncLineSchema = union([object({
+	kind: literal("line"),
+	text: string()
+}), object({
+	kind: literal("done"),
+	ok: boolean(),
+	detail: string().optional()
+})]);
+var RunnerTurnSchema = object({
+	conversationId: string().min(1),
+	branch: string().min(1),
+	prompt: string(),
+	provider: string(),
+	harness: string(),
+	model: string().optional(),
+	effort: string().optional(),
+	thinking: boolean().optional(),
+	fast: boolean().optional(),
+	account: string().optional(),
+	sessionId: string().optional(),
+	attachments: array(object({
+		path: string().min(1),
+		bytesBase64: string()
+	})).optional()
+});
+var OFFLOAD_REF_PREFIX = "refs/intentic-offload/";
+var OffloadRunIdSchema = string().regex(/^[a-z0-9][a-z0-9-]{7,63}$/u);
+var EnvNameSchema = string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/u);
+var RunnerCommandSchema = object({
+	runId: OffloadRunIdSchema,
+	repo: string().min(1),
+	ref: string().startsWith(OFFLOAD_REF_PREFIX),
+	cwd: string().refine((path) => !path.startsWith("/") && !path.split("/").includes(".."), "must stay inside the repo"),
+	command: string().min(1).max(64e3),
+	env: record(EnvNameSchema, string()).default({}),
+	exports: array(EnvNameSchema).max(8).default([]),
+	label: string().min(1).max(80),
+	timeoutMs: number$1().int().positive().max(216e5).optional()
+});
+var RunnerCommandFrameSchema = union([
+	object({
+		kind: literal("status"),
+		text: string()
+	}),
+	object({
+		kind: literal("output"),
+		stream: _enum(["stdout", "stderr"]),
+		text: string()
+	}),
+	object({
+		kind: literal("exit"),
+		code: number$1().int(),
+		signal: string().optional(),
+		failure: string().optional(),
+		ran: boolean().default(true),
+		patchBase64: string().optional(),
+		files: record(EnvNameSchema, string()).default({})
+	})
+]);
+var AgentPlacementSchema = union([object({ kind: literal("local") }), object({
+	kind: literal("runner"),
+	id: string().min(1)
+})]);
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/protocol/raw-routes.js
+var RAW_ROUTES = {
+	"GET /health": {
+		auth: "door",
+		beforeBoot: true
+	},
+	"GET /": {
+		auth: "door",
+		beforeBoot: true
+	},
+	"GET /diff/raw": { lane: "bulk" },
+	"GET /speech/status": { guest: true },
+	"POST /speech/transcribe": {
+		floor: "collaborator",
+		guest: true
+	},
+	"GET /workspace/raw": {
+		guest: true,
+		lane: "bulk"
+	},
+	"GET /workspace/thumb": { guest: true },
+	"GET /workspace/media": {
+		auth: "door",
+		guest: true,
+		lane: "bulk"
+	},
+	"GET /workspace/download": {
+		auth: "door",
+		guest: true,
+		lane: "bulk"
+	},
+	"POST /workspace/upload": {
+		floor: "writer",
+		attachmentFloor: "collaborator",
+		lane: "bulk"
+	},
+	"POST /workspace/upload-diff": {},
+	"POST /workspace/upload-archive": { lane: "bulk" },
+	"POST /system/ws-ticket": {
+		beforeBoot: true,
+		floor: "collaborator",
+		control: "never"
+	},
+	"GET /system/terminal": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never",
+		front: true
+	},
+	"GET /system/vitals": {
+		auth: "door",
+		beforeBoot: true,
+		front: true
+	},
+	"GET /system/sync/ssh": {
+		sync: "pipe",
+		control: "never",
+		lane: "bulk"
+	},
+	"GET /system/browser-profile": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"GET /system/browser-view": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"POST /enroll": {
+		auth: "door",
+		control: "never"
+	},
+	"POST /automations/{id}/fire": { auth: "door" },
+	"POST /workflows/{id}/gate": { auth: "door" },
+	"GET /webchat/widget.js": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /webchat/{id}/config": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /webchat/{id}/challenge": {
+		auth: "door",
+		embedded: true
+	},
+	"POST /webchat/{id}/message": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /webchat/{id}/messages": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /webchat/{id}/installs": {},
+	"GET /intake/sdk.js": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /intake/{id}/config": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /intake/{id}/challenge": {
+		auth: "door",
+		embedded: true
+	},
+	"POST /intake/{id}/report": {
+		auth: "door",
+		embedded: true
+	},
+	"GET /members": { control: "never" },
+	"POST /members": { control: "never" },
+	"DELETE /members": { control: "never" },
+	"DELETE /members/self": {
+		floor: "viewer",
+		guest: true,
+		control: "never"
+	},
+	"POST /platform/relink": { control: "never" },
+	"GET /environment": {},
+	"GET /environment/contents": {},
+	"POST /environment/approve": {},
+	"POST /environment/reject": {},
+	"POST /environment/runtime-install": {},
+	"POST /environment/remove": {},
+	"POST /environment/rebuild-when-idle": {},
+	"DELETE /environment/rebuild-when-idle": {},
+	"GET /engines": {},
+	"POST /engines/channel": {},
+	"POST /engines/update": {},
+	"POST /engines/revert": {},
+	"GET /bundles": { control: "never" },
+	"POST /bundles": { control: "never" },
+	"DELETE /bundles": { control: "never" },
+	"POST /bundles/ticket": { control: "never" },
+	"GET /bundles/download": {
+		auth: "door",
+		control: "never",
+		lane: "bulk"
+	},
+	"GET /definition": {},
+	"POST /definition/diff": {},
+	"GET /definition/workspace": {},
+	"POST /definition/workspace/publish": {},
+	"POST /arrivals/plan": {},
+	"GET /arrivals/hosts": {},
+	"POST /arrivals/scan": {},
+	"POST /arrivals/apply": {},
+	"DELETE /arrivals": {},
+	"GET /extensions/{id}/bundle": { lane: "bulk" },
+	"ALL /x/*": {},
+	"GET /capabilities/connectable": {
+		floor: "maintainer",
+		agent: true,
+		control: "never"
+	},
+	"GET /sandboxes": { agent: true },
+	"POST /sandboxes": { agent: true },
+	"GET /wallet/status": {
+		agent: true,
+		control: "never"
+	},
+	"POST /wallet/fetch": {
+		agent: true,
+		control: "never"
+	},
+	"GET /wallet/history": {
+		agent: true,
+		control: "never"
+	},
+	"POST /children/spawn": {
+		agent: true,
+		control: "never"
+	},
+	"GET /children/providers": {
+		agent: true,
+		control: "never"
+	},
+	"POST /children/wait": {
+		agent: true,
+		control: "never"
+	},
+	"POST /children/send": {
+		agent: true,
+		control: "never"
+	},
+	"POST /children/answer": {
+		agent: true,
+		control: "never"
+	},
+	"POST /children/cancel": {
+		agent: true,
+		control: "never"
+	},
+	"POST /children/merge": {
+		agent: true,
+		control: "never"
+	},
+	"GET /children": {
+		agent: true,
+		control: "never"
+	},
+	"GET /fleet": { agent: true },
+	"POST /fleet/message": { agent: true },
+	"GET /fleet/{handle}": { agent: true },
+	"GET /listeners/{provider}/state": {
+		floor: "maintainer",
+		panel: false,
+		control: "never"
+	},
+	"POST /listeners/{provider}/dispatch": {
+		panel: false,
+		control: "never"
+	},
+	"POST /listeners/{provider}/failure": {
+		panel: false,
+		control: "never"
+	},
+	"POST /listeners/{provider}/status": {
+		panel: false,
+		control: "never"
+	},
+	"POST /ci/webhook/{host}": { auth: "door" },
+	"POST /system/sync/pair": {
+		floor: "collaborator",
+		control: "never"
+	},
+	"POST /system/hosts/pair": { control: "never" },
+	"POST /system/hosts/enroll": {
+		auth: "door",
+		control: "never"
+	},
+	"GET /system/hosts": { control: "never" },
+	"DELETE /system/hosts/{id}": { control: "never" },
+	"GET /system/hosts/connect": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"POST /system/webext/pair": { control: "never" },
+	"POST /system/webext/enroll": {
+		auth: "door",
+		control: "never"
+	},
+	"GET /system/webext": { control: "never" },
+	"DELETE /system/webext/{id}": { control: "never" },
+	"GET /system/webext/connect": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"POST /system/runners/pair": { control: "never" },
+	"POST /system/runners/enroll": {
+		auth: "door",
+		control: "never"
+	},
+	"GET /system/runners": { control: "never" },
+	"DELETE /system/runners/{id}": { control: "never" },
+	"GET /system/runners/connect": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"ALL /mcp/{mount}": {
+		auth: "door",
+		control: "never"
+	},
+	"POST /system/webext/session": {
+		auth: "door",
+		control: "never"
+	},
+	"POST /system/webext/lend": {
+		auth: "door",
+		control: "never"
+	},
+	"POST /system/runners/{id}/definition/sync": { control: "never" },
+	"GET /system/runners/git/{repo}/info/refs": {
+		auth: "door",
+		control: "never",
+		lane: "bulk"
+	},
+	"POST /system/runners/git/{repo}/git-upload-pack": {
+		auth: "door",
+		control: "never",
+		lane: "bulk"
+	},
+	"POST /system/runners/git/{repo}/git-receive-pack": {
+		auth: "door",
+		control: "never",
+		lane: "bulk"
+	},
+	"POST /system/runners/credentials": {
+		auth: "door",
+		control: "never"
+	},
+	"POST /system/runners/credentials/refresh": {
+		auth: "door",
+		control: "never"
+	},
+	[`ALL ${runnerTranslatorPath}/*`]: {
+		auth: "door",
+		control: "never"
+	},
+	"ALL /privacy/gateway/{session}/*": {
+		auth: "door",
+		control: "never",
+		stream: true
+	},
+	"POST /system/control/tokens": { control: "never" },
+	"GET /system/control/tokens": { control: "never" },
+	"DELETE /system/control/tokens/{id}": { control: "never" },
+	"GET /system/passkeys": {
+		guest: true,
+		control: "never"
+	},
+	"POST /system/passkeys/register/options": {
+		floor: "viewer",
+		guest: true,
+		enrolment: true,
+		control: "never"
+	},
+	"POST /system/passkeys/register": {
+		floor: "viewer",
+		guest: true,
+		enrolment: true,
+		control: "never"
+	},
+	"POST /system/passkeys/assert/options": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"POST /system/passkeys/assert": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"POST /system/passkeys/policy": { control: "never" },
+	"POST /system/passkeys/recovery": { control: "never" },
+	"DELETE /system/passkeys/{id}": {
+		floor: "viewer",
+		guest: true,
+		control: "never"
+	},
+	"POST /system/session/recover": {
+		auth: "door",
+		beforeBoot: true,
+		control: "never"
+	},
+	"POST /system/sessions/revoke": { control: "never" },
+	"POST /system/access/disable": {
+		auth: "door",
+		control: "never"
+	},
+	"POST /system/authorized-key": {
+		auth: "door",
+		control: "never"
+	},
+	"GET /system/sync": { control: "never" },
+	"POST /system/sync/report": {
+		sync: "poll",
+		control: "never"
+	},
+	"DELETE /system/authorized-key": {
+		auth: "door",
+		control: "never"
+	},
+	"DELETE /system/authorized-key/{machine}": { control: "never" }
+};
+var rawRoutePath = (key) => key.slice(key.indexOf(" ") + 1);
+Object.keys(RAW_ROUTES).map((name) => ({
+	name,
+	method: name.slice(0, name.indexOf(" ")),
+	path: rawRoutePath(name),
+	meta: RAW_ROUTES[name]
+}));
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/protocol/stream-of.js
+var FRAME = Symbol.for("intentic.contract.frame");
+var streamOf = (frame) => Object.assign(eventIterator(frame), { [FRAME]: frame });
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/protocol/routes.js
+var procedureRoute = (value) => {
+	if (typeof value !== "object" || value === null || !("~orpc" in value)) return;
+	const { route, meta } = value["~orpc"];
+	if (route?.method === void 0 || route.path === void 0) return;
+	return {
+		method: route.method,
+		path: route.path,
+		meta: meta ?? {}
+	};
+};
+var contractRoutes = (contract) => {
+	const routes = [];
+	for (const [group, procedures] of Object.entries(contract)) {
+		if (typeof procedures !== "object" || procedures === null) continue;
+		for (const [name, procedure] of Object.entries(procedures)) {
+			const route = procedureRoute(procedure);
+			if (route !== void 0) routes.push({
+				name: `${group}.${name}`,
+				...route
+			});
+		}
+	}
+	return routes.toSorted((a, b) => a.name.localeCompare(b.name));
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/protocol/route-meta.js
+var procedure = oc.$meta({});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/speaker.js
+var TurnSpeakerSchema = discriminatedUnion("kind", [
+	object({
+		kind: literal("person"),
+		email: string().describe("The signed-in member, as the sandbox verified them."),
+		name: string().optional().describe("Their display name, where the sign-in carries one.")
+	}),
+	object({
+		kind: literal("program"),
+		token: string().describe("The label of the control token a person minted and handed to this program.")
+	}),
+	object({
+		kind: literal("agent"),
+		conversationId: string().describe("The conversation whose agent is speaking: a child reporting back, a peer's message.")
+	}),
+	object({
+		kind: literal("sandbox"),
+		source: string().optional().describe("What in the sandbox spoke: an automation, a watch that fired, a job that ended, a repair. Absent when it does not say.")
+	})
+]);
+var TurnErrandSchema = _enum([
+	"land-conflict",
+	"verify-nudge",
+	"land-breakage",
+	"land-fix",
+	"land-fix-nudge",
+	"land-held",
+	"push-fix",
+	"push-fix-nudge",
+	"ci-fix",
+	"ci-fix-nudge"
+]);
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/ids/conversation-ids.js
 var CONVERSATION_ID = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$/;
 _enum(["helper", "run"]);
 var MODEL_ROLES = [
@@ -14522,16 +9643,16 @@ var MODEL_ROLES = [
 		icon: "check-square"
 	},
 	{
-		id: "persona-router",
-		label: "Persona routing",
-		blurb: "Which model reads a new chat's first message and picks the persona for it.",
+		id: "model-router",
+		label: "New chat routing",
+		blurb: "Which model reads a new chat's first message and picks what it opens on: the model, effort and account, and the persona.",
 		kind: "helper",
-		icon: "users"
+		icon: "sparkles"
 	},
 	{
 		id: "pipeline-fix",
 		label: "Pipeline fixes",
-		blurb: "The agent started by Fix on a red pipeline.",
+		blurb: "The agent started by Fix on a failed pipeline.",
 		kind: "run",
 		trigger: "pressed",
 		icon: "wave-pulse"
@@ -14569,14 +9690,6 @@ var MODEL_ROLES = [
 		icon: "list-check"
 	},
 	{
-		id: "pre-push-fix",
-		label: "Pre-push fixes",
-		blurb: "The fix proposed when a check fails on the way to a push.",
-		kind: "run",
-		trigger: "pressed",
-		icon: "cloud-upload"
-	},
-	{
 		id: "approval-queue",
 		label: "Approvals queue",
 		blurb: "The turn that publishes or acts on what you approved.",
@@ -14605,7 +9718,7 @@ var ModelRoleSchema = _enum(MODEL_ROLES.map((role) => role.id));
 var rolesWhere = (match) => MODEL_ROLES.filter((role) => match(role));
 rolesWhere((role) => role.kind === "helper"), rolesWhere((role) => role.kind === "run" && role.trigger === "pressed"), rolesWhere((role) => role.kind === "run" && role.trigger === "unprompted");
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/models/agent-runtimes.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/models/agent-runtimes.js
 var CLAUDE_CODE = {
 	runtime: "claude-code",
 	steering: true,
@@ -14619,17 +9732,19 @@ var CLAUDE_CODE = {
 	commands: true,
 	terminals: true,
 	recovery: true,
+	warm: true,
 	instructions: "replace",
 	skillDiscovery: "native",
 	rulebook: "hooks",
-	secrets: "masked"
+	secrets: "masked",
+	privacy: "gateway"
 };
 var CODEX = {
 	runtime: "codex",
 	steering: true,
 	permissions: "plan",
 	questions: true,
-	mcp: "browser",
+	mcp: "http",
 	execution: ["shell"],
 	effort: true,
 	fastMode: false,
@@ -14637,17 +9752,19 @@ var CODEX = {
 	commands: true,
 	terminals: false,
 	recovery: false,
+	warm: false,
 	instructions: "replace",
 	skillDiscovery: "native",
 	rulebook: "approval",
-	secrets: "none"
+	secrets: "none",
+	privacy: "gateway"
 };
 var OPENCODE = {
 	runtime: "opencode",
 	steering: false,
 	permissions: "plan",
 	questions: false,
-	mcp: "none",
+	mcp: "http",
 	execution: ["shell"],
 	effort: false,
 	fastMode: false,
@@ -14655,10 +9772,12 @@ var OPENCODE = {
 	commands: false,
 	terminals: false,
 	recovery: false,
+	warm: false,
 	instructions: "append",
 	skillDiscovery: "prompt",
-	rulebook: "refuse-only",
-	secrets: "none"
+	rulebook: "approval",
+	secrets: "none",
+	privacy: "gateway"
 };
 var OPENCODE_GEMINI = {
 	...OPENCODE,
@@ -14666,24 +9785,26 @@ var OPENCODE_GEMINI = {
 };
 var CURSOR = {
 	runtime: "cursor",
-	steering: false,
+	steering: true,
 	permissions: "plan",
 	questions: true,
 	mcp: "tools",
-	execution: ["shell"],
+	execution: ["shell", "js"],
 	effort: true,
 	fastMode: false,
-	isolation: "cwd",
+	isolation: "namespace",
 	commands: false,
 	terminals: false,
 	recovery: true,
+	warm: false,
 	instructions: "append",
 	skillDiscovery: "prompt",
 	rulebook: "hooks",
-	secrets: "none"
+	secrets: "none",
+	privacy: "none"
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/models/provider-specs.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/models/provider-specs.js
 var PROVIDER_SPECS = [
 	{
 		id: "claude",
@@ -14879,131 +10000,12 @@ new Map(PROVIDER_SPECS.map((spec) => [spec.id, spec]));
 var TRANSLATOR_PROVIDERS = PROVIDER_SPECS.filter((spec) => spec.auth.kind === "translator").map((spec) => spec.id);
 PROVIDER_SPECS.filter((spec) => spec.auth.kind === "minted").map((spec) => spec.id);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/policy/needs-action.js
-var NeedsActionSchema = object({
-	subject: string(),
-	detail: string()
-});
-object({
-	type: literal("runner-hello"),
-	token: string(),
-	version: string(),
-	image: string(),
-	channel: string().optional(),
-	overlayHash: string().optional(),
-	definitionToml: string().optional()
-});
-object({
-	agent: string().optional(),
-	account: string().optional(),
-	model: string().optional()
-});
-union([
-	object({
-		ok: literal(true),
-		kind: literal("oauth"),
-		accessToken: string(),
-		account: string().optional()
-	}),
-	object({
-		ok: literal(true),
-		kind: literal("parent-translator"),
-		model: string(),
-		trial: boolean().optional()
-	}),
-	object({
-		ok: literal(true),
-		kind: literal("endpoint"),
-		baseUrl: string(),
-		authToken: string(),
-		model: string(),
-		trial: boolean().optional()
-	}),
-	object({
-		ok: literal(false),
-		code: _enum([
-			"subscription-required",
-			"claude-reauth",
-			"trial-unavailable"
-		]).optional(),
-		message: string()
-	})
-]);
-object({
-	account: string().min(1),
-	rejected: string().min(1)
-});
-object({ accessToken: string().optional() });
-var RunnerFactsSchema = object({
-	cpus: number$1().int().positive(),
-	memoryMb: number$1().int().positive(),
-	freeDiskMb: number$1().int().nonnegative(),
-	load: number$1().nonnegative()
-});
-var RunnerParitySchema = _enum([
-	"current",
-	"outdated",
-	"unknown"
-]);
-object({
-	id: string(),
-	host: string().optional(),
-	online: boolean(),
-	version: string().optional(),
-	image: string().optional(),
-	channel: string().optional(),
-	overlayHash: string().optional(),
-	facts: RunnerFactsSchema.optional(),
-	lastSeen: number$1().optional(),
-	parity: RunnerParitySchema,
-	drift: array(NeedsActionSchema).optional()
-});
-var RunnerSyncSchema = object({
-	op: _enum(["pull", "push"]),
-	conversationId: string().min(1),
-	branch: string().min(1),
-	repos: array(object({
-		repo: string().min(1),
-		dir: string(),
-		mainBranch: string().min(1)
-	}))
-});
-var RunnerSyncLineSchema = union([object({
-	kind: literal("line"),
-	text: string()
-}), object({
-	kind: literal("done"),
-	ok: boolean(),
-	detail: string().optional()
-})]);
-var RunnerTurnSchema = object({
-	conversationId: string().min(1),
-	branch: string().min(1),
-	prompt: string(),
-	provider: string(),
-	harness: string(),
-	model: string().optional(),
-	effort: string().optional(),
-	thinking: boolean().optional(),
-	fast: boolean().optional(),
-	account: string().optional(),
-	sessionId: string().optional(),
-	attachments: array(object({
-		path: string().min(1),
-		bytesBase64: string()
-	})).optional()
-});
-var AgentPlacementSchema = union([object({ kind: literal("local") }), object({
-	kind: literal("runner"),
-	id: string().min(1)
-})]);
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/internal.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/internal.js
 var entryId = string().min(1).max(60).regex(/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/);
 var RefNameSchema = string().regex(/^[A-Za-z0-9][A-Za-z0-9._/-]*$/).max(200);
 var autoStart = _enum(["on", "off"]).default("off");
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/agent.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/agent.js
 var AgentProviderSchema = string().min(1);
 var NativeProviderParamSchema = object({ provider: _enum(NATIVE_PROVIDERS) });
 var AgentHarnessSchema = _enum(["native", "claude-code"]);
@@ -15041,6 +10043,7 @@ var AdmissionRuleSchema = _enum([
 var CommandLocusSchema = _enum(["sandbox", "device"]);
 var CommandClassSchema = _enum([
 	"git.destructive",
+	"git.branch-switch",
 	"files.destructive",
 	"system.destructive",
 	"container.state",
@@ -15067,13 +10070,16 @@ var ForkedFromSchema = object({
 	index: number$1().int().nonnegative(),
 	files: _enum(["then", "now"])
 });
-var AgentTurnSchema = object({
+var AgentTurnFieldsSchema = object({
 	prompt: string().describe("What to say to the agent. May be empty if you are only attaching files."),
+	errand: TurnErrandSchema.optional().describe("What the words are for, when the app or the sandbox composed them rather than a person typing them: a land conflict to resolve, a failed CI run to fix. Shown as the sandbox's words, not yours. Leave it out for your own words."),
+	messageId: string().min(1).max(128).optional().describe("Your id for this message. Sending again under an id the sandbox already took is answered with what it did with it the first time, never a second delivery. Leave it out and the sandbox names the message itself."),
 	title: string().max(80).optional().describe("A title for a conversation this turn is opening. Ignored for a conversation that already has one."),
 	attachments: array(string().min(1)).max(20).optional().describe("Files to hand the agent along with the prompt, as workspace paths. Upload them first."),
+	mentions: array(string().min(1)).max(20).optional().describe("Workspace paths the prompt mentions with `@`. Unlike attachments, one that escapes the workspace or names no file is ignored rather than refused."),
 	agent: AgentProviderSchema.optional().describe("Which model provider serves this turn. Leave it out for Claude."),
 	harness: AgentHarnessSchema.optional().describe("Which agentic loop runs the turn. Leave it out to use each provider's own."),
-	account: string().optional().describe("Which of that provider's connected accounts pays for the turn. Leave it out for the first one."),
+	account: string().optional().describe("Which of that provider's connected accounts pays for the turn. Leave it out to continue on the account the conversation runs on, or, for its first turn on this provider, to take whichever account can serve with the most room. To move a running conversation, use `switchAccount`."),
 	actsAs: entryId.optional().describe("Which persona the turn speaks as out in the world. Not the same as which account pays for it."),
 	sessionId: string().optional().describe("Resume this provider session instead of starting a fresh one."),
 	conversationId: ConversationIdSchema.optional().describe("The conversation this turn belongs to. You choose it, it survives model switches, and it is how you address the conversation later. Naming one that does not exist opens it."),
@@ -15090,20 +10096,38 @@ var AgentTurnSchema = object({
 		files: _enum(["then", "now"]).describe("Which files the fork opens on: \"now\" is the workspace as it stands, \"then\" is the files as they were at the cut, which needs a private copy.")
 	}).optional().describe("Where this conversation was cut from, on its first turn only. Only the client knows this, so only the client can say it."),
 	model: string().optional().describe("Which model to use. Leave it out for the provider's default."),
-	unattended: boolean().optional().describe("Nobody chose a model for this turn because a screen started it rather than a person. The sandbox then fills in the model its owner picked for unwatched work."),
+	unattended: boolean().optional().describe("Nobody is watching this turn: a schedule, a queue or another agent started it and no chat is open on it. A card that needs a person is refused rather than raised, plan mode and the terminal hand-off are withheld, and the sandbox's signed-in accounts stay out of it unless a persona carries them."),
 	outsideWake: string().min(1).optional().describe("Content from outside caused this turn, and what to call the source. It is what makes the sandbox treat the turn as carrying somebody else's words."),
 	permissionMode: PermissionModeSchema.optional().describe("How tool calls are gated: ask before each tool, propose a plan first, or run everything. The agent can move itself between these mid-turn."),
 	allowedTools: array(string().min(1)).optional().describe("Narrow the turn to these tools. Leave it out for everything the runtime has. For a turn driven by an outside message this list is the real boundary, because prompt wording is only advice."),
 	effort: string().optional().describe("How hard the model should think, where the provider offers a choice."),
 	thinking: boolean().optional().describe("Whether to show the model's reasoning as it works."),
 	fast: boolean().optional().describe("Ask for the same work at a higher rate for a higher price. A request rather than a promise: the answer says what actually happened."),
-	tierHold: boolean().optional().describe("Run exactly the model that was picked, even when the turn looks simple enough for a cheaper one. The judgement is still recorded; nothing is substituted."),
-	editorContext: EditorContextSchema.optional().describe("What the user has open in their editor, folded into the prompt so that pointing words like \"this\" resolve.")
-}).refine((turn) => turn.prompt.trim().length > 0 || (turn.attachments?.length ?? 0) > 0, { message: "prompt or attachments required" }).refine((turn) => turn.isolated !== true || turn.conversationId !== void 0, { message: "isolated requires conversationId" }).refine((turn) => turn.worktreeBase === void 0 || turn.isolated === true && turn.conversationId !== void 0, { message: "worktreeBase requires an isolated conversationId" }).refine((turn) => turn.origin === void 0 || turn.conversationId !== void 0, { message: "origin requires conversationId" }).refine((turn) => turn.forkOf === void 0 || turn.conversationId !== void 0, { message: "forkOf requires conversationId" }).refine((turn) => turn.forkOf?.files !== "then" || turn.isolated === true, { message: "forkOf.files \"then\" requires isolated" });
+	autoPicked: boolean().optional().describe("Whether this turn's model was chosen for you by reading the conversation's opening message, rather than picked by hand. Recorded so the choice can be judged later against what you did next."),
+	editorContext: EditorContextSchema.optional().describe("What the user has open in their editor, folded into the prompt so that pointing words like \"this\" resolve."),
+	sendAt: number$1().int().positive().optional().describe("Hold this message until then (epoch milliseconds) instead of starting a turn now: a time you chose, or the reopen of an allowance you know is spent. It waits in the conversation's queue, where it can be sent early, reworded, rescheduled or removed, and goes by itself at that instant, even for a conversation this message opens or one whose turn is running now. Ignored when already past; at most a month ahead."),
+	sendAfter: ConversationIdSchema.optional().describe("Hold this message until the conversation named here has finished and all of its work has landed in the workspace, instead of starting a turn now: for work that builds on another agent's. It waits in this conversation's queue, where it can be sent early, reworded, rescheduled or removed. Sent at once when that conversation has nothing running and nothing left to land."),
+	conversationAutoLand: boolean().optional().describe("Whether this conversation's finished work merges into the workspace by itself from now on: its own answer to the sandbox-wide setting, the one `agents.autoLand` changes later. Read only from the message that opens the conversation, and only from a maintainer. Unlike `autoLand`, it holds for every later turn.")
+});
+var AgentRunSchema = AgentTurnFieldsSchema.refine((turn) => turn.prompt.trim().length > 0 || (turn.attachments?.length ?? 0) > 0, { message: "prompt or attachments required" }).refine((turn) => turn.isolated !== true || turn.conversationId !== void 0, { message: "isolated requires conversationId" }).refine((turn) => turn.worktreeBase === void 0 || turn.isolated === true && turn.conversationId !== void 0, { message: "worktreeBase requires an isolated conversationId" }).refine((turn) => turn.origin === void 0 || turn.conversationId !== void 0, { message: "origin requires conversationId" }).refine((turn) => turn.forkOf === void 0 || turn.conversationId !== void 0, { message: "forkOf requires conversationId" }).refine((turn) => turn.forkOf?.files !== "then" || turn.isolated === true, { message: "forkOf.files \"then\" requires isolated" }).refine((turn) => turn.sendAt === void 0 || turn.sendAfter === void 0, { message: "sendAt and sendAfter are two different holds: name one" }).refine((turn) => turn.sendAfter === void 0 || turn.sendAfter !== turn.conversationId, { message: "a conversation cannot wait for its own work to land" }).safeExtend({ continues: literal(true).optional().describe("Carry the conversation on from where its last turn stopped instead of saying anything: nothing of yours is added to the conversation, and `prompt` is ignored. A turn the sandbox still holds runs again as it was; otherwise the agent is told to continue in its own session. Refused while a turn is running.") });
+var TurnProfileSchema = AgentTurnFieldsSchema.pick({
+	agent: true,
+	harness: true,
+	account: true,
+	model: true,
+	effort: true,
+	thinking: true,
+	fast: true,
+	actsAs: true,
+	isolated: true,
+	unattended: true,
+	runRole: true
+});
+Object.keys(TurnProfileSchema.shape);
 var AgentRunPickSchema = object({
 	agent: string().min(1).describe("Which provider."),
 	model: string().min(1).describe("Which of its models. Both or neither, because a model name only means anything to the provider that serves it."),
-	account: string().optional().describe("Which connected account of that provider pays, by its daemon-minted id. Leave it out for whichever has headroom."),
+	account: string().optional().describe("Which connected account of that provider pays, by its daemon-minted id. Leave it out to take whichever account can serve with the most room."),
 	harness: AgentHarnessSchema.optional().describe("Which agentic loop runs it. Leave it out to use the provider's own."),
 	effort: string().optional().describe("How hard that model should think, where it offers a choice. Leave it out to take the model's own default."),
 	thinking: boolean().optional().describe("Whether this model reasons before it answers, where that is a choice it offers."),
@@ -15117,342 +10141,53 @@ var ModelPinSchema = object({
 	fast: boolean().optional().describe("Ask for this model's work at a higher rate for a higher price. A request rather than a promise."),
 	harness: AgentHarnessSchema.optional().describe("Which agentic loop runs it. Leave it out to use the provider's own.")
 });
-var StartedTurnSchema = object({ run: string().describe("The id of the run that just started. Hand it back when you attach, so the stream resumes rather than replaying.") });
+var StartedTurnSchema = object({ run: string().describe("The id of the run that just started. Hand it back when you attach: the stream always opens on the conversation's newest run, so a different id there means another turn has started since.") });
+var MessageReceiptSchema = object({
+	delivered: _enum([
+		"started",
+		"steered",
+		"queued"
+	]).describe("What became of the message: it started a turn, it was said into the turn already running, or it waits in the conversation's queue for the next one."),
+	run: string().optional().describe("The run the message is in: the turn it started, or the one it was said into. Hand it back when you attach. Absent while the message waits in the queue."),
+	duplicate: literal(true).optional().describe("The sandbox had already taken a message under this id: this is what became of it, and nothing new happened.")
+});
+var MessageVoiceSchema = _enum([
+	"person",
+	"sandbox",
+	"agent"
+]);
+var QueuedMessageSchema = object({
+	id: string().describe("The message's id: what its sender named it, or what the sandbox did."),
+	text: string().describe("The words, as they will go out."),
+	attachments: array(string()).optional().describe("Files that go with it, as workspace paths."),
+	voice: MessageVoiceSchema.describe("Who it is from: a person, the sandbox itself, or another agent."),
+	queuedAt: number$1().describe("When it joined the queue, in milliseconds."),
+	revision: number$1().int().nonnegative().describe("The queue's revision when this message was last written. An edit or a removal names it, and is refused if the message has changed since.")
+});
+var QueuePauseSchema = _enum([
+	"stopped",
+	"refused",
+	"scheduled"
+]);
+var ConversationQueueSchema = object({
+	items: array(QueuedMessageSchema).describe("What waits, in the order it goes out."),
+	revision: number$1().int().nonnegative().describe("Moves with every change to the queue, so of two copies the higher is the newer."),
+	paused: QueuePauseSchema.optional().describe("Why nothing goes out by itself: somebody stopped the turn, the turn these messages started was refused before it ran, or they were scheduled for a time or for after another conversation's work lands. Resuming lets them go, and so does sending another message."),
+	until: number$1().optional().describe("When scheduled messages go out by themselves, in milliseconds. Only on a queue paused as `scheduled`."),
+	after: ConversationIdSchema.optional().describe("The conversation whose finished work must land before scheduled messages go out by themselves. Only on a queue paused as `scheduled`, in place of `until`.")
+});
+var QueueResumedSchema = object({
+	run: string().optional().describe("The turn the waiting messages started. Absent when a turn was already running, and they go after it."),
+	queue: ConversationQueueSchema.optional().describe("The queue the release left: what still waits once the turn took what it could. Absent from sandboxes older than the field.")
+});
 var AttachTurnSchema = object({
 	conversationId: ConversationIdSchema.describe("Which conversation to watch."),
-	run: string().optional().describe("The run you were watching. If a newer turn has started since, the head names that one instead, and its rows are that turn's.")
+	run: string().optional().describe("The run you were watching. The stream opens on the conversation's newest run whatever you name: if a newer turn has started since, the head names that one instead, and its rows are that turn's.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/plan-limits.js
-var WindowGatesSchema = union([
-	literal("all"),
-	literal("none"),
-	object({ models: array(string().min(1)).min(1) })
-]);
-var UsageWindowSchema = object({
-	kind: string(),
-	label: string().optional(),
-	utilization: number$1(),
-	resetsAt: number$1().optional(),
-	gates: WindowGatesSchema
-});
-var AccountUsageSchema = object({
-	windows: array(UsageWindowSchema),
-	measuredAt: number$1()
-});
-var LimitResetStatusSchema = object({
-	available: boolean().describe("Whether the provider will reopen this account's session window right now. The only thing a button may be drawn from."),
-	reason: string().optional().describe("Why not, in the provider's own word, when it gave one. Absent when it is available, or when the provider said nothing."),
-	nextAvailableAt: number$1().optional().describe("When the next reset may be claimed, in epoch seconds, where the provider publishes it. Absent means unknown, never 'now'."),
-	weeklyResetsAt: number$1().optional().describe("When the weekly allowance itself reopens, in epoch seconds, where the provider publishes it.")
-});
-var LimitResetClaimSchema = object({
-	result: _enum([
-		"reset",
-		"already_used",
-		"not_limited",
-		"ineligible",
-		"unavailable",
-		"error"
-	]).describe("What the provider did. Only `reset` reopened the window; every other value means nothing changed."),
-	nextAvailableAt: number$1().optional().describe("When another reset may be claimed, in epoch seconds, where the provider published it."),
-	detail: string().optional().describe("What went wrong, in words, for the two outcomes that are this sandbox's fault rather than the plan's.")
-});
-var ProviderRefusalSchema = object({
-	at: number$1().describe("When it refused, in milliseconds."),
-	kind: _enum([
-		"limit",
-		"auth",
-		"entitlement"
-	]).describe("Three different noes, kept apart because what fixes each is different. A spent allowance is answered by waiting; a refused credential by signing in again; and an entitlement refusal, where somebody has switched this off for your seat, by neither of those. That last one authenticates fine and reports healthy limits the whole time it refuses everything."),
-	message: string().describe("The provider's own words, verbatim. The only part that says which limit or which credential."),
-	account: string().optional().describe("Which account was serving, where that is known."),
-	model: string().optional().describe("Which model the refused turn was on, where that is known.")
-});
-var ProviderRefusalsSchema = object({ refusals: record(string(), ProviderRefusalSchema).describe("The most recent refusal per provider. Read alongside an account's usage: that says how full it was when last checked, this says whether it has since started saying no.") });
-var TranslatorAccountSchema = object({
-	name: string(),
-	label: string(),
-	usage: AccountUsageSchema.optional(),
-	cooling: object({
-		until: number$1().optional(),
-		reason: string().optional()
-	}).optional()
-});
-var TranslatorAccountsSchema = object(Object.fromEntries(TRANSLATOR_PROVIDERS.map((provider) => [provider, array(TranslatorAccountSchema)])));
-var AgentReplySchema = discriminatedUnion("kind", [
-	object({
-		kind: literal("plan").describe("Answering a plan the agent proposed."),
-		requestId: string().min(1).describe("Which card you are answering, from the frame that raised it."),
-		approve: boolean().describe("Whether to go ahead. Approving means the plan then runs without a prompt per tool, because being asked whether a plan you just approved may run its first command is not a question worth having."),
-		feedback: string().optional().describe("Why not, which goes back to the model as the reason.")
-	}),
-	object({
-		kind: literal("question").describe("Answering a question the agent asked."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		answers: record(string(), array(string())).optional().describe("What you chose, keyed by the question, with the chosen labels or your own words."),
-		cancelled: boolean().optional().describe("Dismissing it instead, which tells the agent to carry on using sensible defaults rather than leaving it waiting.")
-	}),
-	object({
-		kind: literal("permission").describe("Answering a request to use a tool."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		decision: _enum([
-			"once",
-			"always",
-			"deny"
-		]).describe("Once allows this call alone; always allows that whole tool for the rest of the conversation; no blocks it."),
-		feedback: string().optional().describe("Why not, which goes back to the model as the reason.")
-	}),
-	object({
-		kind: literal("browser_help").describe("Answering a request for help in the agent's browser: a captcha, a password it does not hold, a check on your phone."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		helped: boolean().describe("Whether you cleared it. Yes means the turn carries on from the page as you left it; no tells the agent so, and it moves on rather than waiting for ever."),
-		note: string().optional().describe("Anything the agent should know, which goes back to it either way.")
-	}),
-	object({
-		kind: literal("terminal_help").describe("Answering a request for help at a terminal: a code to type, a confirmation only a person can give."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		helped: boolean().describe("Whether you did it. Yes also hands the agent what the terminal now says, because a person answering a prompt is exactly the moment the agent cannot see."),
-		note: string().optional().describe("Anything the agent should know, which goes back to it either way.")
-	}),
-	object({
-		kind: literal("capability_offer").describe("Answering a request to connect something the agent needs."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		connect: boolean().describe("Yes keeps the agent waiting while you set it up, and it carries on the moment the connection comes alive. No tells it to continue without. The reply itself connects nothing: setting it up is still your own doing.")
-	}),
-	object({
-		kind: literal("payment_offer").describe("Answering a request to pay for something."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		approve: boolean().describe("Yes releases exactly one payment. Anything else spends nothing. This click is the only way the money can move.")
-	}),
-	object({
-		kind: literal("credential_offer").describe("Releasing a credential the agent may only use once a named person says so."),
-		requestId: string().min(1).describe("Which card you are answering."),
-		approve: boolean().describe("Yes releases it, as far as the card says (this one use, or the rest of the conversation). Only the people the card names can answer at all, yes or no.")
-	})
-]);
-var SteerSchema = object({
-	conversationId: string().min(1).describe("Which running conversation to interrupt."),
-	text: string().max(2e4).describe("What to say to it. It arrives mid-turn without stopping the turn."),
-	attachments: array(string().min(1)).max(20).optional().describe("Files to send with it, as workspace paths. A screenshot dropped in mid-turn with no words is a legitimate thing to send."),
-	editorContext: EditorContextSchema.optional().describe("What you have open, folded in so that pointing words resolve.")
-}).refine((steer) => steer.text.trim().length > 0 || (steer.attachments?.length ?? 0) > 0, { message: "text or attachments required" });
-var StopTurnSchema = object({ conversationId: string().min(1).describe("Which conversation's running turn to cancel.") });
-var ResumeRoutingSchema = object({
-	agent: AgentProviderSchema.describe("Which provider serves the re-run."),
-	harness: AgentHarnessSchema.describe("Which agentic loop runs it."),
-	account: string().optional().describe("Which of that provider's accounts pays for it. Leave it out for the first one."),
-	model: string().optional().describe("Which model. Leave it out to keep the one the refused turn named."),
-	carry: boolean().optional().describe("When the account changes, keep the provider session (the model keeps everything, and re-reads all of it once on the other account) rather than opening a fresh one seeded from the record. Ignored when the provider changes, or when nothing changes.")
-});
-var ResumeTurnSchema = object({
-	conversationId: string().min(1).describe("Which conversation's held turn to run again."),
-	routing: ResumeRoutingSchema.optional().describe("Who serves the re-run, when the conversation has been re-pointed since it was refused. Leave it out to run it on whatever the turn carried.")
-});
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/provider-subscriptions.js
-var KeyedProviderSchema = _enum(TRANSLATOR_PROVIDERS);
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/provider-oauth.js
-var OauthAccountSchema = object({
-	id: string().describe("The account's id, which is what a turn names to spend on it and what disconnecting takes."),
-	label: string().describe("What it is called here, which somebody can change."),
-	email: string().optional().describe("Who it signs in as, in the provider's own words. Kept beside the label rather than folded into it, so a renamed account can still say whose it is. Absent when the provider says nothing, which is exactly when renaming is the only answer."),
-	organization: string().optional().describe("Which organisation it belongs to, where the provider says."),
-	scope: string().optional().describe("What the credential is permitted to do, in the provider's terms."),
-	connectedAt: number$1().describe("When it was connected, in milliseconds."),
-	needsReauth: boolean().optional().describe("Its stored credential can no longer be renewed and somebody has to sign in again. Absent means healthy, or not checked yet."),
-	detail: string().optional().describe("Why, in words a person can act on."),
-	usage: AccountUsageSchema.optional().describe("How full its plan limits were when last measured, so a picker can show what is left before committing work to it. Absent until a reading exists, which reads as unknown rather than as nothing left.")
-});
-var OauthAccountListSchema = object({ accounts: array(OauthAccountSchema).describe("The connected accounts. Tokens never travel in this shape: being in this list is what connected means.") });
-var AccountListQuerySchema = object({ force: stringbool().default(false).describe("Measure the plan limits again before answering, rather than serving a recent reading. Slower, and the right thing when somebody has just changed a plan and is asking whether what they can see is still true.") });
-var AccountIdSchema = object({ id: string().min(1).describe("Which account.") });
-var AccountRenameSchema = object({
-	id: string().min(1).describe("Which account."),
-	label: string().max(80).describe("The new name. Blank restores the one derived from the sign-in, rather than leaving a nameless row.")
-});
-var LoginFlowSchema = _enum([
-	"device",
-	"redirect",
-	"paste"
-]);
-var LoginStartSchema = object({
-	url: string().describe("The page to open and sign in on."),
-	code: string().describe("The one-time code the page will ask for, where the vendor issues one. Blank when the page is already addressed to this attempt."),
-	state: string().describe("For a redirect sign-in, the marker in the address the browser lands on, so a pasted URL can be recognised as this attempt's. Blank otherwise."),
-	flow: LoginFlowSchema.describe("How this attempt ends. A device sign-in finishes by itself and you watch the account list; a redirect needs the address it landed on handed back; a paste needs the code the page showed."),
-	variant: string().describe("Which of the provider's estates this attempt signs in to. Blank for a provider with one."),
-	handshake: string().describe("This attempt's id, for finishing or abandoning it. Not a credential and not redeemable: the proof that completes the sign-in never leaves the sandbox."),
-	expiresAt: number$1().describe("When this attempt stops being answerable, in milliseconds, so a card can stop waiting instead of spinning.")
-});
-var LoginRequestSchema = object({ variant: string().min(1).optional().describe("Which estate to sign in to. Absent takes the provider's default.") });
-var LoginCompleteSchema = object({
-	handshake: string().min(1).describe("Which attempt this belongs to."),
-	code: string().optional().describe("The code the sign-in page showed, for a paste sign-in."),
-	redirectUrl: string().optional().describe("The address the browser was sent to, whole, for a redirect sign-in. The grant is inside it."),
-	label: string().optional().describe("What to call the account. Blank derives one from the sign-in.")
-});
-var LoginCompletedSchema = object({ account: OauthAccountSchema.optional().describe("The account it connected, where the sign-in ends here. Absent means keep watching the account list.") });
-var LoginCancelSchema = object({ handshake: string().min(1).describe("Which attempt to stop waiting on.") });
-var TranslatorStartSchema = object({
-	url: string().describe("The page to open."),
-	code: string().describe("The one-time code, where the provider uses one."),
-	state: string().min(1).describe("The handshake's id, which status reads and the finishing call sends back."),
-	flow: _enum(["device", "redirect"]).describe("Which shape this is. A device sign-in finishes by itself and you poll the attempt; a redirect needs the address it landed on handed back. Said outright rather than guessed at from whether a code happens to exist.")
-});
-var TranslatorStatusSchema = discriminatedUnion("status", [
-	object({ status: literal("wait") }),
-	object({ status: literal("ok") }),
-	object({
-		status: literal("error"),
-		error: string().min(1)
-	})
-]);
-var TranslatorCompleteSchema = object({
-	provider: KeyedProviderSchema.describe("Which provider."),
-	redirectUrl: string().min(1).describe("The address the browser was sent to, whole. The grant is inside it."),
-	state: string().min(1).describe("The handshake this belongs to. A mismatch is refused.")
-});
-var ModelBadgeSchema = _enum(["reasoning", "fast"]);
-var ModelsSchema = object({
-	models: array(object({
-		id: string().describe("What to name when asking for this model."),
-		label: string().describe("What to call it on screen."),
-		efforts: array(string()).optional().describe("The thinking levels it accepts, where the provider says. Empty means use your own defaults."),
-		description: string().optional().describe("What it is good for, in the provider's own words. Absent where the provider publishes only ids, which is the honest answer rather than something to paper over with a hand-written table."),
-		badges: array(ModelBadgeSchema).optional().describe("What it is known for, where the provider says so."),
-		contextWindow: number$1().optional().describe("How many tokens this model will accept in one request, where the server publishes it.")
-	})).describe("What this provider serves, in its own preference order, which is not rearranged here. Never empty."),
-	default: string().describe("Which one a fresh conversation starts on. Always present.")
-});
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/shared.js
-var OkSchema$1 = object({ ok: literal(true).describe("Always true. A route that answers this either did the thing or refused with a status; there is no third outcome to report.") });
-var MemberRoleSchema = _enum([
-	"viewer",
-	"collaborator",
-	"maintainer",
-	"owner"
-]);
-_enum([
-	"viewer",
-	"collaborator",
-	"maintainer"
-]);
-var DoorTokenSchema = object({ token: string().min(1).describe("The freshly minted credential. The previous one stopped working the moment this answered.") });
-var RepoParamSchema = object({ repo: string().describe("Which repository. \"root\" is the workspace itself; anything else is a repository's folder relative to the workspace root, URL-encoded.") });
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/accounts.contract.js
-var accountsContract = {
-	start: oc.route({
-		method: "POST",
-		path: "/accounts/{provider}/login/start",
-		summary: "Begin connecting an account",
-		description: "Hands back the page to sign in on, and the code it will ask for where there is one. The sandbox holds the proof and finishes what it can itself: a device sign-in lands in the account list on its own, a paste or a redirect needs one thing brought back to the finishing call."
-	}).input(NativeProviderParamSchema.extend(LoginRequestSchema.shape)).output(LoginStartSchema),
-	complete: oc.route({
-		method: "POST",
-		path: "/accounts/{provider}/login/complete",
-		summary: "Finish a sign-in with what the page handed back",
-		description: "Takes the code the page showed, or the address a redirect landed on, and finishes the attempt. Answers with the account where the exchange ends here; otherwise the sandbox still has a mint to do and the row appears in the account list."
-	}).input(NativeProviderParamSchema.extend(LoginCompleteSchema.shape)).output(LoginCompletedSchema),
-	cancel: oc.route({
-		method: "POST",
-		path: "/accounts/{provider}/login/cancel",
-		summary: "Abandon a sign-in",
-		description: "Stops waiting on a sign-in nobody completed. An abandoned attempt also expires on its own."
-	}).input(NativeProviderParamSchema.extend(LoginCancelSchema.shape)).output(OkSchema$1),
-	accounts: oc.route({
-		method: "GET",
-		path: "/accounts/{provider}",
-		summary: "Connected accounts of a provider",
-		description: "Each connected account with how full its plan limits were when last measured, where the provider publishes any. Ask for a fresh measurement and it takes one before answering, which is slower. The credentials themselves never travel: being in this list is what connected means."
-	}).input(NativeProviderParamSchema.extend(AccountListQuerySchema.shape)).output(OauthAccountListSchema),
-	rename: oc.route({
-		method: "POST",
-		path: "/accounts/{provider}/rename",
-		summary: "Rename an account",
-		description: "Changes the label one account shows under, so several are tellable apart. Blank restores the one derived from the sign-in."
-	}).input(NativeProviderParamSchema.extend(AccountRenameSchema.shape)).output(OauthAccountSchema),
-	disconnect: oc.route({
-		method: "POST",
-		path: "/accounts/{provider}/disconnect",
-		summary: "Disconnect an account",
-		description: "Clears one stored credential, and stops any sign-in still in flight for this provider. The others stay connected."
-	}).input(NativeProviderParamSchema.extend(AccountIdSchema.shape)).output(OkSchema$1)
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/activity.js
-var ActivityEventSchema = object({
-	id: string().describe("The entry's own id."),
-	at: number$1().describe("When it happened, in milliseconds. Also what you page by."),
-	provider: string().optional().describe("Which outside service, when one was involved. Absent for the sandbox's own events."),
-	account: string().optional().describe("Which account handled it. Absent for the sandbox's own events and for work run on a provider's default."),
-	direction: _enum([
-		"in",
-		"out",
-		"system"
-	]).describe("Whether something arrived, something went out, or the sandbox did it to itself."),
-	type: string().describe("Exactly what happened: a message received or sent, a reaction, a turn starting or ending, a rule doing something. A rule that ran and passed says nothing here, because a feed of green ticks is one the eye learns to skip."),
-	channelId: string().optional().describe("Which channel or thread it happened in."),
-	author: string().optional().describe("Who sent it, for something that arrived."),
-	actor: string().optional().describe("Who asked for the turn, as the sandbox verified it: a member's email, or token:<label> for a program's control token. Absent for a wake nothing asked for."),
-	content: string().optional().describe("The message, in full, whichever direction it went."),
-	method: string().optional().describe("The verb of an outgoing call."),
-	endpoint: string().optional().describe("The address of an outgoing call. Credentials travel in headers, so they are never here."),
-	sessionId: string().optional().describe("The provider session behind it."),
-	turnId: string().optional().describe("Ties one turn's entries together. A turn writes several, and read as separate rows they say one thing several times, so a feed groups on this."),
-	conversationId: string().optional().describe("Which conversation. This, rather than the provider session, is what the same agent means across a feed, because a session is retired whenever the model changes."),
-	title: string().optional().describe("What that conversation was called at the time. Copied in rather than looked up, because an audit entry must still read as words years later, after the conversation has been renamed or pruned."),
-	origin: AgentOriginSchema.optional().describe("What woke the conversation from outside, when something did. It is how a turn gets filed under the chat service that caused it rather than under the model that served it."),
-	automationIds: array(string()).optional().describe("Which automations were involved."),
-	outcome: _enum(["ok", "error"]).optional().describe("How it ended."),
-	error: string().optional().describe("What went wrong, when something did."),
-	extra: record(string(), unknown()).optional().describe("Whatever else the source had to say: attachments, participants, a recording's path. Shape varies by source.")
-});
-var ActivityQuerySchema = object({
-	provider: string().optional().describe("Narrow it to one outside service."),
-	limit: number().min(1).max(500).default(100).describe("How many entries to return."),
-	before: number().optional().describe("Only entries older than this timestamp, so paging walks backwards through the feed.")
-});
-var ActivityListSchema = object({ events: array(ActivityEventSchema).describe("The audit entries, newest first.") });
-var ActivityStatusSchema = object({
-	connections: array(object({
-		capabilityId: string().describe("Which connection."),
-		provider: string().describe("Which service it is."),
-		gateway: _enum([
-			"ready",
-			"connecting",
-			"pairing",
-			"disconnected",
-			"idle"
-		]).describe("Idle means it is up but has nothing to listen for, which is different from a connection that should be up and is not. Pairing means somebody started a sign-in and never finished it, which no amount of waiting will fix."),
-		lastError: string().optional().describe("The most recent thing that went wrong on it.")
-	})).describe("Each source feeding the record, and whether it is working. Probed now rather than remembered."),
-	voice: object({
-		channelId: string().describe("Which channel."),
-		channelName: string().describe("What it is called."),
-		startedAt: number$1().describe("When it joined, in milliseconds."),
-		participants: array(string()).describe("Who else is in it.")
-	}).optional().describe("A voice call the sandbox is currently in, when it is in one.")
-});
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/activity.contract.js
-var activityContract = {
-	list: oc.route({
-		method: "GET",
-		path: "/activity",
-		summary: "What the agent has done out in the world",
-		description: "The audit trail of actions taken on outside services. Read-only on purpose: entries are written by the sandbox alone, which is what makes it a record worth trusting."
-	}).input(ActivityQuerySchema).output(ActivityListSchema),
-	status: oc.route({
-		method: "GET",
-		path: "/activity/status",
-		summary: "Whether the audit trail is being kept",
-		description: "Which sources are feeding the record and whether each is working."
-	}).output(ActivityStatusSchema)
-};
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/secret-hosts.js
+var LABEL = String.raw`[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?`;
+var SECRET_HOST_PATTERN_RE = new RegExp(String.raw`^(?:\*\.${LABEL}(?:\.${LABEL})+|${LABEL}(?:\.${LABEL})*)$`);
 var secretKey = string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/).max(128);
 var SecretSetSchema = object({
 	key: secretKey.describe("The name to store it under, which is the name a process will find it by."),
@@ -15461,6 +10196,20 @@ var SecretSetSchema = object({
 var SecretKeysSchema = object({ keys: array(string()).describe("The names that exist here. Only the names: the values never leave the sandbox.") });
 var SecretKeyParamSchema = object({ key: secretKey.describe("Which secret, by name.") });
 var SecretRevealSchema = object({ value: string().describe("The value itself. The only place in this API one is ever returned.") });
+var SecretGenerateSchema = object({
+	key: secretKey.describe("The name to store it under: a name nothing here holds yet, since a new value would break whatever uses the old one."),
+	bytes: number$1().int().min(16).max(128).default(32).describe("How much randomness, in bytes. 32 unless whatever reads it demands a particular length."),
+	format: _enum([
+		"hex",
+		"base64url",
+		"alnum"
+	]).default("hex").describe("How it is spelled: `hex` (0-9, a-f), `base64url` (letters, digits, - and _), or `alnum` (letters and digits only, for readers that refuse symbols).")
+});
+var SecretGeneratedSchema = object({
+	key: string().describe("The name it is stored under."),
+	length: number$1().int().describe("How many characters it is, which a reader's validation may care about."),
+	stored: _enum(["env", "sandbox"]).describe("Where it was kept: desired-state/.env once DevOps is active, the sandbox's own store before that.")
+});
 var CredentialGateScopeSchema = _enum(["use", "conversation"]).describe("How far one release goes: `use` asks again every single time (one click releases exactly one use), `conversation` covers the rest of this conversation and is forgotten when the daemon restarts.");
 var CredentialGateKindSchema = _enum(["secret", "capability"]).describe("Whether this gate covers one stored secret, by the name a reference carries, or one whole connected capability, by its id.");
 var CredentialLaneSchema = _enum([
@@ -15477,7 +10226,7 @@ var CredentialGateSchema = object({
 	scope: CredentialGateScopeSchema
 });
 var CredentialGatesSchema = object({ gates: array(CredentialGateSchema).describe("Every gate in force. Names, subjects and approver addresses only: this answer never carries a credential.") });
-var CredentialGateSubjectParamSchema = object({ subject: string().min(1).describe("Which gate, by the secret name or capability id it covers.") });
+var CredentialGuardSubjectParamSchema = object({ subject: string().min(1).describe("Which gate, by the secret name or capability id it covers.") });
 var CredentialRequestSchema = object({
 	subject: string().min(1).describe("What to ask for: the secret's name, or the connected capability's id."),
 	why: string().max(280).optional().describe("One line on what it is for. The only words on the card that are the agent's."),
@@ -15487,6 +10236,27 @@ var CredentialGrantSchema = object({
 	granted: literal(true).describe("Always true: a refusal is an error with a sentence, never a `false` here."),
 	approvedBy: string().describe("Who released it."),
 	message: string().describe("What the grant means in practice, and what to do next.")
+});
+var SecretHostSchema = string().max(253).regex(SECRET_HOST_PATTERN_RE).describe("One host, `api.github.com`, or every host under a domain, `*.github.com` (which does not include github.com itself). Lowercase, no scheme or port.");
+var SecretHostSourceSchema = _enum(["owner", "connector"]).describe("Who set it: the owner, or the connector the credential belongs to, whose guard is on with its own service's hosts until the owner changes it.");
+var SecretHostGuardsSchema = object({ guards: array(object({
+	subject: string().min(1).describe("Which secret, by the name its reference carries, or which connected capability, by its id."),
+	kind: CredentialGateKindSchema,
+	guard: boolean().describe("On: a use off the list, or whose destination cannot be read, asks a person first. Off: it never asks."),
+	hosts: array(SecretHostSchema).max(64).describe("Where it goes without asking while the guard is on. Empty with the guard on: every use asks. Kept while it is off, for turning it back on."),
+	source: SecretHostSourceSchema
+})).describe("Every secret whose host guard has been set, or that a connector guards by default. One not listed has its guard off. Names and hosts only, never a value.") });
+var SecretHostGuardSetSchema = object({
+	subject: string().min(1).describe("Which secret, by name, or which connected capability, by id."),
+	kind: CredentialGateKindSchema.optional().describe("Whether the subject is a secret or a capability. Worked out from the name when absent."),
+	guard: boolean().describe("Whether a use off the list, or whose destination cannot be read, must ask a person first."),
+	hosts: array(SecretHostSchema).max(64).describe("The whole new list. Turning the guard on or taking hosts away is open to anybody who may use secrets; turning it off or adding a host is the owner's to approve."),
+	conversationId: string().optional().describe("Which conversation to ask the owner in, when the change needs them. The CLI fills this from the running turn.")
+});
+var SecretHostGuardSetResultSchema = object({
+	guard: boolean().describe("Whether the guard is on now."),
+	hosts: array(string()).describe("Where it goes without asking while the guard is on."),
+	approvedBy: string().optional().describe("Who approved the change, when it needed the owner's click. Absent when nobody had to.")
 });
 var SecretInventorySchema = object({ entries: array(object({
 	key: string().describe("What identifies it. Unique across the whole inventory, so several accounts of one provider each get their own entry."),
@@ -15525,10 +10295,15 @@ var SecretInventorySchema = object({ entries: array(object({
 	gate: object({
 		approvers: array(string()).describe("Who may release it, by email. Nobody else can, whatever their role."),
 		scope: CredentialGateScopeSchema
-	}).optional().describe("Who has to release this before the agent can use it, and for how long one release lasts. Absent when it is not gated.")
+	}).optional().describe("Who has to release this before the agent can use it, and for how long one release lasts. Absent when it is not gated."),
+	hosts: object({
+		guard: boolean().describe("Whether a use off the list, or whose destination cannot be read, asks a person first."),
+		list: array(string()).describe("The hosts it goes to unasked while the guard is on, each exact or `*.domain`."),
+		source: SecretHostSourceSchema
+	}).optional().describe("Its host guard. Absent when none was ever set and no connector sets one: the guard is off.")
 })).describe("One entry per secret this sandbox knows about, from every place they live. No values, ever.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/events/cards.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/events/requests.js
 var AskOptionSchema = object({
 	label: string().describe("The choice, in a few words."),
 	description: string().describe("What picking it means."),
@@ -15543,11 +10318,33 @@ var AskQuestionSchema = object({
 var ProgramAskSchema = object({
 	text: string().describe("What would run."),
 	language: _enum(["bash", "javascript"]).describe("Which of the two backends it is written for, named as the grammar that colours it."),
-	truncated: boolean().describe("Whether this is an excerpt of a longer program, so the card can say so instead of ending mid-word. An excerpt always carries the flagged fragment: the beginning, then a window around the fragment, with any skipped middle written into the text as a bracketed count."),
+	truncated: boolean().describe("Whether this is an excerpt of a longer program, so the request can say so instead of ending mid-word. An excerpt always carries the flagged fragment: the beginning, then a window around the fragment, with any skipped middle written into the text as a bracketed count."),
 	spans: array(object({
 		start: number$1().int().nonnegative(),
 		end: number$1().int().nonnegative()
 	})).describe("Which fragments of the text the pattern match fired on: every matched class's, or, under the hard rule, only the class the title names. Offsets into text, in order, never overlapping.")
+});
+var ChildRunSchema = object({
+	provider: AgentProviderSchema.describe("Which provider serves it."),
+	model: string().min(1).describe("Which of that provider's models."),
+	harness: AgentHarnessSchema.optional().describe("Which agentic loop runs it. Absent is the provider's own."),
+	account: string().optional().describe("Which of that provider's connected accounts pays for it. Absent is whichever has the most room when it starts."),
+	effort: string().optional().describe("How hard it thinks, where the model offers a choice. Absent is the model's own default."),
+	thinking: boolean().optional().describe("Whether it reasons before it answers, where the model offers the choice."),
+	fast: boolean().optional().describe("Whether it asks for the faster rate, at the higher price.")
+});
+var ChildMoveSchema = _enum([
+	"spawn",
+	"send",
+	"answer"
+]);
+var ChildAgentAskSchema = ChildRunSchema.extend({
+	move: ChildMoveSchema.describe("What the parent asks to do: start a new child, say something to one it started, or answer one's question."),
+	child: string().optional().describe("The child's id, for one that already exists."),
+	task: string().optional().describe("What the child is for, in a line."),
+	message: string().optional().describe("What the parent would say to it: the message it sends, or the answers it gives. Clipped for the request."),
+	on: string().optional().describe("Which machine it runs on, when one is named: a runner, or \"here\" for this sandbox."),
+	proposed: ChildRunSchema.optional().describe("What the agent asked to start it on, when the owner started it on something else instead. Present only once the request has settled that way.")
 });
 var PermissionAskSchema = object({
 	toolName: string().describe("Which tool it wants to use."),
@@ -15557,13 +10354,15 @@ var PermissionAskSchema = object({
 	reason: string().optional().describe("Why it is asking at all: a rule, the current mode, something that looked risky."),
 	path: string().optional().describe("Which file it concerns, when it concerns one."),
 	alwaysLabel: string().optional().describe("The wording for an always-allow answer. Present only when there is something an always could actually remember; without it the only answers are once and no."),
-	program: ProgramAskSchema.optional().describe("The program this card is holding, when the card is about one. Present on a command gate's card and absent on every other permission ask."),
+	alwaysAsks: literal(true).optional().describe("This request asks every time: an owner's hard rule, a sandbox restart other conversations would feel, or a change only the owner may make. Allow everything in this conversation is not offered on it and never answers it."),
+	program: ProgramAskSchema.optional().describe("The program this request is holding, when the request is about one. Present on a command gate's request and absent on every other permission ask."),
+	child: ChildAgentAskSchema.optional().describe("The subagent this request would start or reach, and what it runs on. Present on the request to start or reach a subagent and absent on every other permission ask."),
 	explain: string().optional().describe("One plain sentence saying what the program does and why it is being asked about, where the title says something else. Written by the judge that read your safety policy, never by the agent being gated.")
 });
 var CapabilityOfferSchema = object({
-	card: string().describe("Which connection is being asked for."),
+	entry: string().describe("Which catalog entry is being asked for."),
 	name: string().describe("What it is called, as the catalogue titles it rather than as the agent named it."),
-	why: string().optional().describe("The agent's case for connecting it, and the only words on this card that are the agent's.")
+	why: string().optional().describe("The agent's case for connecting it, and the only words on this request that are the agent's.")
 });
 var PaymentOfferSchema = object({
 	url: string().describe("What is being paid for."),
@@ -15575,15 +10374,15 @@ var PaymentOfferSchema = object({
 	amountUsd: string().describe("The exact price. Not a ceiling: this scheme has no ranges, so this is the whole spend."),
 	spentTodayUsd: string().describe("What has already gone out today."),
 	dailyCapUsd: string().describe("What may go out in a day."),
-	why: string().optional().describe("The agent's case for paying, and the only words on this card that are the agent's.")
+	why: string().optional().describe("The agent's case for paying, and the only words on this request that are the agent's.")
 });
 var CredentialOfferSchema = object({
 	subject: string().describe("Which credential is being asked for."),
 	kind: CredentialGateKindSchema,
 	lane: CredentialLaneSchema,
 	detail: string().optional().describe("Where it would go: the start of the command, the site, or what is being mounted. Never a value: the command still reads as a reference at this point."),
-	why: string().optional().describe("The agent's case for using it, and the only words on this card that are the agent's."),
-	approvers: array(string()).describe("Who may release it. A click from anyone else is refused and leaves the card standing."),
+	why: string().optional().describe("The agent's case for using it, and the only words on this request that are the agent's."),
+	approvers: array(string()).describe("Who may release it. A click from anyone else is refused and leaves the request standing."),
 	scope: CredentialGateScopeSchema
 });
 var AgentCommandSchema = object({
@@ -15646,7 +10445,7 @@ var ToolCallContentSchema = discriminatedUnion("type", [
 		path: string().describe("Where it is, as a workspace path. A path rather than the bytes, because the workspace already serves it, sending it inline would bloat every stored record, and this way the picture stays openable afterwards.")
 	})
 ]);
-var CardDocumentSchema = object({
+var RequestDocumentSchema = object({
 	path: string().describe("Where it lives, as a workspace path."),
 	title: string().describe("What it is called: its opening heading, or its file name."),
 	markdown: string().describe("The document itself."),
@@ -15654,37 +10453,37 @@ var CardDocumentSchema = object({
 	plan: boolean().optional().describe("It is one of the CLI's plan files, written to be approved rather than merely read.")
 });
 var REQUEST_ID = string().describe("What to send back when you answer.");
-var planCard = {
+var planRequest = {
 	requestId: REQUEST_ID,
 	text: string().describe("The plan itself."),
-	document: CardDocumentSchema.optional().describe("The write-up this plan refers to, when the plan itself is a pointer to one.")
+	document: RequestDocumentSchema.optional().describe("The write-up this plan refers to, when the plan itself is a pointer to one.")
 };
-var questionCard = {
+var questionRequest = {
 	requestId: REQUEST_ID,
 	questions: array(AskQuestionSchema).describe("What it wants to know."),
-	document: CardDocumentSchema.optional().describe("The document this turn wrote and is asking about, so the choice can be read beside it.")
+	document: RequestDocumentSchema.optional().describe("The document this turn wrote and is asking about, so the choice can be read beside it.")
 };
-var permissionCard = { requestId: REQUEST_ID };
-var browserHelpCard = {
+var permissionRequest = { requestId: REQUEST_ID };
+var browserHelpRequest = {
 	requestId: string(),
 	session: string(),
 	account: string(),
 	message: string()
 };
-var terminalHelpCard = {
+var terminalHelpRequest = {
 	requestId: string(),
 	session: string(),
 	message: string()
 };
-var capabilityOfferCard = {
+var capabilityOfferRequest = {
 	requestId: string(),
 	offer: CapabilityOfferSchema
 };
-var paymentOfferCard = {
+var paymentOfferRequest = {
 	requestId: string(),
 	offer: PaymentOfferSchema
 };
-var credentialOfferCard = {
+var credentialOfferRequest = {
 	requestId: string(),
 	offer: CredentialOfferSchema
 };
@@ -15702,26 +10501,532 @@ var CredentialReceiptSchema = object({
 	outcome: _enum(["released", "refused"]),
 	approvedBy: string().optional()
 });
-var PlanCardSchema = object({
+var PlanRequestSchema = object({
 	kind: literal("plan").describe("The agent has written a plan and is waiting for a yes."),
-	...planCard
+	...planRequest
 });
-var QuestionCardSchema = object({
+var QuestionRequestSchema = object({
 	kind: literal("question").describe("The agent has asked you something and is waiting."),
-	...questionCard
+	...questionRequest
 });
-var PermissionCardSchema = PermissionAskSchema.extend({
+var PermissionRequestSchema = PermissionAskSchema.extend({
 	kind: literal("permission").describe("The agent wants to use a tool it needs permission for."),
-	...permissionCard
+	...permissionRequest
 });
 discriminatedUnion("kind", [
-	PlanCardSchema,
-	QuestionCardSchema,
-	PermissionCardSchema
+	PlanRequestSchema,
+	QuestionRequestSchema,
+	PermissionRequestSchema
 ]);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+constants@1.281.0/node_modules/@intentic/constants/dist/index.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/plan-limits.js
+var WindowGatesSchema = union([
+	literal("all"),
+	literal("none"),
+	object({ models: array(string().min(1)).min(1) })
+]);
+var UsageWindowSchema = object({
+	kind: string(),
+	label: string().optional(),
+	utilization: number$1(),
+	resetsAt: number$1().optional(),
+	gates: WindowGatesSchema
+});
+var UsageUnreadSchema = object({
+	since: number$1().describe("When re-reading this account first failed, in milliseconds. It has failed on every attempt since."),
+	reason: string().describe("Why, in the provider's own words where it gave some (\"Verify your account to continue.\"). Short enough to print; never a pasted response body.")
+});
+var AccountUsageSchema = object({
+	windows: array(UsageWindowSchema),
+	measuredAt: number$1(),
+	unread: UsageUnreadSchema.optional().describe("Present while re-reading this account keeps failing: these windows are the last reading that succeeded, and `measuredAt` will not move until a read succeeds again.")
+});
+var AccountFixSchema = _enum([
+	"reconnect",
+	"admin",
+	"verify",
+	"wait"
+]);
+var AccountStateSchema = discriminatedUnion("kind", [
+	object({
+		kind: literal("ready"),
+		room: number$1().describe("How much of the fullest pool that gates the turn is left, in percent (above 0, up to 100). Pickers take the most room.")
+	}),
+	object({
+		kind: literal("spent"),
+		reopensAt: number$1().optional().describe("When every full pool has reopened, in epoch seconds, where the plan publishes it. Absent means unknown, never now.")
+	}),
+	object({
+		kind: literal("blocked"),
+		fix: AccountFixSchema.describe("Who can make it serve again: `reconnect` (sign in again on this sandbox), `admin` (an organisation admin hands the seat back), `verify` (the account's owner confirms it on the provider's page, at `url`), or `wait` (it lifts by itself, at `until` where known)."),
+		reason: string().describe("Why, in words a person can act on: the provider's own sentence where it gave one."),
+		until: number$1().optional().describe("When waiting lifts it, in epoch seconds, for `wait` only."),
+		url: string().optional().describe("The provider's page where the account's owner lifts it, for `verify` only.")
+	}),
+	object({ kind: literal("unknown").describe("Nothing blocks it and nothing has been measured: usable, never read as room.") })
+]);
+var LimitResetStatusSchema = object({
+	available: boolean().describe("Whether the provider will reopen this account's session window right now. The only thing a button may be drawn from."),
+	reason: string().optional().describe("Why not, in the provider's own word, when it gave one. Absent when it is available, or when the provider said nothing."),
+	nextAvailableAt: number$1().optional().describe("When the next reset may be claimed, in epoch seconds, where the provider publishes it. Absent means unknown, never 'now'."),
+	weeklyResetsAt: number$1().optional().describe("When the weekly allowance itself reopens, in epoch seconds, where the provider publishes it.")
+});
+var LimitResetClaimSchema = object({
+	result: _enum([
+		"reset",
+		"already_used",
+		"not_limited",
+		"ineligible",
+		"unavailable",
+		"error"
+	]).describe("What the provider did. Only `reset` reopened the window; every other value means nothing changed."),
+	nextAvailableAt: number$1().optional().describe("When another reset may be claimed, in epoch seconds, where the provider published it."),
+	detail: string().optional().describe("What went wrong, in words, for the two outcomes that are this sandbox's fault rather than the plan's.")
+});
+var ProviderRefusalSchema = object({
+	at: number$1().describe("When it refused, in milliseconds."),
+	kind: _enum([
+		"limit",
+		"auth",
+		"entitlement"
+	]).describe("Three different noes, kept apart because what fixes each is different. A spent allowance is answered by waiting; a refused credential by signing in again; and an entitlement refusal, where somebody has switched this off for your seat, by neither of those. That last one authenticates fine and reports healthy limits the whole time it refuses everything."),
+	message: string().describe("The provider's own words, verbatim. The only part that says which limit or which credential."),
+	account: string().optional().describe("Which account was serving, where that is known."),
+	model: string().optional().describe("Which model the refused turn was on, where that is known."),
+	resetsAt: number$1().optional().describe("When the provider said to try again, in epoch seconds, for a spent allowance where it named one. Until then the refusal stands whatever a reading says; after it, it is over.")
+});
+var ProviderRefusalsSchema = object({ refusals: record(string(), ProviderRefusalSchema).describe("The most recent refusal per provider. Read alongside an account's usage: that says how full it was when last checked, this says whether it has since started saying no.") });
+var TranslatorAccountSchema = object({
+	name: string(),
+	label: string(),
+	usage: AccountUsageSchema.optional(),
+	cooling: object({
+		until: number$1().optional(),
+		reason: string().optional(),
+		verify: string().optional()
+	}).optional(),
+	state: AccountStateSchema.optional().describe("Whether it can serve a turn now, judged from everything above plus the provider's last refusal. Absent from a daemon older than this field.")
+});
+var TranslatorAccountsSchema = object(Object.fromEntries(TRANSLATOR_PROVIDERS.map((provider) => [provider, array(TranslatorAccountSchema)])));
+var AgentReplySchema = discriminatedUnion("kind", [
+	object({
+		kind: literal("plan").describe("Answering a plan the agent proposed."),
+		requestId: string().min(1).describe("Which card you are answering, from the frame that raised it."),
+		approve: boolean().describe("Whether to go ahead. Approving means the plan then runs without a prompt per tool, because being asked whether a plan you just approved may run its first command is not a question worth having."),
+		feedback: string().optional().describe("Why not, which goes back to the model as the reason.")
+	}),
+	object({
+		kind: literal("question").describe("Answering a question the agent asked."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		answers: record(string(), array(string())).optional().describe("What you chose, keyed by the question, with the chosen labels or your own words."),
+		attachments: record(string(), array(string())).optional().describe("Files that go with your own-words answer, keyed by the question, as workspace-relative paths of files already uploaded (a screenshot, a mock-up)."),
+		cancelled: boolean().optional().describe("Dismissing it instead, which tells the agent to carry on using sensible defaults rather than leaving it waiting.")
+	}),
+	object({
+		kind: literal("permission").describe("Answering a request to use a tool."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		decision: _enum([
+			"once",
+			"always",
+			"everything",
+			"deny"
+		]).describe("Once allows this call alone; always allows what the request's always-label names (a tool, a rule, a secret) for the rest of the conversation; everything allows this call and every later request in this conversation that an allow-once could settle, until it is taken back on Grants; no blocks it. A request that always asks (alwaysAsks) reads everything as once."),
+		feedback: string().optional().describe("Why not, which goes back to the model as the reason."),
+		child: ChildRunSchema.optional().describe("For a request to start a subagent: what to start it on instead of what the agent asked for. It replaces the whole run (model, account, effort and the rest), not only the fields it names. Ignored with a no, and on any other request.")
+	}),
+	object({
+		kind: literal("browser_help").describe("Answering a request for help in the agent's browser: a captcha, a password it does not hold, a check on your phone."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		helped: boolean().describe("Whether you cleared it. Yes means the turn carries on from the page as you left it; no tells the agent so, and it moves on rather than waiting for ever."),
+		note: string().optional().describe("Anything the agent should know, which goes back to it either way.")
+	}),
+	object({
+		kind: literal("terminal_help").describe("Answering a request for help at a terminal: a code to type, a confirmation only a person can give."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		helped: boolean().describe("Whether you did it. Yes also hands the agent what the terminal now says, because a person answering a prompt is exactly the moment the agent cannot see."),
+		note: string().optional().describe("Anything the agent should know, which goes back to it either way.")
+	}),
+	object({
+		kind: literal("capability_offer").describe("Answering a request to connect something the agent needs."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		connect: boolean().describe("Yes keeps the agent waiting while you set it up, and it carries on the moment the connection comes alive. No tells it to continue without. The reply itself connects nothing: setting it up is still your own doing.")
+	}),
+	object({
+		kind: literal("payment_offer").describe("Answering a request to pay for something."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		approve: boolean().describe("Yes releases exactly one payment. Anything else spends nothing. This click is the only way the money can move.")
+	}),
+	object({
+		kind: literal("credential_offer").describe("Releasing a credential the agent may only use once a named person says so."),
+		requestId: string().min(1).describe("Which card you are answering."),
+		approve: boolean().describe("Yes releases it, as far as the card says (this one use, or the rest of the conversation). Only the people the card names can answer at all, yes or no.")
+	})
+]);
+var PARK_KINDS = AgentReplySchema.options.map((option) => option.shape.kind.value);
+new Set(PARK_KINDS);
+var SteerSchema = object({
+	conversationId: string().min(1).describe("Which running conversation to interrupt."),
+	text: string().max(2e4).describe("What to say to it. It arrives mid-turn without stopping the turn."),
+	messageId: string().min(1).max(128).optional().describe("Your id for this message. Sending again under an id the sandbox already took is answered with what it did with it the first time, never a second delivery. Leave it out and the sandbox names the message itself."),
+	attachments: array(string().min(1)).max(20).optional().describe("Files to send with it, as workspace paths. A screenshot dropped in mid-turn with no words is a legitimate thing to send."),
+	mentions: array(string().min(1)).max(20).optional().describe("Workspace paths the message mentions with `@`. Unlike attachments, one that escapes the workspace or names no file is ignored rather than refused."),
+	editorContext: EditorContextSchema.optional().describe("What you have open, folded in so that pointing words resolve.")
+}).refine((steer) => steer.text.trim().length > 0 || (steer.attachments?.length ?? 0) > 0, { message: "text or attachments required" });
+var StopTurnSchema = union([
+	object({
+		conversationId: string().min(1).describe("Which conversation's running turn to cancel."),
+		run: string().min(1).describe("The run you mean to cancel, as starting or attaching to it named it. If another turn has started since, nothing is cancelled and the answer names the one running instead.")
+	}),
+	object({
+		conversationId: string().min(1).describe("Which conversation's running turn to cancel."),
+		messageId: string().min(1).describe("The message you sent, while its run is not named yet: cancels the turn it is in. If none is, nothing is cancelled: the message has not become a turn, or its turn has already ended.")
+	}),
+	object({
+		conversationId: string().min(1).describe("Which conversation's running turn to cancel."),
+		live: literal(true).describe("Cancel whatever turn is running now, whichever that is. Only for a turn you cannot name: one that has no run to attach to.")
+	})
+]);
+var StopResultSchema = object({
+	stopped: boolean().describe("Whether a turn was cancelled."),
+	running: string().optional().describe("The run that is live instead of the one you named, left running. Absent when nothing else runs.")
+});
+var ResumeRoutingSchema = object({
+	agent: AgentProviderSchema.describe("Which provider serves the re-run."),
+	harness: AgentHarnessSchema.describe("Which agentic loop runs it."),
+	account: string().optional().describe("Which of that provider's accounts pays for it. Leave it out to keep the account the conversation runs on, or, on another provider, to take whichever of its accounts can serve with the most room. Moving to another account of the same provider is `switchAccount`'s job; naming one here still works."),
+	model: string().optional().describe("Which model. Leave it out to keep the one the refused turn named."),
+	carry: boolean().optional().describe("When the account changes, keep the provider session (the model keeps everything, and re-reads all of it once on the other account) rather than opening a fresh one seeded from the record. Ignored when the provider changes, or when nothing changes.")
+});
+var ResumeTurnSchema = object({
+	conversationId: string().min(1).describe("Which conversation's held turn to run again."),
+	routing: ResumeRoutingSchema.optional().describe("Who serves the re-run, when the conversation has been re-pointed since it was refused. Leave it out to run it on whatever the turn carried.")
+});
+var QueuedMessageRefSchema = object({
+	conversationId: string().min(1).describe("Whose queue."),
+	id: string().min(1).describe("Which waiting message."),
+	revision: number$1().int().nonnegative().describe("The message's revision as you read it. If it has been changed since, from this window or another, nothing happens.")
+});
+var QueueEditSchema = QueuedMessageRefSchema.extend({ text: string().describe("What the message should say instead. It keeps its place in the queue.") });
+var QueueResumeSchema = object({
+	conversationId: string().min(1).describe("Whose queue to let go."),
+	routing: ResumeRoutingSchema.optional().describe("Who serves the turn the waiting messages start, when the conversation has been re-pointed since they were queued: the usual answer to a refusal that held them. Leave it out to send them as they were queued.")
+});
+var QueueScheduleSchema = object({
+	conversationId: string().min(1).describe("Whose queue."),
+	sendAt: number$1().int().positive().optional().describe("Send what waits at this instant (epoch milliseconds) instead. At most a month ahead; an instant already past sends it now."),
+	sendAfter: ConversationIdSchema.optional().describe("Send what waits once that conversation has finished and all of its work has landed in the workspace, instead. Sent now when it has nothing running and nothing left to land.")
+}).refine((input) => input.sendAt === void 0 !== (input.sendAfter === void 0), { message: "name exactly one of sendAt and sendAfter" }).refine((input) => input.sendAfter !== input.conversationId, { message: "a conversation cannot wait for its own work to land" });
+var SwitchAccountSchema = object({
+	conversationId: string().min(1).describe("Which conversation to move."),
+	account: string().min(1).describe("Which of the conversation's provider's connected accounts pays for its turns from now on."),
+	carry: boolean().optional().describe("Keep the provider session across the move (the model keeps everything, and re-reads all of it once on the other account) rather than opening a fresh one seeded from the record."),
+	run: boolean().optional().describe("Also run a turn that a spent allowance, a stop or a refusal is holding, at once on the new account. Leave it out to only move the conversation: a held turn stays held until something asks for it.")
+});
+var AccountSwitchedSchema = object({ run: string().optional().describe("The run that re-ran a held turn on the new account, when one was waiting: attach to it. Absent when nothing was held.") });
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/loopback-catch.js
+var LoopbackCatchSchema = object({
+	id: string().min(1),
+	host: _enum(["localhost", "127.0.0.1"]),
+	port: number$1().int().min(1).max(65535),
+	path: string().startsWith("/"),
+	expiresAt: number$1(),
+	title: string().min(1)
+}).strict();
+var LoopbackCatchEventSchema = discriminatedUnion("type", [
+	object({ type: literal("listening") }),
+	object({
+		type: literal("busy"),
+		reason: string()
+	}),
+	object({
+		type: literal("landed"),
+		url: string().min(1)
+	})
+]);
+var SignInCatcherSchema = object({
+	kind: _enum(["device", "browser"]),
+	label: string().min(1)
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/provider-subscriptions.js
+var KeyedProviderSchema = _enum(TRANSLATOR_PROVIDERS);
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/provider-oauth.js
+var OauthAccountSchema = object({
+	id: string().describe("The account's id, which is what a turn names to spend on it and what disconnecting takes."),
+	label: string().describe("What it is called here, which somebody can change."),
+	email: string().optional().describe("Who it signs in as, in the provider's own words. Kept beside the label rather than folded into it, so a renamed account can still say whose it is. Absent when the provider says nothing, which is exactly when renaming is the only answer."),
+	organization: string().optional().describe("Which organisation it belongs to, where the provider says."),
+	variant: string().optional().describe("Which of the provider's estates it signs in to, for a provider selling more than one (Z.ai's international or mainland plan). With the email and organisation, it is who the account is: a sign-in matching all three lands on this account again, same id."),
+	scope: string().optional().describe("What the credential is permitted to do, in the provider's terms."),
+	connectedAt: number$1().describe("When it was connected, in milliseconds."),
+	needsReauth: boolean().optional().describe("Its stored credential can no longer be renewed and somebody has to sign in again. Absent means healthy, or not checked yet."),
+	detail: string().optional().describe("Why, in words a person can act on."),
+	seatRefusal: string().optional().describe("Its organisation has switched it off for this harness (no seat): it still signs in and its plan limits may still read, but no turn can run on it until an admin gives access back. The provider's own sentence; cleared by the next turn that runs on it. Absent means no refusal is on file."),
+	usage: AccountUsageSchema.optional().describe("How full its plan limits were when last measured, so a picker can show what is left before committing work to it. Absent until a reading exists, which reads as unknown rather than as nothing left."),
+	state: AccountStateSchema.optional().describe("Whether it can serve a turn now, judged once from the sign-in, the seat, the provider's last refusal and the plan limits: the verdict every picker in the sandbox uses. Read this rather than the fields it was judged from. Absent from a daemon older than this field.")
+});
+var OauthAccountListSchema = object({ accounts: array(OauthAccountSchema).describe("The connected accounts. Tokens never travel in this shape: being in this list is what connected means.") });
+var AccountListQuerySchema = object({ force: stringbool().default(false).describe("Measure the plan limits again before answering, rather than serving a recent reading. Slower, and the right thing when somebody has just changed a plan and is asking whether what they can see is still true.") });
+var AccountIdSchema = object({ id: string().min(1).describe("Which account.") });
+var AccountRenameSchema = object({
+	id: string().min(1).describe("Which account."),
+	label: string().max(80).describe("The new name. Blank restores the one derived from the sign-in, rather than leaving a nameless row.")
+});
+var LoginFlowSchema = _enum([
+	"device",
+	"redirect",
+	"paste"
+]);
+var LoginStartSchema = object({
+	url: string().describe("The page to open and sign in on."),
+	code: string().describe("The one-time code the page will ask for, where the vendor issues one. Blank when the page is already addressed to this attempt."),
+	state: string().describe("For a redirect sign-in, the marker in the address the browser lands on, so a pasted URL can be recognised as this attempt's. Blank otherwise."),
+	flow: LoginFlowSchema.describe("How this attempt ends. A device sign-in finishes by itself and you watch the account list; a redirect needs the address it landed on handed back; a paste needs the code the page showed."),
+	variant: string().describe("Which of the provider's estates this attempt signs in to. Blank for a provider with one."),
+	handshake: string().describe("This attempt's id, for finishing or abandoning it. Not a credential and not redeemable: the proof that completes the sign-in never leaves the sandbox."),
+	expiresAt: number$1().describe("When this attempt stops being answerable, in milliseconds, so a card can stop waiting instead of spinning."),
+	catchers: array(SignInCatcherSchema).optional().describe("Who is watching for where the browser lands, on the machine it is on: a device or a browser of yours. Listed means the sign-in finishes by itself once the page is approved there; the paste stays open for a browser anywhere else. Empty or absent means nothing is watching.")
+});
+var LoginRequestSchema = object({ variant: string().min(1).optional().describe("Which estate to sign in to. Absent takes the provider's default.") });
+var LoginCompleteSchema = object({
+	handshake: string().min(1).describe("Which attempt this belongs to."),
+	code: string().optional().describe("The code the sign-in page showed, for a paste sign-in."),
+	redirectUrl: string().optional().describe("The address the browser was sent to, whole, for a redirect sign-in. The grant is inside it."),
+	label: string().optional().describe("What to call the account. Blank derives one from the sign-in.")
+});
+var LoginCompletedSchema = object({ account: OauthAccountSchema.optional().describe("The account it connected, where the sign-in ends here. Absent means keep watching the account list.") });
+var LoginStatusSchema = discriminatedUnion("status", [
+	object({ status: literal("wait") }),
+	object({
+		status: literal("ok"),
+		account: OauthAccountSchema.optional().describe("The account it connected. Absent where the row lands in the account list a little later.")
+	}),
+	object({
+		status: literal("error"),
+		error: string().min(1).describe("Why it failed, to show as it is.")
+	})
+]);
+var LoginStatusQuerySchema = object({ handshake: string().min(1).describe("Which attempt.") });
+var LoginCancelSchema = object({ handshake: string().min(1).describe("Which attempt to stop waiting on.") });
+var TranslatorStartSchema = object({
+	url: string().describe("The page to open."),
+	code: string().describe("The one-time code, where the provider uses one."),
+	state: string().min(1).describe("The handshake's id, which status reads and the finishing call sends back."),
+	flow: _enum(["device", "redirect"]).describe("Which shape this is. A device sign-in finishes by itself and you poll the attempt; a redirect needs the address it landed on handed back. Said outright rather than guessed at from whether a code happens to exist."),
+	catchers: array(SignInCatcherSchema).optional().describe("Who is watching for where the browser lands, on the machine it is on: a device or a browser of yours. Listed means the sign-in finishes by itself once the page is approved there; the paste stays open for a browser anywhere else. Empty or absent means nothing is watching.")
+});
+var TranslatorStatusSchema = discriminatedUnion("status", [
+	object({ status: literal("wait") }),
+	object({ status: literal("ok") }),
+	object({
+		status: literal("error"),
+		error: string().min(1)
+	})
+]);
+var TranslatorCompleteSchema = object({
+	provider: KeyedProviderSchema.describe("Which provider."),
+	redirectUrl: string().min(1).describe("The address the browser was sent to, whole. The grant is inside it."),
+	state: string().min(1).describe("The handshake this belongs to. A mismatch is refused.")
+});
+var ModelBadgeSchema = _enum(["reasoning", "fast"]);
+var HelperOnlySchema = _enum(["no-tool-calls", "instant-tier"]);
+var ModelsSchema = object({
+	models: array(object({
+		id: string().describe("What to name when asking for this model."),
+		label: string().describe("What to call it on screen."),
+		efforts: array(string()).optional().describe("The thinking levels it accepts, where the provider says. Empty means use your own defaults."),
+		description: string().optional().describe("What it is good for, in the provider's own words. Absent where the provider publishes only ids, which is the honest answer rather than something to paper over with a hand-written table."),
+		badges: array(ModelBadgeSchema).optional().describe("What it is known for, where the provider says so."),
+		contextWindow: number$1().optional().describe("How many tokens this model will accept in one request, where the server publishes it."),
+		helperOnly: HelperOnlySchema.optional().describe("Set where this model may write commit messages, titles and other one-shot jobs but never run a chat turn, and why: its server says it cannot call tools, or it is the small local model kept for quick jobs. Absent means nothing has said it cannot."),
+		availableAt: number$1().optional().describe("When this model can be asked again, where every credential that serves it is currently refused. Absent means it can be asked now. A model here is still worth showing, unlike one the plan does not cover at all: the wait is the whole answer.")
+	})).describe("What this provider serves, in its own preference order, which is not rearranged here. Never empty."),
+	default: string().describe("Which one a fresh conversation starts on. Always present.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/shared.js
+var OkSchema$1 = object({ ok: literal(true).describe("Always true. A route that answers this either did the thing or refused with a status; there is no third outcome to report.") });
+var MemberRoleSchema = _enum([
+	"guest",
+	"viewer",
+	"collaborator",
+	"writer",
+	"maintainer",
+	"owner"
+]);
+_enum([
+	"guest",
+	"viewer",
+	"collaborator",
+	"writer",
+	"maintainer"
+]);
+var DoorTokenSchema = object({ token: string().min(1).describe("The freshly minted credential. The previous one stopped working the moment this answered.") });
+var RepoParamSchema = object({ repo: string().describe("Which repository. \"root\" is the workspace itself; anything else is a repository's folder relative to the workspace root, URL-encoded.") });
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/accounts.contract.js
+var accountsContract = {
+	start: procedure.route({
+		method: "POST",
+		path: "/accounts/{provider}/login/start",
+		summary: "Begin connecting an account",
+		description: "Hands back the page to sign in on, and the code it will ask for where there is one. The sandbox holds the proof and finishes what it can itself: a device sign-in lands in the account list on its own, a paste or a redirect needs one thing brought back to the finishing call."
+	}).input(NativeProviderParamSchema.extend(LoginRequestSchema.shape)).output(LoginStartSchema),
+	complete: procedure.route({
+		method: "POST",
+		path: "/accounts/{provider}/login/complete",
+		summary: "Finish a sign-in with what the page handed back",
+		description: "Takes the code the page showed, or the address a redirect landed on, and finishes the attempt. Answers with the account where the exchange ends here; otherwise the sandbox still has a mint to do and the row appears in the account list."
+	}).input(NativeProviderParamSchema.extend(LoginCompleteSchema.shape)).output(LoginCompletedSchema),
+	status: procedure.route({
+		method: "GET",
+		path: "/accounts/{provider}/login/status",
+		summary: "Read a sign-in attempt",
+		description: "Whether this exact attempt is still waiting, has connected an account, or failed. Tied to the attempt, not to the account list, so adding a second account is told apart from the first already being there. An attempt that finishes by itself on a device or browser of yours ends here."
+	}).input(NativeProviderParamSchema.extend(LoginStatusQuerySchema.shape)).output(LoginStatusSchema),
+	cancel: procedure.route({
+		method: "POST",
+		path: "/accounts/{provider}/login/cancel",
+		summary: "Abandon a sign-in",
+		description: "Stops waiting on a sign-in nobody completed. An abandoned attempt also expires on its own."
+	}).input(NativeProviderParamSchema.extend(LoginCancelSchema.shape)).output(OkSchema$1),
+	accounts: procedure.route({
+		method: "GET",
+		path: "/accounts/{provider}",
+		summary: "Connected accounts of a provider",
+		description: "Each connected account with how full its plan limits were when last measured, where the provider publishes any. Ask for a fresh measurement and it takes one before answering, which is slower. The credentials themselves never travel: being in this list is what connected means."
+	}).input(NativeProviderParamSchema.extend(AccountListQuerySchema.shape)).output(OauthAccountListSchema),
+	rename: procedure.route({
+		method: "POST",
+		path: "/accounts/{provider}/rename",
+		summary: "Rename an account",
+		description: "Changes the label one account shows under, so several are tellable apart. Blank restores the one derived from the sign-in."
+	}).input(NativeProviderParamSchema.extend(AccountRenameSchema.shape)).output(OauthAccountSchema),
+	disconnect: procedure.route({
+		method: "POST",
+		path: "/accounts/{provider}/disconnect",
+		summary: "Disconnect an account",
+		description: "Clears one stored credential, and stops any sign-in still in flight for this provider. The others stay connected."
+	}).input(NativeProviderParamSchema.extend(AccountIdSchema.shape)).output(OkSchema$1)
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/activity.js
+var ActivityEventSchema = object({
+	id: string().describe("The entry's own id."),
+	at: number$1().describe("When it happened, in milliseconds. Also what you page by."),
+	provider: string().optional().describe("Which outside service, when one was involved. Absent for the sandbox's own events."),
+	account: string().optional().describe("Which account handled it. Absent for the sandbox's own events and for work run on a provider's default."),
+	direction: _enum([
+		"in",
+		"out",
+		"system"
+	]).describe("Whether something arrived, something went out, or the sandbox did it to itself."),
+	type: string().describe("Exactly what happened: a message received or sent, a reaction, a turn starting or ending, a rule doing something. A rule that ran and passed says nothing here, because a feed of passes is one the eye learns to skip."),
+	channelId: string().optional().describe("Which channel or thread it happened in."),
+	author: string().optional().describe("Who sent it, for something that arrived."),
+	actor: string().optional().describe("Who asked for the turn, as the sandbox verified it: a member's email, token:<label> for a program's control token, or agent:<conversation id> for a parent conversation's child. Absent for a wake nothing asked for."),
+	content: string().optional().describe("The message, in full, whichever direction it went."),
+	method: string().optional().describe("The verb of an outgoing call."),
+	endpoint: string().optional().describe("The address of an outgoing call. Credentials travel in headers, so they are never here."),
+	sessionId: string().optional().describe("The provider session behind it."),
+	turnId: string().optional().describe("Ties one turn's entries together. A turn writes several, and read as separate rows they say one thing several times, so a feed groups on this."),
+	conversationId: string().optional().describe("Which conversation. This, rather than the provider session, is what the same agent means across a feed, because a session is retired whenever the model changes."),
+	title: string().optional().describe("What that conversation was called at the time. Copied in rather than looked up, because an audit entry must still read as words years later, after the conversation has been renamed or pruned."),
+	origin: AgentOriginSchema.optional().describe("What woke the conversation from outside, when something did. It is how a turn gets filed under the chat service that caused it rather than under the model that served it."),
+	automationIds: array(string()).optional().describe("Which automations were involved."),
+	outcome: _enum(["ok", "error"]).optional().describe("How it ended."),
+	error: string().optional().describe("What went wrong, when something did."),
+	extra: record(string(), unknown()).optional().describe("Whatever else the source had to say: attachments, participants, a recording's path. Shape varies by source.")
+});
+var ActivityQuerySchema = object({
+	provider: string().optional().describe("Narrow it to one outside service."),
+	limit: number().min(1).max(500).default(100).describe("How many entries to return."),
+	before: number().optional().describe("Only entries older than this timestamp, so paging walks backwards through the feed.")
+});
+var ActivityListSchema = object({ events: array(ActivityEventSchema).describe("The audit entries, newest first.") });
+var ActivityStatusSchema = object({
+	connections: array(object({
+		capabilityId: string().describe("Which connection."),
+		provider: string().describe("Which service it is."),
+		gateway: _enum([
+			"ready",
+			"connecting",
+			"pairing",
+			"disconnected",
+			"idle"
+		]).describe("Idle means it is up but has nothing to listen for, which is different from a connection that should be up and is not. Pairing means somebody started a sign-in and never finished it, which no amount of waiting will fix."),
+		lastError: string().optional().describe("The most recent thing that went wrong on it.")
+	})).describe("Each source feeding the record, and whether it is working. Probed now rather than remembered."),
+	voice: object({
+		channelId: string().describe("Which channel."),
+		channelName: string().describe("What it is called."),
+		startedAt: number$1().describe("When it joined, in milliseconds."),
+		participants: array(string()).describe("Who else is in it.")
+	}).optional().describe("A voice call the sandbox is currently in, when it is in one.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/activity.contract.js
+var activityContract = {
+	list: procedure.route({
+		method: "GET",
+		path: "/activity",
+		summary: "What the agent has done out in the world",
+		description: "The audit trail of actions taken on outside services. Read-only on purpose: entries are written by the sandbox alone, which is what makes it a record worth trusting."
+	}).input(ActivityQuerySchema).output(ActivityListSchema),
+	status: procedure.route({
+		method: "GET",
+		path: "/activity/status",
+		summary: "Whether the audit trail is being kept",
+		description: "Which sources are feeding the record and whether each is working."
+	}).output(ActivityStatusSchema)
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+constants@1.323.0/node_modules/@intentic/constants/dist/hosted-tiers.js
+var HOSTED_TIERS = [
+	{
+		id: "free",
+		name: "Free",
+		cpuKind: "shared",
+		cpus: 4,
+		memoryMb: 4096,
+		volumeGb: 10,
+		monthlyHours: 40,
+		priceUsd: 0,
+		flyHourUsd: .0329
+	},
+	{
+		id: "standard",
+		name: "Standard",
+		cpuKind: "shared",
+		cpus: 8,
+		memoryMb: 8192,
+		volumeGb: 25,
+		monthlyHours: 220,
+		priceUsd: 20,
+		flyHourUsd: .0657
+	},
+	{
+		id: "max",
+		name: "Max",
+		cpuKind: "shared",
+		cpus: 8,
+		memoryMb: 16384,
+		volumeGb: 50,
+		monthlyHours: 320,
+		priceUsd: 50,
+		flyHourUsd: .1234
+	}
+];
+HOSTED_TIERS[0];
+HOSTED_TIERS.filter((tier) => tier.priceUsd > 0);
+//#endregion
+//#region node_modules/.pnpm/@intentic+constants@1.323.0/node_modules/@intentic/constants/dist/index.js
+var HISTORY_ROOT = "/history";
 var STATE_DIR = ".intentic";
+var PUBLIC_DIR = "public";
+var FIELD_NOTES_FILE = ".intentic/config/field-notes.toon";
 var OutputFieldSchema = object({
 	name: string().regex(/^[a-zA-Z_][a-zA-Z0-9_]{0,39}$/),
 	type: _enum([
@@ -15749,7 +11054,7 @@ var OutputFieldsSchema = array(OutputFieldSchema).min(1).max(16).superRefine((fi
 	});
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/loops.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/loops.js
 var LoopContextSchema = _enum(["fresh", "continue"]);
 var LoopOutputSchema = discriminatedUnion("kind", [
 	object({ kind: literal("none").describe("It produces nothing but its work. The classic make the suite pass: what it leaves behind is a passing suite, and asking it to also file a report is asking it to spend a round on paperwork.") }),
@@ -15814,7 +11119,8 @@ var LoopStateSchema = _enum([
 	"stalled",
 	"overspent",
 	"stopped",
-	"error"
+	"error",
+	"unpriced"
 ]);
 var LoopRecordSchema = LoopSchema.extend({
 	state: LoopStateSchema.describe("How it ended, and each of these is a different thing to be told. Out of rounds says give it more room; stalled says it is not making progress and more room will not help. Overspent, stopped by a person, and the loop itself failing are all their own answers."),
@@ -15845,7 +11151,293 @@ var LoopDesignSaveSchema = object({
 });
 var LoopDesignIdParamSchema = object({ id: entryId.describe("Which saved loop.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/agents.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/turn-break.js
+var TurnBreakSchema = _enum([
+	"limit",
+	"outage",
+	"stopped"
+]);
+var HeldEndingSchema = _enum([...TurnBreakSchema.options, "flagged"]);
+var LimitPolicySchema = _enum([
+	"wait",
+	"resend",
+	"move"
+]);
+var RetryPolicySchema = _enum(["wait", "retry"]);
+var TurnBreakPolicySchema = _enum([
+	"wait",
+	"resend",
+	"move",
+	"retry"
+]);
+var RetryLadderSchema = object({
+	made: number$1().int().min(0).describe("Automatic re-runs already sent for this turn."),
+	max: number$1().int().min(1).describe("How many the ladder may send before it stands down.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/keep-warm.js
+var KeepWarmEndSchema = _enum([
+	"elapsed",
+	"allowance",
+	"changed",
+	"cold",
+	"failed"
+]);
+var KeepWarmSchema = object({
+	since: number$1().describe("When keeping it warm started, in milliseconds."),
+	until: number$1().describe("When it stops by itself, in milliseconds: the time asked for, shortened to what the sandbox can honestly keep, which is never past the point where refreshing costs more than re-reading, nor past the date change that rewrites the prompt."),
+	refreshes: number$1().int().min(0).describe("Refreshes sent so far."),
+	readTokens: number$1().optional().describe("How much the last refresh read back from the provider's cache, in tokens: the proof the cache was still there."),
+	ended: object({
+		at: number$1().describe("When it stopped, in milliseconds."),
+		reason: KeepWarmEndSchema.describe("Why: `elapsed` the time asked for ran out; `allowance` the account reached the reserve kept for real work, or the provider refused a refresh for its limit; `changed` what the next turn would send no longer matches the cache (a part of the prompt, the date in it, or the conversation's session or account); `cold` the cache was gone, expired before a refresh could run or found missing by one; `failed` a refresh failed."),
+		detail: string().optional().describe("The specifics, when there are any: which parts of the prompt changed, how full the account was, or the failure's own words.")
+	}).optional().describe("Why keeping it warm stopped before anyone picked the conversation up. Absent while it is still being kept.")
+});
+var AgentKeepWarmSchema = object({
+	id: string().min(1).describe("Which conversation."),
+	until: number$1().nullable().describe("Keep its prompt cache warm until this instant, in milliseconds; shortened to what the sandbox can honestly keep. Null stops keeping it warm.")
+});
+var PromptCacheOpeningSchema = object({
+	readTokens: number$1().describe("Tokens the turn's first request read from the provider's cache."),
+	writtenTokens: number$1().describe("Tokens it wrote to the cache, which is what it paid full price for."),
+	kept: object({
+		forMs: number$1().describe("How long the cache had been kept warm for this turn, in milliseconds."),
+		refreshes: number$1().int().min(0).describe("How many refreshes that took.")
+	}).optional().describe("Present when this turn picked up a conversation the sandbox had been keeping warm.")
+});
+var PromptFingerprintSchema = object({
+	hash: string().describe("One short hash over every part."),
+	parts: record(string(), string()).describe("Each part's own short hash or value, by name.")
+});
+var NeedKindSchema = _enum([
+	"capability",
+	"secret",
+	"grant",
+	"release",
+	"environment"
+]).describe("What is being asked for: a connection, a secret's value, wider reach, a gated credential, or a tool in the image.");
+var NeedStatusSchema = _enum([
+	"open",
+	"working",
+	"met",
+	"declined",
+	"cancelled"
+]).describe("Where it stands: open (waiting on a person), working (a person said yes and it is being set up), met, declined, or cancelled (the agent withdrew it, or its conversation went away).");
+var FieldValuesSchema = record(string(), string());
+var CapabilityNeedModeSchema = _enum([
+	"connect",
+	"reconnect",
+	"change"
+]).describe("Connect something new, give a connected one a credential that works again, or change a setting on a connected one.");
+var CapabilityNeedSchema = object({
+	kind: literal("capability"),
+	entry: string().min(1).describe("The catalog entry, as the catalog names it."),
+	name: string().describe("What the catalog calls it, never the agent's spelling."),
+	mode: CapabilityNeedModeSchema,
+	instance: string().optional().describe("The connection a reconnect or a change is about."),
+	target: string().optional().describe("The site, host or address the connection is for, when the entry can hold several."),
+	prefill: FieldValuesSchema.optional().describe("Settings the agent could fill in for a new connection, never a credential: the daemon keeps only the entry's own non-secret fields."),
+	changes: FieldValuesSchema.optional().describe("For a change: each setting and the value it would take. Never a credential."),
+	reason: string().optional().describe("The daemon's own sentence on why this is the ask, such as the refusal a connected credential keeps getting."),
+	reported: boolean().optional().describe("The agent reported the credential refused while the connection still probes as working, so only a person's word that it is fixed meets it: the probe could not see the refusal in the first place.")
+});
+var SecretNeedSchema = object({
+	kind: literal("secret"),
+	name: string().regex(/^[A-Za-z_][A-Za-z0-9_]{0,127}$/).describe("The name it is stored under, and what `{{secret:NAME}}` will resolve."),
+	where: string().max(200).optional().describe("How it will be used: the header, the command, the site it goes to."),
+	link: string().url().refine((url) => url.startsWith("https://"), "only an https link").optional().describe("Where a person gets one, shown as a link on the card."),
+	hint: string().max(120).optional().describe("What a valid one looks like, so a wrong paste is caught by eye."),
+	replace: boolean().optional().describe("One is stored under this name and is being refused: the ask is for a new value in its place.")
+});
+var GrantSubjectSchema = _enum([
+	"capability",
+	"folder",
+	"shelf",
+	"site"
+]).describe("A connected capability the persona leaves out, a folder outside the conversation's reach, a whole shelf of tools, or a site in the person's own browser, which only their browser extension can allow.");
+var GrantShelfSchema = _enum([
+	"files",
+	"shell",
+	"code",
+	"web",
+	"browser",
+	"delegate",
+	"sandbox"
+]);
+var GrantScopeSchema = _enum(["conversation", "persona"]).describe("How far a yes goes: this conversation only, or the persona itself, for every conversation that wears it.");
+var NeedSubjectSchema = discriminatedUnion("kind", [
+	CapabilityNeedSchema,
+	SecretNeedSchema,
+	object({
+		kind: literal("grant"),
+		subject: GrantSubjectSchema,
+		what: string().min(1).describe("The capability's id, the folder, or the shelf."),
+		label: string().describe("What it is, in the daemon's words: the account and its kind, the folder, the shelf's name."),
+		persona: string().optional().describe("The persona that withholds it, when one does."),
+		scope: GrantScopeSchema.optional().describe("How far the yes went, once there was one.")
+	}),
+	object({
+		kind: literal("release"),
+		subject: string().min(1).describe("The gated account or connector."),
+		approvers: array(string()).describe("Who may release it. Anyone else's answer is refused and leaves it waiting.")
+	}),
+	object({
+		kind: literal("environment"),
+		tool: string().min(1).describe("What the steps install, the name the proposal is filed under."),
+		steps: string().min(1).describe("The Dockerfile steps proposed for the image's custom section: RUN and ENV lines only."),
+		approvedHash: string().optional().describe("The overlay these steps were approved into; met once the running container was built from it.")
+	})
+]).describe("What exactly is asked for.");
+var NeedToldSchema = _enum([
+	"call",
+	"turn",
+	"queued"
+]);
+var NeedSchema = object({
+	id: string().describe("The need's handle, the one `needs cancel` takes."),
+	conversationId: string().describe("The conversation that asked, and the one its answer wakes."),
+	subject: NeedSubjectSchema,
+	title: string().describe("The one line it leads with, in the daemon's words."),
+	why: string().max(280).optional().describe("The agent's case for it, and the only words on a need that are the agent's."),
+	status: NeedStatusSchema,
+	createdAt: number$1().describe("When it was raised, in milliseconds."),
+	updatedAt: number$1().describe("When it last moved, in milliseconds."),
+	answeredBy: string().optional().describe("Who answered it, as the sandbox verified them."),
+	outcome: string().optional().describe("How it ended, in the daemon's words, once it has."),
+	told: NeedToldSchema.optional().describe("How the agent heard the outcome, once it has."),
+	unattended: boolean().optional().describe("Raised by a turn nobody was watching, so the card waited for whoever came next.")
+});
+var NeedRaiseSchema = object({
+	ask: discriminatedUnion("kind", [
+		object({
+			kind: literal("capability"),
+			entry: string().min(1).describe("The catalog entry or a connected instance's id."),
+			target: string().max(200).optional().describe("The site, host or address it is for."),
+			set: FieldValuesSchema.optional().describe("Settings to fill in, or to change on a connected one. Credentials are refused."),
+			reconnect: boolean().optional().describe("It is connected, but its credential is being refused: ask for a new one rather than being told to use it.")
+		}),
+		SecretNeedSchema,
+		object({
+			kind: literal("grant"),
+			subject: GrantSubjectSchema,
+			what: string().min(1).max(400)
+		}),
+		object({
+			kind: literal("release"),
+			subject: string().min(1)
+		}),
+		object({
+			kind: literal("environment"),
+			tool: string().min(1).max(64),
+			steps: string().min(1).max(2e4)
+		})
+	]),
+	why: string().max(280).optional(),
+	wait: number$1().int().min(0).max(100).optional().describe("Seconds to hold the call for an answer. Absent is 90 for a watched turn and 0 for an unattended one.")
+});
+var NeedRaisedSchema = object({
+	state: _enum([
+		"met",
+		"open",
+		"refused"
+	]),
+	message: string().describe("The sentence the CLI prints, written for the agent to act on."),
+	need: NeedSchema.optional(),
+	code: string().optional().describe("A refusal's type, for a script to branch on.")
+});
+var NeedAnswerSchema = discriminatedUnion("kind", [
+	object({
+		kind: literal("decline"),
+		note: string().max(500).optional().describe("Why not, passed to the agent.")
+	}),
+	object({ kind: literal("accept") }),
+	object({ kind: literal("apply") }),
+	object({
+		kind: literal("grant"),
+		scope: GrantScopeSchema
+	}),
+	object({ kind: literal("release") }),
+	object({ kind: literal("approve") })
+]);
+var NeedIdParamSchema = object({ id: string().min(1).describe("Which need.") });
+var NeedAnswerInputSchema = NeedIdParamSchema.extend({ answer: NeedAnswerSchema });
+var NeedSecretInputSchema = NeedIdParamSchema.extend({ value: string().min(1).max(64e3).describe("The secret's value. Stored, never echoed, never written into a transcript.") });
+var NeedsQuerySchema = object({
+	conversationId: string().optional().describe("One conversation's needs. Absent is every conversation's."),
+	open: boolean().optional().describe("Only the ones still waiting.")
+});
+var NeedsListSchema = object({ needs: array(NeedSchema).describe("Newest first.") });
+object({
+	entries: array(object({
+		entry: string().describe("The catalog entry's id, what `capabilities request` takes."),
+		name: string(),
+		description: string(),
+		connected: boolean().describe("Whether an instance of it is live, not merely added.")
+	})),
+	suggested: array(object({
+		entry: string(),
+		claim: string().describe("What the workspace seems to want, in words."),
+		evidence: string().describe("What was read to say so, verbatim: a file, a remote.")
+	})).default([])
+});
+var AgentNeedSchema = object({
+	id: string(),
+	kind: NeedKindSchema,
+	title: string(),
+	status: NeedStatusSchema
+});
+object({
+	capabilities: array(string()).default([]).describe("Connected capabilities it may use although its persona leaves them out."),
+	folders: array(string()).default([]).describe("Workspace folders its file tools may touch beyond its fence."),
+	shelves: array(GrantShelfSchema).default([]).describe("Shelves of tools opened for it."),
+	installs: boolean().default(false).describe("Whether its own dependency installs run without asking, where the owner's setting would otherwise ask first."),
+	secrets: array(string()).default([]).describe("Secrets whose host guard it may send past without asking, by registry name."),
+	everything: boolean().default(false).describe("Whether every request an allow-once could settle is allowed without asking, until somebody takes it back."),
+	updatedAt: number$1().describe("When it last changed, in milliseconds."),
+	by: string().optional().describe("Who last allowed something here.")
+});
+var StandingGrantsSchema = object({ conversations: array(object({
+	conversationId: string(),
+	capabilities: array(string()).describe("Connected capabilities allowed although its persona leaves them out."),
+	folders: array(string()).describe("Workspace folders its file tools may touch beyond its fence."),
+	shelves: array(GrantShelfSchema).describe("Shelves of tools opened for it."),
+	installs: boolean().default(false).describe("Whether its own dependency installs run without asking."),
+	secrets: array(string()).default([]).describe("Secrets it may send past their host guard without asking."),
+	everything: boolean().default(false).describe("Whether every request an allow-once could settle is allowed without asking."),
+	by: string().optional().describe("Who last allowed one of those."),
+	updatedAt: number$1().optional().describe("When one of those last changed, in milliseconds."),
+	releases: array(object({
+		subject: string(),
+		approvedBy: string(),
+		at: number$1()
+	})).describe("Gated credentials released to it, until somebody takes one back.")
+})) });
+var GrantRevokeSchema = object({
+	conversationId: string(),
+	kind: _enum([
+		"capability",
+		"folder",
+		"shelf",
+		"release",
+		"install",
+		"secret",
+		"everything"
+	]).describe("Which kind of yes: a grant past the persona or area, a credential's release, letting its installs run unasked, a secret sent past its host guard, or allowing everything."),
+	what: string().describe("The capability id, folder, shelf, released credential or secret it named; empty for installs and everything.")
+});
+record(string(), NeedSchema);
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/text/emoji.js
+var graphemes = new Intl.Segmenter(void 0, { granularity: `grapheme` });
+var PICTOGRAPHIC = /[\p{Extended_Pictographic}\p{Regional_Indicator}\u{20E3}]/u;
+var isSingleEmoji = (text) => {
+	if (text.length === 0 || text.length > 64 || !PICTOGRAPHIC.test(text)) return false;
+	const segments = graphemes.segment(text)[Symbol.iterator]();
+	return segments.next().done !== true && segments.next().done === true;
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/agents.js
 var AgentStatusSchema = _enum([
 	"idle",
 	"running",
@@ -15876,7 +11468,8 @@ var AgentAttentionSchema = object({
 	permission: boolean().describe("It wants to use a tool it needs permission for."),
 	capability: boolean().describe("It needs something connected that is not connected yet."),
 	credential: boolean().describe("It is waiting for a named person to release a credential. The one pause that may not be yours to clear, whatever your role."),
-	conflict: boolean().describe("Its work cannot be merged without somebody resolving a clash.")
+	conflict: boolean().describe("Its work cannot be merged without somebody resolving a clash."),
+	need: boolean().optional().describe("It asked a person for something it still needs: a connection, a secret, wider reach, a tool. Absent from a daemon older than needs.")
 });
 var UnfinishedWorkSchema = object({
 	at: number$1().describe("When the turn that left this ended, in milliseconds."),
@@ -15885,12 +11478,25 @@ var UnfinishedWorkSchema = object({
 		total: number$1().describe("Items on the whole list."),
 		next: string().optional().describe("The one it would have done next: what it was working through, or the first still waiting.")
 	}).optional().describe("The agent's own checklist where that turn left it. Absent for a conversation that kept no list."),
-	check: string().optional().describe("The end-of-turn check that was still failing when the turn ended, by name.")
+	check: string().optional().describe("The end-of-turn check that was still failing when the turn ended, by name. No longer written: nothing checks inside a turn.")
+});
+var TurnProofSchema = object({
+	at: number$1().describe("When the turn that left this ended, in milliseconds."),
+	verification: _enum([
+		"verified",
+		"unproven",
+		"failing",
+		"no-code"
+	]).describe("Verified: a check it ran passed after its last edit to code. Failing: the last one it ran failed. Unproven: it changed code and ran nothing that checked it. No-code: it changed nothing a check could speak to."),
+	check: string().optional().describe("The command that spoke, when one did, so a targeted test is never read as the whole suite."),
+	unviewed: number$1().optional().describe("How many rendered files it changed (pages, components, styles) without looking at the result afterwards. Absent when none.")
 });
 var LandedMessageSchema = object({
 	subject: string().describe("One line saying what the merged work did, read off the code rather than off the opening request. A conversation that asks for an audit and then spends four turns fixing what it found needs a subject about the fixes."),
 	note: string().optional().describe("The same change said to somebody who uses the product, for a repository that keeps a changelog. Usually absent, because most changes are not ones a user would notice."),
-	breaking: string().optional().describe("What this change takes away, for anything already relying on it. Nearly always absent: it is for removals, not for additions.")
+	breaking: string().optional().describe("What this change takes away, for anything already relying on it. Nearly always absent: it is for removals, not for additions."),
+	testNote: string().optional().describe("Why a test this change weakened is meant to be weaker, in the conversation's own words. Nearly always absent."),
+	allows: array(string()).optional().describe("Exceptions the conversation declared for this change, each `<check> — <reason>` in its own words. Nearly always absent.")
 });
 var LandedMessageStepSchema = object({
 	provider: string().min(1).describe("Which provider was asked."),
@@ -15917,10 +11523,25 @@ var LandConflictReasonSchema = _enum([
 	"diverged",
 	"binary"
 ]);
+var ReactorSchema = object({
+	email: string().describe("Who it was, as the sandbox verified them."),
+	name: string().optional().describe("What to call them, when their sign-in carried a name. Absent leaves the address to stand for them."),
+	at: number$1().describe("When they marked it, in milliseconds.")
+});
+var SessionOwnerSchema = object({
+	email: string().describe("Who answers for this conversation, as the sandbox verified them."),
+	name: string().optional().describe("What to call them, when the sign-in that made them its owner carried a name. Absent leaves the address to stand for them."),
+	since: number$1().describe("When they became its owner, in milliseconds.")
+});
+var AgentReactionSchema = object({
+	emoji: string().describe("The mark itself, one emoji, carried as the character rather than as a name that would need a table on both sides."),
+	by: array(ReactorSchema).min(1).describe("Everyone wearing this mark, oldest first, each by name. Carried whole rather than as a count, because a chip reading 3 that cannot say whose is a number nobody can answer. Never empty: the last person taking theirs back takes the whole chip with it.")
+});
 var AgentSummarySchema = object({
 	id: string().describe("The conversation id, which is how every other call addresses it."),
 	sessionId: string().optional().describe("The provider session behind the last turn. It is retired whenever the model or account changes."),
 	title: string().optional().describe("What to call it: the first prompt cut to one line, unless somebody renamed it."),
+	titleAction: string().optional().describe("One word for the kind of work the naming pass read in it (fix, audit, redesign). Never part of the displayed name: a board tints and glyphs a card by it. Absent for a title nothing named an action for."),
 	status: AgentStatusSchema.describe("What it is doing. Stopping and stopped are the two halves of somebody pressing stop, because a cancel is not instant; dismissing is the same window for a question waved away, which ends the turn too but owes the user nothing; resuming means the sandbox is already putting right whatever killed the turn; landing means its work is being carried into the workspace right now, and nothing may act on its branch until that settles."),
 	failure: string().optional().describe("Why the last turn failed, in the words it died on. Absent unless it did, and cleared the moment it runs again. Carried here because the word error on its own is not an answer, least of all for a run nobody was watching."),
 	failureCode: string().optional().describe("Which kind of failure it was, as the turn's own error frame coded it. Absent for a failure nothing could classify, which reads as the plain red line it is."),
@@ -15933,52 +11554,70 @@ var AgentSummarySchema = object({
 	runner: string().optional().describe("The runner this conversation runs on. Absent means this sandbox."),
 	startIn: string().optional().describe("Which folder it opened in, relative to the workspace root. Absent means the root."),
 	actsAs: string().optional().describe("Which persona its first turn acted as. Absent for an ordinary chat."),
+	lastActsAs: string().optional().describe("Which persona its last turn acted as: each turn runs as the persona it names, so this is who the conversation speaks as now, and what a view groups it under. Absent for an ordinary chat."),
 	model: string().optional().describe("What its last turn ran with. Kept per conversation so opening it restores the choices made in it, rather than whatever some other tab last picked."),
 	effort: string().optional().describe("How hard that turn was told to think."),
 	thinking: boolean().optional().describe("Whether that turn showed its reasoning."),
 	fast: boolean().optional().describe("Whether that turn asked for higher speed. What was asked for, not what was served."),
-	tier: _enum(["fast", "standard"]).optional().describe("How hard its last turn looked to the complexity judge. What the next turn's preview needs, not what actually ran."),
-	tierHold: boolean().optional().describe("Whether this conversation is pinned to the picked model, so a turn that looks simple is never moved to a cheaper one."),
 	account: string().optional().describe("Which connected account paid for it."),
 	branch: string().optional().describe("The branch its private copy works on. Absent for a conversation that works directly in the shared tree."),
 	autoLand: boolean().optional().describe("This conversation's own answer to whether its work merges automatically. Absent means it follows the sandbox-wide setting, which is the common case."),
-	resumeAfterOutage: boolean().optional(),
-	resumeAfterLimit: boolean().optional(),
-	moveAfterLimit: boolean().optional(),
+	limitPolicy: LimitPolicySchema.optional(),
+	outagePolicy: RetryPolicySchema.optional(),
+	stopPolicy: RetryPolicySchema.optional(),
 	landRequested: object({
 		email: string().describe("Who asked."),
 		name: string().optional().describe("Their display name."),
 		at: number$1().describe("When they asked, in milliseconds.")
 	}).optional().describe("A collaborator has asked a maintainer to merge this work. Cleared by whichever merge or discard answers it. Absent means nobody is waiting."),
+	reactions: array(AgentReactionSchema).optional().describe("What people have marked this conversation with, one entry per emoji, in the order the emoji were first used. Absent means nobody has marked it, which is most conversations."),
 	origin: AgentOriginSchema.optional().describe("Where the conversation came from when nobody typed it: a chat mention, a visitor's message, a webhook. Absent means a person started it."),
-	startedBy: string().optional().describe("Who asked for the first turn, as the sandbox verified it: a member's email, or token:<label> for a program's control token. Absent when nothing was verified (a wake, a loopback caller)."),
+	startedBy: string().optional().describe("Who asked for the first turn, as the sandbox verified it: a member's email, token:<label> for a program's control token, or agent:<conversation id> for a child another conversation spawned. Absent when nothing was verified (a wake, a loopback caller)."),
+	areas: array(string()).optional().describe("Which named areas of the workspace this conversation was started within, latched from whoever asked for the first turn. Absent means its starter held the whole workspace, which is why a fenced member is not shown it."),
+	owner: SessionOwnerSchema.optional().describe("The member answerable for this conversation: set from whoever started it, inherited from the parent by a spawned child, moved by handing it over. Absent means nobody has claimed it yet."),
 	forkedFrom: ForkedFromSchema.optional().describe("The conversation this one was cut from. Recorded once and never cleared: it is the relationship, not a pending state."),
 	base: string().optional().describe("The commit its private copy started from, shortened."),
 	costUsd: number$1().optional().describe("What it has cost so far, in dollars. A subagent's spend is its own and is not folded in here."),
-	inputTokens: number$1().optional().describe("Tokens sent."),
+	inputTokens: number$1().optional().describe("Uncached input tokens, excluding cache reads and cache writes."),
 	outputTokens: number$1().optional().describe("Tokens received."),
 	contextTokens: number$1().optional().describe("How much of the window the conversation currently fills."),
 	contextWindow: number$1().optional().describe("How large that window is."),
 	promptCache: object({
 		at: number$1().describe("When its last request touched the provider's prompt cache, in milliseconds."),
-		ttlMs: number$1().describe("How long that entry lives from `at`, in milliseconds.")
+		ttlMs: number$1().describe("How long that entry lives from `at`, in milliseconds."),
+		rollsAt: number$1().optional().describe("When the date written into the agent's prompt next changes, in milliseconds (midnight where the agent runs). Past it the next turn sends a different prompt, so nothing kept before it is read again."),
+		keepableUntil: number$1().optional().describe("Present when this sandbox can keep this cache warm (its provider can replay the last turn's prefix): the furthest instant a hold can reach, in milliseconds, where refreshing would cost more than the cold resume it saves or the date in the prompt changes, whichever comes first.")
 	}).optional().describe("When this conversation's prompt cache was last kept alive and how long it lasts, which together say when picking the conversation up stops being cheap. Absent when the provider publishes nothing to ground it on."),
+	keepWarm: KeepWarmSchema.optional().describe("Whether the sandbox is keeping this conversation's prompt cache warm while it sits idle, how that is going, or why it stopped. Absent when nobody asked for it."),
 	activity: AgentActivitySchema.optional().describe("What it is doing at this moment."),
 	checklist: AgentChecklistSchema.optional().describe("How far it is through its own checklist. Absent for a conversation that kept no list, which is most short ones."),
 	landedMessageDraft: LandedMessageDraftSchema.optional().describe("The whole story of this merge's commit message being written: which models were asked, how long each took, what refused and in what words. Forgotten on restart, which is right, because a restart also killed the drafting it describes."),
 	landedMessage: LandedMessageSchema.optional().describe("What this conversation's merged work is called, once the drafting above has finished. It arrives on the same push that ends the draft, so the promise and the answer travel together."),
 	startedAt: number$1().optional().describe("When the running turn started, in milliseconds. Absent when none is running."),
+	run: string().optional().describe("The run under way right now: what a stop names, so it cannot cancel a turn that started after it was pressed. Absent when none is running, and for a turn with no run to attach to."),
+	queue: ConversationQueueSchema.optional().describe("Messages waiting for its next turn, and whether they are held. Absent for a conversation nothing has ever waited for."),
 	updatedAt: number$1().describe("When it last did something, in milliseconds. Reading it does not count."),
 	seenAt: number$1().optional().describe("When somebody last opened it, in milliseconds. Newer activity than this is what makes it unread. Kept by the sandbox rather than by a browser, so clearing site data or picking up a phone does not resurrect every badge."),
+	unsentAt: number$1().optional().describe("Since when somebody's composer has held a message for it that they have not sent yet, in milliseconds. While set, the sandbox never archives it on its own for being idle."),
 	attention: AgentAttentionSchema.describe("Which kinds of waiting-for-you it is doing."),
+	permissionAsk: object({
+		requestId: string().describe("Which request this is: the id an answer to it names."),
+		ask: string().describe("What it asks to do, on one line: the runtime's own sentence, else the tool's short name.")
+	}).optional().describe("The oldest permission its running turn is waiting on, so it can be answered where the conversation is listed. Absent when none waits, and from a sandbox older than it."),
+	landFailure: object({
+		reason: string().describe("Why it failed, in the words it failed with."),
+		code: string().optional().describe("Which kind of failure it was, when the sandbox could tell: unlinked when its copy lost its link to the workspace. Absent otherwise."),
+		at: number$1().describe("When it failed, in milliseconds.")
+	}).optional().describe("The last attempt to bring its work into the workspace failed, and why. Cleared by the next land that goes through. Absent when nothing failed, and from a sandbox older than it."),
 	conflictCauses: array(LandConflictReasonSchema).optional().describe("Why its work will not merge, and so who can clear it: your own uncommitted edits, which only you can commit or stash, against a moved main line or an unmergeable binary, which the conversation can redo on its own copy. Absent unless it is refusing to merge."),
-	unfinished: UnfinishedWorkSchema.optional().describe("What its last turn left open: steps it never completed, a check still failing. Absent for a turn that finished what it started."),
+	unfinished: UnfinishedWorkSchema.optional().describe("What its last turn left open: steps it never completed. Absent for a turn that finished what it started."),
+	proof: TurnProofSchema.optional().describe("What its last turn showed of its work: whether a check it ran passed after its last edit, and whether it looked at interface files it changed. Absent until a turn that edited or checked anything has ended."),
 	turns: number$1().optional().describe("Turns it has finished."),
 	toolUses: number$1().optional().describe("Tools it has used, over its whole life."),
 	subagents: object({
 		running: number$1().describe("Subagents working right now."),
 		total: number$1().describe("Subagents it has started over its whole life.")
-	}).optional().describe("Subagents and child agents this one delegated to. Absent means it never has, which is most conversations. Their spend is their own and is not folded into this conversation's cost."),
+	}).optional().describe("Subagents this one started, in-process and spawned alike. Absent means it never has, which is most conversations. Their spend is their own and is not folded into this conversation's cost."),
 	diff: object({
 		files: number$1().describe("Files touched."),
 		insertions: number$1().describe("Lines added."),
@@ -15986,7 +11625,16 @@ var AgentSummarySchema = object({
 	}).optional().describe("Everything it has written, measured from where it started. Independent of how much has been merged."),
 	landedPresence: object({
 		landed: number$1().describe("Paths this conversation merged in."),
-		present: number$1().describe("How many of them are still there, either pending or committed.")
+		present: number$1().describe("How many of them are still there, either pending or committed."),
+		removedBy: discriminatedUnion("kind", [object({
+			kind: literal("agent"),
+			id: string().describe("The conversation that took them out."),
+			title: string().optional().describe("What that conversation is called.")
+		}), object({
+			kind: literal("person"),
+			email: string().optional().describe("Who it was, as the sandbox verified them. Absent when the request carried no identity."),
+			name: string().optional().describe("What to call them, when their sign-in carried a name.")
+		})]).optional().describe("Who took them out, when the sandbox could tell: an agent working in the workspace, or a person throwing the changes away. Absent when it could not tell, and from a sandbox older than it.")
 	}).optional().describe("Present only when some of what it merged has since been thrown away. Absent is the steady state: its presence is the signal, so an ordinary card spends no line on it."),
 	loop: object({
 		state: LoopStateSchema.describe("How the loop is going."),
@@ -16001,20 +11649,41 @@ var AgentSummarySchema = object({
 		index: number$1().int().min(1).describe("This step's place in the workflow, counting from one."),
 		total: number$1().int().min(1).describe("How many steps the workflow has.")
 	}).optional().describe("The workflow run this conversation is a step of. Without it, a four-step run reads as four unrelated conversations that happen to have started together."),
+	awaitingWake: boolean().optional().describe("Whether this conversation runs again by itself with nobody pressing anything: a watch is armed on it, or words the sandbox or another agent sent wait for it. A finished-looking card that is awaiting a wake is not finished yet."),
 	watches: array(object({
 		id: string().describe("The daemon's handle for this watch, the same one the agent was given when it armed it."),
 		note: string().describe("The agent's own line on what it is waiting for."),
 		intervalSeconds: number$1().int().min(1).describe("How often the check runs."),
 		deadlineAt: number$1().describe("When it gives up and wakes the conversation anyway, in milliseconds. Every watch has one.")
 	})).optional().describe("Outside conditions this conversation is parked on, each of which will wake it. Absent means none, which is nearly every conversation: an armed watch is why a finished-looking agent starts working by itself, and why a hosted machine will not go idle."),
+	needs: array(AgentNeedSchema).optional().describe("What it is waiting on people for and has not got yet, oldest first. Absent means nothing: an open need is why an idle-looking agent still needs you."),
+	jobs: array(object({
+		id: string().describe("The daemon's handle for this job, the one its transcript row names."),
+		label: string().describe("What the job is, in the agent's own words when it gave any, else its command on one line."),
+		session: string().describe("The terminal session its pane runs in, which is what opening it focuses."),
+		startedAt: number$1().describe("When it started, in milliseconds."),
+		endedAt: number$1().optional().describe("When the command exited, in milliseconds. Absent while it runs."),
+		exitCode: number$1().int().optional().describe("The code it exited with. Absent while it runs, or when its exit left none."),
+		watch: string().optional().describe("The watch its exit wakes this conversation through. Present once the turn that left it running has ended and the conversation is waiting on it."),
+		handed: boolean().optional().describe("Left running for the person: the agent kept it for them with the `keep` tool (or it holds a port this conversation already left them), so it outlives the turn, wakes nothing and is theirs to stop."),
+		ports: array(number$1().int()).optional().describe("The ports it was listening on when its turn ended."),
+		stoppedBy: _enum([
+			"turn",
+			"person",
+			"agent"
+		]).optional().describe("Who stopped it: the sandbox, when the turn that used it ended without handing it over; a person; or the agent itself. Present from the moment the stop is asked. Absent for a job that exited by itself.")
+	})).optional().describe("Commands this conversation left running in the background, and how the most recent ones ended. Absent means none since the daemon started. A job is running exactly while it has no end."),
 	archivedAt: number$1().optional().describe("When it was put away, in milliseconds. Nothing was lost: its branch, its record and every counter stayed, and bringing it back gives it a fresh working copy. Absent means it is live on the board.")
 });
 var AgentIdSchema = object({ id: string().min(1).describe("Which conversation.") });
+var AgentStopWatchingSchema = AgentIdSchema.extend({ watchId: string().optional().describe("Which watch to disarm. Absent disarms every watch this conversation is parked on.") });
+var AgentStopJobSchema = AgentIdSchema.extend({ jobId: string().min(1).describe("Which of its background jobs, by the id its card and transcript row carry.") });
 var AgentTranscriptQuerySchema = AgentIdSchema.extend({
 	before: number().int().optional().describe("Return the messages before this position in the record: the `from` of the page below. Absent asks for the most recent turns."),
 	turns: number().int().min(1).max(200).optional().describe("How many of the user's turns to return, newest first. Absent takes the daemon's default.")
 });
-var AgentArchiveSchema = object({ ids: array(string().min(1)).max(500).optional().describe("Which conversations to put away. Leave it out for every finished one that can be archived right now.") });
+var AgentToolChildrenQuerySchema = AgentIdSchema.extend({ toolId: string().min(1).describe("Which tool call, by the id its card carries.") });
+var AgentSubagentQuerySchema = AgentIdSchema.extend({ subagentId: string().min(1).describe("Which subagent this conversation's runtime ran in-process, by the id of the call that started it.") });
 var AgentIdsSchema = object({ ids: array(string().min(1)).min(1).max(500).describe("Which conversations.") });
 var AgentsMovedSchema = object({
 	moved: array(AgentSummarySchema).describe("What actually moved, whole, rather than the fleet afterwards. Two archives finishing at once would each carry a snapshot from a different instant, and swapping one in wholesale would let the slower answer resurrect what the faster one just filed away."),
@@ -16046,6 +11715,15 @@ var AgentRenameSchema = object({
 	id: string().min(1).describe("Which conversation."),
 	title: string().trim().min(1).max(80).describe("What to call it from now on.")
 });
+var AgentAssignSchema = object({
+	id: string().min(1).describe("Which conversation."),
+	to: string().trim().toLowerCase().email().describe("Who should answer for it from now on, by the address they sign in with. Must be the sandbox owner or a member.")
+});
+var AgentReactSchema = object({
+	id: string().min(1).describe("Which conversation."),
+	emoji: string().trim().max(64).refine(isSingleEmoji, { message: "not a single emoji" }).describe("The mark to leave, as the emoji character itself. Exactly one: a chip has room for one mark, and a press is one press."),
+	on: boolean().describe("Whether to add your mark or take it back. Saying what you want rather than flipping what is there, so pressing twice lands where pressing once did.")
+});
 var AgentPlaceSchema = object({
 	id: string().min(1).describe("Which conversation."),
 	text: string().trim().min(1).max(8e3).describe("The words to put in the agent's mouth. Bounded just above what the next turn can carry whole, because a line too long to be handed over intact would reach the agent truncated and quietly break the very thing this is for.")
@@ -16054,17 +11732,14 @@ var AgentAutoLandSchema = object({
 	id: string().min(1).describe("Which conversation."),
 	autoLand: boolean().nullable().describe("Whether its work merges automatically when a turn finishes. Null clears the override and goes back to following the sandbox-wide setting, so a conversation does not sit holding a frozen copy of a default it has quietly stopped following.")
 });
-var AgentResumeAfterOutageSchema = object({
+var AgentUnsentSchema = object({
 	id: string().min(1).describe("Which conversation."),
-	resumeAfterOutage: boolean().nullable().describe("Whether it retries by itself when the model provider was what failed. Null clears the override back to the sandbox-wide setting.")
+	at: number$1().nullable().describe("When the composer started holding the unsent message, in milliseconds. Null says it no longer holds one: it was sent or cleared.")
 });
-var AgentResumeAfterLimitSchema = object({
+var AgentBreakPolicySchema = object({
 	id: string().min(1).describe("Which conversation."),
-	resumeAfterLimit: boolean().nullable().describe("Whether the turn a spent allowance refused is sent again by itself once the window reopens. Null clears the override back to the sandbox-wide setting.")
-});
-var AgentMoveAfterLimitSchema = object({
-	id: string().min(1).describe("Which conversation."),
-	moveAfterLimit: boolean().nullable().describe("Whether the turn a spent allowance refused is moved to another connected account of the same provider that has room, as soon as the refusal lands. Null clears the override back to the sandbox-wide setting.")
+	ending: TurnBreakSchema.describe("Which wall this answers for: a spent usage limit, a provider outage, or a turn that stopped short."),
+	policy: TurnBreakPolicySchema.nullable().describe("What happens next for that ending. `wait` holds the turn for a press; `retry` re-runs it on a bounded ladder (outage, stop); `resend` sends it again at the published reset and `move` also tries another account with room (limit only). An answer the ending does not allow is refused. Null clears the override and goes back to following the sandbox-wide policy, so a conversation does not sit holding a frozen copy of a default it has quietly stopped following.")
 });
 var AgentFileDiffQuerySchema = object({
 	id: string().min(1).describe("Which conversation."),
@@ -16083,6 +11758,7 @@ var LandConflictSchema = object({
 });
 var LandResultSchema = object({
 	landed: boolean().describe("Whether the entire composed change was applied."),
+	changed: boolean().describe("Whether anything actually moved. False alongside merged means there was nothing on the branch to apply: the work is already in your tree, or the branch never carried any."),
 	conflicts: array(LandConflictSchema).optional().describe("What stopped the whole composed change, grouped per repository."),
 	resolving: array(object({
 		repo: string().describe("Which repository."),
@@ -16103,7 +11779,14 @@ var AgentLandSchema = object({
 	force: boolean().optional().describe("Go ahead despite a check that would otherwise refuse.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/claude-gate.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/context-trim.js
+var ContextTrimSchema = object({
+	window: number$1().int().positive().describe("The window that decided it, in tokens, as the model's server declared it."),
+	omitted: array(string()).describe("What was left out, under the same label the chat would have drawn it with, in the order a full turn would have read them."),
+	base: boolean().describe("Whether the agent loop's own base instructions were swapped for a short paragraph as well, which only a replacing runtime can do.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/claude-gate.js
 var RateLimitInfoSchema = object({
 	status: _enum([
 		"allowed",
@@ -16115,7 +11798,7 @@ var RateLimitInfoSchema = object({
 	utilization: number$1().optional()
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/fast-mode.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/providers/fast-mode.js
 var FastModeStateSchema = _enum([
 	"off",
 	"cooldown",
@@ -16172,6 +11855,17 @@ var BrowsersListSchema = object({ sessions: array(object({
 		message: string().describe("What the agent needs, in its own words."),
 		requestedAt: number$1().describe("When it asked, in milliseconds.")
 	}).optional().describe("The agent has hit something only a person can clear: a captcha, a password it does not hold, a check on your phone. Present only while it is waiting."),
+	dialog: object({
+		pageId: string().describe("Which page opened it."),
+		kind: _enum([
+			"alert",
+			"confirm",
+			"prompt",
+			"beforeunload"
+		]).describe("What it asks: an alert wants dismissing, a confirm a yes or no, a prompt a text."),
+		message: string().describe("What the page says."),
+		defaultValue: string().optional().describe("A prompt's prefilled answer.")
+	}).optional().describe("A dialog a page has open and is waiting on. You or the agent answers it; present only while it is open."),
 	pages: array(BrowserPageSchema).describe("Every page it has open. A browser holds several at once, which is the reason it is listed apart from the terminals.")
 })).describe("Every browser the agents have running, open or recently closed.") });
 var BrowserNameParamSchema = object({ name: string().describe("Which browser.") });
@@ -16197,14 +11891,15 @@ var SubagentVerificationSchema = object({
 });
 var SubagentsListSchema = object({ sessions: array(object({
 	id: string().describe("The id of the tool call that started it (an SDK child) or the child's own conversation id (a spawned one); either way both sides already hold it, so a card links to its subagent with the id it has and the subagent points back the same way."),
-	kind: SubagentKindSchema.describe("What sort of subagent: one the runtime's own Task tool spawned in-process, or a full child agent the daemon started for the turn. It changes only how you watch it."),
+	kind: SubagentKindSchema.describe("How it was started: in-process by the runtime's own Agent/Task tool, or spawned by the daemon as a conversation of its own, on any provider. It changes where its record is read from and what else can be done with it, never what it is."),
 	conversationId: string().describe("The conversation whose turn started it, and the way back to the chat it belongs to."),
 	agentType: string().optional().describe("What kind of subagent it is."),
 	description: string().optional().describe("What it was asked to do, in one line."),
-	model: string().optional().describe("Which model it runs on."),
-	provider: string().optional().describe("Which provider serves it, for a child agent spawned across providers."),
+	model: string().optional().describe("Which model it runs on: the exact id its provider served once its own record says so, where the call that started it named only an alias or nothing."),
+	effort: string().optional().describe("How hard it was told to think: its own definition's tier, else the one it inherited from its parent's turn."),
+	provider: string().optional().describe("Which provider serves it, for a subagent spawned across providers."),
 	spawnDepth: number$1().optional().describe("How deep in the chain it sits, where one means the turn itself started it. A subagent can start subagents, and a flat list that could not say so would read as though the turn started all of them."),
-	background: boolean().optional().describe("The parent carried on working instead of waiting for it. This is the whole reason the list exists: such a subagent used to be invisible until its result landed, sometimes minutes later."),
+	background: boolean().optional().describe("The parent carried on working instead of waiting for it. Such a subagent is otherwise invisible until its result lands, sometimes minutes later."),
 	status: SubagentStatusSchema.describe("How it is going. Blocked means it needs an answer, which a parent and an operator act on differently from it simply working."),
 	startedAt: number$1().describe("When it started, in milliseconds."),
 	endedAt: number$1().optional().describe("When it finished, in milliseconds. Absent while it works."),
@@ -16215,10 +11910,9 @@ var SubagentsListSchema = object({ sessions: array(object({
 	summary: string().optional().describe("Its report: what it concluded, without opening its record. The question a finished subagent gets read for."),
 	error: string().optional().describe("Why it failed, when it did."),
 	verification: SubagentVerificationSchema.optional().describe("Whether anything proved the work its report describes.")
-})).describe("Every subagent and child agent this sandbox's conversations have started.") });
-var SubagentIdParamSchema = object({ id: string() });
+})).describe("The subagents conversations the caller can see have started, in-process and spawned alike: every one still working, and the most recent that have settled. Working ones first, then the most recently active.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/share.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/share.js
 var ShareDetailSchema = _enum(["messages", "everything"]);
 var SharedConversationSchema = object({
 	id: string().describe("The share's own id, minted fresh each time, so sharing one conversation twice gives two links. Deliberately not the conversation's id, which is memorable by design and would make a page's address guessable."),
@@ -16238,7 +11932,169 @@ var ShareCreateSchema = object({
 var ShareUpdateSchema = object({ id: string().min(1).describe("Which share to re-take. Its link stays the same, which matters because it has already been sent.") });
 var ShareRemoveSchema = object({ id: string().min(1).describe("Which share to take down.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/events/transcript.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/events/sandbox-notice.js
+var NoticeCodeSchema = object({
+	code: string().describe("Which of the sandbox's notices this row is, by name. A reader that does not know the name shows the row's text."),
+	params: record(string(), union([
+		string(),
+		number$1(),
+		boolean()
+	])).optional().describe("The facts the notice was worded from, by name: counts, names, and the provider's own sentence where the notice quotes one.")
+});
+var count = number$1().int().nonnegative();
+var failure = {
+	message: string(),
+	error: string().optional()
+};
+var ResumeNoticeReasonSchema = _enum([
+	"auth",
+	"outage",
+	"restart",
+	"stopped",
+	"limit",
+	"switched",
+	"carried",
+	"refused",
+	"door",
+	"overflow",
+	"flagged",
+	"continued"
+]);
+discriminatedUnion("code", [
+	object({ code: literal("compacted") }),
+	object({ code: literal("stopped") }),
+	object({
+		code: literal("synced"),
+		params: object({
+			commits: count,
+			blocked: string().optional()
+		})
+	}),
+	object({ code: literal("intoParent") }),
+	object({
+		code: literal("intoParentClash"),
+		params: object({ files: count })
+	}),
+	object({ code: literal("landHeld") }),
+	object({
+		code: literal("landConflict"),
+		params: object({
+			files: count,
+			repos: string()
+		})
+	}),
+	object({
+		code: literal("landed"),
+		params: object({
+			deps: count.optional(),
+			queued: boolean().optional()
+		}).optional()
+	}),
+	object({
+		code: literal("retrying"),
+		params: object({
+			...failure,
+			attempt: count,
+			of: count
+		})
+	}),
+	object({
+		code: literal("retried"),
+		params: object({
+			...failure,
+			made: count,
+			of: count
+		})
+	}),
+	object({
+		code: literal("outageWaiting"),
+		params: object(failure)
+	}),
+	object({
+		code: literal("renewing"),
+		params: object(failure)
+	}),
+	object({
+		code: literal("renewalWithdrawn"),
+		params: object(failure)
+	}),
+	object({
+		code: literal("reconnect"),
+		params: object(failure)
+	}),
+	object({
+		code: literal("undelivered"),
+		params: object({
+			...failure,
+			unattended: boolean().optional()
+		})
+	}),
+	object({
+		code: literal("kept"),
+		params: object({
+			...failure,
+			memory: boolean().optional()
+		})
+	}),
+	object({
+		code: literal("memoryHeld"),
+		params: object(failure)
+	}),
+	object({
+		code: literal("failed"),
+		params: object(failure)
+	}),
+	object({ code: literal("questionDismissed") }),
+	object({ code: literal("planApproved") }),
+	object({ code: literal("keptPlanning") }),
+	object({
+		code: literal("watching"),
+		params: object({
+			note: string(),
+			every: string()
+		})
+	}),
+	object({ code: literal("restartInterrupted") }),
+	object({
+		code: literal("keptWarm"),
+		params: object({
+			tokens: string(),
+			span: string(),
+			refreshes: count
+		})
+	}),
+	object({
+		code: literal("keptCold"),
+		params: object({
+			tokens: string(),
+			span: string(),
+			refreshes: count
+		})
+	}),
+	object({
+		code: literal("contextTrim"),
+		params: object({
+			window: string(),
+			omitted: string().optional(),
+			base: boolean()
+		})
+	}),
+	object({
+		code: literal("resumed"),
+		params: object({ reason: ResumeNoticeReasonSchema })
+	}),
+	object({
+		code: literal("installing"),
+		params: object({
+			ownCopy: boolean(),
+			root: boolean().optional(),
+			projects: string().optional(),
+			more: count.optional()
+		})
+	})
+]);
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/events/transcript.js
 var PlanStatusSchema = _enum([
 	"pending",
 	"approved",
@@ -16254,6 +12110,7 @@ var PermissionStatusSchema = _enum([
 	"pending",
 	"allowed",
 	"always",
+	"everything",
 	"denied",
 	"cancelled"
 ]);
@@ -16276,38 +12133,39 @@ var CapabilityOfferStatusSchema = _enum([
 	"cancelled"
 ]);
 var TranscriptPlanSchema = object({
-	...planCard,
+	...planRequest,
 	status: PlanStatusSchema.describe("Where the decision stands.")
 });
 var TranscriptQuestionSchema = object({
-	...questionCard,
+	...questionRequest,
 	status: QuestionStatusSchema.describe("Where the answer stands."),
-	answers: record(string(), array(string())).optional().describe("What was chosen, keyed by the question, with the chosen labels or the user's own words.")
+	answers: record(string(), array(string())).optional().describe("What was chosen, keyed by the question, with the chosen labels or the user's own words."),
+	attachments: record(string(), array(string())).optional().describe("Files the user attached to their own-words answer, keyed by the question, as workspace-relative paths.")
 });
 var TranscriptPermissionSchema = PermissionAskSchema.extend({
-	...permissionCard,
+	...permissionRequest,
 	status: PermissionStatusSchema.describe("Where the decision stands.")
 });
 var TranscriptBrowserHelpSchema = object({
-	...browserHelpCard,
+	...browserHelpRequest,
 	status: HelpStatusSchema.describe("How the hand-over ended.")
 });
 var TranscriptTerminalHelpSchema = object({
-	...terminalHelpCard,
+	...terminalHelpRequest,
 	status: HelpStatusSchema.describe("How the hand-over ended.")
 });
 var TranscriptCapabilityOfferSchema = object({
-	...capabilityOfferCard,
+	...capabilityOfferRequest,
 	status: CapabilityOfferStatusSchema.describe("Where the decision stands."),
 	outcome: CapabilityOutcomeSchema.optional().describe("How an accepted ask's setup ended (the capability_outcome frame).")
 });
 var TranscriptPaymentOfferSchema = object({
-	...paymentOfferCard,
+	...paymentOfferRequest,
 	status: OfferStatusSchema.describe("Where the decision stands."),
 	receipt: PaymentReceiptSchema.optional().describe("How the approved payment ended (the payment_receipt frame).")
 });
 var TranscriptCredentialOfferSchema = object({
-	...credentialOfferCard,
+	...credentialOfferRequest,
 	status: OfferStatusSchema.describe("Where the decision stands."),
 	receipt: CredentialReceiptSchema.optional().describe("Who released it, or that somebody refused (the credential_receipt frame).")
 });
@@ -16320,10 +12178,12 @@ var TranscriptToolSchema = lazy(() => object({
 	locations: array(ToolCallLocationSchema).optional().describe("The files it touched."),
 	content: array(ToolCallContentSchema).optional().describe("What it produced: text, a change to a file, or a picture."),
 	children: array(TranscriptToolSchema).optional().describe("Calls a delegated subagent made, nested under the call that started it, so a reopened conversation redraws the delegation rather than collapsing it into one result."),
+	nested: number$1().int().nonnegative().optional().describe("How many calls sit under this one, present in place of `children` when they were left behind. A transcript page does that, since a settled delegation draws collapsed; ask for the call's own children to fill it in."),
 	thinking: string().optional().describe("What the agent was reasoning about around this call."),
 	subagent: TranscriptSubagentSchema.optional().describe("The helper this call started, as the daemon's registry sees it: what it is, how it is going, what it has spent. What a card can say about a backgrounded child whose result is minutes away.")
 }));
 var TranscriptSubagentSchema = object({
+	id: string().optional().describe("Its own id, where that is not the card's: a spawned subagent is named by its own conversation, which is what the roster, `wait` and its own chat call it. Absent, the card's id is its id, as it is for one the runtime started in-process."),
 	kind: SubagentKindSchema,
 	agentType: string().optional(),
 	description: string().optional(),
@@ -16337,6 +12197,36 @@ var TranscriptSubagentSchema = object({
 	summary: string().optional(),
 	error: string().optional(),
 	verification: SubagentVerificationSchema.optional()
+});
+var TranscriptWatchWakeSchema = object({
+	outcome: _enum([
+		"met",
+		"timeout",
+		"restart-expired",
+		"broken"
+	]).describe("How the watch ended: the condition held, the deadline passed, or a restart cut it short."),
+	note: string().describe("The agent's own line on what it was waiting for."),
+	elapsed: string().describe("How long the watch stood, already worded ('43m'): carried rather than recomputed, since the arming instant is not on the row."),
+	sent: string().describe("The whole prompt the model was woken with, disclosed under the row.")
+});
+var TranscriptNeedWakeSchema = object({
+	outcome: _enum(["met", "declined"]).describe("How the need ended: a person gave it, or said no."),
+	title: string().describe("The need, as its card leads with it."),
+	id: string().describe("The need's handle, which its live card is keyed by."),
+	sent: string().describe("The whole prompt the model received, disclosed under the row.")
+});
+var TranscriptAgentWordsSchema = object({
+	kind: _enum(["peer", "child"]).describe("Who sent it: another conversation in the workspace, or a subagent this one started."),
+	from: string().describe("The sending conversation's id."),
+	title: string().optional().describe("The sender's title, when it had one."),
+	failed: boolean().optional().describe("A child's report on a turn that failed rather than finished."),
+	sent: string().describe("The whole prompt the model received, disclosed under the row.")
+});
+var TranscriptBackgroundJobSchema = object({
+	id: string().describe("The daemon's handle for the job, which its live state on the conversation's card is keyed by."),
+	label: string().describe("What the job is, in the agent's own words when it gave any, else its command on one line."),
+	command: string().describe("The command as the agent wrote it, folded to one line."),
+	startedAt: number$1().describe("When it started, in milliseconds.")
 });
 var TurnNoteSchema = object({
 	title: string().describe("The one line a reader sees, on a row that opens to the text below."),
@@ -16356,7 +12246,9 @@ var TranscriptRowSchema = object({
 		"notice"
 	]).describe("Who said it. A notice is neither side: it is something that happened to the turn, recorded so a reopened conversation can say it. Without those, a turn a provider refused ends on the user's message and reads as broken."),
 	text: string().describe("The words."),
+	run: string().optional().describe("The run that produced this row. Present on everything a turn produced, absent on rows written outside one. A client draws a run's rows over whatever it already holds for that run, which is what this identifies; content cannot, because the last row of a live run keeps growing."),
 	sentAt: number$1().optional().describe("When it was sent, in milliseconds. On the user's rows only, because that is the only moment actually known: a turn's own frames arrive with no clock, so stamping the agent's rows could only ever mean the whole turn's start or end."),
+	messageId: string().optional().describe("The message's own id, on the rows of messages sent to the agent: what its sender named it, or what the sandbox did. A rewind names the message by it, and the same id sent again is recognised rather than delivered twice."),
 	attachments: array(string()).optional().describe("Files attached to this message, as workspace paths."),
 	checkpointId: string().optional().describe("The saved point this message can be rewound to. Looked up on each read rather than stored, so what is offered is exactly what is still there to go back to."),
 	rewindIndex: number$1().int().nonnegative().optional().describe("This message's position in the conversation's record, which is how a rewind names it. Present only beside a checkpoint."),
@@ -16365,14 +12257,25 @@ var TranscriptRowSchema = object({
 	todos: array(TodoItemSchema).optional().describe("The agent's task checklist, as of this bubble."),
 	usage: TranscriptUsageSchema.optional().describe("What the turn cost, on the bubble its answer ended in."),
 	notes: array(TurnNoteSchema).optional().describe("What the sandbox added to this message before the model saw it. Carried on the message rather than as rows of their own, because they genuinely were part of what was sent."),
+	speaker: TurnSpeakerSchema.optional().describe("Who sent this message, as the sandbox verified it. Absent where it does not say."),
+	errand: TurnErrandSchema.optional().describe("What this message is for, when the sandbox or the app composed it rather than a person typing it. Absent on a person's own words."),
 	placed: boolean().optional().describe("A person wrote this in the agent's voice, with no turn behind it. Marked for the human re-reading the conversation months later, so their own words do not pass as the agent's. The agent itself never sees the mark."),
 	noticeAction: _enum([
 		"landHold",
-		"outageOptOut",
 		"depsInstall",
-		"tierHold"
+		"watchStop",
+		"sandboxMemory",
+		"sendAnyway",
+		"sendAgain"
 	]).optional().describe("A one-press follow-up this notice offers, by name. The chat decides what it does and whether it still applies."),
-	noticeWait: _enum(["credentialRenewal", "personaRoute"]).optional().describe("The wait this notice describes, by name, so a reader can say whether it is still on."),
+	sandboxHeld: boolean().optional().describe("The sandbox kept this refused turn whole, its message still above, so the notice's press runs that turn again instead of letting the conversation's queue go, which never held these words."),
+	noticeWait: _enum([
+		"credentialRenewal",
+		"chatRoute",
+		"watch"
+	]).optional().describe("The wait this notice describes, by name, so a reader can say whether it is still on."),
+	noticeWaitId: string().optional().describe("Which instance of the wait this notice names, for a kind that can have several running at once."),
+	noticeCode: NoticeCodeSchema.optional().describe("Which of the sandbox's own notices this row is, and the facts it was worded from, so a reader can say it in the reader's own language. The text stays the English sentence."),
 	plan: TranscriptPlanSchema.optional().describe("The plan this row asked approval for, and the answer."),
 	question: TranscriptQuestionSchema.optional().describe("The questions this row asked, and the picks that answered them."),
 	permission: TranscriptPermissionSchema.optional().describe("The tool this row asked permission for, and the decision."),
@@ -16380,6 +12283,11 @@ var TranscriptRowSchema = object({
 	terminalHelp: TranscriptTerminalHelpSchema.optional().describe("The terminal hand-over this row asked for, and how it ended."),
 	capabilityOffer: TranscriptCapabilityOfferSchema.optional().describe("The capability setup this row asked for, the decision, and the outcome."),
 	paymentOffer: TranscriptPaymentOfferSchema.optional().describe("The payment this row asked for, the decision, and the receipt."),
+	watchWake: TranscriptWatchWakeSchema.optional().describe("The condition watch that woke this conversation, and the prompt it was woken with."),
+	need: NeedSchema.optional().describe("Something the agent asked a person for, as it was when raised. Its live state (answered, met) is read by its id, since it outlives the turn."),
+	needWake: TranscriptNeedWakeSchema.optional().describe("The answered need that reached this conversation, and the prompt it came as."),
+	agentWords: TranscriptAgentWordsSchema.optional().describe("Another agent's words that reached this conversation, whose they are, and the prompt they came as."),
+	backgroundJob: TranscriptBackgroundJobSchema.optional().describe("The background job this row marks the start of."),
 	credentialOffer: TranscriptCredentialOfferSchema.optional().describe("The gated credential this row asked to use, who may release it, and who did.")
 });
 var TranscriptPatchSchema = discriminatedUnion("op", [
@@ -16407,7 +12315,13 @@ var TranscriptPatchSchema = discriminatedUnion("op", [
 		text: string()
 	}),
 	object({
-		op: literal("tool").describe("A tool card, whole: new, or the latest state of one already there, matched by id wherever it nests."),
+		op: literal("toolThinking").describe("More of a delegated subagent's reasoning, onto the thinking of the card that started it."),
+		index: number$1().int().nonnegative(),
+		id: string().describe("The card's id, matched wherever it nests."),
+		text: string()
+	}),
+	object({
+		op: literal("tool").describe("A tool card's own fields: new, or the latest state of one already there, matched by id wherever it nests. Carries no `children` or `thinking`; a card already there keeps its own."),
 		index: number$1().int().nonnegative(),
 		tool: TranscriptToolSchema,
 		parent: string().optional().describe("The card this one nests under, when it is a delegated subagent's own call.")
@@ -16415,11 +12329,7 @@ var TranscriptPatchSchema = discriminatedUnion("op", [
 ]);
 var SessionTranscriptSchema = object({ messages: array(TranscriptRowSchema).describe("The conversation, in order. Each block of the agent's prose is its own message with the tools that block introduced, which is what reproduces the way it actually unfolded.") });
 var TurnEndingSchema = object({
-	reason: _enum([
-		"stopped",
-		"limit",
-		"outage"
-	]).describe("Which ending left the work here: a Stop or a daemon killed under the turn, a spent usage allowance, or a provider that refused it."),
+	reason: HeldEndingSchema.describe("Which ending left the work here: a Stop or a daemon killed under the turn, a spent usage allowance, a provider that refused it, or the provider's safety classifier stopping it partway."),
 	resetsAt: number$1().optional().describe("When the spent allowance reopens, in epoch seconds. Absent for every ending that names no instant, and for a provider that publishes none."),
 	held: object({
 		ran: boolean().describe("Whether the held turn got anywhere before it was refused, which is a different sentence from one refused at the door."),
@@ -16427,7 +12337,9 @@ var TurnEndingSchema = object({
 		handoffTokens: number$1().optional().describe("What a press that opens a fresh session pays instead: the capped record plus the sandbox's measured brief, counted at the failure."),
 		moving: string().optional().describe("The account the owner's policy is already moving this turn to, when it is; the surface then reports the move rather than offering a press.")
 	}).optional().describe("Present when the daemon still holds the refused turn whole, so a press re-runs it rather than appending a message after it."),
-	scheduled: boolean().optional().describe("Whether something other than the user is already booked to send this turn again, so the surface reports the wait instead of offering a press.")
+	scheduled: boolean().optional().describe("Whether something other than the user is already booked to send this turn again, so the surface reports the wait instead of offering a press."),
+	nextAt: number$1().optional().describe("When the booked send actually fires, in epoch seconds. Present only with `scheduled`; absent for a booking that fires on the next pass, which is 'now' to a reader."),
+	retries: RetryLadderSchema.optional().describe("How many automatic re-runs a stopped turn has already had, of how many. Absent before its first; equal counts mean the ladder is spent and only a press sends it again.")
 });
 var AgentTranscriptSchema = SessionTranscriptSchema.extend({
 	sessionId: string().optional().describe("The provider session behind the last turn, when there is one."),
@@ -16438,6 +12350,7 @@ var AgentTranscriptSchema = SessionTranscriptSchema.extend({
 	from: number$1().int().nonnegative().describe("Where the first message sits in the whole record, and the `before` that asks for the page above this one."),
 	more: boolean().describe("Whether older messages precede this page.")
 });
+var AgentToolChildrenSchema = object({ children: array(TranscriptToolSchema).describe("The calls the delegated agent made, in the order it made them.") });
 object({
 	title: string(),
 	sharedAt: number$1(),
@@ -16445,7 +12358,7 @@ object({
 	messages: array(TranscriptRowSchema)
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/events/agent-events.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/events/agent-events.js
 var AgentEventSchema = discriminatedUnion("kind", [
 	object({
 		kind: literal("session"),
@@ -16472,15 +12385,18 @@ var AgentEventSchema = discriminatedUnion("kind", [
 			missing: number$1(),
 			started: array(string()),
 			deferred: boolean()
-		}).optional()
+		}).optional(),
+		into: string().optional()
 	}),
 	object({
 		kind: literal("preamble"),
 		notes: array(TurnNoteSchema)
 	}),
+	ContextTrimSchema.extend({ kind: literal("context_trim") }),
 	object({
 		kind: literal("init"),
-		model: string()
+		model: string(),
+		prompt: PromptFingerprintSchema.optional()
 	}),
 	object({
 		kind: literal("checkpoint"),
@@ -16491,7 +12407,10 @@ var AgentEventSchema = discriminatedUnion("kind", [
 		kind: literal("steer"),
 		text: string(),
 		sentAt: number$1(),
-		attachments: array(string()).optional()
+		attachments: array(string()).optional(),
+		voice: _enum(["sandbox", "agent"]).optional(),
+		errand: TurnErrandSchema.optional(),
+		messageId: string().optional()
 	}),
 	object({
 		kind: literal("delta"),
@@ -16571,8 +12490,12 @@ var AgentEventSchema = discriminatedUnion("kind", [
 		cacheReadTokens: number$1().optional(),
 		cacheCreationTokens: number$1().optional(),
 		durationMs: number$1().optional(),
-		numTurns: number$1().optional()
+		numTurns: number$1().optional(),
+		openingCacheReadTokens: number$1().optional(),
+		openingCacheCreationTokens: number$1().optional(),
+		promptFingerprint: string().optional()
 	}),
+	PromptCacheOpeningSchema.extend({ kind: literal("prompt_cache") }),
 	RateLimitInfoSchema.extend({
 		kind: literal("rate_limit_info"),
 		account: string().optional()
@@ -16581,15 +12504,6 @@ var AgentEventSchema = discriminatedUnion("kind", [
 		kind: literal("fast_mode"),
 		state: FastModeStateSchema,
 		reason: string().optional()
-	}),
-	object({
-		kind: literal("tier"),
-		tier: _enum(["fast", "standard"]),
-		score: number$1(),
-		rules: array(string()),
-		model: string().optional(),
-		routed: boolean(),
-		held: boolean().optional()
 	}),
 	object({
 		kind: literal("provider_retry"),
@@ -16610,20 +12524,25 @@ var AgentEventSchema = discriminatedUnion("kind", [
 		preTokens: number$1().optional(),
 		postTokens: number$1().optional()
 	}),
-	PlanCardSchema,
-	QuestionCardSchema,
-	PermissionCardSchema,
+	object({
+		kind: literal("install"),
+		reach: _enum(["own-copy", "main-tree"]).describe("Where it writes: this conversation's own copy of the tree, or the main tree every conversation reads."),
+		projects: array(string()).describe("The projects it works on, workspace-relative, the workspace root as an empty string; empty when none could be named.")
+	}),
+	PlanRequestSchema,
+	QuestionRequestSchema,
+	PermissionRequestSchema,
 	object({
 		kind: literal("browser_help"),
-		...browserHelpCard
+		...browserHelpRequest
 	}),
 	object({
 		kind: literal("terminal_help"),
-		...terminalHelpCard
+		...terminalHelpRequest
 	}),
 	object({
 		kind: literal("capability_offer"),
-		...capabilityOfferCard
+		...capabilityOfferRequest
 	}),
 	CapabilityOutcomeSchema.extend({
 		kind: literal("capability_outcome"),
@@ -16631,7 +12550,7 @@ var AgentEventSchema = discriminatedUnion("kind", [
 	}),
 	object({
 		kind: literal("payment_offer"),
-		...paymentOfferCard
+		...paymentOfferRequest
 	}),
 	PaymentReceiptSchema.extend({
 		kind: literal("payment_receipt"),
@@ -16639,11 +12558,15 @@ var AgentEventSchema = discriminatedUnion("kind", [
 	}),
 	object({
 		kind: literal("credential_offer"),
-		...credentialOfferCard
+		...credentialOfferRequest
 	}),
 	CredentialReceiptSchema.extend({
 		kind: literal("credential_receipt"),
 		requestId: string()
+	}),
+	object({
+		kind: literal("need"),
+		need: NeedSchema
 	}),
 	object({
 		kind: literal("resolved"),
@@ -16662,6 +12585,7 @@ var AgentEventSchema = discriminatedUnion("kind", [
 			"rate_limit",
 			"codex-advisory",
 			"codex-reauth",
+			"acp-auth-required",
 			"claude-reauth",
 			"claude-token-refused",
 			"claude-not-entitled",
@@ -16674,31 +12598,44 @@ var AgentEventSchema = discriminatedUnion("kind", [
 			"codex-model-invalid",
 			"model-unavailable",
 			"context-window-too-small",
+			"model-helper-only",
+			"privacy-unshielded",
+			"context-overflow",
 			"subscription-required",
 			"agent-busy",
 			"sandbox-memory-low",
 			"turn-cap",
 			"harness-incomplete",
-			"engine-version-floor"
+			"engine-version-floor",
+			"safeguard-flagged"
 		]).optional(),
+		refusal: object({
+			category: string().optional().describe("The classifier's category as the provider named it (cyber, bio, reasoning_extraction, …), when it did."),
+			resumeAt: string().optional().describe("The last session entry before the stopped response: a retry resumes the session there, so the model never sees what was stopped.")
+		}).optional(),
 		engine: object({
 			id: string().describe("Which engine (e.g. claude)."),
 			running: string().optional().describe("The version that was refused, when the provider named it."),
 			floor: string().describe("The lowest version the provider will accept.")
 		}).optional(),
 		resetsAt: number$1().optional(),
+		account: string().optional().describe("Which of the provider's accounts served (or was refused for) the turn, where the sandbox holds it."),
 		autoResume: _enum(["scheduled", "available"]).optional(),
+		nextAt: number$1().optional(),
 		held: object({
 			ran: boolean(),
 			contextTokens: number$1().optional(),
 			handoffTokens: number$1().optional(),
 			moving: string().optional()
 		}).optional(),
-		outage: object({
-			retryAt: number$1(),
-			attempt: number$1(),
-			maxAttempts: number$1()
-		}).optional()
+		outage: object({ retryAt: number$1() }).optional(),
+		retries: RetryLadderSchema.optional(),
+		memory: object({
+			limitBytes: number$1().describe("The cgroup's ceiling: what a raise would move."),
+			residentBytes: number$1().describe("memory.current, the resident charge alone."),
+			swapBytes: number$1().describe("memory.swap.current; 0 when swap is off or unaccounted.")
+		}).optional(),
+		unattended: boolean().optional()
 	}),
 	object({ kind: literal("done") })
 ]);
@@ -16712,7 +12649,6 @@ var TURN_FACT_KINDS = [
 	"usage",
 	"rate_limit_info",
 	"fast_mode",
-	"tier",
 	"provider_retry",
 	"account_usage",
 	"context_usage",
@@ -16741,7 +12677,37 @@ var AttachFrameSchema = discriminatedUnion("kind", [
 	object({ kind: literal("end").describe("The run is over and every frame has been delivered. A stream that closes without this was dropped mid-run, so re-attach rather than assuming the turn finished.") })
 ]);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/history.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/chat-route.js
+var ChatRouteAskSchema = object({
+	prompt: string().min(1).max(2e4).describe("The message a new chat is about to open with."),
+	paths: array(string().min(1).max(500)).max(50).default([]).describe("Workspace paths the message names: uploads, @-mentions, the editor's own file. How much real code the work touches, and which persona's ground it stands on."),
+	folder: string().max(200).optional().describe("The workspace folder the chat was opened in, when it was opened in one."),
+	editorContext: boolean().optional().describe("Whether the message carries a file and selection the user pointed at, so it is about real code."),
+	planMode: boolean().optional().describe("Whether the chat opens in plan mode, which is a request to think before acting."),
+	model: boolean().describe("Whether to choose the model, effort and account: true when the chat is on Auto and nothing has been picked by hand."),
+	persona: boolean().describe("Whether to choose the persona: true when persona matching is on and the chat has not been pointed at one by hand.")
+});
+var ModelPickSchema = object({
+	provider: AgentProviderSchema.describe("Which provider serves the conversation."),
+	model: string().min(1).describe("Which of its models."),
+	effort: string().optional().describe("How hard it should think, where the model offers a choice. Absent takes the model's own default."),
+	account: string().optional().describe("Which connected account pays, by its daemon-minted id. Absent leaves it to whichever account has the most headroom.")
+});
+var PersonaVerdictSchema = object({
+	id: entryId.optional().describe("The persona this message belongs to, or absent when none does."),
+	reason: string().describe("Why, in the one clause a chat can show. Present whether or not a persona was named.")
+});
+var ModelVerdictSchema = object({
+	pick: ModelPickSchema.optional().describe("What the conversation should run on, or absent when nothing could be chosen and the usual pick stands."),
+	reason: string().describe("Why, in the one clause a chat can show. Present whether or not a model was named.")
+});
+var ChatRouteSchema = object({
+	persona: PersonaVerdictSchema.optional().describe("The persona half's answer, present only when it was asked for."),
+	model: ModelVerdictSchema.optional().describe("The model half's answer, present only when it was asked for."),
+	judge: string().optional().describe("Which model answered, as `provider:model`, so the chat can name what the reading cost. Absent when no model was reached at all.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/history.js
 var SnapshotTriggerSchema = _enum([
 	"turn",
 	"interval",
@@ -16757,7 +12723,8 @@ var SnapshotsListSchema = object({ snapshots: array(object({
 })).describe("Every point you can go back to, newest first.") });
 var RewindTurnSchema = object({
 	conversationId: string().min(1).describe("Which conversation to rewind."),
-	index: number$1().int().nonnegative().describe("Which message to go back to, counting from the start. It is also how many messages survive: rewinding to the first keeps none of them and puts the files back to before it ran.")
+	index: number$1().int().nonnegative().describe("Which message to go back to, counting from the start. It is also how many messages survive: rewinding to the first keeps none of them and puts the files back to before it ran."),
+	messageId: string().min(1).describe("The id of the message at that position, as its row names it. If that position now holds a different message, nothing is rewound: the transcript has moved since you read it.")
 });
 var RewindResultSchema = object({
 	snapshot: string().optional().describe("The saved point the files were put back to. Absent for a conversation working in its own copy, whose rewind moved a branch rather than the shared timeline."),
@@ -16792,65 +12759,141 @@ var FileDiffSchema = object({
 	partial: PartialFileDiffSchema.optional().describe("Set when the file was too large to send whole: what is sent instead of the two sides.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/agent.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/agent.contract.js
 var agentContract = {
-	run: oc.route({
+	run: procedure.route({
 		method: "POST",
 		path: "/agent",
 		summary: "Say something to an agent",
-		description: "Starts a turn and answers immediately with its id; the work runs inside the sandbox whether or not anybody stays connected. Watch it by attaching. Naming a conversation that does not exist yet opens it."
-	}).input(AgentTurnSchema).output(StartedTurnSchema),
-	attach: oc.route({
+		description: "Answers at once with what became of the message: it starts a turn when the conversation is free, is said into the running turn where that turn takes words mid-way, and otherwise waits in the conversation's queue for the next turn, where every window sees it. The work runs inside the sandbox whether or not anybody stays connected; watch it by attaching. Naming a conversation that does not exist yet opens it. Give the message an id, and sending it again after a lost answer is met with what became of it the first time rather than a second delivery."
+	}).meta({
+		floor: "collaborator",
+		guest: true,
+		control: "editor"
+	}).input(AgentRunSchema).output(MessageReceiptSchema),
+	attach: procedure.route({
 		method: "POST",
 		path: "/agent/attach",
 		summary: "Watch a turn happen",
-		description: "Streams everything the agent does: its words, the tools it reaches for, and the answers it gets. Give it the point you have already seen and it replays from there before going live, so a reload loses nothing. The window that started the turn holds no special claim, and any number of watchers on any number of devices see the same thing."
-	}).input(AttachTurnSchema).output(eventIterator(AttachFrameSchema)),
-	reply: oc.route({
+		description: "Streams everything the agent does: its words, the tools it reaches for, and the answers it gets. It opens with the turn's transcript whole as it stands, then sends every change as it lands, so a reload or a dropped connection loses nothing: attaching again hands over the whole transcript again. The window that started the turn holds no special claim, and any number of watchers on any number of devices see the same thing."
+	}).meta({
+		floor: "viewer",
+		guest: true,
+		stream: true,
+		control: "read"
+	}).input(AttachTurnSchema).output(streamOf(AttachFrameSchema)),
+	reply: procedure.route({
 		method: "POST",
 		path: "/agent/reply",
 		summary: "Answer a question the agent asked",
 		description: "Un-parks a turn that is waiting on you: approving a plan, choosing between options, or permitting a tool. The turn picks up where it stopped."
+	}).meta({
+		floor: "collaborator",
+		guest: true,
+		control: "editor"
 	}).input(AgentReplySchema).output(OkSchema$1),
-	steer: oc.route({
+	steer: procedure.route({
 		method: "POST",
 		path: "/agent/steer",
 		summary: "Interrupt a running turn",
-		description: "Slips a message into a turn already under way, without stopping it. This is how you redirect an agent mid-thought rather than waiting for it to finish being wrong."
-	}).input(SteerSchema).output(OkSchema$1),
-	stop: oc.route({
+		description: "Slips a message into a turn already under way, without stopping it. This is how you redirect an agent mid-thought rather than waiting for it to finish being wrong. Give the message an id, and sending it again after a lost answer is met with what became of it the first time rather than saying it twice."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(SteerSchema).output(MessageReceiptSchema),
+	stop: procedure.route({
 		method: "POST",
 		path: "/agent/stop",
 		summary: "Stop a turn now",
-		description: "Cancels the running turn inside the sandbox. Whatever it had already written to disk stays written."
-	}).input(StopTurnSchema).output(OkSchema$1),
-	resume: oc.route({
+		description: "Cancels the running turn inside the sandbox. Whatever it had already written to disk stays written, and whatever waits in the conversation's queue is held there, for everyone, until somebody resumes it. Name the run you mean: a stop that arrives after that run has ended cancels nothing, rather than whatever turn started next."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(StopTurnSchema).output(StopResultSchema),
+	queueEdit: procedure.route({
+		method: "POST",
+		path: "/agent/queue/edit",
+		summary: "Reword a waiting message",
+		description: "Changes what a message waiting in the conversation's queue says, keeping its place. Name the revision you read it at: if somebody changed it since, on this device or another, nothing is changed and you are told so."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(QueueEditSchema).output(ConversationQueueSchema),
+	queueRemove: procedure.route({
+		method: "POST",
+		path: "/agent/queue/remove",
+		summary: "Take back a waiting message",
+		description: "Removes a message from the conversation's queue before the agent gets it. Name the revision you read it at: a message somebody reworded since is left alone, so you never take back words you have not seen."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(QueuedMessageRefSchema).output(ConversationQueueSchema),
+	queueResume: procedure.route({
+		method: "POST",
+		path: "/agent/queue/resume",
+		summary: "Let waiting messages go",
+		description: "Releases a queue held after a stop or a refusal: what waits goes out now as one turn when nothing is running, or after the running turn otherwise. Name who serves that turn when the conversation has been re-pointed since the messages were queued."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(QueueResumeSchema).output(QueueResumedSchema),
+	queueSchedule: procedure.route({
+		method: "POST",
+		path: "/agent/queue/schedule",
+		summary: "Reschedule waiting messages",
+		description: "Books what waits in the conversation's queue to go out by itself at another instant, or once another conversation has finished and its work has landed, holding it until then. Works on a queue that is held for any reason, or on messages waiting behind a running turn. A time already past, or a conversation with nothing left to land, lets them go now."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(QueueScheduleSchema).output(ConversationQueueSchema),
+	resume: procedure.route({
 		method: "POST",
 		path: "/agent/resume",
 		summary: "Run a refused turn again",
 		description: "Sends the same turn again when the model provider's allowance refused it, with everything it originally carried except who serves it: the caller may name a different provider, harness or account, which is the usual answer to a spent allowance. It repeats the request rather than adding a new message to the conversation, so pressing it twice costs nothing and the agent is never told to continue work it has not started."
+	}).meta({
+		floor: "collaborator",
+		guest: true
 	}).input(ResumeTurnSchema).output(StartedTurnSchema),
-	rewind: oc.route({
+	switchAccount: procedure.route({
+		method: "POST",
+		path: "/agent/account",
+		summary: "Move a conversation to another account",
+		description: "Points the conversation at another connected account of the provider it runs on, for every turn from now on. It starts nothing by itself: with `run`, a turn held by a spent allowance or a stop runs again at once on that account, which is how a refused turn continues elsewhere. Without `carry` the next turn opens a fresh session seeded from the record."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(SwitchAccountSchema).output(AccountSwitchedSchema),
+	rewind: procedure.route({
 		method: "POST",
 		path: "/agent/rewind",
 		summary: "Go back to an earlier message",
-		description: "Puts the files back as they stood at that point, drops every message after it, and forgets what the model remembered, so the next thing you say starts from there cleanly. Refused while a turn is running, because a restore cannot overwrite files an agent is editing, and refused for a message with no saved state to return to."
+		description: "Puts the files back as they stood at that point, drops every message after it, and forgets what the model remembered, so the next thing you say starts from there cleanly. Refused while a turn is running, because a restore cannot overwrite files an agent is editing; refused for a message with no saved state to return to; and refused when that position no longer holds the message you named, because the conversation moved since you read it."
+	}).meta({
+		floor: "collaborator",
+		guest: true
 	}).input(RewindTurnSchema).output(RewindResultSchema),
-	commands: oc.route({
+	commands: procedure.route({
 		method: "GET",
 		path: "/agent/commands",
 		summary: "Shortcut commands the agent knows",
 		description: "The commands a provider published the last time one of its turns ran, so a composer can offer them before this conversation has run anything. A running turn's own list wins over this one."
-	}).input(AgentCommandsQuerySchema).output(AgentCommandsSchema),
-	refusals: oc.route({
+	}).meta({ guest: true }).input(AgentCommandsQuerySchema).output(AgentCommandsSchema),
+	routeChat: procedure.route({
+		method: "POST",
+		path: "/agent/route-chat",
+		summary: "Choose what a new chat opens on",
+		description: "Reads a new chat's opening message once and answers whichever of two questions it still has: the model, effort and account that conversation should run on, from what is connected and still has allowance left, and which of this sandbox's personas should handle it. `model` and `persona` on the ask say which halves to answer, and only those are put to the model. Asked once per chat, on the message actually sent, and never again: every turn after it runs on what the chat is wearing, which you are free to change. Answers with nothing, and a reason, whenever it cannot choose — a chat is never held up by this."
+	}).meta({ floor: "collaborator" }).input(ChatRouteAskSchema).output(ChatRouteSchema),
+	refusals: procedure.route({
 		method: "GET",
 		path: "/agent/refusals",
 		summary: "The last time each provider said no",
 		description: "What each model provider most recently refused and why. Read this alongside an account's usage: the usage says how full it was when last checked, this says whether it has since started turning work away."
-	}).output(ProviderRefusalsSchema)
+	}).meta({ guest: true }).output(ProviderRefusalsSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/issues.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/issues.js
 var IssueKindSchema = _enum([
 	"crash",
 	"report",
@@ -16959,7 +13002,19 @@ var IssueInstallsSchema = object({ origins: array(object({
 })) });
 var IssueIntakeIdParamSchema = object({ automationId: entryId.describe("Which intake.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/automations.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/time/zone.js
+var isZone = (value) => {
+	if (value.startsWith("+") || value.startsWith("-")) return false;
+	try {
+		return Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone !== "";
+	} catch {
+		return false;
+	}
+};
+var ZoneSchema = string().refine(isZone, { message: "Not a zone name ICU knows, e.g. Europe/Warsaw or UTC." });
+string().regex(/^\d{4}-\d{2}-\d{2}$/, "A calendar day as YYYY-MM-DD.");
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/automations.js
 var WorkspaceEventKindSchema = _enum([
 	"turn.settled",
 	"agent.landed",
@@ -16995,7 +13050,12 @@ var TriggerSchema = discriminatedUnion("kind", [
 	object({
 		kind: literal("schedule").describe("On a clock."),
 		cron: string().min(1).describe("When, in cron notation."),
+		tz: ZoneSchema.optional().describe("Which clock the times in the cron mean, as a zone name like Europe/Warsaw. Leave it out to use the sandbox's own setting, which is what you want unless this one chore belongs to a different place."),
 		afterSessions: number$1().int().positive().optional().describe("Fire only once at least this many new sessions have been run since the last wake. A due run short of that is skipped, and says how far off it is.")
+	}),
+	object({
+		kind: literal("once").describe("At one moment, and then never again."),
+		at: number$1().int().positive().describe("The moment it fires, in milliseconds. An absolute instant, so it means the same thing wherever the sandbox runs.")
 	}),
 	object({
 		kind: literal("event").describe("When something calls its webhook."),
@@ -17208,7 +13268,7 @@ var AutomationCatalogSchema = object({
 	templates: array(AutomationTemplateSchema)
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/ci.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/ci.js
 var CiHostSchema = _enum(["github", "gitlab"]);
 var PipelineStatusSchema = _enum([
 	"queued",
@@ -17227,6 +13287,7 @@ var PipelineRunSchema = object({
 	authorName: string().optional().describe("Who the forge credits for setting it off."),
 	authorAvatarUrl: string().optional().describe("Their picture, hosted by the forge. Absent means drawing their initials instead."),
 	trigger: string().optional().describe("What set it off, in the forge's own word rather than flattened into a shared vocabulary, because the forge's word is the precise one."),
+	workflow: string().optional().describe("Which workflow it is a run of, where a push starts several. Absent where a commit has one pipeline."),
 	branch: string().describe("Which branch."),
 	sha: string().describe("Which commit."),
 	status: PipelineStatusSchema.describe("How it is going. Queued means the forge has accepted it and nothing is executing it yet, which is a different thing to wait on than a run actually in progress."),
@@ -17245,16 +13306,48 @@ var CiJobsResponseSchema = object({ jobs: array(object({
 	durationSeconds: number$1().optional().describe("How long it took."),
 	webUrl: string().optional().describe("Its page on the forge, which is the shortest path from this step failed to the log that says why.")
 })).describe("The steps inside one run. Fetched separately from the run list, so that list stays cheap.") });
+var CiRepoSchema = object({
+	repo: string().describe("Which workspace repository."),
+	host: CiHostSchema.describe("Which forge it lives on."),
+	project: string().describe("The project there."),
+	url: string().describe("Its page on the forge."),
+	hookWarning: string().optional().describe("Present when the sandbox could not register for instant notifications, with what happened. Without them the sandbox polls instead, so this costs a couple of minutes' delay rather than the feature."),
+	hookRecipe: string().optional().describe("What to paste into the repository's webhook settings by hand, secret included. Shown to a maintainer or the owner only.")
+});
+var MainFailureDecisionKindSchema = _enum([
+	"fix-up",
+	"reported",
+	"spent"
+]);
+var MainFailureHandBackSchema = _enum([
+	"turns",
+	"no-change",
+	"stopped",
+	"interrupted",
+	"turn-failed",
+	"gone",
+	"refused"
+]);
+var MainFailureDecisionSchema = object({
+	kind: MainFailureDecisionKindSchema.describe("What was decided."),
+	reason: MainFailureHandBackSchema.optional().describe("Why the fix agent handed it back, on a `spent` decision."),
+	conversationId: string().optional().describe("The conversation working on it, when one is."),
+	at: number$1().describe("When that was decided, in milliseconds."),
+	detail: string().optional().describe("One short sentence on why, in the sandbox's words.")
+});
+var CiMainFailureSchema = object({
+	repo: string().describe("Which workspace repository."),
+	branch: string().describe("Which main-line branch."),
+	since: number$1().describe("When its first job failed, in milliseconds."),
+	runId: number$1().describe("The newest run that failed on it."),
+	jobs: array(string()).describe("The jobs failing on it now, by name: the newest failed run's failures, and any that failed since."),
+	fixer: string().optional().describe("The one conversation working on it, which every failure goes to until the branch passes. Absent while nobody is on it."),
+	decision: MainFailureDecisionSchema.optional().describe("The latest thing decided about it: `fix-up` while the fix agent has it, `spent` once it waits for you (its turns are used up, or it stopped without a fix), `reported` when repairs are off.")
+});
 var CiRunsResponseSchema = object({
-	repos: array(object({
-		repo: string().describe("Which workspace repository."),
-		host: CiHostSchema.describe("Which forge it lives on."),
-		project: string().describe("The project there."),
-		url: string().describe("Its page on the forge."),
-		hookWarning: string().optional().describe("Present when the sandbox could not register for instant notifications, with what happened. Without them the sandbox polls instead, so this costs a couple of minutes' delay rather than the feature."),
-		hookRecipe: string().optional().describe("What to paste into the repository's webhook settings by hand, secret included. Shown to a maintainer or the owner only.")
-	})).describe("Which workspace repositories are wired to a forge, and how each one's notifications are set up."),
-	runs: array(PipelineRunSchema).describe("Runs across all of them, newest first.")
+	repos: array(CiRepoSchema).describe("Which workspace repositories are wired to a forge, and how each one's notifications are set up."),
+	runs: array(PipelineRunSchema).describe("Runs across all of them, newest first."),
+	failures: array(CiMainFailureSchema).optional().describe("Every main-line branch failing right now, with the fix agent on it. Absent from a daemon that keeps none.")
 });
 var CiRunParamSchema = object({
 	repo: string().describe("Which workspace repository. The project behind it is resolved fresh each call, so a stale screen cannot act on one the workspace no longer maps to."),
@@ -17262,6 +13355,7 @@ var CiRunParamSchema = object({
 });
 var CiFixParamSchema = CiRunParamSchema.extend({
 	pick: AgentRunPickSchema.describe("Which model to open the conversation on, when somebody chose one. Leave it out for the sandbox's own choice, which is the ordinary path."),
+	fallback: AgentRunPickSchema.describe("The model a new chat opens on for whoever pressed, for when nobody chose one and no model set for fixing pipelines can run. Used while this sandbox can serve its provider; left out, or not servable, the sandbox takes its default provider when connected, else the first one connected."),
 	mode: _enum(["continue", "start-over"]).optional().describe("What to do about the attempt already made at this run, when there is one. `continue` carries on in that conversation; `start-over` stops it if running, files it away, and opens the next attempt on a clean worktree. Leave it out for the plain press: an attempt that ended is continued, a fresh failure gets attempt 1, and one still in play answers CONFLICT with why."),
 	force: boolean().optional().describe("Open the conversation even when every failed job died in its runner's own setup, which is the fleet's fault and nothing an agent on the code can repair. Left out, such a run is refused with that sentence.")
 });
@@ -17284,7 +13378,7 @@ var CommandRunSchema = object({
 	output: string().describe("The end of what it printed, as plain text with the colour codes and redrawn progress lines resolved away. The end rather than the beginning, because a suite's verdict is at the end. Empty while it runs, and for one that was killed.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/git/git.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/git/git.js
 var GitDiffSideSchema = _enum([
 	"staged",
 	"unstaged",
@@ -17294,8 +13388,9 @@ var GitScopeSchema = object({
 	side: GitDiffSideSchema.optional().describe("Narrow to one of the three lists a repository's changes split into. Leave it out for all of them, which is the whole repository."),
 	origin: string().min(1).optional().describe("Narrow to the files one conversation landed. Leave it out for everyone's, including your own edits.")
 });
+var MAX_ACTION_PATHS = 1e3;
 var GitTargetSchema = object({
-	paths: array(string().min(1)).max(1e3).describe("Exactly these repository-relative paths. For anything bigger than a hand-picked selection, describe a scope instead.").optional(),
+	paths: array(string().min(1)).max(MAX_ACTION_PATHS).describe("Exactly these repository-relative paths. For anything bigger than a hand-picked selection, describe a scope instead.").optional(),
 	scope: GitScopeSchema.optional().describe("What to act on, described rather than listed, so it covers every matching file in the repository and not just the ones a list could hold.")
 });
 var ONE_TARGET = { message: "name paths or a scope, not both" };
@@ -17315,7 +13410,7 @@ var PushRefusalSchema = _enum([
 var PushRunSchema = CommandRunSchema.extend({
 	repo: string().describe("The repository this run is about, the same id the routes take."),
 	reason: string().optional().describe("Why not, in git's own words: the last verdict line, for a row that has room for one line. The whole tail is `output`."),
-	refusedBy: PushRefusalSchema.optional().describe("Who refused a failed push: this repository's pre-push hook (the code is wrong, a fix is worth proposing), the remote (pull first), or the transport (credentials, network: retry). Absent while it runs and for a push that went.")
+	refusedBy: PushRefusalSchema.optional().describe("Who refused a failed push: this repository's own pre-push hook (what it printed is about the code), the remote (pull first), or the transport (credentials, network: retry). Absent while it runs and for a push that went.")
 });
 var GitFileQuerySchema = RepoParamSchema.extend({ path: string().min(1).describe("The file to read, relative to the repository root.") });
 var GitFileWriteSchema = RepoParamSchema.extend({
@@ -17400,6 +13495,19 @@ var GitOperationStateSchema = object({
 	repo: string().describe("The repository asked about."),
 	operation: GitOperationSchema.optional().describe("Which operation the working tree is stuck inside. Absent means it is not stuck at all, which is almost always. While one is present git refuses nearly everything else, and abandoning it is the only way out.")
 });
+var ScratchReasonSchema = _enum([
+	"hidden",
+	"byproduct",
+	"checkout",
+	"oversized",
+	"root"
+]).describe("Why it looks like scratch. A new hidden directory that is not one a project keeps on purpose (like `.github`). A log, dump, backup or editor leftover. A git checkout of its own. A new file past the size source code reaches. Or a new dotfile at the top of a workspace whose projects are the repositories inside it.");
+var ScratchPathSchema = object({
+	path: string().describe("Relative to its repository. A directory ends in a slash and stands for everything inside it."),
+	reason: ScratchReasonSchema,
+	files: number$1().optional().describe("How many files it holds. Absent for a checkout of its own, whose contents are not walked."),
+	bytes: number$1().optional().describe("Their total size in bytes. Absent exactly when `files` is.")
+});
 var RepoChangesSchema = object({
 	repo: string(),
 	branch: string().optional().describe("The checked-out branch. Absent in a repository that has no commits yet."),
@@ -17411,6 +13519,7 @@ var RepoChangesSchema = object({
 		staged: number$1().describe("Staged changes not listed above."),
 		unstaged: number$1().describe("Unstaged changes not listed above.")
 	}).optional().describe("How many changes were cut from each of the two lists above. A freshly cloned monorepo or a mass delete runs to six figures, which no screen can draw, so past a budget the lists arrive short and this says by how much on each side. Absent means they are complete."),
+	scratch: array(ScratchPathSchema).optional().describe("Untracked paths that look like scratch. Staging or committing everything leaves them out, while staging one by its own path takes it like any other file. Absent when there are none."),
 	remote: GitRemoteStateSchema.optional().describe("Where this repository stands against its remote."),
 	origins: record(string(), array(string())).optional().describe("Which conversation put each path here, newest first, keyed by path. Only work that went through a merge can appear: edits made in the shared tree, in a terminal, or by a person are simply absent rather than guessed at."),
 	error: string().optional().describe("Why the repository could not be read at all, in git's own words. A repository left broken by a failed import arrives with empty lists and this set, rather than vanishing from the answer with nothing to act on.")
@@ -17439,15 +13548,36 @@ var WorkspaceModulesSchema = object({ repos: array(object({
 	modules: array(WorkspaceModuleSchema).describe("Its packages.")
 })).describe("Every repository with the packages inside it.") });
 var AgentChangeSchema = GitChangeSchema.extend({ landed: boolean().describe("Whether your workspace already holds this content. Read from the tree at request time, not from what a land recorded: discard a landed file in the Changes panel and this goes back to false, which is what puts it back under Land now.") });
+var AddedDependenciesSchema = object({
+	path: string().describe("The manifest, relative to the repository root, such as video/package.json."),
+	added: array(string()).describe("The names it declares now and did not declare before, sorted. Only new names: a version bump of a dependency already there is not listed.")
+});
 var AgentChangesSchema = object({
 	repos: array(object({
 		repo: string().describe("Which repository."),
 		branch: string().optional().describe("The branch this conversation's work sits on."),
 		changes: array(AgentChangeSchema).describe("What it changed there."),
-		modules: array(WorkspaceModuleSchema).describe("The packages of the tree these changes came from, so a review can group by package. Carried with the changes rather than looked up separately, because a package the conversation has just created exists only in its own copy and the shared tree has never heard of it.")
+		modules: array(WorkspaceModuleSchema).describe("The packages of the tree these changes came from, so a review can group by package. Carried with the changes rather than looked up separately, because a package the conversation has just created exists only in its own copy and the shared tree has never heard of it."),
+		addedDependencies: array(AddedDependenciesSchema).optional().describe("Dependencies the changed manifests here declare that they did not before (package.json, pyproject.toml, requirements.txt), one entry per manifest that gained any. The review is where a new dependency is approved: a conversation installs freely in its own copy, and this is what the project takes on if the work lands. Absent when none was added.")
 	})).describe("One entry per repository the conversation touched."),
 	absorbed: number$1().describe("How many of this conversation's files your own history already carries, and which are therefore not listed as differences any more."),
-	conflicts: array(LandConflictSchema).optional().describe("Why the last merge refused, when one did. Carried here as well as in the merge's own answer, because a conflict is found the moment a turn ends and dealt with hours later on this surface, which would otherwise open with nothing to explain what it promised to resolve.")
+	conflicts: array(LandConflictSchema).optional().describe("Why the last merge refused, when one did. Carried here as well as in the merge's own answer, because a conflict is found the moment a turn ends and dealt with hours later on this surface, which would otherwise open with nothing to explain what it promised to resolve."),
+	elsewhere: array(object({
+		repo: string().describe("Which repository."),
+		branch: string().optional().describe("The branch its copy is standing on. Absent where it stands on no branch at all, which is a state git allows."),
+		carried: boolean().optional().describe("Whether everything the conversation committed there has also been copied onto its own branch, so what is listed here and what a merge brings include it. False where a commit would not copy over cleanly. Absent from a sandbox too old to copy it, which never did."),
+		uncommitted: boolean().optional().describe("Whether its copy there holds uncommitted changes to tracked files, which no merge brings until they are committed there.")
+	})).optional().describe("Repositories whose copy the conversation left standing on a different branch of its own. What is listed for them is this conversation's own branch, onto which each turn copies what it committed on the other branch unless `carried` says it could not."),
+	scratch: array(object({
+		repo: string().describe("Which repository."),
+		paths: array(ScratchPathSchema).describe("What it keeps out there.")
+	})).optional().describe("Untracked files the conversation left in its copy that look like scratch: logs, probe scripts, dumps, a checkout of its own. They are not in the list above and no merge carries them. They stay in its copy until they are included or deleted, and go with the copy when it is archived or retired. Absent when there are none.")
+});
+var AgentConflictsSchema = AgentChangesSchema.pick({ conflicts: true });
+var AgentScratchSchema = object({
+	id: string().min(1).describe("Which conversation."),
+	repo: string().min(1).describe("Which repository of its composition."),
+	paths: array(string().min(1)).min(1).max(MAX_ACTION_PATHS).describe("Paths exactly as the review lists them under scratch, a directory with its trailing slash.")
 });
 var AgentHistoryCommitSchema = object({
 	sha: string().describe("The commit."),
@@ -17466,146 +13596,786 @@ var AgentHistorySchema = object({
 	unaccounted: number$1().describe("How many of the conversation's absorbed files none of these commits carries. Above zero means its content reached your main line by some other road, so the commits listed are not the whole story.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/agents.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/command-classes.js
+var globally$1 = (patterns) => patterns.map((pattern) => new RegExp(pattern.source, `${pattern.flags}g`));
+var GIT_DESTRUCTIVE = [
+	/\bgit\s+push\b[^|;&]*\s(?:-f\b|--force\b|--force-with-lease\b|--delete\b)/,
+	/\bgit\s+reset\b[^|;&]*\s--hard\b/,
+	/\bgit\s+clean\b[^|;&]*\s-{1,2}[a-zA-Z]*f/,
+	/\bgit\s+branch\b[^|;&]*\s(?:-D\b|--delete\s+--force\b|--force\s+--delete\b)/,
+	/\bgit\s+filter-branch\b/
+];
+var GIT_BRANCH_SWITCH = [/\bgit\s+switch\b/, /\bgit\s+checkout\b(?![^|;&]*\s--\s)(?![^|;&]*\s\.(?:\s|$))/];
+var SECRET_REFERENCES = [/\{\{secret:[A-Za-z0-9_./-]+\}\}/];
+var LEADING_PATH = String.raw`[\w~$.{}/\\-]*`;
+var CREDENTIAL_PATHS = [
+	/(?<![\w.])\.env(?!\.(?:example|sample|template))(?:\.[\w-]+)?\b/,
+	/\.ssh(?!\w)(?!\/(?:known_hosts|config|authorized_keys|environment)(?!\w))(?!\/[\w.-]*\.pub(?!\w))(?:\/[\w.\-/]*)?/,
+	/\bid_(?:rsa|dsa|ecdsa|ed25519)\b(?!\.pub\b)/,
+	new RegExp(String.raw`${LEADING_PATH}\.aws/credentials\b`),
+	new RegExp(String.raw`${LEADING_PATH}\.npmrc(?!\.(?:example|sample|template))\b`),
+	new RegExp(String.raw`${LEADING_PATH}\.git-credentials\b`),
+	new RegExp(String.raw`${LEADING_PATH}\.credentials\.json\b`)
+];
+var PACKAGE_PUBLISH = [
+	/\b(?:npm|pnpm|yarn|bun)\s+publish\b/,
+	/\bcargo\s+publish\b/,
+	/\bgh\s+release\s+create\b/,
+	/\bdocker\s+push\b/,
+	/\btwine\s+upload\b/
+];
+var LOOPBACK_NAMES = String.raw`localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|::1`;
+var LOOPBACK = String.raw`(?:${LOOPBACK_NAMES})(?::\d+)?(?=[/?#\s'"\x60]|$)`;
+new RegExp(String.raw`^(?:${LOOPBACK_NAMES})$`, "i");
+new RegExp(String.raw`\bfetch\(\s*['"\x60]https?://(?!${LOOPBACK})`, "g");
+var NETWORK_PROGRAMS = /* @__PURE__ */ new Map([
+	["curl", "url"],
+	["wget", "url"],
+	["nc", "host"],
+	["ncat", "host"],
+	["netcat", "host"],
+	["telnet", "host"],
+	["ftp", "host"],
+	["ssh", "host"],
+	["scp", "spec"],
+	["sftp", "spec"],
+	["rsync", "spec"],
+	["socat", "socket"]
+]);
+var programPattern = (names) => new RegExp(String.raw`(?<![\w.$-])(${names.join("|")})(?:\.exe)?(?=\s+[^\s=(),:;|&<>?+*/%!\]}])`, "g");
+programPattern([...NETWORK_PROGRAMS.keys()]);
+programPattern([
+	String.raw`python[23]?(?:\.\d+)?`,
+	"node",
+	"nodejs",
+	"deno",
+	"bun",
+	"ruby",
+	"perl",
+	"php"
+]);
+var BLOCK_DEVICE = [
+	/\bmkfs(?:\.\w+)?\b/,
+	/\bwipefs\b/,
+	/\bblkdiscard\b/,
+	/\bsgdisk\b[^|;&]*\s(?:--zap-all|-Z)\b/,
+	/\bdd\b[^|;&]*\bof=(?:\/dev\/|['"`]\/dev\/)/,
+	/\bshred\b[^|;&]*\s\/dev\//,
+	/>\s*\/dev\/(?:[shv]d[a-z]|nvme\d|disk\d|mmcblk\d)/
+];
+var CONTAINER_STATE = [
+	/\b(?:docker|podman)\s+volume\s+(?:rm|remove|prune)\b/,
+	/\b(?:docker|podman)\s+system\s+prune\b/,
+	/\b(?:docker(?:\s+compose|-compose)?|podman-compose)\s+down\b[^|;&]*\s(?:-v\b|--volumes\b)/
+];
+globally$1(GIT_DESTRUCTIVE);
+globally$1(GIT_BRANCH_SWITCH);
+globally$1(SECRET_REFERENCES);
+globally$1(CREDENTIAL_PATHS);
+globally$1(PACKAGE_PUBLISH);
+globally$1(BLOCK_DEVICE);
+globally$1(CONTAINER_STATE);
+var COMMAND_CLASS_LABELS = {
+	"git.destructive": "rewrite or discard git history",
+	"git.branch-switch": "move a checkout you share with this conversation onto another branch",
+	"files.destructive": "delete files recursively",
+	"system.destructive": "wipe a disk, or delete a whole root directory",
+	"container.state": "delete a container volume or the data in it",
+	"secrets.access": "read credential material",
+	"package.publish": "publish or release a package",
+	"network.outbound": "send a request out to the internet"
+};
+var COMMAND_CLASS_PATTERNS = {
+	"git.destructive": [
+		{
+			code: "git push --force",
+			qualifier: "also -f and --force-with-lease"
+		},
+		{ code: "git push --delete" },
+		{ code: "git reset --hard" },
+		{ code: "git clean -f" },
+		{ code: "git branch -D" },
+		{ code: "git filter-branch" },
+		{
+			code: "rm .git",
+			qualifier: "any flags: a checkout's link to its history"
+		},
+		{
+			code: "git init",
+			qualifier: "only in the current folder, which may already be a checkout"
+		}
+	],
+	"git.branch-switch": [{ code: "git switch <branch>" }, {
+		code: "git checkout <branch>",
+		qualifier: "not `git checkout -- <path>` or `git checkout .`, which restore files and move nothing"
+	}],
+	"files.destructive": [
+		{ code: "rm -rf <path>" },
+		{
+			code: "fs.rm(<path>, { recursive: true })",
+			qualifier: "also rmSync, rmdir, rmdirSync"
+		},
+		{ code: "rimraf(<path>)" },
+		{
+			code: "find <path> -delete",
+			qualifier: "also -exec rm and -execdir rm"
+		},
+		{ code: "xargs rm" }
+	],
+	"system.destructive": [
+		{ code: "mkfs" },
+		{ code: "wipefs" },
+		{ code: "blkdiscard" },
+		{ code: "sgdisk --zap-all" },
+		{ code: "dd of=/dev/…" },
+		{ code: "shred /dev/…" },
+		{ code: "> /dev/sda" },
+		{
+			code: "rm -rf /",
+			qualifier: "also find / -delete; only when the target is a root, listed below"
+		}
+	],
+	"container.state": [
+		{
+			code: "docker volume rm",
+			qualifier: "also remove, prune, and podman for any of these"
+		},
+		{ code: "docker system prune" },
+		{ code: "docker compose down -v" }
+	],
+	"secrets.access": [
+		{
+			code: "{{secret:NAME}}",
+			qualifier: "a stored secret, used in the command itself"
+		},
+		{ code: ".env" },
+		{ code: ".ssh/*" },
+		{ code: "id_rsa" },
+		{ code: ".aws/credentials" },
+		{ code: ".npmrc" },
+		{ code: ".git-credentials" }
+	],
+	"package.publish": [
+		{
+			code: "npm publish",
+			qualifier: "also pnpm, yarn, bun"
+		},
+		{ code: "cargo publish" },
+		{ code: "gh release create" },
+		{ code: "docker push" },
+		{ code: "twine upload" }
+	],
+	"network.outbound": [
+		{
+			code: "curl https://…",
+			qualifier: "also wget; a literal loopback address does not count, even with a variable port"
+		},
+		{
+			code: "curl $URL",
+			qualifier: "a destination built at run time counts, since its host can't be read beforehand"
+		},
+		{
+			code: "nc host.example 443",
+			qualifier: "also ncat, netcat, telnet, ftp and ssh"
+		},
+		{
+			code: "scp file host:/path",
+			qualifier: "also sftp and rsync with a remote side, and socat TCP:host:port"
+		},
+		{
+			code: "python3 -c 'import urllib…'",
+			qualifier: "any interpreter's inline code that opens a connection"
+		},
+		{
+			code: "fetch(\"https://…\")",
+			qualifier: "in a script"
+		}
+	]
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/safety-policy.js
+var SANDBOX_HARD_RULE = /* @__PURE__ */ new Set(["system.destructive"]);
+var DEVICE_HARD_RULE = /* @__PURE__ */ new Set([
+	"system.destructive",
+	"container.state",
+	"files.destructive"
+]);
+var hardRuleClasses = (locus) => locus === "sandbox" ? SANDBOX_HARD_RULE : DEVICE_HARD_RULE;
+var ROOT_NOTES = {
+	sandbox: `/ and /history. Not /work, /usr or /etc: the worktree's changes are uncommitted work, and the container comes back from its image.`,
+	device: `/, a home directory, a Windows drive, and the top-level directories an OS keeps.`
+};
+var tiersFor = (commandClass) => Object.fromEntries(CommandLocusSchema.options.map((locus) => [locus, hardRuleClasses(locus).has(commandClass) ? "hard" : "judged"]));
+var unwaivableAt = (rule) => CommandLocusSchema.options.filter((locus) => rule.tiers[locus] === "hard").length;
+CommandClassSchema.options.map((commandClass) => ({
+	commandClass,
+	label: COMMAND_CLASS_LABELS[commandClass],
+	patterns: COMMAND_CLASS_PATTERNS[commandClass],
+	tiers: tiersFor(commandClass),
+	...commandClass === "system.destructive" ? { notes: ROOT_NOTES } : {}
+})).sort((left, right) => unwaivableAt(right) - unwaivableAt(left));
+var CommandJudgeModeSchema = _enum([
+	"off",
+	"watch",
+	"on"
+]);
+var ProjectInstallModeSchema = _enum([
+	"automatic",
+	"ask",
+	"never"
+]);
+var SafetyDecisionSchema = _enum([
+	"allow",
+	"ask",
+	"refuse"
+]);
+object({
+	decision: SafetyDecisionSchema.describe("Run it, ask the owner, or refuse it."),
+	sentence: string().describe("What this command does and why it was allowed, held or refused, in one plain sentence."),
+	policyLine: string().optional().describe("A line the owner could add to their policy so this stops being asked. Shown on the card before it is accepted.")
+});
+var SafetyLogEntrySchema = object({
+	at: number$1().int().describe("When it was judged, epoch milliseconds."),
+	program: string().describe("The command or script, excerpted."),
+	classes: array(string()).describe("The kinds of consequence triage matched, which is why a judge looked."),
+	decision: SafetyDecisionSchema.describe("What the judge decided."),
+	sentence: string().describe("The judge's sentence."),
+	outcome: _enum([
+		"allowed",
+		"asked",
+		"refused"
+	]).describe("What the gate did in the end."),
+	answer: _enum([
+		"allowed",
+		"declined",
+		"unanswered"
+	]).optional().describe("How the owner answered, when they were asked."),
+	machine: string().optional().describe("Which connected device it was headed for, when it was not this sandbox.")
+});
+var SafetyPolicySchema = object({
+	text: string().describe("The policy, as the owner wrote it."),
+	custom: boolean().describe("False when nobody has edited it and this is the text this product ships.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/settings.js
+var SystemPromptModeSchema = _enum([
+	"intentic",
+	"claude",
+	"custom"
+]);
+var BuiltinPromptSchema = object({ base: _enum(["intentic", "claude"]) });
+var SYSTEM_PROMPT_MAX = 2e4;
+var AUTO_MODEL_GUIDANCE_MAX = 2e3;
+var RuleMomentSchema = _enum([
+	"file.edited",
+	"turn.ending",
+	"agent.finished",
+	"agent.landed"
+]);
+var RuleBuiltinSchema = _enum(["verify-ui-edits", "version-landed"]);
+var RuleActionSchema = discriminatedUnion("kind", [
+	object({
+		kind: literal("command"),
+		command: string().max(500),
+		timeoutMs: number$1().min(6e4).max(36e5).default(9e5)
+	}),
+	object({
+		kind: literal("verdict"),
+		verdict: _enum(["allow", "hold"])
+	}),
+	object({
+		kind: literal("builtin"),
+		name: RuleBuiltinSchema
+	})
+]);
+var RuleOutcomeSchema = _enum([
+	"clean",
+	"error",
+	"conflict",
+	"checks-failed"
+]);
+var RuleConditionSchema = object({
+	repo: string().min(1).optional(),
+	paths: array(string().min(1)).max(20).optional(),
+	outcome: array(RuleOutcomeSchema).optional(),
+	sample: number$1().gt(0).lt(1).optional()
+});
+var MOMENT_ACTIONS = {
+	"file.edited": ["command"],
+	"turn.ending": ["builtin", "command"],
+	"agent.finished": ["verdict"],
+	"agent.landed": ["builtin"]
+};
+var MOMENT_BUILTINS = {
+	"turn.ending": ["verify-ui-edits"],
+	"agent.landed": ["version-landed"]
+};
+var RuleSchema = object({
+	id: string().regex(/^[a-z0-9][a-z0-9-]*$/),
+	label: string().min(1).max(80),
+	moment: RuleMomentSchema,
+	when: RuleConditionSchema.optional(),
+	action: RuleActionSchema,
+	enabled: boolean().default(true)
+}).refine((rule) => MOMENT_ACTIONS[rule.moment].includes(rule.action.kind), {
+	message: "that action cannot stand at that moment",
+	path: ["action"]
+}).refine((rule) => rule.action.kind !== "builtin" || (MOMENT_BUILTINS[rule.moment] ?? []).includes(rule.action.name), {
+	message: "that built-in cannot stand at that moment",
+	path: ["action"]
+});
+var isRetiredMomentRule = (rule) => rule.moment === "turn.ending" || rule.action.kind === "builtin" && rule.action.name === "verify-ui-edits";
+var RuleFiringsSchema = record(string(), number$1());
+var SkillOriginSchema = _enum([
+	"builtin",
+	"own",
+	"capability",
+	"extension",
+	"plugin",
+	"persona",
+	"dropped"
+]);
+var SkillNameSchema = string().regex(/^[a-z0-9][a-z0-9-]*$/, "a skill name is lowercase letters, digits and dashes");
+var SkillsListSchema = array(object({
+	id: string().describe("Its handle, which reading and deleting take. A skill of your own is simply its name; one belonging to something else is qualified, because two packages may each ship a review."),
+	name: string().describe("Its name."),
+	description: string().describe("What it is for, which is the line the agent reads to decide whether to reach for it. Empty when the skill declares none, which is worth showing as the blank it is: a skill with no description is rarely picked."),
+	origin: SkillOriginSchema.describe("Where it came from."),
+	owner: string().optional().describe("Who ships it, as the row would name them."),
+	enabled: boolean().describe("Whether the agent can reach it."),
+	switchable: boolean().describe("Whether this surface can switch it. Everything else is on because its extension or its plugin is, and a switch here that silently did nothing would be worse than none, so the row names its owner instead."),
+	editable: boolean().describe("Whether it can be rewritten here. Your own only: editing somebody else's in place would be undone the next time the thing that ships it catches up."),
+	removable: boolean()
+}));
+var SkillBodySchema = object({
+	id: string().describe("The skill's id, which can carry the owner it came from."),
+	name: string().describe("Its name."),
+	body: string().describe("The instructions themselves, as written.")
+});
+var SkillIdSchema = object({ id: string().min(1).describe("Which skill. It travels in the query rather than the address, because an id can name the owner it came from and that will not fit in a path.") });
+var SkillDraftSchema = object({
+	name: SkillNameSchema.describe("What to call it. Saving over an existing name rewrites it, which is also how one is renamed."),
+	description: string().min(1).max(1024).describe("What it is for, which is what the agent reads to decide whether to reach for it."),
+	body: string().min(1).describe("The skill itself.")
+});
+var SkillRemoveSchema = object({ name: SkillNameSchema.describe("Which skill to delete. The stored text and the agent's copy go together, so nothing is left half done.") });
+var SkillSwitchSchema = object({
+	name: SkillNameSchema.describe("Which skill of your own to switch."),
+	on: boolean().describe("On writes the agent's copy from the stored text; off removes that copy and keeps the text.")
+});
+var KeepWarmSettingsSchema = object({
+	auto: boolean().default(false).describe("Keep a Claude conversation's prompt cache warm after each turn a person asked for. Each refresh re-reads the cached context at the cache price and adds nothing to the conversation."),
+	hours: number$1().min(1).max(8).default(4).describe("How long an idle conversation is kept warm after its last turn, in hours, and what a press on one offers first. Shortened where refreshing would cost more than the cold resume it saves, and at midnight where the agent runs, when the date in its prompt changes."),
+	minTokens: number$1().int().min(0).default(1e5).describe("Only conversations at least this large, in tokens, are kept warm by `auto`: a small one is cheap to re-read anyway."),
+	reserve: number$1().int().min(0).max(90).default(15).describe("How much of an account's usage limit, in percent, keeping conversations warm must leave untouched for real work. Refreshing stops once any limit that account's model spends is fuller than that.")
+});
+var AudienceSchema = _enum(["developer", "maker"]);
+var MemberAudienceSchema = object({ audience: AudienceSchema.optional().describe("developer for git's own words, maker for plain ones. Absent until this person has chosen here.") });
+var SandboxSettingsSchema = object({
+	timezone: union([literal(""), ZoneSchema]).default("").describe("Which clock this sandbox's schedules are set by, as a zone name like Europe/Warsaw. Automations that repeat on a clock fire by this, not by the machine's own time. Leave it empty and they fire by UTC, which is almost certainly not what you meant when you typed a time."),
+	stableSystemPrompt: boolean().default(false).describe("Keep the instructions identical between turns so the provider can cache them, moving anything that varies into the message instead. Cheaper, at the cost of some flexibility."),
+	skills: array(string()).default(["lsp", "fileq"]).describe("Which built-in tools are switched on. A skill of your own is not listed here: it is on while the agent's copy of it exists."),
+	personaRouting: boolean().default(true).describe("Whether a new chat is matched to one of your personas from its first message. It is read once the message is sent, in the same single call that chooses what the chat runs on (the New chat routing job under Models), and the chat says in its own transcript which persona it landed on. Never applies to unwatched runs, which name their persona themselves."),
+	hashlineEdits: boolean().default(false).describe("Have the agent edit files by line number rather than by quoting the text it wants replaced. Cheaper on large files, and less forgiving of a stale read."),
+	systemPromptMode: SystemPromptModeSchema.default("intentic").describe("Which instructions the agent starts from: intentic's own, the ones the installed Claude Code carries, or your own. The first two both get this product's own guidance added on top; your own gets nothing added, which is the point of it."),
+	systemPrompt: string().max(SYSTEM_PROMPT_MAX).default("").describe("Your own instructions, used only when the mode above says custom. Then it is the whole of them: both built-in bases go, and so does everything this product would otherwise add, including the guidance the chat's own cards are driven by. That is the price of total control."),
+	leanGuidance: boolean().default(false).describe("Send this product's own guidance in its short form: only what the agent cannot find out by looking, instead of a paragraph for every habit it was once caught in. Off by default, because the long form is the one the product was tuned on."),
+	leanGuidanceHoldout: number$1().min(0).max(1).default(0).describe("What share of conversations to keep on the long form, so the two can be compared. Whole conversations rather than individual turns, because the guidance sits in the prompt for the whole session."),
+	iqSearch: boolean().default(false).describe("Teach the agent how to use this workspace's own search tool, rather than leaving it to grep around."),
+	iqSearchHoldout: number$1().min(0).max(1).default(0).describe("What share of conversations to run without that teaching, so the two can be compared. Whole conversations rather than individual turns, because once the teaching is in a session, withholding it from the next request does not make the model forget it."),
+	workspaceMap: boolean().default(false).describe("Open every conversation with a map of the project it starts in: what is in it, what each part is for, and where the agent is standing. Worked out fresh each time rather than written down anywhere, because a written layout is wrong within a fortnight. Off by default, since it spends tokens on the first message of every conversation."),
+	workspaceMapHoldout: number$1().min(0).max(1).default(0).describe("What share of conversations to open without the map, so the two can be compared. Whole conversations rather than individual turns, because the map is sent once and stays in the conversation's history afterwards."),
+	fieldNotes: boolean().default(false).describe("Open every turn with a brief on how work actually goes in this sandbox: the traps that cost past sessions calls, the commands that really verify, what the machine can take. Written once a month by an automation that reads back the sessions run here, rather than worked out per turn, because it is drawn from history rather than from the tree. Off by default, since it rides every turn of every conversation."),
+	fieldNotesBudget: number$1().int().min(500).max(2e4).default(4e3).describe("How much of that brief to send. Its sections are ranked, most costly-to-not-know first, and they are taken whole in that order until this runs out — so raising it buys more of the tail, never a fuller version of the same thing."),
+	fieldNotesHoldout: number$1().min(0).max(1).default(0).describe("What share of conversations to run without the brief, so the two can be compared. Whole conversations rather than individual turns, because the brief sits in the prompt for the whole session and withholding it from one turn would not take it back."),
+	outputCleaners: string().default("").describe("Which command outputs to trim before the agent reads them, cutting the noise a build tool prints without cutting what it said."),
+	outputHoldout: number$1().min(0).max(1).default(0).describe("What share of commands to leave untrimmed, so the saving can be measured against a real comparison rather than estimated."),
+	modelRoles: partialRecord(ModelRoleSchema, array(ModelPinSchema).max(10)).default({}).describe("Which models do which job, one ordered list per job: commit messages, session titles, the safety judge, pipeline fixes, and every other place this sandbox picks a model for you. Tried in order, so one spent account does not take a job down. Nothing is chosen for you: a one-shot job with no list does not run, and a whole session with no list opens on whatever your own chat is set to."),
+	autoModelGuidance: string().max(AUTO_MODEL_GUIDANCE_MAX).default("").describe("What you would tell somebody choosing the model for a new chat on your behalf: which model you want the cheap work on, which account to leave alone, when to reach for the strongest one. Read once per chat, alongside the models and allowances this sandbox can actually run, and it overrides the product's own advice where the two disagree. It cannot invent a model: the answer is still a choice from that list."),
+	changelogRepos: array(string()).max(50).default([]).describe("Which repositories keep a changelog, and so get a user-facing note written alongside each merge. A list rather than a switch, and empty by default, because the commit writer's standing rule is to copy the house style rather than impose one, and a repository that has never written such a note gives it nothing to copy."),
+	agentRetentionDays: number$1().min(0).max(365).default(3).describe("How many days a finished conversation stays on the board before being put away. Zero means never. The one setting here that defaults on, because each card left behind is a real working copy on disk, not just a row."),
+	limitPolicy: LimitPolicySchema.default("wait").describe("What happens to a turn a spent usage limit refused. `wait` holds it for a press. `resend` sends it again by itself once the allowance reopens, which needs a provider that publishes a reset (Grok and Cursor publish none). `move` also tries another connected account of the same provider that still has room, as soon as the refusal lands, and keeps the reset as its fallback. The sandbox-wide default; any one conversation can say otherwise."),
+	outagePolicy: RetryPolicySchema.default("wait").describe("What happens to a turn the model provider's own failure killed. `wait` holds it for a press. `retry` re-runs it on the shared per-provider breaker, backing off between attempts. The sandbox-wide default; any one conversation can say otherwise. Worth `retry` for a sandbox whose work mostly happens with nobody in the room."),
+	stopPolicy: RetryPolicySchema.default("wait").describe("What happens to a turn that stopped short with nothing to repair — a hung runtime, a crashed harness. `wait` holds it for a press. `retry` re-runs the held turn on a short ladder, standing down after three tries that got nowhere rather than looping forever."),
+	limitMoveCarryUnder: number$1().int().min(0).default(1e5).describe("When a spent usage limit moves a turn to another account, carry the provider session (the model keeps everything, and re-reads all of it once on the other account) while the conversation's context is under this many tokens; at or above it, start a fresh session with the sandbox's measured brief instead. Zero always starts fresh."),
+	keepWarm: KeepWarmSettingsSchema.prefault({}).describe("Keeping an idle conversation's prompt cache warm, so coming back to it hours later costs a cache read instead of re-sending everything. Any one conversation can be kept warm or let cool by hand whatever `auto` says."),
+	autoRepair: boolean().default(true).describe("Whether main's CI failing is repaired without asking. The first job that fails on main starts one fix agent, without waiting for the rest of the run, and every later failure on main goes to that same agent until a run passes. It gets a few turns; when they are spent, or it finishes without changing anything (a failure that is not in the code), the failure waits for you. A failure on the CI fleet itself is re-run once instead. Off, all of it is only reported."),
+	followOrigin: boolean().default(true).describe("Whether each workspace repo keeps up with the remote branch it tracks. Every couple of minutes it is fetched, and what arrived is brought into the main tree: a fast-forward when you have no commits of your own, else a merge commit. Only while it is quiet (no turn working in the main tree, no merge or rebase of yours open), and never half-way: a conflict, or an uncommitted file in the way, leaves the repo exactly as it was until the next try. Nothing is ever pushed. Off, nothing is fetched."),
+	offload: object({ commands: record(string().min(1), string().min(1)).default({}) }).default({ commands: {} }).describe("Which heavy work runs on a runner on one of your machines instead of this sandbox: agents' commands by the kind the heavy-command rules sort them into (tests, typechecks, verify…). The code travels as it stands, uncommitted work included; the output streams back, and any file the command changed comes back with it. A machine that is offline, outdated or busy hands the work back to this sandbox, and the output says so."),
+	continueWhenNeedMet: boolean().default(true).describe("Whether a conversation carries on by itself once something it asked a person for arrives: a connection made, a secret given, access allowed, a tool built into the image. Off leaves the answer on the conversation's card until someone sends a message."),
+	autoResumeOnRestart: boolean().default(false).describe("Whether a turn killed by the sandbox restarting is re-run once it comes back. A switch rather than one of the policies above, because a restart is the one ending with nobody watching it, so there is no in-chat question to answer. Off to begin with: it would spend your allowance on work you are not watching and edit files while you are still waiting for the sandbox to return. Either way the interruption is recorded rather than silently lost."),
+	adoptedChecks: record(string(), string()).default({}).describe("Which repositories may run the checks they declare for themselves, and exactly which version of those checks you agreed to. A repository's declaration does nothing until it appears here, the same rule git keeps for hooks, which are never cloned; and a declaration that changes afterwards is held until you look at it again."),
+	rules: array(RuleSchema).max(50).default([]).refine((rules) => rules.every((rule) => rule.action.kind !== "command"), { message: "a command belongs in the repository's own .intentic/checks.json, not in settings" }).describe("Standing decisions about the sandbox's own work: land or hold finished work, save a version of what landed. Empty is the default and is exactly the behaviour of a fresh sandbox, because each of those defaults is what no rule matched means at its own moment. A command to run is a repository's own check, declared in its .intentic/checks.json."),
+	automationFailureLimit: number$1().min(0).max(20).default(0).describe("How many failures in a row before an automation switches itself off. Zero means never, which is the default, because the failure is not always the automation's fault and a job disabled at three in the morning is one nobody re-enables. Only real errors count: a guard deciding there was nothing to do, or the sandbox dying mid-run, say nothing about the automation."),
+	admission: AdmissionPolicySchema.prefault({}).describe("Whether work started from outside may run, per kind of trigger: let it, hold it for approval, or refuse it. Composes with each automation's own setting, and the stricter of the two wins, so holding every visitor's message needs no edit to each automation."),
+	actionRules: record(string(), AdmissionRuleSchema).default({}).describe("What an agent may do out in the world, per kind of action: go ahead, ask first, or never."),
+	commandJudge: CommandJudgeModeSchema.default("on").describe("Whether a model reads your safety policy before a flagged command runs. Off judges nothing and asks about nothing; Watch judges everything and records it without ever interrupting you, which is how you find out what your policy actually does before you let it stop anything; On lets the verdict decide. Wiping a disk or deleting under /history asks at every setting — that rule is typed rather than judged, and cannot be turned off."),
+	projectInstalls: ProjectInstallModeSchema.default("automatic").describe("What happens when an agent installs a project's packages itself (pnpm add, npm install, uv sync). Automatic lets it run and keep working; Ask first stops for your answer in the chat, once or for the whole conversation; Never refuses, and a dependency the agent added to a manifest is installed when you land its work. A conversation in its own worktree installs into its own copy, and the land review lists every dependency its work adds."),
+	subagentsAtOnce: number$1().min(1).max(200).default(20).describe("How many subagents may work at the same time."),
+	subagentsPerTurn: number$1().min(1).max(2e3).default(200).describe("How many a single turn may start in total."),
+	subagentDepth: number$1().min(1).max(10).default(3).describe("How many levels deep the delegation may go, since a subagent can start subagents of its own.")
+});
+var SandboxSettingsWriteSchema = SandboxSettingsSchema.refine((settings) => !settings.rules.some(isRetiredMomentRule), {
+	message: "turn.ending is retired: nothing runs when a turn ends any more, so a rule cannot stand there",
+	path: ["rules"]
+});
+var AudienceAnswerSchema = object({
+	audience: AudienceSchema.describe("developer for git's own words, maker for plain ones."),
+	offer: boolean().optional().describe("Take it only while this person has no answer kept here yet. Absent or false replaces whatever is kept.")
+});
+var AudienceStateSchema = object({
+	audience: AudienceSchema.describe("The words this sandbox's editor now uses."),
+	adopted: boolean().describe("Whether this call set it. False means an offer met an answer already kept, which stands.")
+});
+var TimezoneOfferSchema = object({ timezone: ZoneSchema.describe("The zone the offering machine is in, as an IANA name like Europe/Warsaw.") });
+var TimezoneStateSchema = object({
+	timezone: string().describe("The zone this sandbox's schedules are now read in. Empty only if none could be resolved."),
+	adopted: boolean().describe("Whether this call is what set it. False means it was already answered and the stored zone stands.")
+});
+var BuiltinPromptTextSchema = object({
+	text: string(),
+	version: string()
+});
+var SavingsStageSchema = object({
+	id: string(),
+	commands: number$1(),
+	savedTokens: number$1()
+});
+var InputSavingsSchema = object({
+	updatedAt: number$1().optional(),
+	commands: number$1(),
+	rawTokens: number$1(),
+	emittedTokens: number$1(),
+	savedPct: number$1(),
+	perCleaner: array(SavingsStageSchema),
+	holdout: object({
+		cleaned: number$1(),
+		heldOut: number$1(),
+		measuredSavedPct: number$1().optional()
+	}),
+	gaps: array(object({
+		command: string(),
+		commands: number$1(),
+		tokens: number$1()
+	}))
+});
+var SavingsArmSchema = object({
+	turns: number$1(),
+	mean: number$1()
+});
+var TurnMetricReadingSchema = object({
+	metric: _enum([
+		"searchCalls",
+		"openingSearches",
+		"openingListings",
+		"callsBeforeTarget",
+		"failedCalls"
+	]),
+	on: SavingsArmSchema,
+	off: SavingsArmSchema,
+	controlTurnsNeeded: number$1().optional(),
+	marginPct: number$1().optional(),
+	deltaPct: number$1().optional(),
+	saved: number$1().optional()
+});
+var TurnExperimentSchema = object({
+	metrics: tuple([TurnMetricReadingSchema], TurnMetricReadingSchema),
+	minTurns: number$1(),
+	sampleUnit: _enum([
+		"turns",
+		"conversations",
+		"opening turns"
+	]).optional(),
+	cohort: string().optional()
+});
+var FieldNotesStatusSchema = object({
+	present: boolean(),
+	writtenAt: number$1().optional(),
+	ranksSent: number$1().optional(),
+	ranksTotal: number$1().optional(),
+	chars: number$1().optional(),
+	automation: _enum([
+		"missing",
+		"enabled",
+		"disabled"
+	]),
+	nextRunAt: number$1().optional(),
+	unreadable: string().optional()
+});
+var SavingsReportSchema = object({
+	input: InputSavingsSchema,
+	search: TurnExperimentSchema.optional(),
+	map: TurnExperimentSchema.optional(),
+	notes: TurnExperimentSchema.optional(),
+	guidance: TurnExperimentSchema.optional()
+});
+var REPO_CHECKS_FILE = `${STATE_DIR}/checks.json`;
+var RepoCheckSchema = object({
+	when: _enum([
+		"edit",
+		"turn",
+		"land"
+	]).describe("When to run it: `edit` on each file as it is written (`{file}` is its path). `turn` and `land` are retired and run nothing: checks no longer run while a conversation works or after its work lands, since CI checks what is pushed."),
+	run: string().min(1).max(500).describe("The command, run in this repository's own directory, so it reads as it would in a terminal there."),
+	label: string().min(1).max(80).optional().describe("What to call it on screen. Absent names it after the command."),
+	timeoutMs: number$1().min(6e4).max(36e5).optional().describe("How long it may take before it is killed and counted as failed."),
+	paths: array(string().min(1)).max(20).optional().describe("Only run it when the change touches these paths, written relative to this repository. Absent runs it on every change here.")
+});
+object({ checks: array(RepoCheckSchema).max(10).default([]) });
+var RepoChecksListSchema = object({ repos: array(object({
+	repo: string().describe("Which repository, by its workspace id (\"root\" is the workspace itself)."),
+	path: string().describe("Where the declaration lives, relative to the workspace, whether or not the file exists yet."),
+	checks: array(RepoCheckSchema).describe("What it declares, in the order the file lists them."),
+	fired: array(number$1().nullable()).describe("When each declared check last reported something, in the file's order, as epoch milliseconds; null for one that never has, or for a retired one, which runs nothing."),
+	adopted: boolean().describe("Whether these are running. False means declared and inert: nothing a repository writes runs until the owner switches it on."),
+	changed: boolean().describe("Whether the declaration changed since it was adopted, which holds it until the owner looks again. True only for a repository that was adopted before."),
+	error: string().optional().describe("Why the file could not be read, when it exists but does not parse. The checks list is empty in that case.")
+})).describe("Every repository that declares checks, in id order.") });
+var RepoChecksAdoptSchema = object({
+	repo: string().min(1).describe("Which repository's declaration to switch."),
+	on: boolean().describe("On adopts what it declares as it stands now; off stops running it. Adopting again is how a changed declaration is accepted.")
+});
+var PromptSectionSchema = object({
+	source: _enum([
+		"guidance",
+		"persona",
+		"field-notes",
+		"memory"
+	]).describe("Which mechanism added this."),
+	title: string().describe("The one line a reader sees on the row that opens to the text below."),
+	text: string().describe("The section's exact words, as the model received them.")
+});
+var PromptBaseSchema = object({
+	kind: _enum([
+		"intentic",
+		"claude",
+		"custom",
+		"runtime",
+		"trimmed"
+	]).describe("Which prompt the additions ride on."),
+	text: string().optional().describe("The base's own words, when they can be read here. Absent for a runtime that keeps its prompt to itself."),
+	model: string().optional().describe("The model the turn ran on, for a built-in base: Claude Code renders a different preset for each.")
+});
+var ConversationPromptSchema = object({ prompt: object({
+	at: number$1().describe("When the turn that was told this was sent (epoch ms)."),
+	runtime: string().describe("Which runtime served that turn."),
+	mode: SystemPromptModeSchema.describe("Which base the turn was configured to run on."),
+	base: PromptBaseSchema,
+	sections: array(PromptSectionSchema).describe("What the daemon added to that base, in the order the model reads them.")
+}).optional().describe("What the most recent turn of this conversation was told, if one has been recorded.") });
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/agents.contract.js
 var agentsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/agents",
 		summary: "Every live conversation",
 		description: "The fleet as the board draws it: each conversation with its title, what it is doing, when it last moved and whether anybody has read it since. Archived conversations are not in here."
-	}).output(AgentsListSchema),
-	archived: oc.route({
+	}).meta({ guest: true }).output(AgentsListSchema),
+	archived: procedure.route({
 		method: "GET",
 		path: "/agents/archived",
 		summary: "Conversations put away",
 		description: "The same shape as the live fleet, for the conversations somebody has decided are finished. Their work is kept, and any one of them can be brought back."
-	}).output(AgentsListSchema),
-	search: oc.route({
+	}).meta({ guest: true }).output(AgentsListSchema),
+	search: procedure.route({
 		method: "GET",
 		path: "/agents/search",
 		summary: "Find a conversation",
 		description: "Searches the live fleet and the archive together. Both halves on purpose: the board hides finished work by design, and a filter that says it found nothing while the answer sits one click away is simply wrong."
 	}).input(AgentSearchQuerySchema).output(AgentSearchResultSchema),
-	get: oc.route({
+	get: procedure.route({
 		method: "GET",
 		path: "/agents/{id}",
 		summary: "One conversation's card",
 		description: "Everything the board shows for a single conversation: its title, state, working branch, unread marker and timestamps."
-	}).input(AgentIdSchema).output(AgentSummarySchema),
-	transcript: oc.route({
+	}).meta({ guest: true }).input(AgentIdSchema).output(AgentSummarySchema),
+	transcript: procedure.route({
 		method: "GET",
 		path: "/agents/{id}/transcript",
 		summary: "One page of a conversation",
 		description: "The most recent turns of one conversation, in order, including the tool calls and their results: what the chat replays and the next turn is seeded from. A page, not the whole record — pass the answer's `from` back as `before` to walk further back, until `more` reads false."
-	}).input(AgentTranscriptQuerySchema).output(AgentTranscriptSchema),
-	place: oc.route({
+	}).meta({ guest: true }).input(AgentTranscriptQuerySchema).output(AgentTranscriptSchema),
+	systemPrompt: procedure.route({
+		method: "GET",
+		path: "/agents/{id}/system-prompt",
+		summary: "What this conversation is told before it is asked anything",
+		description: "The system prompt the most recent turn of this conversation actually ran on: which base it was, and every piece the sandbox added to it — this product's guidance, the persona, the field notes, the workspace's own standing rules — each with the exact words the model received. None of this appears in the transcript, so this is the only way to read it."
+	}).input(AgentIdSchema).output(ConversationPromptSchema),
+	toolChildren: procedure.route({
+		method: "GET",
+		path: "/agents/{id}/transcript/tools/{toolId}",
+		summary: "One delegation's own calls",
+		description: "The calls a delegated agent made under one tool card. A transcript page leaves them behind and reports their count as `nested`, since a settled delegation draws collapsed; this is what fills the card in when it is opened. Empty when the record no longer holds that call."
+	}).input(AgentToolChildrenQuerySchema).output(AgentToolChildrenSchema),
+	subagentTranscript: procedure.route({
+		method: "GET",
+		path: "/agents/{id}/subagents/{subagentId}/transcript",
+		summary: "One in-process subagent's own record",
+		description: "What a subagent this conversation's runtime ran in-process said and did, as a transcript of its own: its ask, its thinking, its calls and its words. Read from the runtime's own record of the subagent where it keeps one, which it writes as the subagent works, else from the calls the delegation's card holds in this conversation's record. A subagent spawned as a conversation of its own is read through `transcript` instead."
+	}).meta({ guest: true }).input(AgentSubagentQuerySchema).output(SessionTranscriptSchema),
+	place: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/place",
 		summary: "Put words in the agent's mouth",
 		description: "Writes a line into the record as though the agent had said it, with no turn behind it and no reply. Human readers see it marked as placed. The next real turn starts fresh from the record, where the line reads as the agent's own. Refused while a turn is running."
 	}).input(AgentPlaceSchema).output(OkSchema$1),
-	rename: oc.route({
+	rename: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/rename",
 		summary: "Retitle a conversation",
 		description: "Sets the title a person chose, replacing the one that was generated. Allowed while the conversation is working, and it does not count as activity."
+	}).meta({
+		floor: "collaborator",
+		guest: true
 	}).input(AgentRenameSchema).output(AgentSummarySchema),
-	autoLand: oc.route({
+	autoLand: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/auto-land",
 		summary: "Whether this conversation merges its work automatically",
 		description: "Overrides the sandbox-wide setting for one conversation; clear it to go back to following the default. Deliberately allowed mid-turn, because the setting is read when the turn finishes, so flipping it while the agent works means exactly hold this piece of work for review."
 	}).input(AgentAutoLandSchema).output(AgentSummarySchema),
-	resumeAfterOutage: oc.route({
+	breakPolicy: procedure.route({
 		method: "POST",
-		path: "/agents/{id}/resume-after-outage",
-		summary: "Whether this conversation retries after a provider outage",
-		description: "Overrides the sandbox-wide setting for one conversation; clear it to follow the default again. This is what the offer shown when a turn dies writes, because the press happens inside one conversation and honestly means finish this piece of work."
-	}).input(AgentResumeAfterOutageSchema).output(AgentSummarySchema),
-	resumeAfterLimit: oc.route({
+		path: "/agents/{id}/break-policy",
+		summary: "What this conversation does when a turn stops before it finished",
+		description: "One answer per ending — a spent usage limit, a provider outage, a turn that stopped short — overriding the sandbox-wide policy for one conversation; clear it to follow the default again. The answers are mutually exclusive by construction, so nothing here can arm two automations over the same wall. Every ending starts at `wait` unless asked otherwise, because a re-run spends the user's own allowance on a turn they sent once."
+	}).meta({ floor: "collaborator" }).input(AgentBreakPolicySchema).output(AgentSummarySchema),
+	keepWarm: procedure.route({
 		method: "POST",
-		path: "/agents/{id}/resume-after-limit",
-		summary: "Whether this conversation sends itself again when its allowance comes back",
-		description: "Overrides the sandbox-wide setting for one conversation; clear it to follow the default again. Off unless asked for, because the allowance is the user's own budget and a turn that spends it the moment it reopens is not a decision to make on their behalf."
-	}).input(AgentResumeAfterLimitSchema).output(AgentSummarySchema),
-	moveAfterLimit: oc.route({
-		method: "POST",
-		path: "/agents/{id}/move-after-limit",
-		summary: "Whether this conversation moves to another account when its allowance is spent",
-		description: "Overrides the sandbox-wide setting for one conversation; clear it to follow the default again. A move spends a second account of the same provider on this conversation's behalf, so it is off unless asked for."
-	}).input(AgentMoveAfterLimitSchema).output(AgentSummarySchema),
-	seen: oc.route({
+		path: "/agents/{id}/keep-warm",
+		summary: "Keep this conversation's prompt cache warm while it sits idle",
+		description: "Re-reads the conversation's cached context shortly before the provider would drop it, until the time asked for, so picking it back up costs a cache read instead of re-sending everything. Each refresh is a forked, unsaved request that adds nothing to the conversation. Stops by itself when the time runs out, when a turn starts, when the account nears its limit, or when the prompt the next turn would send has changed. Refused for a conversation whose cache is already cold or that this sandbox cannot replay. Null stops it."
+	}).meta({ floor: "collaborator" }).input(AgentKeepWarmSchema).output(AgentSummarySchema),
+	seen: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/seen",
 		summary: "Mark a conversation read",
 		description: "Stamps the read marker behind the unread badge on one card. Allowed while the conversation is working, and reading never counts as activity."
+	}).meta({
+		floor: "collaborator",
+		guest: true
 	}).input(AgentIdSchema).output(AgentSummarySchema),
-	stopWatching: oc.route({
+	unsent: procedure.route({
+		method: "POST",
+		path: "/agents/{id}/unsent",
+		summary: "Report that a composer holds an unsent message for a conversation",
+		description: "The words stay in the browser; the sandbox only records since when some composer has held them, so a conversation waiting on a message nobody has sent yet is never archived for being idle. Null clears it once the message is sent or deleted. Does not count as activity."
+	}).meta({ floor: "collaborator" }).input(AgentUnsentSchema).output(AgentSummarySchema),
+	stopWatching: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/stop-watching",
-		summary: "Stop every condition watch a conversation is parked on",
-		description: "Disarms all of this conversation's outside-condition watches, so none of them will wake it. All of them rather than one, because that is what the press means when it is made about a card. Nothing else about the conversation changes."
-	}).input(AgentIdSchema).output(AgentSummarySchema),
-	seenAll: oc.route({
+		summary: "Stop a conversation's condition watches",
+		description: "Disarms this conversation's outside-condition watches, so they will not wake it. Named without a watch id it disarms all of them, because that is what the press means when it is made about a card; a press made about one watch's own row names that watch and leaves the rest armed. Nothing else about the conversation changes."
+	}).input(AgentStopWatchingSchema).output(AgentSummarySchema),
+	stopJob: procedure.route({
+		method: "POST",
+		path: "/agents/{id}/stop-job",
+		summary: "Stop one of a conversation's background jobs",
+		description: "Ends a command this conversation left running: the server it handed over, or the build it is waiting on. The watch that would have woken the conversation on its exit is disarmed first, so stopping it wakes nothing. Stopping a job that already ended is not an error."
+	}).input(AgentStopJobSchema).output(AgentSummarySchema),
+	seenAll: procedure.route({
 		method: "POST",
 		path: "/agents/seen",
 		summary: "Mark every conversation read",
 		description: "Clears the unread badge across the whole fleet at once, and hands the refreshed list back."
+	}).meta({
+		floor: "collaborator",
+		guest: true
 	}).output(AgentsListSchema),
-	diff: oc.route({
+	diff: procedure.route({
 		method: "GET",
 		path: "/agents/{id}/diff",
 		summary: "Everything a conversation has changed",
 		description: "One flat set of changed files per repo, measured against where each repo stood when the conversation started, with every file flagged as already merged or not. Not the staged-and-unstaged shape a working copy has, because nobody ever checks this branch out to stage into it."
 	}).input(AgentIdSchema).output(AgentChangesSchema),
-	history: oc.route({
+	conflicts: procedure.route({
+		method: "GET",
+		path: "/agents/{id}/conflicts",
+		summary: "Why a conversation's last merge refused",
+		description: "What still blocks the conversation's last refused merge, checked again against your workspace as it stands now. Returns the same `conflicts` the full change list carries, without the change list itself. Empty when nothing refused, or when what refused before has since stopped being in the way."
+	}).input(AgentIdSchema).output(AgentConflictsSchema),
+	history: procedure.route({
 		method: "GET",
 		path: "/agents/{id}/history",
 		summary: "Where a conversation's committed work lives",
 		description: "The commits in your own history that carry this conversation's work, with the files each one brought. Use it when the change list is empty or short because you already committed what it wrote: those files are not differences against the main line any more, so they are not in the review, and this is where they went."
 	}).input(AgentIdSchema).output(AgentHistorySchema),
-	fileDiff: oc.route({
+	fileDiff: procedure.route({
 		method: "GET",
 		path: "/agents/{id}/{repo}/file-diff",
 		summary: "One file's before and after in a conversation's work",
 		description: "Both sides of a single file: what it held when the conversation started and what it holds on its branch now."
 	}).input(AgentFileDiffQuerySchema).output(FileDiffSchema),
-	land: oc.route({
+	includeScratch: procedure.route({
+		method: "POST",
+		path: "/agents/{id}/scratch/include",
+		summary: "Carry files set aside as scratch with a conversation's work",
+		description: "Takes files the review lists as scratch and adds them to the conversation's work, so the next merge carries them like any other file. For the file that only looked like scratch. Refused for a checkout of its own, which no merge can carry, while a turn is running, and for a path that is not scratch right now."
+	}).input(AgentScratchSchema).output(OkSchema$1),
+	deleteScratch: procedure.route({
+		method: "POST",
+		path: "/agents/{id}/scratch/delete",
+		summary: "Delete a conversation's scratch",
+		description: "Removes files the review lists as scratch from the conversation's copy. Nothing else is touched, and nothing of it was ever merged. Refused while a turn is running, and for a path that is not scratch right now."
+	}).input(AgentScratchSchema).output(OkSchema$1),
+	land: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/land",
 		summary: "Merge a conversation's work into the workspace",
 		description: "Brings the conversation's branches into the main tree, one repo at a time. A conflict is reported rather than raised and nothing is lost when it fails. Refused while a turn is running, and refused for a conversation that works directly in the shared tree, which has nothing to merge."
-	}).input(AgentLandSchema).output(LandResultSchema),
-	requestLand: oc.route({
+	}).meta({ control: "land" }).input(AgentLandSchema).output(LandResultSchema),
+	requestLand: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/request-land",
 		summary: "Ask a maintainer to merge this work",
 		description: "For a collaborator who is not allowed to merge: marks the conversation as waiting for review, with who asked. The request shows on every maintainer's board and clears when somebody merges or discards it."
-	}).input(AgentIdSchema).output(AgentSummarySchema),
-	discard: oc.route({
+	}).meta({ floor: "collaborator" }).input(AgentIdSchema).output(AgentSummarySchema),
+	assign: procedure.route({
+		method: "POST",
+		path: "/agents/{id}/assign",
+		summary: "Make a member answerable for this conversation",
+		description: "Hands a conversation to a member: its owner is who answers its questions and who a reviewer asks about its work. Its owner may hand it to anyone; a maintainer may reassign any conversation; one nobody owns may be claimed by anyone allowed to drive agents. Refused for an address that is not a member's. Nothing about the conversation's own work changes."
+	}).meta({ floor: "collaborator" }).input(AgentAssignSchema).output(AgentSummarySchema),
+	react: procedure.route({
+		method: "POST",
+		path: "/agents/{id}/react",
+		summary: "Mark a conversation with an emoji",
+		description: "Puts your mark on a conversation, or takes it back. Everyone sharing the sandbox sees it, with who left it, which is what makes it worth more than a private bookmark. One mark per person per emoji; nothing about the conversation's own work changes."
+	}).meta({
+		floor: "viewer",
+		guest: true
+	}).input(AgentReactSchema).output(AgentSummarySchema),
+	discard: procedure.route({
 		method: "POST",
 		path: "/agents/{id}/discard",
 		summary: "Throw a conversation's work away",
 		description: "Deletes the conversation's working copies, its branches and its entry. Nothing is kept. Refused while a turn is running, and refused for a conversation working in the shared tree."
-	}).input(AgentIdSchema).output(OkSchema$1),
-	archive: oc.route({
+	}).meta({ control: "land" }).input(AgentIdSchema).output(OkSchema$1),
+	archive: procedure.route({
 		method: "POST",
 		path: "/agents/archive",
 		summary: "Put conversations away",
-		description: "The gentle counterpart to discarding. Commits whatever the conversation still has in progress onto its own branch, releases its working copy, and keeps the entry and the record. It leaves the live fleet and joins the archive. Refused for a conversation that is running."
-	}).input(AgentArchiveSchema).output(AgentsArchivedSchema),
-	unarchive: oc.route({
+		description: "The gentle counterpart to discarding. Commits whatever the conversation still has in progress onto its own branch, releases its working copy, and keeps the entry and the record. Its scratch is not committed and goes with the copy. It leaves the live fleet and joins the archive. Refused for a conversation that is running."
+	}).meta({
+		floor: "collaborator",
+		guest: true
+	}).input(AgentIdsSchema).output(AgentsArchivedSchema),
+	unarchive: procedure.route({
 		method: "POST",
 		path: "/agents/unarchive",
 		summary: "Bring conversations back",
 		description: "Returns archived conversations to the live fleet. The next turn picks up a fresh working copy from the branch that was kept."
+	}).meta({
+		floor: "collaborator",
+		guest: true
 	}).input(AgentIdsSchema).output(AgentsMovedSchema),
-	purge: oc.route({
+	purge: procedure.route({
 		method: "POST",
 		path: "/agents/purge",
 		summary: "Empty the archive for good",
 		description: "Discards every conversation already in the archive: working copies, branches and entries. The whole archive rather than a chosen few, because the archive is the pile somebody has already decided is over. A teardown that fails on one conversation leaves that one behind instead of taking the rest down with it."
-	}).output(AgentsRemovedSchema)
+	}).meta({ control: "land" }).output(AgentsRemovedSchema)
 };
 _enum(["post", "action"]);
 var ApprovalStatusSchema = _enum([
@@ -17649,92 +14419,197 @@ var ApprovalsListSchema = object({
 	invalid: array(string()).describe("Files that could not be read at all, or name a kind this daemon does not know. Listed rather than skipped, because an agent writes these files directly and a malformed one would otherwise never run and never say why.")
 });
 var ApprovalIdParamSchema = object({ id: entryId.describe("Which approval.") });
+var hookDigest = string().regex(/^[0-9a-f]{64}$/);
+var SettingsHookSchema = object({
+	source: _enum(["user", "project"]).describe("Whose configuration declares it: the sandbox's own (~/.claude) or the workspace's (.claude/ in the project)."),
+	declaredIn: string().optional().describe("The skill, subagent or command whose frontmatter declares it, spelled like a script path. Absent when it comes from the settings.json of its source."),
+	event: string().describe("When it runs, in Claude Code's own words: before a tool, after one, when a prompt is sent, when a session starts."),
+	matcher: string().optional().describe("Which tools it is limited to, when it is limited at all."),
+	type: string().describe("What kind of hook it is: a shell command, an address it calls, a prompt it asks a model."),
+	run: string().describe("Exactly what it runs: the command line, the address, the prompt.")
+});
+var HookScriptSchema = object({
+	path: string().describe("A file one of the hooks runs, spelled the way the hook names it: inside the workspace as $CLAUDE_PROJECT_DIR/…, under the home directory as ~/…, otherwise absolute."),
+	sha256: string().describe("Its contents when the hooks were found. The approval covers these bytes, so editing the file asks again, the same as editing the command would.")
+});
+var HookRequestsSchema = object({
+	requests: array(object({
+		digest: hookDigest.describe("The set's fingerprint: every hook as declared plus the bytes of every file they run. Approving it approves exactly this, and nothing that differs from it by a character."),
+		seenAt: number$1().describe("When a turn first found this set, in milliseconds."),
+		conversationId: string().optional().describe("The conversation whose turn found it, when one did."),
+		hooks: array(SettingsHookSchema).describe("Every hook in the set. Until it is approved, turns run with all of them off, and so with every other hook the agent would load."),
+		scripts: array(HookScriptSchema).describe("The files those hooks run by name, which the approval pins byte for byte."),
+		dismissed: boolean().optional().describe("Kept off on purpose: no longer counted as waiting, and still approvable. Present only when it was dismissed.")
+	})).describe("Hook sets waiting for a yes, newest first, then the dismissed ones."),
+	ledgerUnreadable: boolean().optional().describe("The record of what was approved could not be read, so no settings-file hook runs anywhere until a set is approved again. Present only when that is the case.")
+});
+var HookDigestParamSchema = object({ digest: hookDigest.describe("Which hook set, by its fingerprint.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/approvals.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/approvals.contract.js
 var approvalsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/approvals",
 		summary: "Things waiting for your yes",
 		description: "Everything an agent has prepared and would like to do: posts to publish, actions to carry out. Nothing here has happened yet."
 	}).output(ApprovalsListSchema),
-	upsert: oc.route({
+	upsert: procedure.route({
 		method: "POST",
 		path: "/approvals",
 		summary: "Approve, edit or retry one",
 		description: "All three are the same act with a different field changed, so they share one call. Send the item back as you want it."
 	}).input(ApprovalSummarySchema).output(OkSchema$1),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "DELETE",
 		path: "/approvals/{id}",
 		summary: "Reject one",
 		description: "Throws it away undone."
-	}).input(ApprovalIdParamSchema).output(OkSchema$1)
+	}).input(ApprovalIdParamSchema).output(OkSchema$1),
+	hookRequests: procedure.route({
+		method: "GET",
+		path: "/approvals/hooks",
+		summary: "Hooks waiting for your yes",
+		description: "Hook sets a turn found in Claude Code's settings files, or in a skill's or subagent's definition, that nobody has approved in that exact form. Until one is approved, turns in this workspace run with every hook switched off; the sandbox's own safeguards are not hooks of this kind and keep working."
+	}).meta({ floor: "maintainer" }).output(HookRequestsSchema),
+	approveHooks: procedure.route({
+		method: "POST",
+		path: "/approvals/hooks/{digest}/approve",
+		summary: "Let a hook set run",
+		description: "Approves exactly this set, commands and the bytes of the files they run, from the next turn on. Any later change to either is a new set and asks again. Owner and maintainers only, and never through a token a program holds."
+	}).meta({
+		panel: false,
+		control: "never"
+	}).input(HookDigestParamSchema).output(OkSchema$1),
+	dismissHooks: procedure.route({
+		method: "POST",
+		path: "/approvals/hooks/{digest}/dismiss",
+		summary: "Keep a hook set off without being asked again",
+		description: "Takes the set off the list. Its hooks stay switched off; a change to them is a new set, which asks again."
+	}).meta({
+		panel: false,
+		control: "never"
+	}).input(HookDigestParamSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/automations.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/fence-paths.js
+var foldPath = (raw) => {
+	if (raw.startsWith("/") || /^[A-Za-z]:/.test(raw)) return;
+	const segments = [];
+	for (const segment of raw.split(/[\\/]/)) {
+		if (segment === "" || segment === ".") continue;
+		if (segment !== "..") {
+			segments.push(segment);
+			continue;
+		}
+		if (segments.pop() === void 0) return;
+	}
+	return segments.join("/");
+};
+var pathInsideFolder = (folder, path) => {
+	const outer = foldPath(folder);
+	const inner = foldPath(path);
+	if (outer === void 0 || inner === void 0) return false;
+	return outer === "" || inner === outer || inner.startsWith(`${outer}/`);
+};
+var SANDBOX_PATHS = [STATE_DIR, PUBLIC_DIR];
+var isSandboxPath = (path) => SANDBOX_PATHS.some((folder) => pathInsideFolder(folder, path));
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/areas.js
+var AreaFolderSchema = string().min(1).max(200).refine((raw) => (foldPath(raw) ?? "") !== "", { message: "a folder is workspace-relative and inside the workspace; the workspace root is what naming no area already means" }).refine((raw) => !isSandboxPath(raw), { message: "an area cannot name the sandbox's own configuration or its public outbox" });
+var AreaSchema = object({
+	id: entryId.describe("The area's id, the name a member row points at."),
+	label: string().max(60).optional().describe("What to call it on screen. Absent falls back to the id, which somebody chose anyway."),
+	brief: string().max(200).optional().describe("What this part of the workspace is, in one line, so whoever grants it can tell what they are handing over."),
+	folders: array(AreaFolderSchema).min(1).max(50).describe("The folders it admits, workspace-relative. At least one: an area naming nothing would be a grant with no reader, and the way to grant everything is to name no area at all.")
+});
+var AreasListSchema = object({ areas: array(AreaSchema).describe("Every named part of the workspace this sandbox grants access in.") });
+var AreaIdParamSchema = object({ id: entryId.describe("Which area.") });
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/areas.contract.js
+var areasContract = {
+	list: procedure.route({
+		method: "GET",
+		path: "/areas",
+		summary: "The named parts of the workspace",
+		description: "Each area with the folders it admits. Access is granted in these rather than in folder lists per person, so widening what a team sees is one edit here instead of one edit per member."
+	}).meta({ guest: true }).output(AreasListSchema),
+	save: procedure.route({
+		method: "POST",
+		path: "/areas",
+		summary: "Create or edit an area",
+		description: "Writes the whole area; sending an id that exists edits it. Editing the folders of an area people already hold changes what those people see on their next request, which is why this is the sandbox owner's to do and why the file it writes is tracked and reviewable."
+	}).input(AreaSchema).output(OkSchema$1),
+	remove: procedure.route({
+		method: "DELETE",
+		path: "/areas/{id}",
+		summary: "Delete an area",
+		description: "Removes the name and the folders behind it. Refused while a member still points at it, since nobody chose what such a row should then mean; move them onto another area first, or off areas entirely."
+	}).input(AreaIdParamSchema).output(OkSchema$1)
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/automations.contract.js
 var automationsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/automations",
 		summary: "Things that wake an agent on their own",
 		description: "Every automation with its recent runs and when it fires next."
 	}).output(AutomationsListSchema),
-	catalog: oc.route({
+	catalog: procedure.route({
 		method: "GET",
 		path: "/automations/catalog",
 		summary: "What can trigger an automation here",
 		description: "Every trigger this sandbox understands and every template worth starting from, the daemon's own merged with each installed extension's. Writing an automation is checked against this same list, so a screen and the daemon can never disagree about what is allowed."
 	}).output(AutomationCatalogSchema),
-	upsert: oc.route({
+	upsert: procedure.route({
 		method: "POST",
 		path: "/automations",
 		summary: "Create or edit an automation",
 		description: "Writes an automation by id. Nothing needs provisioning: the scheduler picks it up on its next sweep."
 	}).input(AutomationSchema).output(OkSchema$1),
-	setEnabled: oc.route({
+	setEnabled: procedure.route({
 		method: "POST",
 		path: "/automations/{id}/enabled",
 		summary: "Turn an automation on or off",
 		description: "Flips only the switch, so a row in a list can be toggled without rebuilding the whole record."
 	}).input(AutomationEnabledInputSchema).output(OkSchema$1),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "DELETE",
 		path: "/automations/{id}",
 		summary: "Delete an automation",
 		description: "Removes it, so nothing fires from it again."
 	}).input(AutomationIdParamSchema).output(OkSchema$1),
-	rotateToken: oc.route({
+	rotateToken: procedure.route({
 		method: "POST",
 		path: "/automations/{id}/rotate-token",
 		summary: "Rotate an automation's webhook token or intake key",
 		description: "Mints a new credential for the door this automation opens and retires the old one at once. Every caller has to be handed the new URL; that is the point. Refused for an automation with no door."
 	}).input(AutomationIdParamSchema).output(DoorTokenSchema),
-	run: oc.route({
+	run: procedure.route({
 		method: "POST",
 		path: "/automations/{id}/run",
 		summary: "Fire an automation by hand",
 		description: "The answer to writing something that runs at three in the morning and having no way to try it. It takes exactly the path the real trigger takes, including the check that decides whether there was anything to do, since skipped by the guard is the most useful thing this can tell you. A switched-off automation fires too, because trying it before switching it on is the main reason to press this. Not available for the trigger that listens for incoming messages, where a hand-fire would produce an agent asked to handle events and handed none; send the bot a message instead. Answers straight away and runs detached."
 	}).input(AutomationIdParamSchema).output(OkSchema$1),
-	senders: oc.route({
+	senders: procedure.route({
 		method: "GET",
 		path: "/automations/senders/{provider}",
 		summary: "Who has written to a listener source",
 		description: "Everyone whose message reached one of this source's automations, newest first, admitted or not. What the sender rules picker offers by name while storing the id the service vouches for."
 	}).input(SendersProviderParamSchema).output(SendersRosterSchema),
-	pendingList: oc.route({
+	pendingList: procedure.route({
 		method: "GET",
 		path: "/automations/pending",
 		summary: "Automations waiting for a yes",
 		description: "The queue an automation set to ask first lands in each time it would have fired."
 	}).output(AutomationApprovalsListSchema),
-	approve: oc.route({
+	approve: procedure.route({
 		method: "POST",
 		path: "/automations/pending/{id}/approve",
 		summary: "Let a held automation run",
 		description: "Releases one waiting automation and runs the wake it was holding. Answers straight away and runs detached."
 	}).input(AutomationApprovalIdParamSchema).output(OkSchema$1),
-	reject: oc.route({
+	reject: procedure.route({
 		method: "POST",
 		path: "/automations/pending/{id}/reject",
 		summary: "Drop a held automation",
@@ -17742,7 +14617,7 @@ var automationsContract = {
 	}).input(AutomationApprovalIdParamSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/workspace/workspace-tree.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/workspace/workspace-tree.js
 var WorkspaceScopeSchema = object({ agent: ConversationIdSchema.optional().describe("Read a conversation's own private copy of the workspace rather than the shared tree. Leave it out for the shared tree. A conversation that is not working privately resolves back to the shared tree rather than failing, so a link need not know which mode it runs in.") });
 var WorkspaceLinkSchema = object({
 	to: string().describe("What the link says, verbatim, rather than where it ends up. That is what the person who made it wrote, and what they would edit."),
@@ -17763,7 +14638,17 @@ var WorkspaceTreeSchema = object({
 	root: string().describe("The path everything below is relative to."),
 	tree: array(WorkspaceTreeEntrySchema).describe("The workspace, one entry per file and folder."),
 	hidden: number$1().describe("How many entries at the top level were cut for size. Zero means the listing is complete."),
-	barren: array(string()).describe("Folders whose whole contents are empty folders, and nothing else. Complete for the workspace, however much of the tree above was listed, and ordered like the tree, so a parent comes before the branch below it.")
+	barren: array(string()).describe("Folders whose whole contents are empty folders, and nothing else. Complete for the workspace, however much of the tree above was listed, and ordered like the tree, so a parent comes before the branch below it."),
+	generation: number$1().int().nonnegative().optional().describe("Which state of the shared tree this is; the changes that follow count from it. Absent for a conversation's own checkout, which is listed when asked and followed by no changes.")
+});
+var WorkspaceTreeDeltaSchema = object({
+	from: number$1().int().nonnegative().describe("The generation this applies on top of. A reader holding any other fetches the tree afresh instead."),
+	generation: number$1().int().nonnegative().describe("The generation it leaves the tree at."),
+	dirs: array(object({
+		path: string().describe("The folder, as a workspace path; empty for the workspace root."),
+		entries: array(WorkspaceTreeEntrySchema).describe("Its entries now, without their contents: a folder whose own entries also changed comes as an item of its own.")
+	})).describe("Each folder that changed, parents before the folders inside them."),
+	barren: array(string()).optional().describe("The barren folders now, present only when that list moved.")
 });
 var WorkspaceChildrenQuerySchema = WorkspaceScopeSchema.extend({
 	path: string().min(1).describe("The folder to open, as a workspace path."),
@@ -17779,6 +14664,12 @@ var WorkspaceMediaTicketSchema = object({
 	ticket: string().describe("Hand this to the streaming route in the query string. It buys exactly the one file it was minted for."),
 	expiresAt: number$1().describe("When it stops working, in milliseconds, so a player can tell a dead ticket from a dead file.")
 });
+var WorkspaceDownloadTicketQuerySchema = WorkspaceScopeSchema.extend({ paths: array(string().min(1)).min(1).max(1e4).describe("The files and folders to download together, as workspace paths. A folder brings everything inside it.") });
+var WorkspaceDownloadTicketSchema = object({
+	ticket: string().describe("Hand this to the download route in the query string. It buys exactly the selection it was minted for, once resolved."),
+	expiresAt: number$1().describe("When it stops working, in milliseconds. It is meant to be used at once."),
+	filename: string().describe("What the archive is saved as, so a caller can say what is on its way.")
+});
 var WorkspaceFileReadQuerySchema = WorkspaceScopeSchema.extend({
 	path: string().min(1).describe("The file to read, as a workspace path."),
 	offset: number().int().optional().describe("Which byte to start at. A negative number reads that many bytes from the end, which is how you follow a growing log without knowing its size first."),
@@ -17791,32 +14682,19 @@ var WorkspaceFileSchema = discriminatedUnion("present", [object({
 	size: number$1().describe("How large the whole file is. Compare it with the window below to know whether there is more."),
 	offset: number$1().describe("Which byte the window starts at."),
 	bytes: number$1().describe("How many bytes the window holds."),
-	shared: boolean().describe("Which tree answered. True when no conversation was named, and also when one was but its own copy has no such file, which is the case a reader has to be told about rather than left to assume.")
+	shared: boolean().describe("Which tree answered. True when no conversation was named, and also when one was but its own copy has no such file, which is the case a reader has to be told about rather than left to assume."),
+	lossy: literal(true).optional().describe("The bytes are not valid UTF-8, so `content` holds replacement characters where they failed to decode. Saving that text back would change the file, so treat it as read-only.")
 }), object({
 	present: literal(false).describe("Nothing there. An answer, not a failure: reading a file that may not exist yet is the ordinary case for half the reads in this product."),
 	path: string().describe("The path, as asked for.")
 })]);
 var WorkspaceDerivedQuerySchema = object({ path: string().min(1).describe("The file you want the text of, as a workspace path. The real file, not its shadow: where the text is kept is this route's business.") });
-var SidecarStatusSchema = object({
-	enabled: boolean().describe("Whether the background pass is on (the `sidecars` setting). Off means a shadow exists only where someone asked for one."),
-	queued: number$1().describe("Files waiting for a shadow, not counting the batch being rendered right now."),
-	deriving: array(string()).describe("The files being rendered at this moment, as workspace paths. One batch at a time, because derivation shares the box with the agent it serves."),
-	sweeping: boolean().describe("Whether a whole-tree pass is running, which is what a freshly enabled setting or an unlistably large batch triggers."),
-	broken: boolean().describe("Whether the `fileq` binary is missing, in which case nothing renders in the background until this sandbox restarts."),
-	shadows: number$1().optional().describe("How many shadows the last whole-tree pass counted. Absent until one has run in this daemon's lifetime."),
-	sweptAt: string().optional().describe("When that pass finished, as an ISO timestamp.")
-});
-var DerivedStandingShape = {
-	state: _enum([
-		"off",
-		"queued",
-		"deriving",
-		"idle",
-		"broken",
-		"undeliverable"
-	]).describe("Where this file stands with the background pass: switched off, waiting its turn, being read right now, settled, or unreachable because the renderer is missing. `undeliverable` is a format nothing here reads."),
-	queue: SidecarStatusSchema.describe("How the background pass as a whole is doing, so a wait can be reported as a queue rather than as nothing happening.")
-};
+var DerivedStandingShape = { state: _enum([
+	"deriving",
+	"idle",
+	"broken",
+	"undeliverable"
+]).describe("Where this file stands: being read right now, settled (what it has is what it gets until someone asks), or unreachable because the renderer is missing. `undeliverable` is a format nothing here reads.") };
 var WorkspaceDerivedSchema = discriminatedUnion("present", [object({
 	...DerivedStandingShape,
 	present: literal(true).describe("There is derived text for that file."),
@@ -17831,7 +14709,7 @@ var WorkspaceDerivedSchema = discriminatedUnion("present", [object({
 	stale: boolean().describe("Whether the file has changed since this text was derived, compared by content rather than by clock. True means you are reading a rendering of an older version of the file, and deriving it again catches it up.")
 }), object({
 	...DerivedStandingShape,
-	present: literal(false).describe("There is no derived text for that file. Read `state` before saying so to anyone: absent and queued are different answers."),
+	present: literal(false).describe("There is no derived text for that file. Read `state` before saying so to anyone: absent and being read are different answers."),
 	path: string().describe("The file, as asked for."),
 	derivable: boolean().describe("Whether this format can be turned into text at all. True means asking for it to be derived is worth offering; false means nothing here reads this format."),
 	reason: string().optional().describe("Why there is none, when deriving was just attempted and produced nothing: the file is too large, corrupt, or of a format no reader claims.")
@@ -17843,6 +14721,13 @@ var WorkspaceMoveSchema = object({
 	from: string().min(1).describe("What to move or copy, as a workspace path."),
 	to: string().min(1).describe("Where it should end up. Changing only the last part is how you rename something.")
 });
+var WorkspaceExtractSchema = object({ path: string().describe("Where the contents landed, as a workspace path: a new folder named after the archive, or the decompressed file itself when the archive held just one. Never an existing entry written over, so a name already taken lands beside it under a free one.") });
+var WorkspaceDeletedSchema = object({
+	ok: literal(true).describe("Always true: the entry is gone from where it was, or was never there."),
+	trashed: string().optional().describe("The trash id that brings it back through the restore call, for a day. Absent when there was nothing at that path to delete.")
+});
+var WorkspaceRestoreSchema = object({ trashed: string().min(1).describe("The trash id a delete answered with.") });
+var WorkspaceRestoredSchema = object({ path: string().describe("Where it came back, as a workspace path: where it was deleted from, or beside that under a `(restored)` name when something new has taken the name since.") });
 var WorkspaceBucketSchema = _enum([
 	"repositories",
 	"documents",
@@ -17856,7 +14741,7 @@ var WorkspaceClassificationSchema = object({ classifications: array(object({
 	reason: string().describe("The signal that decided it, so the proposal can be argued with rather than trusted.")
 })).describe("One entry per repository folder and loose file at the top of the workspace. A read-only proposal: nothing moves until you apply it.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/events/system-events.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/events/system-events.js
 var IntenticLineSchema = looseObject({ kind: string() });
 var HeartbeatSchema = object({
 	kind: literal("heartbeat"),
@@ -17888,7 +14773,9 @@ var HelloSchema = object({
 	routes: array(string()).optional(),
 	shapes: record(string(), string()).optional(),
 	build: string().optional(),
-	boot: BootProgressSchema.optional()
+	boot: BootProgressSchema.optional(),
+	projectDir: string().optional(),
+	surface: _enum(["sandbox", "folder"]).optional()
 });
 var ReposChangedSchema = object({
 	kind: literal("reposChanged"),
@@ -17900,8 +14787,7 @@ var WorkspaceChangedSchema = object({
 });
 var DerivedChangedSchema = object({
 	kind: literal("derivedChanged"),
-	paths: array(string()),
-	queue: SidecarStatusSchema
+	paths: array(string())
 });
 var RefsChangedSchema = object({
 	kind: literal("refsChanged"),
@@ -17922,38 +14808,43 @@ var PresenceUserSchema = object({
 	sessionId: string().optional(),
 	path: string().optional()
 });
+var PresenceSchema = object({
+	kind: literal("presence"),
+	users: array(PresenceUserSchema)
+});
+var AgentsSchema = object({
+	kind: literal("agents"),
+	agents: array(AgentSummarySchema),
+	rev: number$1()
+});
+var AccountUsageChangedSchema = object({
+	kind: literal("accountUsage"),
+	provider: string(),
+	account: string(),
+	usage: AccountUsageSchema.optional()
+});
+var ProviderRefusalChangedSchema = object({
+	kind: literal("providerRefusal"),
+	provider: string(),
+	refusal: ProviderRefusalSchema.optional()
+});
 var SystemEventSchema = discriminatedUnion("kind", [
 	HelloSchema,
 	HeartbeatSchema,
 	BootSchema,
 	WorkspaceChangedSchema,
+	WorkspaceTreeDeltaSchema.extend({ kind: literal("treeChanged") }),
 	DerivedChangedSchema,
 	ReposChangedSchema,
 	RefsChangedSchema,
 	RuntimeChangedSchema,
-	object({
-		kind: literal("presence"),
-		users: array(PresenceUserSchema)
-	}),
-	object({
-		kind: literal("agents"),
-		agents: array(AgentSummarySchema),
-		rev: number$1()
-	}),
-	object({
-		kind: literal("accountUsage"),
-		provider: string(),
-		account: string(),
-		usage: AccountUsageSchema.optional()
-	}),
-	object({
-		kind: literal("providerRefusal"),
-		provider: string(),
-		refusal: ProviderRefusalSchema.optional()
-	})
+	PresenceSchema,
+	AgentsSchema,
+	AccountUsageChangedSchema,
+	ProviderRefusalChangedSchema
 ]);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/exit.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/exit.js
 var ExitProviderSchema = _enum([
 	"tor",
 	"vpngate",
@@ -18019,69 +14910,50 @@ var ExitUseInputSchema = object({
 	country: CountryCodeSchema.optional().describe("Where to come out. Leaving it out means letting the provider choose, so clearing a country is something you can actually say rather than only setting one.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/inventory.js
-var InventoryProviderSchema = _enum([
-	"host",
-	"cloudflare",
-	"github",
-	"gitlab",
-	"stripe"
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/netdisk.js
+var NetdiskProviderSchema = _enum(["smb"]);
+var NetdiskAccessSchema = _enum(["read", "readwrite"]);
+var SmbVersionSchema = _enum([
+	"auto",
+	"3.1.1",
+	"3.0",
+	"2.1",
+	"1.0"
 ]);
-var ServiceKindSchema = _enum([
-	"signoz",
-	"outline",
-	"paperless",
-	"openproject",
-	"invoiceninja",
-	"infisical"
+var autoMount = _enum(["on", "off"]).default("on");
+var uncPart = (label) => string().min(1).refine((value) => !/[\\/\s]/.test(value), { message: `${label} is one name, without slashes or spaces.` });
+var NetdiskConfigSchema = discriminatedUnion("provider", [object({
+	provider: literal("smb"),
+	server: uncPart("Server").describe("The NAS or file server: a hostname or address, reachable from the sandbox (through a VPN if it is behind one)."),
+	share: uncPart("Share").describe("The share name, the first path segment after the server in //server/share."),
+	path: string().optional().refine((value) => value === void 0 || !value.startsWith("/") && !value.split("/").includes(".."), { message: "Path is a folder inside the share, like projects/2026, with no leading slash and no '..'." }).describe("A folder inside the share to mount instead of its root."),
+	username: string().min(1).describe("The account the sandbox mounts as. For a read-only disk, give it an account the server itself limits to reading."),
+	password: string().optional().describe("Its password. Leave empty for a guest share."),
+	domain: string().optional().describe("The Windows domain or workgroup, only where the server asks for one."),
+	access: NetdiskAccessSchema.default("read").describe("Whether the agent may write to it. Read-only is the default."),
+	version: SmbVersionSchema.default("auto").describe("The SMB dialect to insist on. Leave on auto unless the server refuses."),
+	autoMount
+})]);
+var NetdiskStateSchema = _enum([
+	"mounted",
+	"unmounted",
+	"unavailable"
 ]);
-var InventoryValuesSchema = record(string(), union([string(), number$1()]));
-var inventoryName = string().min(1).max(60).regex(/^[a-zA-Z_][a-zA-Z0-9_]*$/);
-var BackendEntrySchema = object({
-	kind: literal("backend").describe("Something you already have: a machine, an account with a hosting provider."),
-	provider: InventoryProviderSchema.describe("Which provider it is with."),
-	name: string().describe("What to call it, which is also how everything else refers to it."),
-	values: InventoryValuesSchema.describe("Its settings. Anything secret is stored separately and referred to here, never written in.")
-});
-var ServiceEntrySchema = object({
-	kind: literal("service").describe("Something you want provisioned."),
-	service: ServiceKindSchema.describe("Which service."),
-	name: string().describe("What to call it."),
-	values: InventoryValuesSchema.describe("Its settings."),
-	on: string().describe("Which of your machines to put it on."),
-	expose: string().describe("How it should be reachable.")
-});
-var AppEntrySchema = object({
-	kind: literal("app").describe("An app of your own, built from source and deployed."),
-	name: string().describe("What to call it."),
-	values: InventoryValuesSchema.describe("Its settings, including the address it should answer on."),
-	on: string().describe("Which of your machines to put it on."),
-	expose: string().describe("How it should be reachable.")
-});
-var InventoryEntrySchema = discriminatedUnion("kind", [
-	BackendEntrySchema,
-	ServiceEntrySchema,
-	AppEntrySchema
-]);
-var AddInventoryInputSchema = discriminatedUnion("kind", [
-	BackendEntrySchema.extend({ name: inventoryName }),
-	ServiceEntrySchema.extend({ name: inventoryName }),
-	AppEntrySchema.extend({ name: inventoryName })
-]);
-var InventoryNameParamSchema = object({ name: string().describe("Which entry, by name.") });
-var InventoryListSchema = object({ entries: array(InventoryEntrySchema).describe("Everything declared: what you have, and what you want provisioned.") });
-object({
-	name: inventoryName,
-	user: string().min(1),
-	address: string().min(1),
-	port: number().default(22),
-	via: _enum(["direct", "cloudflared"]).default("cloudflared"),
-	sshKey: string().min(1),
-	cfToken: string().optional(),
-	cfZone: string().optional()
-});
+var NetdiskListSchema = object({ links: array(object({
+	id: string().describe("Which disk."),
+	provider: NetdiskProviderSchema.describe("What protocol it speaks."),
+	state: NetdiskStateSchema.describe("Whether it is mounted, resting, or not mountable yet because its client needs a rebuild to arrive."),
+	target: string().describe("What it mounts, as //server/share. For display only, and never a credential."),
+	mountPoint: string().describe("Where its files appear inside the sandbox."),
+	access: NetdiskAccessSchema.describe("What the card asked for: read, or read and write."),
+	writable: boolean().optional().describe("Whether the live mount accepts writes, as the kernel has it. Absent unless mounted."),
+	since: number$1().optional().describe("When it was mounted, in milliseconds. Absent unless it is."),
+	autoMount: boolean().describe("Whether it mounts itself when the sandbox starts."),
+	detail: string().optional().describe("Why it is unavailable, or a note about a healthy one. Never a credential.")
+})).describe("Every configured disk with its live mount state, read back from the kernel each time rather than remembered.") });
+var NetdiskIdParamSchema = object({ id: string().describe("Which disk.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/vpn.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/vpn.js
 var VpnProviderSchema = _enum([
 	"wireguard",
 	"fortinet",
@@ -18171,28 +15043,90 @@ var ForticlientImportSchema = object({ connections: array(object({
 	needs: array(string()).describe("What you still have to type in before it can dial. Always at least the password, because the export wraps credentials in encryption that cannot be undone here.")
 })).describe("The connections found in the file, ready to be added one at a time.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/capabilities.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/webext.js
+var webextScope = _enum(["on", "off"]);
+var WebExtScopesSchema = object({
+	read: webextScope.default("on"),
+	act: webextScope.default("on"),
+	screenshot: webextScope.default("off"),
+	cookies: webextScope.default("off"),
+	confirm: _enum([
+		"sensitive",
+		"always",
+		"never"
+	]).default("sensitive")
+});
+var WebExtConfigSchema = WebExtScopesSchema.extend({ platform: string().min(1) });
+var WebExtGrantSchema = object({
+	origin: string(),
+	mode: _enum(["read", "act"])
+});
+var WebExtFactsSchema = object({
+	browser: string(),
+	tabs: number$1(),
+	grants: array(WebExtGrantSchema),
+	paused: boolean(),
+	features: array(string()).optional()
+});
+object({ browsers: array(object({
+	id: string(),
+	platform: string().min(1),
+	online: boolean(),
+	version: string().optional(),
+	lastSeen: number$1().optional(),
+	facts: WebExtFactsSchema.optional()
+})) });
+var WebExtCookieSchema = object({
+	name: string(),
+	value: string(),
+	domain: string(),
+	path: string(),
+	expires: number$1().optional(),
+	httpOnly: boolean(),
+	secure: boolean(),
+	sameSite: _enum([
+		"Strict",
+		"Lax",
+		"None"
+	])
+});
+object({
+	account: string().min(1),
+	origin: string().min(1),
+	cookies: array(WebExtCookieSchema).min(1).max(300)
+});
+object({
+	account: string().min(1),
+	domain: string().min(1)
+});
+object({
+	ok: boolean(),
+	message: string(),
+	cookies: array(WebExtCookieSchema).optional()
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/capabilities.js
 var CapabilityKindSchema = _enum([
 	"devops",
 	"monorepo",
 	"mcp",
-	"service",
-	"integration",
 	"cli",
 	"plugin",
 	"extension",
 	"ssh",
 	"vpn",
 	"exit",
+	"netdisk",
 	"docker",
 	"browser",
 	"identity",
-	"host",
+	"device",
 	"webext",
 	"agent",
 	"endpoint",
 	"localmodel",
-	"wallet"
+	"wallet",
+	"fleet"
 ]);
 var CapabilityStateSchema = _enum([
 	"active",
@@ -18204,13 +15138,6 @@ var McpConfigSchema = object({
 	url: url().describe("Where the tool server answers."),
 	token: string().optional().describe("The credential it needs, if any. Stored, never echoed back.")
 });
-var ServiceConfigSchema = object({
-	service: ServiceKindSchema.describe("Which service to provision."),
-	domain: string().min(1).describe("The address it should answer on."),
-	on: string().min(1).describe("Which machine to put it on."),
-	expose: string().min(1).describe("How it should be reachable.")
-});
-var IntegrationConfigSchema = object({ provider: literal("stripe").describe("Which outside service's credential to make available to deployed apps.") });
 var CliConfigSchema = object({ provider: string().min(1).describe("Which tool to give the agent. The rest of the fields are whatever that tool's own card declares it needs, and are checked against it when you connect.") }).catchall(string());
 var PluginConfigSchema = object({
 	url: url().describe("The repository to take the plugin from."),
@@ -18225,19 +15152,29 @@ var ExtensionConfigSchema = object({
 	token: string().min(1).optional().describe("A credential for a private repository. Stored, never echoed back."),
 	registry: url().optional().describe("Which registry this install came from, which is what update checks and security advisories are read against. Absent falls back to the official one.")
 });
-var SshConfigSchema = discriminatedUnion("auth", [object({
-	auth: literal("key").describe("Sign in with a key."),
-	host: string().min(1).describe("The machine's address."),
-	port: number().default(22).describe("Which port it listens on."),
-	user: string().min(1).describe("Which user to connect as."),
-	privateKey: string().min(1).describe("The private key, whole. Stored with tight permissions and never echoed back.")
-}), object({
-	auth: literal("password").describe("Sign in with a password."),
-	host: string().min(1).describe("The machine's address."),
-	port: number().default(22).describe("Which port it listens on."),
-	user: string().min(1).describe("Which user to connect as."),
-	password: string().min(1).describe("The password. Stored, never echoed back.")
-})]);
+var SshConfigSchema = discriminatedUnion("auth", [
+	object({
+		auth: literal("key").describe("Sign in with a key."),
+		host: string().min(1).describe("The machine's address."),
+		port: number().default(22).describe("Which port it listens on."),
+		user: string().min(1).describe("Which user to connect as."),
+		privateKey: string().min(1).describe("The private key, whole. Stored with tight permissions and never echoed back.")
+	}),
+	object({
+		auth: literal("generated").describe("Sign in with a key the sandbox generated. Its private half never left the sandbox."),
+		host: string().min(1).describe("The machine's address."),
+		port: number().default(22).describe("Which port it listens on."),
+		user: string().min(1).describe("Which user to connect as."),
+		privateKey: string().min(1).describe("The private half of the generated key. Stored with tight permissions and never echoed back.")
+	}),
+	object({
+		auth: literal("password").describe("Sign in with a password."),
+		host: string().min(1).describe("The machine's address."),
+		port: number().default(22).describe("Which port it listens on."),
+		user: string().min(1).describe("Which user to connect as."),
+		password: string().min(1).describe("The password. Stored, never echoed back.")
+	})
+]);
 var DockerConfigSchema = object({
 	gpu: _enum(["on", "off"]).default("off"),
 	registryMirror: url().optional(),
@@ -18262,7 +15199,7 @@ var IdentityConfigSchema = object({
 	exit: string().optional()
 });
 var hostScope = _enum(["on", "off"]);
-var HostScopesSchema = object({
+var DeviceScopesSchema = object({
 	shell: hostScope.default("on"),
 	write: hostScope.default("off"),
 	screen: hostScope.default("on"),
@@ -18271,20 +15208,7 @@ var HostScopesSchema = object({
 	destructive: hostScope.default("off"),
 	roots: string().optional()
 });
-var HostConfigSchema = HostScopesSchema.extend({ platform: string().min(1) });
-var webextScope = _enum(["on", "off"]);
-var WebExtScopesSchema = object({
-	read: webextScope.default("on"),
-	act: webextScope.default("on"),
-	screenshot: webextScope.default("off"),
-	cookies: webextScope.default("off"),
-	confirm: _enum([
-		"sensitive",
-		"always",
-		"never"
-	]).default("sensitive")
-});
-var WebExtConfigSchema = WebExtScopesSchema.extend({ platform: string().min(1) });
+var DeviceConfigSchema = DeviceScopesSchema.extend({ platform: string().min(1) });
 var AcpAgentConfigSchema = object({
 	command: string().min(1),
 	name: string().min(1).optional(),
@@ -18298,17 +15222,63 @@ var EndpointConfigSchema = object({
 	apiKey: string().optional(),
 	headers: string().optional()
 });
+var LOCAL_MODEL_WINDOWS = [
+	"16384",
+	"32768",
+	"65536",
+	"131072"
+];
+var LOCAL_MODEL_WINDOW_DEFAULT = "65536";
+var LOCAL_MODEL_WINDOW_MIN = 2048;
+var LOCAL_MODEL_WINDOW_MAX = 1048576;
+[
+	{
+		id: "unsloth/Qwen3.5-2B-GGUF/Qwen3.5-2B-Q4_K_M.gguf",
+		label: "Qwen3.5 2B",
+		weightsBytes: 1280835840,
+		tier: "instant",
+		revision: "f6d5376be1edb4d416d56da11e5397a961aca8ae",
+		sha256: "aaf42c8b7c3cab2bf3d69c355048d4a0ee9973d48f16c731c0520ee914699223"
+	},
+	{
+		id: "unsloth/Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf",
+		label: "Phi-4-mini 3.8B",
+		weightsBytes: 2491874272,
+		tier: "work",
+		revision: "78eb92a46fc37e6b524df991ed9aca9bc6aa7b80",
+		sha256: "88c00229914083cd112853aab84ed51b87bdf6b9ce42f532d8c85c7c63b1730a"
+	},
+	{
+		id: "unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf",
+		label: "Qwen3.5 9B",
+		weightsBytes: 5680522464,
+		tier: "work",
+		revision: "3885219b6810b007914f3a7950a8d1b469d598a5",
+		sha256: "03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8"
+	},
+	{
+		id: "unsloth/gemma-4-12b-it-GGUF/gemma-4-12b-it-Q4_K_M.gguf",
+		label: "Gemma 4 12B",
+		weightsBytes: 7121861440,
+		tier: "work",
+		revision: "fc034cfff751157913579611efad8462ac1be606",
+		sha256: "0a270ec9fe6b34f4a0d33992b6135117b484ebc4766ab76b51d4ae8c457e4c42"
+	},
+	{
+		id: "unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-Q4_K_M.gguf",
+		label: "Qwen3.8 27B",
+		weightsBytes: 16464440224,
+		tier: "work",
+		revision: "4ca720788d1e01f1bff70c033e0d0028fd02e502",
+		sha256: "322e194ff79741c7baa497c240f677f54b201b0efab44ca8e50f122b39123482"
+	}
+].find((choice) => choice.tier === "instant");
 var LocalModelConfigSchema = object({
 	model: string().min(1),
 	gpu: _enum(["on", "off"]).default("off"),
 	url: url().optional(),
-	context: union([_enum([
-		"16384",
-		"32768",
-		"65536",
-		"131072"
-	]), literal("custom")]).default("65536"),
-	contextTokens: number().int().min(2048).max(1048576).optional()
+	context: union([_enum(LOCAL_MODEL_WINDOWS), literal("custom")]).default(LOCAL_MODEL_WINDOW_DEFAULT),
+	contextTokens: number().int().min(LOCAL_MODEL_WINDOW_MIN).max(LOCAL_MODEL_WINDOW_MAX).optional()
 });
 var usdAmount = string().regex(/^\d+(\.\d{1,6})?$/, "a USD amount like 0.50 (up to six decimals: USDC's own precision)");
 var WalletConfigSchema = object({
@@ -18320,6 +15290,7 @@ var WalletConfigSchema = object({
 	allow: string().optional(),
 	deny: string().optional()
 });
+var FleetConfigSchema = object({ token: string().min(1).describe("A provisioning token from Settings ▸ Tokens. Stored, never echoed back.") });
 var CapabilitySchema = discriminatedUnion("kind", [
 	object({
 		id: entryId,
@@ -18335,16 +15306,6 @@ var CapabilitySchema = discriminatedUnion("kind", [
 		id: entryId,
 		kind: literal("mcp"),
 		config: McpConfigSchema
-	}),
-	object({
-		id: entryId,
-		kind: literal("service"),
-		config: ServiceConfigSchema
-	}),
-	object({
-		id: entryId,
-		kind: literal("integration"),
-		config: IntegrationConfigSchema
 	}),
 	object({
 		id: entryId,
@@ -18378,6 +15339,11 @@ var CapabilitySchema = discriminatedUnion("kind", [
 	}),
 	object({
 		id: entryId,
+		kind: literal("netdisk"),
+		config: NetdiskConfigSchema
+	}),
+	object({
+		id: entryId,
 		kind: literal("docker"),
 		config: DockerConfigSchema
 	}),
@@ -18393,8 +15359,8 @@ var CapabilitySchema = discriminatedUnion("kind", [
 	}),
 	object({
 		id: entryId,
-		kind: literal("host"),
-		config: HostConfigSchema
+		kind: literal("device"),
+		config: DeviceConfigSchema
 	}),
 	object({
 		id: entryId,
@@ -18420,12 +15386,18 @@ var CapabilitySchema = discriminatedUnion("kind", [
 		id: entryId,
 		kind: literal("wallet"),
 		config: WalletConfigSchema
+	}),
+	object({
+		id: entryId,
+		kind: literal("fleet"),
+		config: FleetConfigSchema
 	})
 ]);
 var CapabilityStatusSchema = object({
 	state: CapabilityStateSchema.describe("Whether it is live, still coming up, broken, or switched off."),
 	detail: string().optional().describe("What is wrong, in words a person can act on."),
-	code: string().optional().describe("A short marker for that reason, for anything deciding what to do about it.")
+	code: string().optional().describe("A short marker for that reason, for anything deciding what to do about it."),
+	settling: boolean().optional().describe("True while something under way will move this on its own: a start, a download, a pairing code waiting to be typed. Absent when only a person can move it, or a pushed change will say when it moved.")
 });
 var CapabilitySummarySchema = object({
 	id: string().describe("The connection's id."),
@@ -18439,7 +15411,7 @@ var CapabilitySummarySchema = object({
 	secrets: array(string()).default([]).describe("Which credentials it holds, by name. The values are on one route only, and it is not this one.")
 });
 var CapabilityRecommendationSchema = object({
-	card: string().describe("Which connection is being suggested."),
+	entry: string().describe("Which catalog entry is being suggested."),
 	evidence: string().describe("What was seen that prompted it: a file, a remote, printed verbatim so the claim can be checked rather than believed."),
 	reason: string().describe("The same claim in words, without repeating the evidence into it."),
 	prefill: record(string(), string()).describe("Settings the scan could read, to fill the form so you supply only the credential. Never a secret, even when one is sitting in a checked-in file: the suggestion points at such a file, it does not absorb what is in it.")
@@ -18454,7 +15426,7 @@ var CapabilityConnectionSchema = object({
 	kind: string().describe("What sort of thing it is."),
 	config: record(string(), string()).describe("Its settings exactly as stored, credentials included. The field names are its own kind's, which the caller already knows.")
 });
-var CapabilityCardParamSchema = object({ card: string().describe("Which suggestion to stop making.") });
+var CapabilityEntryParamSchema = object({ entry: string().describe("Which suggestion to stop making.") });
 var CapabilitySecretInputSchema = object({
 	id: string().describe("Which connection."),
 	value: string().min(1).describe("The new credential. Its other settings are left alone.")
@@ -18471,10 +15443,15 @@ var CapabilityOtpSchema = object({
 var CapabilityProbeSchema = object({
 	checked: boolean().describe("Whether this connection can be tested from here at all. False is not a failure: it is 'no test exists'."),
 	ok: boolean().describe("Whether the service answered as itself."),
-	message: string().describe("What happened, in the words a person standing in front of the form needs: the service's own answer, or its refusal.")
+	message: string().describe("What happened, in the words a person standing in front of the form needs: the service's own answer, or its refusal."),
+	who: string().optional().describe("Who the service said the credential belongs to, when it said.")
+});
+var SshKeySchema = object({
+	publicKey: string().describe("The public half, as the one line a server's authorized_keys holds: `ssh-ed25519 AAAA… intentic-<sandbox>`."),
+	token: string().describe("Stands for the private half, which never leaves the sandbox. Sent wrapped as a marker in the private key's place, it installs that key once, and it lapses after thirty minutes.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+registry@1.281.0/node_modules/@intentic/registry/dist/source.js
+//#region node_modules/.pnpm/@intentic+registry@1.323.0/node_modules/@intentic/registry/dist/source.js
 var RegistryInstallSchema = object({
 	url: string(),
 	ref: string().optional(),
@@ -18507,7 +15484,7 @@ var resolveSource = (source, registryUrl, pluginRoot) => {
 	};
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+registry@1.281.0/node_modules/@intentic/registry/dist/registry.js
+//#region node_modules/.pnpm/@intentic+registry@1.323.0/node_modules/@intentic/registry/dist/registry.js
 var RegistrySecurityReviewSchema = object({
 	sha: string().regex(/^[0-9a-f]{40}$/, "must be a full lowercase commit sha"),
 	url: string().min(1),
@@ -18620,7 +15597,7 @@ var RegistryEntrySchema = object({
 	checks: RegistryChecksSchema.optional()
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/marketplace.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/marketplace.js
 var MarketplaceRequestSchema = object({
 	url: url().describe("The registry to read."),
 	token: string().min(1).optional().describe("A credential for a private one. Sent as a body rather than in the address, so it never lands in a log.")
@@ -18630,7 +15607,7 @@ var MarketplaceSchema = object({
 	plugins: array(RegistryEntrySchema).describe("What it lists, each with the curated decision, the resolved pointer and what a scan found upstream.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/git/remote-refs.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/git/remote-refs.js
 var RemoteRefsRequestSchema = object({
 	url: url().describe("The repository to ask. http(s) only: an ssh remote would stop on a host-key prompt nobody can answer."),
 	token: string().min(1).optional().describe("A credential for a private one. Sent as a body rather than in the address, so it never lands in a log. A form editing a live connection has never been shown its token: it sends the VAULTED marker here and names the connection in `keeping`, so a private repository still answers without anyone retyping a key."),
@@ -18646,89 +15623,99 @@ var RemoteRefsSchema = object({
 	refs: array(RemoteRefSchema).describe("Every branch the remote advertises, then every tag. Which to offer first is the reader's question, not this one's.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/capabilities.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/capabilities.contract.js
+var capabilityRoute = procedure.meta({
+	floor: "maintainer",
+	control: "never"
+});
 var capabilitiesContract = {
-	list: oc.route({
+	list: capabilityRoute.route({
 		method: "GET",
 		path: "/capabilities",
 		summary: "Everything this sandbox is connected to",
 		description: "Each connection with its live state, the settings that are safe to show, and the names of the credentials it holds. The values of those credentials are never in the answer, on any route but one."
 	}).output(CapabilitiesListSchema),
-	add: oc.route({
+	add: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities",
 		summary: "Connect something, or change a connection",
 		description: "Writes a connection and streams the work of applying it, because some kinds provision real infrastructure and take a while. Sending an id that already exists edits that connection: this is the edit as well as the create. Since a caller is never shown stored credentials, it marks the ones it is leaving alone and the daemon fills them in, which is the only way to change one setting without retyping a key."
-	}).input(CapabilitySchema).output(eventIterator(IntenticLineSchema)),
-	probe: oc.route({
+	}).input(CapabilitySchema).output(streamOf(IntenticLineSchema)),
+	probe: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities/probe",
 		summary: "Test a connection's settings without saving them",
 		description: "Dials the service the way this connection would and hands back what it said, before anything is written. The answer is the service's own confirmation or its exact refusal, so a wrong token or an unreachable host is found on the form rather than on a card afterwards."
-	}).input(CapabilitySchema).output(CapabilityProbeSchema),
-	remove: oc.route({
+	}).meta({ panel: false }).input(CapabilitySchema).output(CapabilityProbeSchema),
+	sshKey: capabilityRoute.route({
+		method: "POST",
+		path: "/capabilities/ssh-key",
+		summary: "Generate an SSH key for a connection",
+		description: "Makes an ed25519 key pair inside the sandbox and answers with its public half, to authorize on the server, and a one-time token. The private half is never in the answer: it waits in the sandbox until an add sends the token where the private key goes, and lapses if none does within thirty minutes."
+	}).meta({ panel: false }).output(SshKeySchema),
+	remove: capabilityRoute.route({
 		method: "DELETE",
 		path: "/capabilities/{id}",
 		summary: "Disconnect something",
 		description: "Tears a connection down. The kinds that own real infrastructure refuse, because deleting those would be losing data rather than losing a connection."
 	}).input(CapabilityIdParamSchema).output(OkSchema$1),
-	rename: oc.route({
+	rename: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities/{id}/rename",
 		summary: "Rename a connection",
 		description: "Carries everything the old name keyed across with it: a browser profile and its logins, an enrolled machine, an extension's copy of its source. Removing and re-adding would lose exactly the state that made the connection worth keeping. Kinds whose name is part of what they are refuse."
 	}).input(CapabilityRenameSchema).output(OkSchema$1),
-	setSecret: oc.route({
+	setSecret: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities/{id}/secret",
 		summary: "Replace a stored credential",
 		description: "Swaps one connection's key or token for a new one and re-applies it, without touching any of its other settings."
 	}).input(CapabilitySecretInputSchema).output(OkSchema$1),
-	status: oc.route({
+	status: capabilityRoute.route({
 		method: "GET",
 		path: "/capabilities/{id}/status",
 		summary: "Re-check one connection",
 		description: "Probes a single connection right now, for a screen that wants to refresh one row rather than the whole list."
 	}).input(CapabilityIdParamSchema).output(CapabilityStatusSchema),
-	connection: oc.route({
+	connection: capabilityRoute.route({
 		method: "GET",
 		path: "/capabilities/{id}/connection",
 		summary: "A connection's settings, credentials included",
-		description: "The one call that hands back stored secrets, so an extension's own backend can dial the service behind a connection. Never answered for a signed-in person: only a machine credential reaches it, and an extension's only if its manifest asked for this route out loud at install time."
-	}).input(CapabilityIdParamSchema).output(CapabilityConnectionSchema),
-	marketplace: oc.route({
+		description: "The one call that hands back stored secrets, so an extension's own backend can dial the service behind a connection. Never answered for a signed-in person: only a machine credential reaches it, and an extension's only if its manifest asked for this route out loud at install time, and only for a connection of a kind that extension itself contributes."
+	}).meta({ panel: false }).input(CapabilityIdParamSchema).output(CapabilityConnectionSchema),
+	marketplace: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities/marketplace",
 		summary: "Read a plugin marketplace",
 		description: "Resolves a plugin marketplace source into the list of connections you could install from it."
 	}).input(MarketplaceRequestSchema).output(MarketplaceSchema),
-	refs: oc.route({
+	refs: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities/refs",
 		summary: "The versions a repository offers",
 		description: "Asks a git remote what it advertises and hands back every branch and tag with the commit it points at, plus which branch is its default. Nothing is cloned and nothing is written, so this is cheap enough to answer a form as someone types a repository into it."
 	}).input(RemoteRefsRequestSchema).output(RemoteRefsSchema),
-	dismiss: oc.route({
+	dismiss: capabilityRoute.route({
 		method: "DELETE",
-		path: "/capabilities/recommendations/{card}",
+		path: "/capabilities/recommendations/{entry}",
 		summary: "Stop suggesting this connection",
 		description: "Not needed, for now. Nothing is torn down. The suggestion comes back if what prompted it in the workspace changes, because what is remembered is the evidence, not the refusal."
-	}).input(CapabilityCardParamSchema).output(OkSchema$1),
-	login: oc.route({
+	}).input(CapabilityEntryParamSchema).output(OkSchema$1),
+	login: capabilityRoute.route({
 		method: "POST",
 		path: "/capabilities/{id}/login",
 		summary: "Sign in to a connection by hand",
 		description: "Opens the connection's own sign-in in a terminal a person can type into, for the flows that need a code pasted or a device confirmed. The answer names the terminal to attach to."
 	}).input(CapabilityIdParamSchema).output(CapabilityLoginSchema),
-	otp: oc.route({
+	otp: capabilityRoute.route({
 		method: "GET",
 		path: "/capabilities/{id}/otp",
 		summary: "Mint a one-time code",
 		description: "Generates a single two-factor code from a stored seed. The one credential-adjacent read an agent is allowed, and it is safe because a code expires in seconds and never reveals the seed, so an agent can answer a prompt without ever holding the factor."
-	}).input(CapabilityIdParamSchema).output(CapabilityOtpSchema)
+	}).meta({ agent: true }).input(CapabilityIdParamSchema).output(CapabilityOtpSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/workspace/workspace-search.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/workspace/workspace-search.js
 var WorkspaceSearchQuerySchema = object({
 	query: string().min(2).max(512).describe("What to look for. Plain words, a pattern, a symbol name, or a question."),
 	mode: _enum([
@@ -18741,6 +15728,7 @@ var WorkspaceSearchQuerySchema = object({
 		"ast"
 	]).optional().describe("Narrow the search to one kind: plain text, filenames, definitions, references, symbols, or code structure. Leave it out to blend them, which also answers a question asked in words."),
 	includeIgnored: stringbool().optional().describe("Search inside installed packages and other ignored folders too."),
+	dir: string().max(512).optional().describe("Only look inside this folder, given as a path from the workspace root. Leave it out to search everything."),
 	literal: stringbool().optional().describe("Treat the query as fixed text rather than a pattern."),
 	word: stringbool().optional().describe("Match whole words only."),
 	caseSensitive: stringbool().optional().describe("Whether capitals matter. Off means they do not, rather than being guessed at from the query."),
@@ -18809,7 +15797,7 @@ var WorkspaceSearchResultSchema = object({
 	features: array(string()).optional().describe("Which stages of the search were switched off for this run. Absent means all of them ran.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/codebase-health.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/codebase-health.js
 var WorkspaceHealthQuerySchema = object({
 	repo: string().min(1).describe("Which repository, using the same ids the git routes take."),
 	since: string().max(16).optional().describe("How far back to count changes, written as a span such as 2d, 12h, 1w or 3m. Leave it out for all of history."),
@@ -18914,7 +15902,7 @@ var BundleSchema = object({
 var MutationScoreSchema = object({
 	score: number$1().describe("The share of injected faults the suite caught. Not a coverage figure: coverage says a line ran, this says an assertion depended on it."),
 	killed: number$1().int().nonnegative().describe("Faults the suite caught."),
-	survived: number$1().int().nonnegative().describe("Faults it did not: code that can be broken with every test still green."),
+	survived: number$1().int().nonnegative().describe("Faults it did not: code that can be broken with every test still passing."),
 	inconclusive: number$1().int().nonnegative().describe("Faults it never got a verdict on, because they would not compile or were configured out. Left out of the score entirely, since neither answer is known."),
 	survivors: array(object({
 		file: string().describe("Where it is."),
@@ -19041,21 +16029,21 @@ var ExtensionReadinessSchema = object({ checks: array(object({
 	detail: string().describe("What it found.")
 })).describe("Everything that can be checked from the extension's own files, for an author about to publish.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/chores.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/chores.contract.js
 var choresContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/chores",
 		summary: "What maintenance the repos are asking for",
 		description: "Every repo's standing evidence in one read: what the last measurement found and how old it is, the cheap signals that are always current, and what has already been decided about each."
 	}).output(ChoresReportSchema),
-	probe: oc.route({
+	probe: procedure.route({
 		method: "POST",
 		path: "/chores/probe",
 		summary: "Measure one repo again now",
 		description: "Re-runs a single check without waiting for it to go stale. Answers immediately: the work happens in the background and the result turns up in the next read, because some of these sweeps outlive any sane request."
 	}).input(ChoreProbeRequestSchema).output(OkSchema$1),
-	record: oc.route({
+	record: procedure.route({
 		method: "POST",
 		path: "/chores/ledger",
 		summary: "Record a verdict, or snooze one",
@@ -19063,33 +16051,33 @@ var choresContract = {
 	}).input(ChoreLedgerWriteSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/ci.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/ci.contract.js
 var ciContract = {
-	runs: oc.route({
+	runs: procedure.route({
 		method: "GET",
 		path: "/ci/runs",
 		summary: "Pipeline runs across the repos",
 		description: "What the forges are reporting for every workspace repo that has a remote, served from a cache and filled in on demand. Repos whose notifications are not wired up say so."
 	}).output(CiRunsResponseSchema),
-	rerun: oc.route({
+	rerun: procedure.route({
 		method: "POST",
 		path: "/ci/runs/rerun",
 		summary: "Run a pipeline again",
 		description: "Asks the forge to re-run one pipeline. The daemon only passes the request along."
 	}).input(CiRunParamSchema).output(OkSchema$1),
-	cancel: oc.route({
+	cancel: procedure.route({
 		method: "POST",
 		path: "/ci/runs/cancel",
 		summary: "Cancel a pipeline run",
 		description: "Asks the forge to stop a run in progress."
 	}).input(CiRunParamSchema).output(OkSchema$1),
-	jobs: oc.route({
+	jobs: procedure.route({
 		method: "POST",
 		path: "/ci/runs/jobs",
 		summary: "The steps inside one pipeline run",
 		description: "Each job in a run with its outcome, which is where you look to find out what actually broke."
 	}).input(CiRunParamSchema).output(CiJobsResponseSchema),
-	fix: oc.route({
+	fix: procedure.route({
 		method: "POST",
 		path: "/ci/fix",
 		summary: "Put an agent on a broken pipeline",
@@ -19097,7 +16085,59 @@ var ciContract = {
 	}).input(CiFixParamSchema).output(CiFixResponseSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/endpoints.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/diff.js
+var path = string().min(1).describe("The file, relative to the repo or scope the diff belongs to.");
+var repo = string().min(1).describe("Which repository: \"root\" for the workspace itself, otherwise a repo id.");
+var DiffSourceQuerySchema = discriminatedUnion("source", [
+	object({
+		source: literal("working"),
+		repo,
+		side: GitDiffSideSchema.describe("Which git side the row came from; a half-staged file is two different diffs."),
+		path
+	}).describe("Uncommitted work in a workspace repo, what the Changes panel lists."),
+	object({
+		source: literal("agent"),
+		agent: string().min(1).describe("The conversation whose work is under review."),
+		repo,
+		path
+	}).describe("One agent's work against the base its review is listed against."),
+	object({
+		source: literal("commit"),
+		repo,
+		sha: string().regex(/^[0-9a-f]{4,64}$/).describe("The commit, compared against its first parent."),
+		path
+	}).describe("A commit against its first parent."),
+	object({
+		source: literal("checkpoint"),
+		snapshot: string().min(1).describe("Which saved point."),
+		scope: string().min(1).describe("Which part of the workspace the path belongs to."),
+		path
+	}).describe("A saved point in the timeline, against the visible one before it.")
+]);
+var DerivedSideSchema = discriminatedUnion("present", [object({
+	present: literal(true),
+	content: string().describe("The side as markdown."),
+	deriver: string().describe("Which reader made this text, with its version."),
+	notes: array(string()).describe("Every cap and degradation the conversion hit, one line each."),
+	truncated: boolean().describe("The rendering was longer than this response carries; only its start is here.")
+}), object({
+	present: literal(false),
+	reason: string().describe("Why this side has no text: a format nothing reads, a broken file, a sandbox with no reader.")
+})]);
+var DerivedDiffSchema = object({
+	before: DerivedSideSchema.optional().describe("The file as it was, rendered to text. Absent when it did not exist yet."),
+	after: DerivedSideSchema.optional().describe("The file as it is now, rendered to text. Absent when it was deleted.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/diff.contract.js
+var diffContract = { derived: procedure.route({
+	method: "GET",
+	path: "/diff/derived",
+	summary: "Both sides of a document's diff, as text",
+	description: "A document, spreadsheet, presentation or notebook that changed, both versions rendered to markdown the way an agent reads them, so the change can be shown as tracked changes instead of two downloads. The side on disk reuses the shadow the sandbox already keeps; a past version is rendered from its bytes and kept by content hash, so the same version is never rendered twice. A side nothing can read says why."
+}).input(DiffSourceQuerySchema).output(DerivedDiffSchema) };
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/endpoints.contract.js
 var TrialHealthSchema = _enum([
 	"unknown",
 	"healthy",
@@ -19114,60 +16154,129 @@ var TrialStatusSchema = object({
 	retryAt: string().optional(),
 	servedModel: string().optional()
 });
+var LocalModelGpuSchema = _enum([
+	"granted",
+	"unsupported",
+	"absent"
+]);
+var LocalModelDeviceSchema = _enum(["gpu", "host"]);
+var LocalModelWindowFitSchema = object({
+	tokens: number$1().int().positive(),
+	totalBytes: number$1().int().nonnegative(),
+	fits: boolean(),
+	fullSpeed: boolean().optional()
+});
+var LocalModelOptionFitSchema = object({
+	model: string(),
+	label: string(),
+	tier: _enum(["instant", "work"]),
+	weightsBytes: number$1().int().nonnegative(),
+	held: boolean(),
+	windows: array(LocalModelWindowFitSchema)
+});
+var LocalModelPrefetchSchema = object({
+	model: string(),
+	state: _enum([
+		"idle",
+		"downloading",
+		"held",
+		"failed"
+	]),
+	receivedBytes: number$1().int().nonnegative(),
+	totalBytes: number$1().int().nonnegative(),
+	detail: string().optional()
+});
+var LocalModelFitSchema = object({
+	memoryBytes: number$1().int().nonnegative(),
+	memoryCapped: boolean(),
+	gpu: LocalModelGpuSchema,
+	gpuMemoryBytes: number$1().int().nonnegative(),
+	gpuFreeBytes: number$1().int().nonnegative().optional(),
+	budgetBytes: number$1().int().nonnegative(),
+	fullSpeedBytes: number$1().int().nonnegative().optional(),
+	fullSpeedDevice: LocalModelDeviceSchema.optional(),
+	serverReady: boolean(),
+	options: array(LocalModelOptionFitSchema),
+	instant: object({
+		model: string(),
+		context: string()
+	}).optional(),
+	best: object({
+		model: string(),
+		context: string()
+	}).optional(),
+	prefetch: LocalModelPrefetchSchema
+});
 var endpointsContract = {
-	models: oc.route({
+	models: procedure.route({
 		method: "GET",
 		path: "/endpoints/{id}/models",
 		summary: "Models a connected server offers",
 		description: "Asks one configured model server what it serves. There is no built-in list and no fallback: what a server offers is knowable only by asking it, so an empty answer is the honest report that we could not."
 	}).input(CapabilityIdParamSchema).output(ModelsSchema),
-	trial: oc.route({
+	trial: procedure.route({
 		method: "GET",
 		path: "/endpoints/trial/status",
 		summary: "What is left of the free trial",
 		description: "The allowance, what has been used, when it resets, and which model actually answered the last message. Not being available is the ordinary answer rather than a failure: most sandboxes run against a platform that offers no trial at all."
-	}).output(TrialStatusSchema)
+	}).output(TrialStatusSchema),
+	localModelFit: procedure.route({
+		method: "GET",
+		path: "/endpoints/local-model/fit",
+		summary: "Which local models this machine can actually run",
+		description: "The memory this sandbox may use, whether a GPU reached it, and every curated model priced two ways: whether it fits on one device's free memory and so runs at full speed, and whether it can load at all. The two the connect view offers, one that downloads in a minute and the best this machine runs at full speed, come from the first; a start is refused only on the second."
+	}).output(LocalModelFitSchema),
+	localModelPrefetch: procedure.route({
+		method: "POST",
+		path: "/endpoints/local-model/prefetch",
+		summary: "Fetch the small model's weights ahead of being asked",
+		description: "Downloads the curated instant model into the workspace cache so that adding it later costs nothing. Stopping leaves the part file, so a later start resumes from where this one stopped rather than beginning again."
+	}).input(object({ action: _enum(["start", "stop"]) })).output(LocalModelPrefetchSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/exit.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/exit.contract.js
+var exitRoute = procedure.meta({
+	agent: true,
+	control: "never"
+});
 var exitContract = {
-	list: oc.route({
+	list: exitRoute.route({
 		method: "GET",
 		path: "/exit",
 		summary: "Ways to come out somewhere else",
 		description: "Every configured exit with its live state, the country it was asked to appear in, and the country it actually appears in. Those last two disagreeing is the whole reason this reports both."
 	}).output(ExitListSchema),
-	countries: oc.route({
+	countries: exitRoute.route({
 		method: "GET",
 		path: "/exit/{id}/countries",
 		summary: "Countries one exit can reach",
 		description: "Where this exit can put you, ranked by how much capacity is really there. Asked of the provider when it answers and taken from a built-in list when it does not, and the answer says which of those you got."
 	}).input(ExitIdParamSchema).output(ExitCountriesSchema),
-	start: oc.route({
+	start: exitRoute.route({
 		method: "POST",
 		path: "/exit/{id}/start",
 		summary: "Bring an exit up",
 		description: "Starts the exit in the country it was configured for. Streamed, because a first start fetches a catalogue, raises a tunnel and then checks the address, which takes tens of seconds on the free providers and can fail at each step with something worth reading. Starting one that is already up simply says so."
-	}).input(ExitIdParamSchema).output(eventIterator(IntenticLineSchema)),
-	use: oc.route({
+	}).input(ExitIdParamSchema).output(streamOf(IntenticLineSchema)),
+	use: exitRoute.route({
 		method: "POST",
 		path: "/exit/{id}/use",
 		summary: "Move to another country",
 		description: "Switches the exit's country, starting it first if it was down. It ends by checking where the world actually sees you and fails if that does not match what you asked for. A switch that quietly left your traffic where it was is the exact failure this whole feature exists to rule out."
-	}).input(ExitUseInputSchema).output(eventIterator(IntenticLineSchema)),
-	rotate: oc.route({
+	}).input(ExitUseInputSchema).output(streamOf(IntenticLineSchema)),
+	rotate: exitRoute.route({
 		method: "POST",
 		path: "/exit/{id}/rotate",
 		summary: "Take a different address, same country",
 		description: "Swaps to another address in the country you are already in. Fails if the address does not actually change, which on a small pool it sometimes cannot."
-	}).input(ExitIdParamSchema).output(eventIterator(IntenticLineSchema)),
-	check: oc.route({
+	}).input(ExitIdParamSchema).output(streamOf(IntenticLineSchema)),
+	check: exitRoute.route({
 		method: "POST",
 		path: "/exit/{id}/check",
 		summary: "Where the world sees you right now",
 		description: "Looks up the address and country as seen through this exit. Cheap, and the honest answer to whether you are really where you meant to be, which is what every other call here is judged against."
 	}).input(ExitIdParamSchema).output(ExitObservationSchema),
-	stop: oc.route({
+	stop: exitRoute.route({
 		method: "POST",
 		path: "/exit/{id}/stop",
 		summary: "Take an exit down",
@@ -19179,10 +16288,48 @@ var MARK_FIELDS = {
 	logo: string().optional().describe("A simple-icons slug, fetched from a CDN: right for standing in for somebody else's product. Add a \"/<hex>\" suffix to force a colour for a mark that vanishes against the surface it lands on. Unreachable in an offline sandbox, so it falls back to `icon`, then to initials."),
 	icon: string().optional().describe("A name from the host's own icon set, drawn when no simple-icons slug fits. It ships in the image, follows the theme and costs no request: what actually carries a first-party extension. An unknown name falls back to initials rather than to a hole.")
 };
+//#endregion
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/permissions.js
+var METHODS = /* @__PURE__ */ new Set([
+	"GET",
+	"HEAD",
+	"POST",
+	"PUT",
+	"PATCH",
+	"DELETE",
+	"OPTIONS"
+]);
+var DOT_SEGMENT = /^(?:\.|%2e){1,2}$/iu;
+var segmentProblem = (segment) => {
+	if (segment.includes("*") && segment !== "*") return `"${segment}" is not a segment glob: a \`*\` stands alone between slashes and matches one whole segment, so \`**\` and a \`*\` inside a segment are not supported`;
+	if (DOT_SEGMENT.test(segment)) return `"${segment}" is not a route segment: the URL resolves it away before any route sees it`;
+};
+var syntaxProblem = (method, glob) => {
+	if (glob === "") return `expected "<METHOD> <path-glob>", e.g. "GET /panels"`;
+	if (!METHODS.has(method.toUpperCase())) return `"${method}" is not one of ${[...METHODS].join(", ")}`;
+	if (!glob.startsWith("/")) return `the path must start with "/"`;
+	if (/[?#\\]/u.test(glob)) return `the path may not hold "?", "#" or "\\": routes are matched on the path alone`;
+	return glob.slice(1).split("/").map(segmentProblem).find((found) => found !== void 0);
+};
+var split = (entry) => {
+	const [, method = "", glob = ""] = /^(\S+)\s+(\S+)$/u.exec(entry.trim()) ?? [];
+	return {
+		method,
+		glob
+	};
+};
+var permissionProblem = (entry) => {
+	const { method, glob } = split(entry);
+	const problem = syntaxProblem(method, glob);
+	return problem === void 0 ? void 0 : `invalid permission "${entry}": ${problem}`;
+};
 var agentPoint = {
 	name: "agent",
-	description: "Declare that this checkout is also a Claude Code plugin, so the agent picks up its skills, agents, hooks, commands and MCP servers each turn. The daemon hands the directory to the plugin loader and never parses what is in it.",
-	schema: object({ path: string().optional().describe("Relative to the extension checkout. Absent ⇒ the checkout root.") })
+	description: "Declare that this checkout is also a Claude Code plugin, so Claude Code turns pick up its skills, agents, hooks and commands. Only Claude Code reads it: give the agent tools with `contributes.tools`, which every runtime gets, and put a skill every runtime should read in a capability card's `skill`. MCP servers in the plugin's `.mcp.json` are deprecated, reach Claude Code alone, and are warned about at load.",
+	schema: object({ path: string().optional().describe("Relative to the extension checkout. Absent ⇒ the checkout root.") }).meta({ power: {
+		key: "agent",
+		sentence: "contributes skills, agents and hooks to the agent's turns"
+	} })
 };
 var automationTemplatesPoint = {
 	name: "automationTemplates",
@@ -19216,14 +16363,17 @@ var automationTemplatesPoint = {
 	}))
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+extension-manifest@1.281.0/node_modules/@intentic/extension-manifest/dist/points/bin.js
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/points/bin.js
 var binPoint = {
 	name: "bin",
 	description: "A checkout-relative directory of executables the daemon puts on the agent's PATH every turn, how you ship the agent a command-line tool. The files are the approved code themselves: they ride the pinned checkout, and the daemon only adds the directory to PATH.",
-	schema: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "bin must stay inside the checkout" })
+	schema: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "bin must stay inside the checkout" }).meta({ power: {
+		key: "bin",
+		sentence: "puts its shipped tools on the agent's PATH"
+	} })
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+base@1.281.0/node_modules/@intentic/base/dist/when.js
+//#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/when.js
 var WhenSyntaxError = class extends Error {
 	source;
 	offset;
@@ -19438,7 +16588,68 @@ var isWhenExpression = (source) => {
 	}
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+extension-manifest@1.281.0/node_modules/@intentic/extension-manifest/dist/points/capabilities.js
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/points/tools.js
+var TOOL_PATH = /^[a-z0-9][a-z0-9-]*(?:\/[a-z0-9][a-z0-9-]*)*$/;
+var toolsPoint = {
+	name: "tools",
+	description: "Tools for the agent, as an MCP server the daemon mounts into every turn and every runtime (Claude Code, Codex, Cursor, ACP agents). Serve them from your `server` bundle with `api.tools.serve((card) => [...])`, or from a declared process's port. Replaces an agent plugin's `.mcp.json`, which only Claude Code read.",
+	schema: object({
+		perCard: string().regex(/^[a-z0-9][a-z0-9-]*$/).optional().describe("The id of one of this extension's `cli` capability cards. Every turn granted a card of that kind gets one server named by the card's id, handed that card's settings (secrets included) with each call. Absent ⇒ one server for the extension, named by its `name`, in every turn while the extension is enabled."),
+		process: string().regex(/^[a-z0-9][a-z0-9-]*$/).optional().describe("A process from `contributes.processes`, declared with `port: \"auto\"`, that answers MCP over Streamable HTTP at `path` on its port. Absent ⇒ your `server` bundle serves the tools."),
+		path: string().regex(TOOL_PATH).optional().describe("Where the MCP endpoint answers, without a leading or trailing slash: on the process's port, or in your backend's own namespace when your `server` bundle speaks MCP itself. Absent with no `process` ⇒ the host serves what `api.tools.serve` returns, which is what you want: the host owns the transport, the deadlines and the card lookup. With `perCard`, a request arrives at `<path>/<card id>`.")
+	}).meta({
+		effect: "mcp",
+		mintsServer: true,
+		power: {
+			key: "tools${perCard?-${perCard}:}",
+			sentence: "gives the agent MCP tools${perCard?, one server for each \"${perCard}\" card:}"
+		}
+	})
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/meaning.js
+var readMeta = (schema) => {
+	const { power, effect, mintsServer } = schema.meta() ?? {};
+	return {
+		...power === void 0 ? {} : { power },
+		...effect === void 0 ? {} : { effect },
+		...mintsServer === void 0 ? {} : { mintsServer }
+	};
+};
+var WRAPPERS = /* @__PURE__ */ new Set([
+	"optional",
+	"nullable",
+	"default",
+	"prefault",
+	"readonly",
+	"nonoptional",
+	"catch"
+]);
+var unwrapMeaning = (schema) => {
+	let current = schema;
+	const met = [];
+	for (;;) {
+		met.unshift(readMeta(current));
+		const def = current._zod.def;
+		if (WRAPPERS.has(def.type) && def.innerType !== void 0) current = def.innerType;
+		else if (def.type === "pipe" && def.in !== void 0) current = def.in;
+		else return {
+			schema: current,
+			meaning: Object.assign({}, ...met)
+		};
+	}
+};
+var fieldMeanings = (schema) => {
+	const meanings = /* @__PURE__ */ new Map();
+	const shape = unwrapMeaning(schema).schema.shape ?? {};
+	for (const [key, field] of Object.entries(shape)) {
+		const { meaning } = unwrapMeaning(field);
+		if (Object.keys(meaning).length > 0) meanings.set(key, meaning);
+	}
+	return meanings;
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/points/capabilities.js
 var CapabilityFieldSchema = object({
 	key: string().regex(/^[a-zA-Z][a-zA-Z0-9]*$/),
 	label: string().min(1),
@@ -19490,49 +16701,71 @@ var contributionBase = {
 	catalog: CatalogSchema,
 	fields: array(CapabilityFieldSchema)
 };
+var CapabilityContributionSchema = discriminatedUnion("kind", [
+	object({
+		...contributionBase,
+		kind: literal("cli"),
+		fields: array(CapabilityFieldSchema).min(1),
+		env: record(string().regex(/^[A-Z][A-Z0-9_]*$/), string()).describe("The environment the agent's shell gets, as value templates over the fields: `${field}` substitutes, `${field:uri}` percent-encodes. Each name is suffixed per instance."),
+		skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent this tool. `${id}` in it is replaced with the instance name at apply time."),
+		fragment: string().min(1).optional().describe("A Dockerfile fragment holding the client binary this tool needs (psql, mysql, whisper).").meta({ effect: "image" }),
+		pack: string().min(1).optional().describe("A sandbox feature pack name (whisper, llamacpp, browser, …) supplying this tool. Preferred over `fragment`: an image that already bakes the pack needs no rebuild, and there is no copy to drift.").meta({ effect: "image" }),
+		probe: ProbeSchema.optional().describe("One authenticated request that tests this card's settings before they are saved, so a wrong token or an unreachable host is answered on the form rather than by a card that says 'not connected' afterwards."),
+		hosts: array(string().min(1)).optional().describe("The hosts this card's credential is meant for, as templates over the fields like `env` (`api.github.com`, `*.githubusercontent.com`, `${url}`); a value that comes out as a URL counts as its host. The sandbox limits the credential's `{{secret:…}}` reference to them by default, so a use aimed anywhere else asks a person first. The owner can change or lift the list on the Secrets view."),
+		mcp: string().regex(TOOL_PATH).optional().describe("Deprecated: declare `contributes.tools` with `perCard` naming this card instead, and serve the tools with `api.tools.serve`. A path in this extension's backend (`server`) answering MCP over Streamable HTTP; every turn granted a card of this kind gets it as a server named by the card's id, each request arriving at `<path>/<card id>`.").meta({
+			effect: "mcp",
+			mintsServer: true,
+			power: {
+				key: "capability-tools:${id}",
+				sentence: "serves MCP tools to the agent for each \"${catalog.name}\" card"
+			}
+		})
+	}),
+	object({
+		...contributionBase,
+		kind: literal("browser"),
+		loginUrl: url().optional().describe("What the sign-in window opens; the profile it persists IS the credential. Optional so one card can be the generic one that asks for the URL on its form instead, but a card must either pin this or declare a field that supplies it, or the window opens on nothing."),
+		homeUrl: url().optional().describe("Where that same profile opens once it HAS a session: the owner's own hands on the connected browser. Separate from loginUrl because for some platforms the login lives on another site entirely (YouTube signs in at accounts.google.com)."),
+		skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent this site's actions: rendered once per site, all its connected accounts on one roster (`${accounts}`), the core tool note at `${tools}`.")
+	}),
+	object({
+		...contributionBase,
+		kind: literal("device"),
+		skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent that machine's shell.")
+	}).meta({ mintsServer: true }),
+	object({
+		...contributionBase,
+		kind: literal("webext"),
+		install: url().optional().describe("Where this browser's extension is installed from: its store listing, or a page offering the build."),
+		skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent to drive this browser.")
+	}).meta({ mintsServer: true }),
+	object({
+		...contributionBase,
+		kind: literal("agent")
+	})
+]).superRefine((spec, ctx) => {
+	if (spec.kind !== "cli") return;
+	for (const field of spec.fields.filter((candidate) => candidate.totp === true)) if (Object.values(spec.env).some((template) => template.includes(`\${${field.key}}`) || template.includes(`\${${field.key}:uri}`))) ctx.addIssue({
+		code: "custom",
+		message: `env must not reference the totp field "${field.key}", the daemon mints codes from it instead`
+	});
+}).meta({ power: {
+	key: "capability:${id}",
+	sentence: "a ${kind} capability card \"${catalog.name}\""
+} });
 var capabilitiesPoint = {
 	name: "capabilities",
 	description: "Capability cards this pack adds to the \"+\" grid: a connected CLI tool, a site the agent acts on as the owner through the shared browser, an operating system pack, a browser family the owner connects their own copy of, or a preset over a core kind. The card and its form are data here; the machinery that acts on them is core, which is why a card may only name one of these five kinds.",
-	schema: array(discriminatedUnion("kind", [
-		object({
-			...contributionBase,
-			kind: literal("cli"),
-			fields: array(CapabilityFieldSchema).min(1),
-			env: record(string().regex(/^[A-Z][A-Z0-9_]*$/), string()).describe("The environment the agent's shell gets, as value templates over the fields: `${field}` substitutes, `${field:uri}` percent-encodes. Each name is suffixed per instance."),
-			skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent this tool. `${id}` in it is replaced with the instance name at apply time."),
-			fragment: string().min(1).optional().describe("A Dockerfile fragment holding the client binary this tool needs (psql, mysql, whisper)."),
-			pack: string().min(1).optional().describe("A sandbox feature pack name (whisper, llamacpp, browser, …) supplying this tool. Preferred over `fragment`: an image that already bakes the pack needs no rebuild, and there is no copy to drift."),
-			probe: ProbeSchema.optional().describe("One authenticated request that tests this card's settings before they are saved, so a wrong token or an unreachable host is answered on the form rather than by a card that says 'not connected' afterwards.")
-		}),
-		object({
-			...contributionBase,
-			kind: literal("browser"),
-			loginUrl: url().optional().describe("What the sign-in window opens; the profile it persists IS the credential. Optional so one card can be the generic one that asks for the URL on its form instead, but a card must either pin this or declare a field that supplies it, or the window opens on nothing."),
-			homeUrl: url().optional().describe("Where that same profile opens once it HAS a session: the owner's own hands on the connected browser. Separate from loginUrl because for some platforms the login lives on another site entirely (YouTube signs in at accounts.google.com)."),
-			skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent this site's actions: rendered once per site, all its connected accounts on one roster (`${accounts}`), the core tool note at `${tools}`.")
-		}),
-		object({
-			...contributionBase,
-			kind: literal("host"),
-			skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent that machine's shell.")
-		}),
-		object({
-			...contributionBase,
-			kind: literal("webext"),
-			install: url().describe("Where this browser's extension is installed from: its store listing, or a page offering the build."),
-			skill: string().min(1).describe("Checkout-relative SKILL.md teaching the agent to drive this browser.")
-		}),
-		object({
-			...contributionBase,
-			kind: literal("agent")
-		})
-	]).superRefine((spec, ctx) => {
-		if (spec.kind !== "cli") return;
-		for (const field of spec.fields.filter((candidate) => candidate.totp === true)) if (Object.values(spec.env).some((template) => template.includes(`\${${field.key}}`) || template.includes(`\${${field.key}:uri}`))) ctx.addIssue({
-			code: "custom",
-			message: `env must not reference the totp field "${field.key}", the daemon mints codes from it instead`
-		});
-	}))
+	schema: array(CapabilityContributionSchema)
+};
+var contributedServerMintingKinds = () => {
+	const kinds = /* @__PURE__ */ new Set();
+	for (const option of CapabilityContributionSchema.options) {
+		const kind = option.shape["kind"]?._zod.def?.values?.[0];
+		if (kind === void 0) continue;
+		if (unwrapMeaning(option).meaning.mintsServer === true || [...fieldMeanings(option).values()].some((meaning) => meaning.mintsServer === true)) kinds.add(kind);
+	}
+	return kinds;
 };
 var commandsPoint = {
 	name: "commands",
@@ -19542,9 +16775,15 @@ var commandsPoint = {
 		title: string().min(1).describe("What the command palette shows. The manifest's value wins over the one passed at registration."),
 		category: string().min(1).optional().describe("What the command acts on (\"Deployments\", \"Knowledge\"), drawn ahead of the title as \"Category: Title\" and searched with it. Use the extension's own name so its commands group together; omit it and the command stands alone."),
 		icon: string().optional().describe("A name from the host's icon set, drawn beside the title."),
-		keybinding: string().regex(/^\S+$/).optional().describe("A global keyboard shortcut, e.g. \"Mod+Shift+K\" — `Mod` is ⌘ on Apple and Ctrl elsewhere. Declared here because a global shortcut is consequential: the owner approves it at install, and the host binds only what was approved."),
+		keybinding: string().regex(/^\S+$/).optional().describe("A global keyboard shortcut, e.g. \"Mod+Shift+K\" — `Mod` is ⌘ on Apple and Ctrl elsewhere. Declared here because a global shortcut is consequential: the owner approves it at install, and the host binds only what was approved.").meta({ power: {
+			key: "keybinding:${command}",
+			sentence: "the global shortcut ${keybinding} (\"${title}\")"
+		} }),
 		when: string().refine(isWhenExpression, { message: "not a valid `when` condition" }).optional().describe("When the shortcut applies, as a condition over the shell's context keys, `tabSurface == 'chat'`, `!editableTarget`. Without one the chord is claimed everywhere, including inside a terminal where a bare key belongs to the program running in it. The command palette ignores this: a command is always runnable by name.")
-	}))
+	}).meta({ power: {
+		key: "command:${command}",
+		sentence: "a palette command \"${title}\""
+	} }))
 };
 var documentsPoint = {
 	name: "documents",
@@ -19552,12 +16791,21 @@ var documentsPoint = {
 	schema: array(object({
 		id: string().regex(/^[a-z0-9][a-z0-9-]*$/),
 		label: string().min(1).describe("The family's name, shown in the install dialog beside your other contributions. Per-row wording stays with the provider, which is the only thing that knows what it found.")
-	}))
+	}).meta({ power: {
+		key: "document:${id}",
+		sentence: "marks workspace directories (\"${label}\")"
+	} }))
 };
 var environmentPoint = {
 	name: "environment",
 	description: "A Dockerfile fragment baked into the sandbox image so your tools are actually installed at runtime: a whisper binary, a psql client. The owner approves the composed overlay and rebuilds out of band, so this does not take effect immediately.",
-	schema: object({ fragment: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "fragment must stay inside the checkout" }).describe("Checkout-relative path to a file holding ONLY RUN and ENV instructions. FROM and privileged directives are rejected: those stay daemon-owned.") })
+	schema: object({ fragment: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "fragment must stay inside the checkout" }).describe("Checkout-relative path to a file holding ONLY RUN and ENV instructions. FROM and privileged directives are rejected: those stay daemon-owned.") }).meta({
+		effect: "image",
+		power: {
+			key: "environment",
+			sentence: "bakes an environment fragment into the sandbox image"
+		}
+	})
 };
 var filesPoint = {
 	name: "files",
@@ -19565,10 +16813,13 @@ var filesPoint = {
 	schema: array(object({
 		path: string().min(1).refine((value) => !value.startsWith("/") && !value.split("/").includes(".."), { message: "path must be workspace-root-relative and stay inside the workspace" }).describe("Workspace-root-relative, forward-slash, matched by prefix, so one entry covers an exact file (`.intentic/config/automations.json`), a directory (`.intentic/config/approvals/`, with the trailing slash so it cannot match a sibling file) or a name family (`.intentic/environment.`). Not a glob."),
 		invalidates: array(string().min(1)).min(1).describe("The query keys this path makes stale, the first element of your own api.sandbox.key(...) keys. Keep both this and the path as narrow as the view actually needs: a broad prefix costs every connected browser a refetch on every matching write.")
-	}))
+	}).meta({ power: {
+		key: "files:${path}",
+		sentence: "is told when ${path} changes"
+	} }))
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+extension-manifest@1.281.0/node_modules/@intentic/extension-manifest/dist/points/listener.js
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/points/listener.js
 var TriggerFieldContributionSchema = object({
 	label: string().min(1),
 	placeholder: string().min(1),
@@ -19592,7 +16843,10 @@ var listenerPoint = {
 			senderGroup: TriggerFieldContributionSchema.optional().describe("How this source names a sender's group, for a source whose messages carry `author.groups` (a Discord role). Absent ⇒ rules match ids only."),
 			starterPrompt: string().min(1).describe("The first prompt a new automation on this source is prefilled with. You own the payload vocabulary, so you own the prompt that explains it.")
 		}).describe("How the generic automation editor presents this source: its name, its filters, and the prompt it starts people on.")
-	})
+	}).meta({ power: {
+		key: "listener:${provider}",
+		sentence: "a realtime listener provider \"${provider}\""
+	} })
 };
 var processesPoint = {
 	name: "processes",
@@ -19604,6 +16858,12 @@ var processesPoint = {
 		port: literal("auto").optional().describe("Assign a free port and inject it as PORT."),
 		preview: boolean().optional().describe("Expose the port on a tunnelled preview hostname."),
 		autoStart: boolean().optional().describe("Launch it on install and on daemon boot, rather than waiting to be started.")
+	}).meta({
+		effect: "process",
+		power: {
+			key: "process:${name}",
+			sentence: "a background process \"${name}\"${autoStart? (starts on boot):}"
+		}
 	}))
 };
 var settingsPoint = {
@@ -19626,8 +16886,26 @@ var settingsPoint = {
 		]).optional(),
 		enum: array(string()).optional().describe("The choices, for type \"enum\". Meaningless otherwise."),
 		secret: boolean().optional().describe("Mask the value in the UI and strip it from reads: a set secret round-trips as 'still set', never as its value."),
-		env: string().regex(/^[A-Z][A-Z0-9_]*$/).optional().describe("Inject the stored value into the agent's shell environment under this name, every turn. How a credential you hold reaches the agent's command-line tools.")
+		env: string().regex(/^[A-Z][A-Z0-9_]*$/).optional().describe("Inject the stored value into the agent's shell environment under this name, every turn. How a credential you hold reaches the agent's command-line tools.").meta({ power: {
+			key: "setting-env:${key}",
+			sentence: "puts the \"${key}\" setting into the agent's environment as ${env}"
+		} })
 	}))
+};
+var sideViewsPoint = {
+	name: "sideViews",
+	description: "Things this extension can show in the editor's side panel, one input at a time, beside whatever the reader is doing. Each entry reserves an id; the extension supplies the component with api.sideViews.register and opens one with api.sideViews.open, and the host refuses any id this list does not cover.",
+	schema: array(object({
+		id: string().regex(/^[a-z0-9][a-z0-9-]*$/),
+		label: string().min(1).describe("What one of these is called (\"CI run\"), shown in the install dialog and on a tab whose own title could not be read. Each tab's title is the extension's to say for the thing it shows."),
+		links: boolean().optional().describe("Allow this side view to take links the chat renders: a link it recognises (its registration's `claim`) opens beside the chat instead of in a new browser tab. Declared because it changes what the reader's click does; leave it out and the host never asks.").meta({ power: {
+			key: "side-view-links:${id}",
+			sentence: "opens links it recognises as \"${label}\" beside the chat"
+		} })
+	}).meta({ power: {
+		key: "side-view:${id}",
+		sentence: "shows \"${label}\" in the side panel"
+	} }))
 };
 var viewersPoint = {
 	name: "viewers",
@@ -19638,12 +16916,18 @@ var viewersPoint = {
 		fetch: _enum([
 			"text",
 			"blob",
-			"url"
-		]).describe("How much of the file the host hands you. `text` for a format that is text (svg, a subtitle track). `blob` for one that must be parsed end to end before any of it shows (a .docx, a spreadsheet), bounded by the daemon's raw-read cap. `url` for anything range-read rather than parsed (audio, video): your component gets a streaming URL to point an element at, never the bytes.")
-	}))
+			"url",
+			"path"
+		]).describe("How much of the file the host hands you. `text` for a format that is text (svg, a subtitle track). `blob` for one that must be parsed end to end before any of it shows (a .docx, a spreadsheet), bounded by the daemon's raw-read cap. `url` for anything range-read rather than parsed (audio, video): your component gets a streaming URL to point an element at, never the bytes. `path` for a viewer whose own backend reads and writes the file: you get the workspace path and the scope it is viewed in, plus `readOnly` where the window may not write the file and, in a desktop app's local window, a `text` slot holding the document's text for while your own view can't show it. Emit `dirty` (a boolean) whenever you start or stop holding edits the file doesn't have, so a window closing over them can ask first."),
+		edit: boolean().optional().describe("Whether this viewer writes the file back. An editing viewer is chosen over a render-only viewer claiming the same extension, whatever order the two activated in."),
+		compare: boolean().optional().describe("Whether this viewer also draws two versions of a file as one, with what changed marked in place: its registration then carries a `compare` component the host renders with `before` and `after` blobs. Only for `fetch: \"blob\"`.")
+	}).meta({ power: {
+		key: "viewer:${id}",
+		sentence: "${edit?opens and edits:opens}${compare? and compares:} .${extensions|, .} files (${fetch})"
+	} }))
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+extension-manifest@1.281.0/node_modules/@intentic/extension-manifest/dist/points/index.js
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/points/index.js
 var CONTRIBUTION_POINTS = [
 	{
 		name: "views",
@@ -19656,12 +16940,19 @@ var CONTRIBUTION_POINTS = [
 				"directory",
 				"sandbox"
 			]).describe("Where it appears. `rail` is a tile in the global left rail; `directory` is a panel opened from a repo in the Workspace tree; `sandbox` is a tab on the Sandbox hub, for a view whose subject is the box rather than the work."),
-			badge: boolean().optional().describe("Allow this view to say something on its tile: a count, a glyph, or that work is running there. Declared because a badge interrupts from every other screen in the app; leave it out and any badge the extension registers is dropped.")
-		}))
+			badge: boolean().optional().describe("Allow this view to say something on its tile: a count, a glyph, or that work is running there. Declared because a badge interrupts from every other screen in the app; leave it out and any badge the extension registers is dropped.").meta({ power: {
+				key: "view-badge:${id}",
+				sentence: "may badge the \"${label}\" tile from any screen"
+			} })
+		}).meta({ power: {
+			key: "view:${id}",
+			sentence: "a ${surface} view \"${label}\""
+		} }))
 	},
 	filesPoint,
 	viewersPoint,
 	documentsPoint,
+	sideViewsPoint,
 	commandsPoint,
 	settingsPoint,
 	processesPoint,
@@ -19670,12 +16961,20 @@ var CONTRIBUTION_POINTS = [
 	capabilitiesPoint,
 	listenerPoint,
 	automationTemplatesPoint,
-	binPoint
+	binPoint,
+	toolsPoint
 ];
 var contributesSchema = object(Object.fromEntries(CONTRIBUTION_POINTS.map((point) => [point.name, point.schema.describe(point.description).optional()])));
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+extension-manifest@1.281.0/node_modules/@intentic/extension-manifest/dist/manifest.js
-var ExtensionManifestSchema = object({
+//#region node_modules/.pnpm/@intentic+extension-manifest@1.323.0/node_modules/@intentic/extension-manifest/dist/manifest.js
+var permissionEntry = () => string().superRefine((entry, ctx) => {
+	const problem = permissionProblem(entry);
+	if (problem !== void 0) ctx.addIssue({
+		code: "custom",
+		message: problem
+	});
+});
+var ManifestShape = object({
 	$schema: string().optional().describe("The authoring schema, for editor completion and validation. Nothing at runtime reads it."),
 	publisher: string().regex(/^[a-z0-9][a-z0-9-]*$/),
 	name: string().regex(/^[a-z0-9][a-z0-9-]*$/),
@@ -19683,16 +16982,73 @@ var ExtensionManifestSchema = object({
 	category: string().min(1).optional().describe("Which section of the Extensions tab this sits under: a grouping by what it is FOR, which cannot be derived from what it contributes. A section this app has never heard of lands in 'Other' rather than failing to install."),
 	...MARK_FIELDS,
 	engines: object({ intentic: string().min(1) }).describe("A semver range over the host's extension API version, checked before your code is activated."),
-	entry: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "entry must stay inside the checkout" }).optional().describe("Repo-relative path of your prebuilt single-file ESM bundle, built with `vue` and `@intentic/extension-api` as externals. Absent ⇒ an extension with no UI."),
-	server: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "server must stay inside the checkout" }).optional().describe("Repo-relative path of your prebuilt single-file node ESM server bundle, exporting `activateServer`. Served under your own route namespace, which the daemon proxies. Nothing is provided at runtime but node builtins, so bundle everything else in. Absent ⇒ no backend."),
+	entry: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "entry must stay inside the checkout" }).meta({ power: {
+		key: "entry",
+		sentence: "runs a UI bundle in your browser"
+	} }).optional().describe("Repo-relative path of your prebuilt single-file ESM bundle, built with `vue` and `@intentic/extension-api` as externals. Absent ⇒ an extension with no UI."),
+	server: string().min(1).refine((value) => !value.split("/").includes(".."), { message: "server must stay inside the checkout" }).meta({ power: {
+		key: "server",
+		sentence: "runs a backend bundle inside the daemon's extension host"
+	} }).optional().describe("Repo-relative path of your prebuilt single-file node ESM server bundle, exporting `activateServer`. Served under your own route namespace, which the daemon proxies. Nothing is provided at runtime but node builtins, so bundle everything else in. Absent ⇒ no backend."),
 	permissions: object({
-		sandbox: array(string()).optional().describe("Daemon routes your UI half may call. Your own backend namespace needs no entry: its backend is your own code."),
-		daemon: array(string()).optional().describe("Daemon routes your SERVER half may call. Separate from `sandbox` because the two halves run as different principals: the UI as the owner's session, the backend as a minted per-extension token, so a grant to one must never quietly widen the other.")
+		sandbox: array(permissionEntry().meta({ power: {
+			key: "sandbox:${value}",
+			sentence: "its UI calls the sandbox route ${value}"
+		} })).optional().describe("Daemon routes your UI half may call. Your own backend namespace needs no entry: its backend is your own code."),
+		daemon: array(permissionEntry().meta({ power: {
+			key: "daemon:${value}",
+			sentence: "its backend calls the daemon route ${value}"
+		} })).optional().describe("Daemon routes your SERVER half may call. Separate from `sandbox` because the two halves run as different principals: the UI as the owner's session, the backend as a minted per-extension token, so a grant to one must never quietly widen the other.")
 	}).optional().describe("How far this extension may reach into the daemon, as \"<METHOD> <path-glob>\" entries where `*` matches one path segment: e.g. \"GET /panels\", \"POST /panels/*/start\". The install dialog shows these, the host refuses anything undeclared, and the usage ledger records which were actually earned."),
 	contributes: contributesSchema.optional()
 });
+var servedTools = (manifest, ctx) => {
+	const contributes = manifest.contributes;
+	const tools = contributes?.tools;
+	const cards = contributes?.capabilities ?? [];
+	for (const card of cards) if (card.kind === "cli" && card.mcp !== void 0 && manifest.server === void 0) ctx.addIssue({
+		code: "custom",
+		path: ["contributes", "capabilities"],
+		message: `card "${card.id}" declares \`mcp\`, which only a \`server\` bundle can answer`
+	});
+	if (tools === void 0) return;
+	if (tools.process !== void 0) {
+		if ((contributes?.processes?.find((entry) => entry.name === tools.process))?.port !== "auto") ctx.addIssue({
+			code: "custom",
+			path: [
+				"contributes",
+				"tools",
+				"process"
+			],
+			message: `tools.process must name a process in contributes.processes declared with port: "auto"`
+		});
+		if (tools.path === void 0) ctx.addIssue({
+			code: "custom",
+			path: [
+				"contributes",
+				"tools",
+				"path"
+			],
+			message: "tools served by a process need the path its MCP endpoint answers at"
+		});
+	} else if (manifest.server === void 0) ctx.addIssue({
+		code: "custom",
+		path: ["contributes", "tools"],
+		message: "tools need a `server` bundle to serve them, or a `process` that does"
+	});
+	if (tools.perCard !== void 0 && !cards.some((card) => card.kind === "cli" && card.id === tools.perCard)) ctx.addIssue({
+		code: "custom",
+		path: [
+			"contributes",
+			"tools",
+			"perCard"
+		],
+		message: `tools.perCard must name one of this extension's cli cards`
+	});
+};
+var ExtensionManifestSchema = ManifestShape.superRefine(servedTools);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/extension-updates.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/extension-updates.js
 var extensionId = string().min(1).max(121).regex(/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/);
 var ExtensionUpdatePolicySchema = object({
 	updates: _enum([
@@ -19795,6 +17151,7 @@ var ExtensionSummarySchema = object({
 		]).describe("How its server half is doing. Absent means the code is not in this image at all; incompatible means it needs a different sandbox version."),
 		detail: string().optional().describe("What went wrong, so a backend that failed to start is a sentence rather than an address that answers nothing.")
 	}).optional().describe("Present only for an extension that ships a server half."),
+	problems: array(string()).optional().describe("Declarations in its manifest the sandbox refused at load, each a sentence saying what and why, such as a listener for a provider another extension already owns. The rest of it still loads. Absent when nothing was refused."),
 	update: ExtensionUpdateSchema.optional().describe("A newer version waiting. All five of these exist only for one installed from a repository: a built-in updates with the image and one written here is edited live."),
 	advisory: ExtensionAdvisorySchema.optional().describe("A security warning about the installed version."),
 	health: ExtensionHealthSchema.optional().describe("How it has behaved since the last update, which is what decides whether that update sticks."),
@@ -19808,9 +17165,22 @@ var InvalidWorkspaceExtensionSchema = object({
 	dir: string().describe("Which folder."),
 	error: string().describe("Why it could not be read.")
 });
+var PendingWorkspaceExtensionSchema = object({
+	id: extensionId.describe("The extension's id."),
+	dir: string().describe("Which folder under .intentic/config/workspace-extensions/."),
+	manifest: ExtensionManifestSchema.describe("What it declares about itself."),
+	powers: PowersDiffSchema.describe("What saying yes allows, as plain sentences. Against what was approved before when something was: `added` is what it asks for now that it did not then. Never approved before, everything it declares is `added`."),
+	approvedBefore: boolean().describe("An earlier shape of it was approved, and the powers it declares have changed since, which is what put it back here."),
+	digest: string().regex(/^[0-9a-f]{64}$/).describe("The fingerprint of the powers shown, sent back with the approval so a change made while you were reading is caught rather than approved.")
+});
+var ExtensionApproveInputSchema = object({
+	id: extensionId.describe("Which extension."),
+	digest: string().regex(/^[0-9a-f]{64}$/).describe("The fingerprint of the powers you read, from the pending list. A mismatch means they changed since, and nothing is approved.")
+});
 var ExtensionsListSchema = object({
 	extensions: array(ExtensionSummarySchema).describe("What is installed."),
 	invalid: array(InvalidWorkspaceExtensionSchema).describe("Extensions written here that could not be read at all. Listed rather than dropped, because there is no install moment at which to reject a broken one, so this is its only way of saying anything."),
+	pending: array(PendingWorkspaceExtensionSchema).describe("Extensions written in this workspace that wait for the owner's approval before anything of theirs runs: never approved, or approved when they declared less than they do now."),
 	updatesCheckedAt: string().optional().describe("When updates were last looked for. Absent until the first check has run. Sent so a screen can say checked an hour ago rather than presenting staleness as certainty.")
 });
 var ExtensionSettingsSchema = object({
@@ -19844,7 +17214,7 @@ var WorkspaceExtensionCreatedSchema = object({
 var ExtensionRemovalConnectionSchema = object({
 	id: string().describe("The name the owner gave it, which is also the agent's handle for it."),
 	kind: string().describe("Which core kind it is underneath: cli, browser, host or webext."),
-	card: string().describe("The card it was added from, named as the grid names it."),
+	entry: string().describe("The catalog entry it was added from, named as the grid names it."),
 	secrets: array(string()).describe("Credential fields stored for it, by name. The values are deleted with the entry and cannot be recovered from here."),
 	effect: string().describe("What tearing it down actually takes away, in one sentence.")
 });
@@ -19891,589 +17261,122 @@ var ExtensionProcessStatusSchema = object({
 	previewUrl: string().optional().describe("Where to open it, when it has an address.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/extensions.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/extensions.contract.js
 var extensionsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/extensions",
 		summary: "Installed extensions",
 		description: "Every extension installed here, resolved to the manifest the owner approved, which is what the app boots its extension host from. The code itself is served separately, because raw script bytes are not a JSON answer."
 	}).output(ExtensionsListSchema),
-	create: oc.route({
+	create: procedure.route({
 		method: "POST",
 		path: "/extensions/workspace",
 		summary: "Write a new extension in place",
 		description: "Scaffolds a working extension into this workspace and installs it. The only call here that creates one, and it exists because that folder is otherwise reachable only through an agent's file tools, which is a fine way to change an extension and a poor way to meet the idea of one."
 	}).input(WorkspaceExtensionCreateSchema).output(WorkspaceExtensionCreatedSchema),
-	removalPlan: oc.route({
+	removalPlan: procedure.route({
 		method: "GET",
 		path: "/extensions/{id}/removal",
 		summary: "What removing an extension would take away",
 		description: "Everything one removal destroys, before it happens: the files deleted, the connections configured from its cards, the settings and credentials forgotten, the background processes stopped, and the owner's own automations that quietly stop firing. Also answerable for an extension that cannot be removed, in which case it says why."
 	}).input(CapabilityIdParamSchema).output(ExtensionRemovalPlanSchema),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/remove",
 		summary: "Remove an extension",
 		description: "Uninstalls it and everything that only existed because it was here: the connections added from its cards, with their stored credentials, its settings, its switch and its update record. What the owner made with it — automations, files in the workspace — is left alone. Owner only, for the same reason installing is. Built-in extensions cannot be removed; switch them off instead."
 	}).input(CapabilityIdParamSchema).output(ExtensionRemovedSchema),
-	settings: oc.route({
+	settings: procedure.route({
 		method: "GET",
 		path: "/extensions/{id}/settings",
 		summary: "An extension's settings",
 		description: "The current values for the settings this extension declared it has."
 	}).input(CapabilityIdParamSchema).output(ExtensionSettingsSchema),
-	setSettings: oc.route({
+	setSettings: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/settings",
 		summary: "Change an extension's settings",
 		description: "Writes new values. A key the extension never declared is refused rather than quietly stored, the same honesty rule that governs everything else an extension claims."
 	}).input(ExtensionSettingsInputSchema).output(OkSchema$1),
-	setEnabled: oc.route({
+	approve: procedure.route({
+		method: "POST",
+		path: "/extensions/{id}/approve",
+		summary: "Let a workspace extension run",
+		description: "Approves an extension written in this workspace with the powers it declares now: its background processes start, its backend loads, and what it contributes is wired from the next turn. Editing its code keeps the approval; declaring a power it did not have puts it back in the pending list. Owner and maintainers only."
+	}).meta({
+		panel: false,
+		control: "never"
+	}).input(ExtensionApproveInputSchema).output(OkSchema$1),
+	setEnabled: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/enabled",
 		summary: "Turn an extension on or off",
 		description: "The owner's switch. Turning one off stops its background processes at once. What it contributes to an agent's tools is rebuilt at the start of the next turn, and anything it adds to the sandbox image only at the next rebuild."
 	}).input(ExtensionEnabledInputSchema).output(OkSchema$1),
-	recordUsage: oc.route({
+	recordUsage: procedure.route({
 		method: "POST",
 		path: "/extensions/usage",
 		summary: "Record what extensions just used",
 		description: "One batch written by the app rather than measured by the daemon, because the permission gate runs in the browser: from the sandbox's side extension traffic is indistinguishable from anyone else's. This is how the record of which powers each extension actually exercises gets kept without one reporting request per extension."
 	}).input(ExtensionUsageBatchSchema).output(OkSchema$1),
-	readiness: oc.route({
+	readiness: procedure.route({
 		method: "GET",
 		path: "/extensions/{id}/readiness",
 		summary: "Whether an extension is fit to share",
 		description: "The checks that can be answered from an extension's own files, for an author about to publish. Read on demand rather than carried on the list, because it reads the code off disk each time."
 	}).input(CapabilityIdParamSchema).output(ExtensionReadinessSchema),
-	checkUpdates: oc.route({
+	checkUpdates: procedure.route({
 		method: "POST",
 		path: "/extensions/updates/check",
 		summary: "Look for extension updates now",
 		description: "Compares every installed extension against its source and reports what is newer, what carries an advisory and what looks unhealthy. This also happens on a schedule; call it to check on demand."
 	}).output(ExtensionUpdatesCheckedSchema),
-	updatePreview: oc.route({
+	updatePreview: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/update/preview",
 		summary: "What an update would change",
 		description: "The read before the click: which versions are involved and exactly which powers the new code asks for that the running one does not. Costs one throwaway copy of the source, the same as browsing a registry entry."
 	}).input(ExtensionUpdateActionSchema).output(ExtensionUpdatePreviewSchema),
-	applyUpdate: oc.route({
+	applyUpdate: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/update",
 		summary: "Update an extension",
 		description: "The whole swap as one transaction: fetch, check, quiet the running one, replace it while keeping the outgoing copy one step back, restart and watch it come up. The existing configuration is kept, so a token for a private source survives what removing and re-adding would lose. Owner only, because it changes what code runs."
 	}).input(ExtensionUpdateActionSchema).output(ExtensionUpdateAppliedSchema),
-	revert: oc.route({
+	revert: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/revert",
 		summary: "Go back to the previous version",
 		description: "Swaps the copy kept from before the last update back into place. Owner only, for the same reason updating is."
 	}).input(CapabilityIdParamSchema).output(ExtensionUpdateAppliedSchema),
-	setUpdatePolicy: oc.route({
+	setUpdatePolicy: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/update-policy",
 		summary: "How an extension should handle its own updates",
 		description: "The owner's standing answer for one extension: tell me, have an agent look at it, or just do it. Security advisories can be opted out of separately."
 	}).input(ExtensionUpdatePolicyInputSchema).output(OkSchema$1),
-	processStatus: oc.route({
+	processStatus: procedure.route({
 		method: "GET",
 		path: "/extensions/{id}/processes/{name}",
 		summary: "Whether an extension's background process is up",
 		description: "The state of one process an extension declared, with the port it was given and its preview address if it has one."
 	}).input(ExtensionProcessParamSchema).output(ExtensionProcessStatusSchema),
-	processStart: oc.route({
+	processStart: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/processes/{name}/start",
 		summary: "Start an extension's background process",
 		description: "Brings one of an extension's declared processes up in an attachable terminal."
 	}).input(ExtensionProcessParamSchema).output(OkSchema$1),
-	processStop: oc.route({
+	processStop: procedure.route({
 		method: "POST",
 		path: "/extensions/{id}/processes/{name}/stop",
 		summary: "Stop an extension's background process",
 		description: "Shuts one of an extension's declared processes down and frees its port."
 	}).input(ExtensionProcessParamSchema).output(OkSchema$1)
 };
-PROVIDER_SPECS.map((spec) => ({
-	label: spec.label,
-	value: spec.id
-}));
-Object.fromEntries(PROVIDER_SPECS.map((spec) => [spec.id, spec.access]));
-PROVIDER_SPECS.filter((spec) => spec.access.kind === "free").map((spec) => spec.id);
-Object.fromEntries(PROVIDER_SPECS.map((spec) => [spec.id, spec.vendor]));
-PROVIDER_SPECS.filter((spec) => spec.planLimits).map((spec) => spec.id);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/policy/command-classes.js
-var globally$1 = (patterns) => patterns.map((pattern) => new RegExp(pattern.source, `${pattern.flags}g`));
-var GIT_DESTRUCTIVE = [
-	/\bgit\s+push\b[^|;&]*\s(?:-f\b|--force\b|--force-with-lease\b|--delete\b)/,
-	/\bgit\s+reset\b[^|;&]*\s--hard\b/,
-	/\bgit\s+clean\b[^|;&]*\s-{1,2}[a-zA-Z]*f/,
-	/\bgit\s+branch\b[^|;&]*\s(?:-D\b|--delete\s+--force\b|--force\s+--delete\b)/,
-	/\bgit\s+filter-branch\b/
-];
-var SECRET_REFERENCES = [/\{\{secret:[A-Za-z0-9_./-]+\}\}/];
-var LEADING_PATH = String.raw`[\w~$.{}/\\-]*`;
-var CREDENTIAL_PATHS = [
-	/(?<![\w.])\.env(?!\.(?:example|sample|template))(?:\.[\w-]+)?\b/,
-	/\.ssh(?!\w)(?!\/(?:known_hosts|config|authorized_keys|environment)(?!\w))(?!\/[\w.-]*\.pub(?!\w))(?:\/[\w.\-/]*)?/,
-	/\bid_(?:rsa|dsa|ecdsa|ed25519)\b(?!\.pub\b)/,
-	new RegExp(String.raw`${LEADING_PATH}\.aws/credentials\b`),
-	new RegExp(String.raw`${LEADING_PATH}\.npmrc(?!\.(?:example|sample|template))\b`),
-	new RegExp(String.raw`${LEADING_PATH}\.git-credentials\b`),
-	new RegExp(String.raw`${LEADING_PATH}\.credentials\.json\b`)
-];
-var PACKAGE_PUBLISH = [
-	/\b(?:npm|pnpm|yarn|bun)\s+publish\b/,
-	/\bcargo\s+publish\b/,
-	/\bgh\s+release\s+create\b/,
-	/\bdocker\s+push\b/,
-	/\btwine\s+upload\b/
-];
-var LOOPBACK = String.raw`(?:localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(?::\d+)?(?=[/?#\s'"\x60]|$)`;
-var NETWORK_OUTBOUND = [new RegExp(String.raw`\b(?:curl|wget)\b[^|;&]*\bhttps?://(?!${LOOPBACK})`), new RegExp(String.raw`\bfetch\(\s*['"\x60]https?://(?!${LOOPBACK})`)];
-var BLOCK_DEVICE = [
-	/\bmkfs(?:\.\w+)?\b/,
-	/\bwipefs\b/,
-	/\bblkdiscard\b/,
-	/\bsgdisk\b[^|;&]*\s(?:--zap-all|-Z)\b/,
-	/\bdd\b[^|;&]*\bof=(?:\/dev\/|['"`]\/dev\/)/,
-	/\bshred\b[^|;&]*\s\/dev\//,
-	/>\s*\/dev\/(?:[shv]d[a-z]|nvme\d|disk\d|mmcblk\d)/
-];
-var CONTAINER_STATE = [
-	/\b(?:docker|podman)\s+volume\s+(?:rm|remove|prune)\b/,
-	/\b(?:docker|podman)\s+system\s+prune\b/,
-	/\b(?:docker(?:\s+compose|-compose)?|podman-compose)\s+down\b[^|;&]*\s(?:-v\b|--volumes\b)/
-];
-globally$1(GIT_DESTRUCTIVE);
-globally$1(SECRET_REFERENCES);
-globally$1(CREDENTIAL_PATHS);
-globally$1(PACKAGE_PUBLISH);
-globally$1(NETWORK_OUTBOUND);
-globally$1(BLOCK_DEVICE);
-globally$1(CONTAINER_STATE);
-var COMMAND_CLASS_LABELS = {
-	"git.destructive": "rewrite or discard git history",
-	"files.destructive": "delete files recursively",
-	"system.destructive": "wipe a disk, or delete a whole root directory",
-	"container.state": "delete a container volume or the data in it",
-	"secrets.access": "read credential material",
-	"package.publish": "publish or release a package",
-	"network.outbound": "send a request out to the internet"
-};
-var COMMAND_CLASS_PATTERNS = {
-	"git.destructive": [
-		{
-			code: "git push --force",
-			qualifier: "also -f and --force-with-lease"
-		},
-		{ code: "git push --delete" },
-		{ code: "git reset --hard" },
-		{ code: "git clean -f" },
-		{ code: "git branch -D" },
-		{ code: "git filter-branch" }
-	],
-	"files.destructive": [
-		{ code: "rm -rf <path>" },
-		{
-			code: "fs.rm(<path>, { recursive: true })",
-			qualifier: "also rmSync, rmdir, rmdirSync"
-		},
-		{ code: "rimraf(<path>)" }
-	],
-	"system.destructive": [
-		{ code: "mkfs" },
-		{ code: "wipefs" },
-		{ code: "blkdiscard" },
-		{ code: "sgdisk --zap-all" },
-		{ code: "dd of=/dev/…" },
-		{ code: "shred /dev/…" },
-		{ code: "> /dev/sda" },
-		{
-			code: "rm -rf /",
-			qualifier: "only when the target is a root, listed below"
-		}
-	],
-	"container.state": [
-		{
-			code: "docker volume rm",
-			qualifier: "also remove, prune, and podman for any of these"
-		},
-		{ code: "docker system prune" },
-		{ code: "docker compose down -v" }
-	],
-	"secrets.access": [
-		{
-			code: "{{secret:NAME}}",
-			qualifier: "a stored secret, used in the command itself"
-		},
-		{ code: ".env" },
-		{ code: ".ssh/*" },
-		{ code: "id_rsa" },
-		{ code: ".aws/credentials" },
-		{ code: ".npmrc" },
-		{ code: ".git-credentials" }
-	],
-	"package.publish": [
-		{
-			code: "npm publish",
-			qualifier: "also pnpm, yarn, bun"
-		},
-		{ code: "cargo publish" },
-		{ code: "gh release create" },
-		{ code: "docker push" },
-		{ code: "twine upload" }
-	],
-	"network.outbound": [{
-		code: "curl https://…",
-		qualifier: "also wget; loopback does not count"
-	}, {
-		code: "fetch(\"https://…\")",
-		qualifier: "in a script"
-	}]
-};
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/policy/safety-policy.js
-var SANDBOX_HARD_RULE = /* @__PURE__ */ new Set(["system.destructive"]);
-var DEVICE_HARD_RULE = /* @__PURE__ */ new Set([
-	"system.destructive",
-	"container.state",
-	"files.destructive"
-]);
-var hardRuleClasses = (locus) => locus === "sandbox" ? SANDBOX_HARD_RULE : DEVICE_HARD_RULE;
-var ROOT_NOTES = {
-	sandbox: `/ and /history. Not /work, /usr or /etc: the worktree's changes are uncommitted work, and the container comes back from its image.`,
-	device: `/, a home directory, a Windows drive, and the top-level directories an OS keeps.`
-};
-var tiersFor = (commandClass) => Object.fromEntries(CommandLocusSchema.options.map((locus) => [locus, hardRuleClasses(locus).has(commandClass) ? "hard" : "judged"]));
-var unwaivableAt = (rule) => CommandLocusSchema.options.filter((locus) => rule.tiers[locus] === "hard").length;
-CommandClassSchema.options.map((commandClass) => ({
-	commandClass,
-	label: COMMAND_CLASS_LABELS[commandClass],
-	patterns: COMMAND_CLASS_PATTERNS[commandClass],
-	tiers: tiersFor(commandClass),
-	...commandClass === "system.destructive" ? { notes: ROOT_NOTES } : {}
-})).sort((left, right) => unwaivableAt(right) - unwaivableAt(left));
-var CommandJudgeModeSchema = _enum([
-	"off",
-	"watch",
-	"on"
-]);
-var SafetyDecisionSchema = _enum([
-	"allow",
-	"ask",
-	"refuse"
-]);
-object({
-	decision: SafetyDecisionSchema.describe("Run it, ask the owner, or refuse it."),
-	sentence: string().describe("What this command does and why it was allowed, held or refused, in one plain sentence."),
-	policyLine: string().optional().describe("A line the owner could add to their policy so this stops being asked. Shown on the card before it is accepted.")
-});
-var SafetyLogEntrySchema = object({
-	at: number$1().int().describe("When it was judged, epoch milliseconds."),
-	program: string().describe("The command or script, excerpted."),
-	classes: array(string()).describe("The kinds of consequence triage matched, which is why a judge looked."),
-	decision: SafetyDecisionSchema.describe("What the judge decided."),
-	sentence: string().describe("The judge's sentence."),
-	outcome: _enum([
-		"allowed",
-		"asked",
-		"refused"
-	]).describe("What the gate did in the end."),
-	answer: _enum([
-		"allowed",
-		"declined",
-		"unanswered"
-	]).optional().describe("How the owner answered, when they were asked."),
-	machine: string().optional().describe("Which connected device it was headed for, when it was not this sandbox.")
-});
-var SafetyPolicySchema = object({
-	text: string().describe("The policy, as the owner wrote it."),
-	custom: boolean().describe("False when nobody has edited it and this is the text this product ships.")
-});
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/settings.js
-var SystemPromptModeSchema = _enum([
-	"intentic",
-	"claude",
-	"custom"
-]);
-var BuiltinPromptSchema = object({ base: _enum(["intentic", "claude"]) });
-var DependencyFreshnessSchema = _enum([
-	"off",
-	"versions",
-	"full"
-]);
-var RuleMomentSchema = _enum([
-	"file.edited",
-	"turn.ending",
-	"push.starting",
-	"agent.finished",
-	"agent.landed"
-]);
-var RuleBuiltinSchema = _enum([
-	"verify-edits",
-	"verify-removals",
-	"verify-ui-edits",
-	"verify-tests",
-	"version-landed"
-]);
-var RuleActionSchema = discriminatedUnion("kind", [
-	object({
-		kind: literal("command"),
-		command: string().max(500),
-		timeoutMs: number$1().min(6e4).max(36e5).default(9e5)
-	}),
-	object({
-		kind: literal("instruct"),
-		text: string().min(1).max(4e3)
-	}),
-	object({
-		kind: literal("verdict"),
-		verdict: _enum(["allow", "hold"])
-	}),
-	object({
-		kind: literal("builtin"),
-		name: RuleBuiltinSchema
-	})
-]);
-var RuleOutcomeSchema = _enum([
-	"clean",
-	"error",
-	"conflict",
-	"checks-failed"
-]);
-var RuleConditionSchema = object({
-	repo: string().min(1).optional(),
-	paths: array(string().min(1)).max(20).optional(),
-	outcome: array(RuleOutcomeSchema).optional(),
-	sample: number$1().gt(0).lt(1).optional()
-});
-var MOMENT_ACTIONS = {
-	"file.edited": ["command"],
-	"turn.ending": [
-		"builtin",
-		"instruct",
-		"command"
-	],
-	"push.starting": ["command"],
-	"agent.finished": ["verdict"],
-	"agent.landed": ["builtin"]
-};
-var MOMENT_BUILTINS = {
-	"turn.ending": [
-		"verify-edits",
-		"verify-removals",
-		"verify-ui-edits",
-		"verify-tests"
-	],
-	"agent.landed": ["version-landed"]
-};
-var RuleSchema = object({
-	id: string().regex(/^[a-z0-9][a-z0-9-]*$/),
-	label: string().min(1).max(80),
-	moment: RuleMomentSchema,
-	when: RuleConditionSchema.optional(),
-	action: RuleActionSchema,
-	enabled: boolean().default(true)
-}).refine((rule) => MOMENT_ACTIONS[rule.moment].includes(rule.action.kind), {
-	message: "that action cannot stand at that moment",
-	path: ["action"]
-}).refine((rule) => rule.action.kind !== "builtin" || (MOMENT_BUILTINS[rule.moment] ?? []).includes(rule.action.name), {
-	message: "that built-in cannot stand at that moment",
-	path: ["action"]
-});
-var RuleFiringsSchema = record(string(), number$1());
-var SkillOriginSchema = _enum([
-	"builtin",
-	"own",
-	"capability",
-	"extension",
-	"plugin",
-	"persona",
-	"dropped"
-]);
-var SkillNameSchema = string().regex(/^[a-z0-9][a-z0-9-]*$/, "a skill name is lowercase letters, digits and dashes");
-var SkillsListSchema = array(object({
-	id: string().describe("Its handle, which reading and deleting take. A skill of your own is simply its name; one belonging to something else is qualified, because two packages may each ship a review."),
-	name: string().describe("Its name."),
-	description: string().describe("What it is for, which is the line the agent reads to decide whether to reach for it. Empty when the skill declares none, which is worth showing as the blank it is: a skill with no description is rarely picked."),
-	origin: SkillOriginSchema.describe("Where it came from."),
-	owner: string().optional().describe("Who ships it, as the row would name them."),
-	enabled: boolean().describe("Whether the agent can reach it."),
-	switchable: boolean().describe("Whether this surface can switch it. Everything else is on because its extension or its plugin is, and a switch here that silently did nothing would be worse than none, so the row names its owner instead."),
-	editable: boolean().describe("Whether it can be rewritten here. Your own only: editing somebody else's in place would be undone the next time the thing that ships it catches up."),
-	removable: boolean()
-}));
-var SkillBodySchema = object({
-	id: string().describe("The skill's id, which can carry the owner it came from."),
-	name: string().describe("Its name."),
-	body: string().describe("The instructions themselves, as written.")
-});
-var SkillIdSchema = object({ id: string().min(1).describe("Which skill. It travels in the query rather than the address, because an id can name the owner it came from and that will not fit in a path.") });
-var SkillDraftSchema = object({
-	name: SkillNameSchema.describe("What to call it. Saving over an existing name rewrites it, which is also how one is renamed."),
-	description: string().min(1).max(1024).describe("What it is for, which is what the agent reads to decide whether to reach for it."),
-	body: string().min(1).describe("The skill itself.")
-});
-var SkillRemoveSchema = object({ name: SkillNameSchema.describe("Which skill to delete. The stored text and the agent's copy go together, so nothing is left half done.") });
-var SkillSwitchSchema = object({
-	name: SkillNameSchema.describe("Which skill of your own to switch."),
-	on: boolean().describe("On writes the agent's copy from the stored text; off removes that copy and keeps the text.")
-});
-var SandboxSettingsSchema = object({
-	stableSystemPrompt: boolean().default(false).describe("Keep the instructions identical between turns so the provider can cache them, moving anything that varies into the message instead. Cheaper, at the cost of some flexibility."),
-	skills: array(string()).default(["lsp", "fileq"]).describe("Which built-in tools are switched on. A skill of your own is not listed here: it is on while the agent's copy of it exists."),
-	personaRouting: boolean().default(true).describe("Whether a new chat is matched to one of your personas from its first message. The message is read once it is sent, by the model on the persona-routing list, and the chat says in its own transcript what was asked and which persona it landed on. Never applies to unwatched runs, which name their persona themselves."),
-	hashlineEdits: boolean().default(false).describe("Have the agent edit files by line number rather than by quoting the text it wants replaced. Cheaper on large files, and less forgiving of a stale read."),
-	systemPromptMode: SystemPromptModeSchema.default("intentic").describe("Which instructions the agent starts from: intentic's own, the ones the installed Claude Code carries, or your own. The first two both get this product's own guidance added on top; your own gets nothing added, which is the point of it."),
-	systemPrompt: string().max(2e4).default("").describe("Your own instructions, used only when the mode above says custom. Then it is the whole of them: both built-in bases go, and so does everything this product would otherwise add, including the guidance the chat's own cards are driven by. That is the price of total control."),
-	iqSearch: boolean().default(false).describe("Teach the agent how to use this workspace's own search tool, rather than leaving it to grep around."),
-	iqSearchHoldout: number$1().min(0).max(1).default(0).describe("What share of conversations to run without that teaching, so the two can be compared. Whole conversations rather than individual turns, because once the teaching is in a session, withholding it from the next request does not make the model forget it."),
-	workspaceMap: boolean().default(false).describe("Open every conversation with a map of the project it starts in: what is in it, what each part is for, and where the agent is standing. Worked out fresh each time rather than written down anywhere, because a written layout is wrong within a fortnight. Off by default, since it spends tokens on the first message of every conversation."),
-	workspaceMapHoldout: number$1().min(0).max(1).default(0).describe("What share of conversations to open without the map, so the two can be compared. Whole conversations rather than individual turns, because the map is sent once and stays in the conversation's history afterwards."),
-	sidecars: boolean().default(false).describe("Keep an up-to-date markdown rendering of every document, image and audio file in the workspace, made in the background as files land, so the agent reads a pre-derived text instead of paying to parse the file mid-task. Costs background CPU on a document-heavy workspace, so it is a switch rather than a default."),
-	dependencyFreshness: DependencyFreshnessSchema.default("off").describe("Whether a version the agent is about to pin is checked against the package's own registry first. Facts only, or facts plus the name of a maintained replacement where the registry agrees the current choice has been abandoned. It tells the agent and lets it decide rather than refusing, because matching a version your project already uses is usually the right answer and a gate would fight it."),
-	outputCleaners: string().default("").describe("Which command outputs to trim before the agent reads them, cutting the noise a build tool prints without cutting what it said."),
-	outputHoldout: number$1().min(0).max(1).default(0).describe("What share of commands to leave untrimmed, so the saving can be measured against a real comparison rather than estimated."),
-	modelRoles: partialRecord(ModelRoleSchema, array(ModelPinSchema).max(10)).default({}).describe("Which models do which job, one ordered list per job: commit messages, session titles, the safety judge, pipeline fixes, and every other place this sandbox picks a model for you. Tried in order, so one spent account does not take a job down. Nothing is chosen for you: a one-shot job with no list does not run, and a whole session with no list opens on whatever your own chat is set to."),
-	changelogRepos: array(string()).max(50).default([]).describe("Which repositories keep a changelog, and so get a user-facing note written alongside each merge. A list rather than a switch, and empty by default, because the commit writer's standing rule is to copy the house style rather than impose one, and a repository that has never written such a note gives it nothing to copy."),
-	autoTier: _enum([
-		"off",
-		"shadow",
-		"on"
-	]).default("shadow").describe("Whether an easy-looking turn may run on a cheaper model from the same provider. Three states rather than a switch, because the middle one is the only honest road to the third: it scores every turn and routes nothing, so the guess can become a measurement before it changes anything. It can only ever route down, so the worst case is one turn's quality rather than a bill nobody asked for."),
-	autoTierEagerness: _enum([
-		"cautious",
-		"balanced",
-		"eager"
-	]).default("balanced").describe("How readily a turn counts as simple enough for the cheaper model. It moves only the cutoff: at every setting a turn still has to say something positively easy, so nothing here can downgrade a short vague request."),
-	autoFastModels: array(string()).max(10).default([]).describe("Which cheaper model a downgraded turn lands on. A list so a sandbox spanning providers can name a rung on each, but not a fallback ladder: an entry naming a different provider than the turn is on is skipped rather than tried, because switching provider retires the conversation and starting over to save a fraction of a penny is not a saving. Empty picks the cheapest the turn's own provider publishes."),
-	agentRetentionDays: number$1().min(0).max(365).default(3).describe("How many days a finished conversation stays on the board before being put away. Zero means never. The one setting here that defaults on, because each card left behind is a real working copy on disk, not just a row."),
-	resumeAfterOutage: boolean().default(false).describe("Whether a turn killed by the model provider failing is re-run automatically, backing off between attempts. The sandbox-wide default; any one conversation can say otherwise. Off to begin with, because a retry spends your allowance on a turn you sent once and only you can say whether it was worth paying for twice. Worth turning on for a sandbox whose work mostly happens with nobody in the room."),
-	resumeAfterLimit: boolean().default(false).describe("Whether a turn a spent usage limit refused is sent again by itself once the allowance reopens. The sandbox-wide default; any one conversation can say otherwise. Off to begin with, because the allowance is your budget and a turn that spends it the second it comes back is not a decision to make for you. Worth turning on for a sandbox whose work mostly happens with nobody in the room."),
-	moveAfterLimit: boolean().default(false).describe("Whether a turn a spent usage limit refused is moved to another connected account of the same provider that still has room, as soon as the refusal lands. The sandbox-wide default; any one conversation can say otherwise. Off to begin with, because it spends a second account on your behalf. With no account that has room the turn waits as the setting above says."),
-	limitMoveCarryUnder: number$1().int().min(0).default(1e5).describe("When a spent usage limit moves a turn to another account, carry the provider session (the model keeps everything, and re-reads all of it once on the other account) while the conversation's context is under this many tokens; at or above it, start a fresh session with the sandbox's measured brief instead. Zero always starts fresh."),
-	autoResumeOnRestart: boolean().default(false).describe("Whether a turn killed by the sandbox restarting is re-run once it comes back. Off to begin with, for the same reason: it would spend your allowance on work you are not watching and edit files while you are still waiting for the sandbox to return. Either way the interruption is recorded rather than silently lost."),
-	adoptedChecks: record(string(), string()).default({}).describe("Which repositories may run the checks they declare for themselves, and exactly which version of those checks you agreed to. A repository's declaration does nothing until it appears here, the same rule git keeps for hooks, which are never cloned; and a declaration that changes afterwards is held until you look at it again."),
-	rules: array(RuleSchema).max(50).default([]).describe("Standing instructions you give the sandbox about its own work: ask for proof before a turn ends, run something before a push, hold or release finished work. Empty is the default and is exactly the behaviour of a fresh sandbox, because each of those defaults is what no rule matched means at its own moment."),
-	automationFailureLimit: number$1().min(0).max(20).default(0).describe("How many failures in a row before an automation switches itself off. Zero means never, which is the default, because the failure is not always the automation's fault and a job disabled at three in the morning is one nobody re-enables. Only real errors count: a guard deciding there was nothing to do, or the sandbox dying mid-run, say nothing about the automation."),
-	admission: AdmissionPolicySchema.prefault({}).describe("Whether work started from outside may run, per kind of trigger: let it, hold it for approval, or refuse it. Composes with each automation's own setting, and the stricter of the two wins, so holding every visitor's message needs no edit to each automation."),
-	actionRules: record(string(), AdmissionRuleSchema).default({}).describe("What an agent may do out in the world, per kind of action: go ahead, ask first, or never."),
-	commandJudge: CommandJudgeModeSchema.default("on").describe("Whether a model reads your safety policy before a flagged command runs. Off judges nothing and asks about nothing; Watch judges everything and records it without ever interrupting you, which is how you find out what your policy actually does before you let it stop anything; On lets the verdict decide. Wiping a disk or deleting under /history asks at every setting — that rule is typed rather than judged, and cannot be turned off."),
-	subagentsAtOnce: number$1().min(1).max(200).default(20).describe("How many subagents may work at the same time."),
-	subagentsPerTurn: number$1().min(1).max(2e3).default(200).describe("How many a single turn may start in total."),
-	subagentDepth: number$1().min(1).max(10).default(3).describe("How many levels deep the delegation may go, since a subagent can start subagents of its own.")
-});
-var BuiltinPromptTextSchema = object({
-	text: string(),
-	version: string()
-});
-var SavingsStageSchema = object({
-	id: string(),
-	commands: number$1(),
-	savedTokens: number$1()
-});
-var InputSavingsSchema = object({
-	updatedAt: number$1().optional(),
-	commands: number$1(),
-	rawTokens: number$1(),
-	emittedTokens: number$1(),
-	savedPct: number$1(),
-	perCleaner: array(SavingsStageSchema),
-	holdout: object({
-		cleaned: number$1(),
-		heldOut: number$1(),
-		measuredSavedPct: number$1().optional()
-	}),
-	gaps: array(object({
-		command: string(),
-		commands: number$1(),
-		tokens: number$1()
-	}))
-});
-var SavingsArmSchema = object({
-	turns: number$1(),
-	mean: number$1()
-});
-var TurnMetricReadingSchema = object({
-	metric: _enum([
-		"searchCalls",
-		"openingSearches",
-		"openingListings",
-		"callsBeforeTarget"
-	]),
-	on: SavingsArmSchema,
-	off: SavingsArmSchema,
-	controlTurnsNeeded: number$1().optional(),
-	marginPct: number$1().optional(),
-	deltaPct: number$1().optional(),
-	saved: number$1().optional()
-});
-var TurnExperimentSchema = object({
-	metrics: tuple([TurnMetricReadingSchema], TurnMetricReadingSchema),
-	minTurns: number$1(),
-	sampleUnit: _enum([
-		"turns",
-		"conversations",
-		"opening turns"
-	]).optional(),
-	cohort: string().optional()
-});
-var TierReportSchema = object({
-	judged: number$1(),
-	fast: number$1(),
-	atStakeUsd: number$1(),
-	routed: number$1(),
-	routedUsd: number$1(),
-	escalated: number$1(),
-	denied: number$1()
-});
-var DependencyImprovementSchema = object({
-	prevented: string(),
-	chosen: string(),
-	reason: string(),
-	at: number$1().optional()
-});
-var DependencySavingsSchema = object({
-	checked: number$1(),
-	improved: number$1(),
-	recent: array(DependencyImprovementSchema),
-	updatedAt: number$1().optional()
-});
-var SavingsReportSchema = object({
-	input: InputSavingsSchema,
-	search: TurnExperimentSchema.optional(),
-	map: TurnExperimentSchema.optional(),
-	tier: TierReportSchema.optional(),
-	dependencies: DependencySavingsSchema.optional()
-});
-var REPO_CHECKS_FILE = `${STATE_DIR}/checks.json`;
-var RepoCheckSchema = object({
-	when: _enum(["turn", "push"]).describe("When to run it: `turn` before the assistant finishes, `push` before code leaves the machine."),
-	run: string().min(1).max(500).describe("The command, run in this repository's own directory, so it reads as it would in a terminal there."),
-	label: string().min(1).max(80).optional().describe("What to call it on screen. Absent names it after the command."),
-	timeoutMs: number$1().min(6e4).max(36e5).optional().describe("How long it may take before it is killed and counted as failed."),
-	paths: array(string().min(1)).max(20).optional().describe("Only run it when the change touches these paths, written relative to this repository. Absent runs it on every change here.")
-});
-object({ checks: array(RepoCheckSchema).max(10).default([]) });
-var RepoChecksListSchema = object({ repos: array(object({
-	repo: string().describe("Which repository, by its workspace id (\"root\" is the workspace itself)."),
-	path: string().describe("Where the declaration lives, relative to the workspace, whether or not the file exists yet."),
-	checks: array(RepoCheckSchema).describe("What it declares, in the order the file lists them."),
-	adopted: boolean().describe("Whether these are running. False means declared and inert: nothing a repository writes runs until the owner switches it on."),
-	changed: boolean().describe("Whether the declaration changed since it was adopted, which holds it until the owner looks again. True only for a repository that was adopted before."),
-	error: string().optional().describe("Why the file could not be read, when it exists but does not parse. The checks list is empty in that case.")
-})).describe("Every repository that declares checks, plus any the owner has adopted before, sorted by id.") });
-var RepoChecksAdoptSchema = object({
-	repo: string().min(1).describe("Which repository's declaration to switch."),
-	on: boolean().describe("On adopts what it declares as it stands now; off stops running it. Adopting again is how a changed declaration is accepted.")
-});
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/personas.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/personas.js
 var PersonaPowersSchema = object({
 	files: _enum([
 		"none",
@@ -20488,13 +17391,14 @@ var PersonaPowersSchema = object({
 	sandbox: boolean().default(true),
 	connectors: array(entryId).max(100).optional(),
 	devices: array(entryId).max(50).optional(),
-	mcp: array(entryId).max(50).optional()
+	mcp: array(entryId).max(50).optional(),
+	extensions: array(string().min(1).max(121).regex(/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/)).max(100).optional().describe("Which extensions' own agent tools and agent plugin (skills, commands, subagents) it gets, by extension id. Absent means every enabled one; empty means none. The tools an extension serves for a connected card follow the connectors list instead.")
 });
 var PersonaWorkspaceSchema = object({
 	startIn: string().max(200).optional().describe("Which folder a conversation opens in."),
 	folders: array(string().min(1)).max(50).optional().describe("Which folders it may touch at all. Absent means the whole workspace.")
 });
-var PersonaContextSchema = object({ repos: array(string().min(1).max(200)).max(50).describe("Which nested repositories a conversation wearing this card carries, by workspace-relative path. The workspace itself is always carried; empty means the workspace alone.") });
+var PersonaContextSchema = object({ repos: array(string().min(1).max(200)).max(50).describe("Which nested repositories a conversation on this persona carries, by workspace-relative path. The workspace itself is always carried; empty means the workspace alone.") });
 var PersonaBriefingSchema = object({ omit: array(_enum([
 	"map",
 	"context",
@@ -20505,7 +17409,7 @@ var PersonaBriefingSchema = object({ omit: array(_enum([
 	"dependencies",
 	"repoSync",
 	"handoff"
-])).max(20).describe("Which of the notes the sandbox prepends to each message a conversation wearing this card does NOT get. Everything not named here is sent as usual; the notes that keep a turn inside its own branch or explain a missing account cannot be named at all.") });
+])).max(20).describe("Which of the notes the sandbox prepends to each message a conversation on this persona does NOT get. Everything not named here is sent as usual; the notes that keep a turn inside its own branch or explain a missing account cannot be named at all.") });
 var PersonaSchema = object({
 	id: entryId.describe("The persona's id."),
 	label: string().max(60).optional().describe("What to call it on screen. Absent falls back to the id, which somebody chose anyway."),
@@ -20517,16 +17421,6 @@ var PersonaSchema = object({
 	briefing: PersonaBriefingSchema.optional().describe("Which of the notes the sandbox prepends to every message this card's conversations do without. Absent means all of them, which is what a card written before this existed keeps."),
 	models: array(ModelPinSchema).max(10).optional().describe("Which models a conversation wearing it runs on, tried in order. Absent means whatever the chat or the job would have run on anyway; a model chosen for the turn itself always wins."),
 	systemPromptMode: SystemPromptModeSchema.optional()
-});
-var PersonaRouteAskSchema = object({
-	prompt: string().min(1).max(2e4).describe("The message a new chat is about to open with."),
-	folder: string().max(200).optional().describe("The workspace folder the chat was opened in, when it was opened in one."),
-	paths: array(string().min(1).max(500)).max(50).default([]).describe("Workspace paths the message names: uploads, @-mentions, the editor's own file.")
-});
-var PersonaRouteSchema = object({
-	persona: entryId.optional().describe("The card this message belongs to, or absent when none does and the chat should stay open to everything."),
-	reason: string().describe("Why, in the one line a chat can show. Present whether or not a card was named."),
-	model: string().optional().describe("Which model answered, as `provider:model`, so the chat can name what the reading cost. Absent when no model was asked at all, which a folder match and an empty persona list both are.")
 });
 var PersonaIdParamSchema = object({ id: entryId.describe("Which persona.") });
 var PersonasListSchema = object({
@@ -20540,7 +17434,7 @@ var PersonaKitSchema = object({
 		description: string().describe("What it is for.")
 	})).describe("Skills only this persona's conversations can reach. A different question from what the agent knows generally, with a different answer.")
 });
-var PersonaPromptSchema = PersonaIdParamSchema.extend({ prompt: string().max(2e4).describe("What to tell this persona. Sending an empty one removes it entirely rather than storing a blank, so the persona falls back to the sandbox's own instructions.") });
+var PersonaPromptSchema = PersonaIdParamSchema.extend({ prompt: string().max(SYSTEM_PROMPT_MAX).describe("What to tell this persona. Sending an empty one removes it entirely rather than storing a blank, so the persona falls back to the sandbox's own instructions.") });
 var PersonaSkillSchema = PersonaIdParamSchema.extend(SkillDraftSchema.shape);
 var PersonaSkillNameSchema = PersonaIdParamSchema.extend({ name: SkillNameSchema.describe("Which skill.") });
 var PersonaSkillBodySchema = object({
@@ -20549,57 +17443,51 @@ var PersonaSkillBodySchema = object({
 	body: string().describe("The skill itself, in full.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/personas.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/personas.contract.js
 var personasContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/personas",
 		summary: "The characters an agent can wear",
 		description: "Each persona with the connected accounts it speaks for, what a conversation wearing it is allowed to do, and where it works."
-	}).output(PersonasListSchema),
-	save: oc.route({
+	}).meta({ guest: true }).output(PersonasListSchema),
+	save: procedure.route({
 		method: "POST",
 		path: "/personas",
 		summary: "Create or edit a persona",
 		description: "Writes the whole card; sending an id that exists edits it. Nothing is connected, installed or spent by saving one, because a persona only records a decision about accounts that already exist. It is stored as a file you can equally well edit by hand, which is why this writes the card whole rather than patching a field: a round trip through a screen should leave a change a reviewer recognises."
 	}).input(PersonaSchema).output(OkSchema$1),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "DELETE",
 		path: "/personas/{id}",
 		summary: "Delete a persona",
 		description: "Takes away the character, never the accounts: every login it named stays connected. Its own prompt and skills go with it, since a folder nothing can reach is worse than deleting what somebody just asked to delete. Anything still pointed at it goes quiet rather than falling back to speaking as everyone."
 	}).input(PersonaIdParamSchema).output(OkSchema$1),
-	route: oc.route({
-		method: "POST",
-		path: "/personas/route",
-		summary: "Which persona a new chat belongs to",
-		description: "Reads the message a chat has just been sent, and one line per persona, and names the card it belongs to, or none, along with the model that answered. Costs one small model call on the persona-routing list, and says so. Nothing is applied here: the chat that asked puts the card on, and only when the persona routing setting is on."
-	}).input(PersonaRouteAskSchema).output(PersonaRouteSchema),
-	kit: oc.route({
+	kit: procedure.route({
 		method: "GET",
 		path: "/personas/{id}/kit",
 		summary: "What one persona carries",
 		description: "The instructions this persona is given and the skills only its conversations can reach. A different question from what the agent knows generally, with a different answer."
 	}).input(PersonaIdParamSchema).output(PersonaKitSchema),
-	savePrompt: oc.route({
+	savePrompt: procedure.route({
 		method: "POST",
 		path: "/personas/{id}/prompt",
 		summary: "Write a persona's instructions",
 		description: "Sets what this persona is told. Saving an empty one removes it entirely rather than storing a blank, so the persona simply falls back to the sandbox's own instructions."
 	}).input(PersonaPromptSchema).output(OkSchema$1),
-	readSkill: oc.route({
+	readSkill: procedure.route({
 		method: "GET",
 		path: "/personas/{id}/skills/read",
 		summary: "Read one of a persona's skills",
 		description: "The full text of a single skill belonging to this persona."
 	}).input(PersonaSkillNameSchema).output(PersonaSkillBodySchema),
-	saveSkill: oc.route({
+	saveSkill: procedure.route({
 		method: "POST",
 		path: "/personas/{id}/skills",
 		summary: "Write one of a persona's skills",
 		description: "Creates or replaces a skill by name. There is nothing to switch on: a persona's skill is available exactly when that persona is worn, which is what belonging to it has to mean."
 	}).input(PersonaSkillSchema).output(OkSchema$1),
-	removeSkill: oc.route({
+	removeSkill: procedure.route({
 		method: "POST",
 		path: "/personas/{id}/skills/remove",
 		summary: "Delete one of a persona's skills",
@@ -20607,7 +17495,7 @@ var personasContract = {
 	}).input(PersonaSkillNameSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/git/git-history.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/git/git-history.js
 var ShaSchema = string().regex(/^[0-9a-f]{4,64}$/);
 var GitCommitSchema = object({
 	sha: string().describe("The commit, in full."),
@@ -20738,273 +17626,273 @@ var GitUndoSchema = RepoParamSchema.extend({
 	discardChanges: boolean().optional().describe("Also rewrite the files, rather than only moving the branch.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/git.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/git.contract.js
 var gitContract = {
-	changes: oc.route({
+	changes: procedure.route({
 		method: "GET",
 		path: "/git/changes",
 		summary: "Uncommitted work across every repo",
 		description: "The workspace's whole review set in one answer: every repo that has something uncommitted, and within it every changed file with its status and line counts. This is what the Changes panel draws, and it is the call to make when you want to know whether a workspace is clean without walking the repos yourself."
 	}).output(GitChangesSchema),
-	repos: oc.route({
+	repos: procedure.route({
 		method: "GET",
 		path: "/git/repos",
 		summary: "Every git repo in the workspace",
 		description: "The repos the daemon found under the workspace root, each with the id every other call in this group expects as its `{repo}` segment. The workspace root itself is always present as `root`."
 	}).output(GitReposSchema),
-	remoteRepos: oc.route({
+	remoteRepos: procedure.route({
 		method: "GET",
 		path: "/git/remote-repos",
 		summary: "Repos matched to their remotes",
 		description: "The same repo list, but with the forge host and `owner/name` each one's remote points at. Use it to recognise a workspace repo in a list of names that came from somewhere else, such as a set of pull requests. Costs a remote lookup per repo, which is why it is separate from the plain repo list."
 	}).output(GitRemoteReposSchema),
-	log: oc.route({
+	log: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/log",
 		summary: "Commit history for one repo",
 		description: "A page of commits on the current branch, newest first, each with its author, subject, timestamp and the refs pointing at it. Paginate with the cursor the answer hands back rather than by offset, so a commit landing mid-scroll does not shift the page under you."
 	}).input(GitLogQuerySchema).output(GitLogSchema),
-	commitDiff: oc.route({
+	commitDiff: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/commit-diff",
 		summary: "What one commit changed",
 		description: "The list of files a single commit touched, with per-file status and line counts but not the content. Fetch the content of any one of them with the commit file diff call, so a commit with a thousand files stays one cheap answer."
 	}).input(GitCommitDiffQuerySchema).output(GitCommitDiffSchema),
-	commitFileDiff: oc.route({
+	commitFileDiff: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/commit-file-diff",
 		summary: "One file's before and after at a commit",
 		description: "Both sides of a single file as of one commit: the content its parent had and the content that commit left. The daemon returns whole sides rather than a patch, so a caller can render the comparison however it likes."
 	}).input(GitCommitFileDiffQuerySchema).output(FileDiffSchema),
-	operation: oc.route({
+	operation: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/operation",
 		summary: "Whether a merge or rebase is halted mid-flight",
 		description: "Names the git operation the worktree is stuck inside, if any: a conflicted merge, an interrupted rebase, a half-applied cherry-pick. Check this first when another call refuses, because a halted worktree is the usual reason and the abort call is the way out."
 	}).input(RepoParamSchema).output(GitOperationStateSchema),
-	abort: oc.route({
+	abort: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/abort",
 		summary: "Abandon a halted merge or rebase",
 		description: "Runs git's own abort for whichever operation has the worktree halted, putting the repo back where it stood before the operation started. Nothing else clears that state."
 	}).input(RepoParamSchema).output(GitActionResultSchema),
-	undoable: oc.route({
+	undoable: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/undo",
 		summary: "What undoing the last action would do",
 		description: "Reads the branch's reflog to describe the move that undo would reverse, and hands back the commit it would land on. Pass that commit to the undo call as proof you looked, and an undo prepared against a view that has since moved is refused rather than landing somewhere unexamined."
 	}).input(RepoParamSchema).output(GitUndoStateSchema),
-	undo: oc.route({
+	undo: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/undo",
 		summary: "Move the branch back one step",
 		description: "Walks the current branch back to where it pointed before its last action. This moves the branch ref and leaves the working tree alone, which is the opposite of restoring a checkpoint. Requires the commit the matching read handed you."
 	}).input(GitUndoSchema).output(GitActionResultSchema),
-	stashes: oc.route({
+	stashes: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/stashes",
 		summary: "Everything set aside in the stash",
 		description: "The repo's stash entries, newest first, each with the message and the commit behind it. A stash entry is a commit, so it reads the same way a log entry does and its contents come back from the stash diff call."
 	}).input(RepoParamSchema).output(StashListSchema),
-	stashDiff: oc.route({
+	stashDiff: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/stash-diff",
 		summary: "What one stash entry holds",
 		description: "The files a single stash entry would bring back, with per-file status and line counts. The same shape a commit diff has, because a stash entry is a commit."
 	}).input(StashDiffQuerySchema).output(GitCommitDiffSchema),
-	stashPush: oc.route({
+	stashPush: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/stash",
 		summary: "Set the current changes aside",
 		description: "Moves the working tree's changes onto the stash and leaves a clean tree behind. Nothing is lost: the entry is a commit you can inspect, apply or drop afterwards."
 	}).input(StashPushSchema).output(GitActionResultSchema),
-	stashApply: oc.route({
+	stashApply: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/stash/apply",
 		summary: "Bring a stash entry back",
 		description: "Replays one stash entry onto the working tree. A conflict is reported in the answer rather than raised as a failure, because a conflicting apply is an ordinary outcome a screen has to render."
 	}).input(StashApplySchema).output(GitActionResultSchema),
-	stashDrop: oc.route({
+	stashDrop: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/stash/drop",
 		summary: "Discard a stash entry",
 		description: "Deletes one stash entry. This is the only unrecoverable call in the stash set, so the daemon takes a checkpoint of the workspace first."
 	}).input(StashRefParamSchema).output(OkSchema$1),
-	createBranch: oc.route({
+	createBranch: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/branch",
 		summary: "Start a branch at a commit",
 		description: "Points a new branch name at any commit, without moving HEAD. Use the checkout call if you also want to switch to it."
 	}).input(GitBranchCreateSchema).output(OkSchema$1),
-	createTag: oc.route({
+	createTag: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/tag",
 		summary: "Tag a commit",
 		description: "Puts a tag on any commit. Local only: pushing it to the remote is a separate call."
 	}).input(GitTagCreateSchema).output(OkSchema$1),
-	deleteTag: oc.route({
+	deleteTag: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/tag/delete",
 		summary: "Remove a tag",
 		description: "Deletes a tag locally. A tag already pushed stays on the remote until it is deleted there too."
 	}).input(GitTagDeleteSchema).output(OkSchema$1),
-	pushTag: oc.route({
+	pushTag: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/tag/push",
 		summary: "Send a tag to the remote",
 		description: "Pushes one tag to the repo's remote. Reports the outcome rather than failing, since a missing remote or missing credentials are ordinary answers here."
 	}).input(GitTagPushSchema).output(GitActionResultSchema),
-	checkout: oc.route({
+	checkout: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/checkout",
 		summary: "Switch to a branch or commit",
 		description: "Moves HEAD to a branch, tag or commit and reshapes the working tree to match. The daemon takes a checkpoint first, so an unexpected result is recoverable. Uncommitted work that would be overwritten is reported instead of being trampled."
 	}).input(GitCheckoutSchema).output(GitActionResultSchema),
-	cherryPick: oc.route({
+	cherryPick: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/cherry-pick",
 		summary: "Replay one commit onto this branch",
 		description: "Applies a single commit's changes on top of the current branch as a new commit. A conflict comes back in the answer, with the halted state readable from the operation call."
 	}).input(GitCommitActionSchema).output(GitActionResultSchema),
-	revert: oc.route({
+	revert: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/revert",
 		summary: "Undo a commit with a new commit",
 		description: "Adds a commit that reverses an earlier one, leaving the history intact. This is the safe way to take something back on a branch other people have pulled."
 	}).input(GitCommitActionSchema).output(GitActionResultSchema),
-	drop: oc.route({
+	drop: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/drop",
 		summary: "Remove a commit from history",
 		description: "Rewrites the branch so one commit is no longer in it. History changes, so this is for branches nobody else has pulled. A checkpoint is taken first."
 	}).input(GitCommitActionSchema).output(GitActionResultSchema),
-	merge: oc.route({
+	merge: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/merge",
 		summary: "Merge another branch in",
 		description: "Merges a branch or commit into the current one. Conflicts are reported in the answer and leave the worktree halted, which the operation call explains and the abort call clears."
 	}).input(GitCommitActionSchema).output(GitActionResultSchema),
-	rebase: oc.route({
+	rebase: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/rebase",
 		summary: "Replay this branch onto another",
 		description: "Moves the current branch's commits on top of a different base. History changes. Conflicts halt the rebase and are reported rather than raised, so the operation and abort calls are the way through."
 	}).input(GitCommitActionSchema).output(GitActionResultSchema),
-	reset: oc.route({
+	reset: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/reset",
 		summary: "Move the branch to a commit",
 		description: "Repoints the current branch at another commit, optionally reshaping the working tree to match. The destructive modes take a checkpoint first."
 	}).input(GitResetSchema).output(GitActionResultSchema),
-	fileDiff: oc.route({
+	fileDiff: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/file-diff",
 		summary: "One file's committed and working copies",
 		description: "Both sides of a file as it stands right now: what the last commit holds and what is on disk. This is what a review pane shows for an uncommitted change."
 	}).input(GitFileDiffQuerySchema).output(FileDiffSchema),
-	status: oc.route({
+	status: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/status",
 		summary: "One repo's branch and pending changes",
 		description: "The current branch, its sync position against the remote, and every staged, unstaged and untracked path. The single-repo counterpart to the workspace-wide changes call."
 	}).input(RepoParamSchema).output(GitStatusSchema),
-	commit: oc.route({
+	commit: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/commit",
 		summary: "Commit the pending changes",
 		description: "Records a commit with your message. It commits whatever is staged; add `stage` to stage something first — an empty object for everything pending, or a scope such as one side or one conversation's landed files. The answer carries the commit it created."
 	}).input(CommitSchema).output(CommitResultSchema),
-	discard: oc.route({
+	discard: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/discard",
 		summary: "Throw away pending changes",
 		description: "Restores files to their committed state and deletes untracked ones. Name paths or a scope to narrow it; with neither it throws away every uncommitted change in the repository. The daemon checkpoints the workspace first, so this is recoverable from the timeline."
 	}).input(DiscardSchema).output(OkSchema$1),
-	stage: oc.route({
+	stage: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/stage",
 		summary: "Mark changes for the next commit",
 		description: "Adds changes to the index: exactly the paths you name, everything a scope describes, or the whole repository when you name neither. Nothing on disk changes, so this is always safe and always reversible with the unstage call."
 	}).input(GitIndexMoveSchema).output(OkSchema$1),
-	unstage: oc.route({
+	unstage: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/unstage",
 		summary: "Take changes back out of the next commit",
 		description: "Removes changes from the index and leaves the files themselves untouched, on the same terms as staging. The exact reverse of it."
 	}).input(GitIndexMoveSchema).output(OkSchema$1),
-	branches: oc.route({
+	branches: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/branches",
 		summary: "Local branches and how far each has drifted",
 		description: "Every local branch with how many commits it sits ahead of and behind its remote counterpart, so a branch switcher can show sync state without a call per branch."
 	}).input(RepoParamSchema).output(GitBranchesSchema),
-	createBranchAt: oc.route({
+	createBranchAt: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/branches",
 		summary: "Create a branch from a starting point",
 		description: "Makes a branch at a named start point and optionally switches to it. The branch-switcher counterpart to creating a branch at a specific commit."
 	}).input(GitBranchCreateAtSchema).output(OkSchema$1),
-	deleteBranch: oc.route({
+	deleteBranch: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/branches/delete",
 		summary: "Delete a local branch",
 		description: "Removes a branch from the repo. Unmerged work is refused unless you ask for it to be forced, and the remote branch is untouched either way."
 	}).input(GitBranchDeleteSchema).output(OkSchema$1),
-	remote: oc.route({
+	remote: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/remote",
 		summary: "Sync position against the remote",
 		description: "How far the current branch sits ahead of and behind its remote, as of the last fetch, plus whether a remote and working credentials exist at all. This is a read of what the daemon already knows, not a network call, which is why fetching is a separate button."
 	}).input(RepoParamSchema).output(GitRemoteStateSchema),
-	fetch: oc.route({
+	fetch: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/fetch",
 		summary: "Refresh what the remote holds",
 		description: "Contacts the remote and updates the daemon's picture of it without touching your branch. Run this before trusting the sync position."
 	}).input(RepoParamSchema).output(GitActionResultSchema),
-	pull: oc.route({
+	pull: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/pull",
 		summary: "Bring remote commits down",
 		description: "Fetches and integrates the remote's commits into the current branch. A pull that cannot fast-forward is reported in the answer rather than raised, because that is an ordinary thing to be told."
 	}).input(RepoParamSchema).output(GitActionResultSchema),
-	push: oc.route({
+	push: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/push",
 		summary: "Start sending commits to the remote",
 		description: "Starts pushing the current branch, setting its upstream on first push, and answers at once: the push runs in a real terminal (it runs this repository's pre-push hook, which can be a whole suite), so watch it there and poll pushState for the verdict. A second start while one is going joins it rather than pushing twice."
 	}).input(PushSchema).output(OkSchema$1),
-	pushState: oc.route({
+	pushState: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/push",
 		summary: "How the push is going",
 		description: "The verdict, or the progress so far: where it is, the terminal it runs in, and for a push that did not go, git's last words and who refused it, the repository's own pre-push hook, the remote, or the transport. Idle when nothing has been started for this repository."
 	}).input(RepoParamSchema).output(PushRunSchema),
-	pushCancel: oc.route({
+	pushCancel: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/push/cancel",
 		summary: "Stop the push",
 		description: "Kills the run. It settles as cancelled; nothing that git had not already sent reaches the remote."
 	}).input(RepoParamSchema).output(OkSchema$1),
-	files: oc.route({
+	files: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/files",
 		summary: "Every tracked path in the repo",
 		description: "The flat list of files git tracks, which is what a file picker or a search box wants. Ignored and untracked files are not in it."
 	}).input(RepoParamSchema).output(GitFilesSchema),
-	readFile: oc.route({
+	readFile: procedure.route({
 		method: "GET",
 		path: "/git/{repo}/file",
 		summary: "Read a file from the repo",
 		description: "The contents of one file as it stands on disk. A path that climbs out of the repo is refused."
 	}).input(GitFileQuerySchema).output(GitFileSchema),
-	writeFile: oc.route({
+	writeFile: procedure.route({
 		method: "PUT",
 		path: "/git/{repo}/file",
 		summary: "Write a file into the repo",
 		description: "Replaces one file's contents, creating it and its parent folders if they are missing. Nothing is committed: the change shows up as pending work."
 	}).input(GitFileWriteSchema).output(OkSchema$1),
-	publishFile: oc.route({
+	publishFile: procedure.route({
 		method: "POST",
 		path: "/git/{repo}/publish-file",
 		summary: "Write, commit and push one file",
@@ -21012,27 +17900,27 @@ var gitContract = {
 	}).input(GitPublishFileSchema).output(GitPublishFileResultSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/history.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/history.contract.js
 var historyContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/history/snapshots",
 		summary: "Points you can go back to",
 		description: "The saved states of the whole workspace, taken automatically as work happens. This is the timeline behind undoing a change that was never committed."
 	}).output(SnapshotsListSchema),
-	diff: oc.route({
+	diff: procedure.route({
 		method: "GET",
 		path: "/history/diff",
 		summary: "What changed since a saved point",
 		description: "The files that differ between one saved point and the one before it, taking in everything that happened in between."
 	}).input(SnapshotIdSchema).output(SnapshotDiffSchema),
-	fileDiff: oc.route({
+	fileDiff: procedure.route({
 		method: "GET",
 		path: "/history/file-diff",
 		summary: "One file's before and after across a saved point",
 		description: "Both sides of a single file at one point in the timeline."
 	}).input(SnapshotFileDiffQuerySchema).output(FileDiffSchema),
-	restore: oc.route({
+	restore: procedure.route({
 		method: "POST",
 		path: "/history/restore",
 		summary: "Put the workspace back",
@@ -21040,46 +17928,108 @@ var historyContract = {
 	}).input(SnapshotIdSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/intentic.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/intentic.js
 var IntenticRunSchema = object({ args: array(string()) });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/intentic.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/intentic.contract.js
 var intenticContract = {
-	run: oc.route({
+	run: procedure.route({
 		method: "POST",
 		path: "/intentic",
 		summary: "Run an infrastructure command",
 		description: "Runs the sandbox's own command-line tool and streams its output as it arrives, so progress is visible rather than arriving all at once at the end. A failure surfaces once the stream closes."
-	}).input(IntenticRunSchema).output(eventIterator(IntenticLineSchema)),
-	apply: oc.route({
+	}).input(IntenticRunSchema).output(streamOf(IntenticLineSchema)),
+	apply: procedure.route({
 		method: "POST",
 		path: "/intentic/apply",
 		summary: "Bring the infrastructure into line",
 		description: "Starts the long reconcile that makes the running world match what was declared, and answers immediately. It takes minutes, so it runs in a terminal you attach to rather than on a held-open request."
 	}).output(OkSchema$1),
-	applyEvents: oc.route({
+	applyEvents: procedure.route({
 		method: "GET",
 		path: "/intentic/apply/events",
 		summary: "Follow the reconcile",
 		description: "The same progress the terminal shows, as structured events, kept on disk so a page refresh does not lose it. It replays from the start of the run and then follows live, closing when the run ends."
-	}).output(eventIterator(IntenticLineSchema))
+	}).meta({ stream: true }).output(streamOf(IntenticLineSchema))
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/inventory.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/inventory.js
+var InventoryProviderSchema = _enum([
+	"host",
+	"cloudflare",
+	"github",
+	"gitlab",
+	"stripe"
+]);
+var ServiceKindSchema = _enum([
+	"signoz",
+	"outline",
+	"paperless",
+	"openproject",
+	"invoiceninja",
+	"infisical"
+]);
+var InventoryValuesSchema = record(string(), union([string(), number$1()]));
+var inventoryName = string().min(1).max(60).regex(/^[a-zA-Z_][a-zA-Z0-9_]*$/);
+var BackendEntrySchema = object({
+	kind: literal("backend").describe("Something you already have: a machine, an account with a hosting provider."),
+	provider: InventoryProviderSchema.describe("Which provider it is with."),
+	name: string().describe("What to call it, which is also how everything else refers to it."),
+	values: InventoryValuesSchema.describe("Its settings. Anything secret is stored separately and referred to here, never written in.")
+});
+var ServiceEntrySchema = object({
+	kind: literal("service").describe("Something you want provisioned."),
+	service: ServiceKindSchema.describe("Which service."),
+	name: string().describe("What to call it."),
+	values: InventoryValuesSchema.describe("Its settings."),
+	on: string().describe("Which of your machines to put it on."),
+	expose: string().describe("How it should be reachable.")
+});
+var AppEntrySchema = object({
+	kind: literal("app").describe("An app of your own, built from source and deployed."),
+	name: string().describe("What to call it."),
+	values: InventoryValuesSchema.describe("Its settings, including the address it should answer on."),
+	on: string().describe("Which of your machines to put it on."),
+	expose: string().describe("How it should be reachable.")
+});
+var InventoryEntrySchema = discriminatedUnion("kind", [
+	BackendEntrySchema,
+	ServiceEntrySchema,
+	AppEntrySchema
+]);
+var AddInventoryInputSchema = discriminatedUnion("kind", [
+	BackendEntrySchema.extend({ name: inventoryName }),
+	ServiceEntrySchema.extend({ name: inventoryName }),
+	AppEntrySchema.extend({ name: inventoryName })
+]);
+var InventoryNameParamSchema = object({ name: string().describe("Which entry, by name.") });
+var InventoryListSchema = object({ entries: array(InventoryEntrySchema).describe("Everything declared: what you have, and what you want provisioned.") });
+object({
+	name: inventoryName,
+	user: string().min(1),
+	address: string().min(1),
+	port: number().default(22),
+	via: _enum(["direct", "cloudflared"]).default("cloudflared"),
+	sshKey: string().min(1),
+	cfToken: string().optional(),
+	cfZone: string().optional()
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/inventory.contract.js
 var inventoryContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/inventory",
 		summary: "Machines and services you have declared",
 		description: "What the deployment configuration says this setup owns and what it wants provisioned."
 	}).output(InventoryListSchema),
-	add: oc.route({
+	add: procedure.route({
 		method: "POST",
 		path: "/inventory",
 		summary: "Declare a machine or service",
 		description: "Writes the entry into the configuration file and commits it, exactly as an agent editing that file by hand would. Answers with the whole updated list, so a screen redraws from one response."
 	}).input(AddInventoryInputSchema).output(InventoryListSchema),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "DELETE",
 		path: "/inventory/{name}",
 		summary: "Undeclare a machine or service",
@@ -21087,33 +18037,33 @@ var inventoryContract = {
 	}).input(InventoryNameParamSchema).output(InventoryListSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/issues.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/issues.contract.js
 var issuesContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/issues",
 		summary: "Bugs your users have reported",
 		description: "Everything that has crashed or been written in, grouped so a crash that hit a thousand people is one row with a count."
 	}).output(IssuesListSchema),
-	status: oc.route({
+	status: procedure.route({
 		method: "POST",
 		path: "/issues/{id}/status",
 		summary: "File one away, or reopen it",
 		description: "Moves one issue between open, resolved and ignored. Resolving does not close anything upstream: it is your own inbox."
 	}).input(IssueStatusInputSchema).output(OkSchema$1),
-	investigate: oc.route({
+	investigate: procedure.route({
 		method: "POST",
 		path: "/issues/{id}/investigate",
 		summary: "Put an agent on it now",
 		description: "Starts a turn on this issue with the crash, its stack and what led up to it as the brief. Answers straight away and runs detached; the issue goes to 'being looked at'."
 	}).input(IssueIdParamSchema).output(OkSchema$1),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "DELETE",
 		path: "/issues/{id}",
 		summary: "Throw one away",
 		description: "Forgets an issue entirely. It will come back as new if it happens again, which is usually what you want."
 	}).input(IssueIdParamSchema).output(OkSchema$1),
-	installs: oc.route({
+	installs: procedure.route({
 		method: "GET",
 		path: "/issues/installs/{automationId}",
 		summary: "Which sites have loaded the reporter",
@@ -21158,21 +18108,28 @@ var PresenceReportSchema = object({
 	path: string().optional().describe("Which file they are looking at. Sent whole rather than merged: leaving a field out clears it, so a tab that closes a file drops the path in the same report.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/logs.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/logs.contract.js
+var logRoute = procedure.meta({
+	floor: "maintainer",
+	control: "never"
+});
 var logsContract = {
-	list: oc.route({
+	list: logRoute.route({
 		method: "GET",
 		path: "/logs",
 		summary: "Logs the sandbox keeps",
 		description: "Every log file the daemon owns: captured terminal output, command runs, and the daemon's own log. Read-only, because only the sandbox writes them."
 	}).output(LogsListSchema),
-	read: oc.route({
+	read: logRoute.route({
 		method: "GET",
 		path: "/logs/file",
 		summary: "Read part of a log",
 		description: "A window of one log file's text. A window rather than the whole thing, because a busy log outgrows any single answer."
 	}).input(LogReadQuerySchema).output(LogReadSchema),
-	report: oc.route({
+	report: procedure.meta({
+		floor: "viewer",
+		control: "never"
+	}).route({
 		method: "POST",
 		path: "/logs/client",
 		summary: "Report what the browser saw",
@@ -21180,39 +18137,39 @@ var logsContract = {
 	}).input(ClientDiagnosticsReportSchema).output(ClientDiagnosticsAcceptedSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/loops.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/loops.contract.js
 var loopsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/loops",
 		summary: "Every loop that has run",
 		description: "The loops this workspace has run, newest first, kept after they end. Why it stopped on the fourth round is the question a loop gets read for, and the round-by-round history is the answer."
 	}).output(LoopsListSchema),
-	start: oc.route({
+	start: procedure.route({
 		method: "POST",
 		path: "/loops",
 		summary: "Run a conversation until it is done",
 		description: "Starts repeating a conversation towards a goal and answers straight away with the loop as recorded; the work carries on without you. The conversation need not exist yet, so run this until it passes can be the first thing you ever say to a new agent. A conversation already looping is refused."
 	}).input(LoopSchema).output(LoopRecordSchema),
-	stop: oc.route({
+	stop: procedure.route({
 		method: "POST",
 		path: "/loops/{conversationId}/stop",
 		summary: "Make this round the last",
 		description: "Means do not start another round, not stop what is running. Somebody watching the sixth round do good work can say this is the last one without throwing that work away. To cut the current round off as well, stop the conversation too."
 	}).input(LoopIdParamSchema).output(OkSchema$1),
-	designs: oc.route({
+	designs: procedure.route({
 		method: "GET",
 		path: "/loops/designs",
 		summary: "Saved loop designs",
 		description: "Loops somebody authored once and can point at a different job each time. A saved loop is the same loop with its goal left blank until you type one, not a different feature."
 	}).output(LoopDesignsListSchema),
-	saveDesign: oc.route({
+	saveDesign: procedure.route({
 		method: "POST",
 		path: "/loops/designs",
 		summary: "Create or replace a saved loop",
 		description: "Say which of the two you mean, so a name that happens to collide cannot silently overwrite somebody's work. A design that could never finish, with nothing to produce and nothing to check, is refused in the same words an ad-hoc loop would be: catching that at save time is the whole advantage of saving."
 	}).input(LoopDesignSaveSchema).output(LoopDesignSchema),
-	removeDesign: oc.route({
+	removeDesign: procedure.route({
 		method: "DELETE",
 		path: "/loops/designs/{id}",
 		summary: "Delete a saved loop",
@@ -21220,7 +18177,7 @@ var loopsContract = {
 	}).input(LoopDesignIdParamSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/panels.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/panels.js
 var PanelLaunchSchema = _enum([
 	"launching",
 	"installing",
@@ -21251,27 +18208,27 @@ var PanelsListSchema = object({ panels: array(object({
 	desiredState: boolean().describe("That declaration has been resolved at least once."),
 	directoryUi: boolean().describe("It carries a small interface of its own."),
 	monorepo: boolean().describe("It holds several packages."),
-	vitest: boolean().describe("It has tests that can be run."),
+	tests: boolean().describe("It has tests that can be run."),
 	userStories: boolean().describe("It carries stories an agent could test the running app against. The one fact here that says nothing about the language."),
 	docs: boolean().describe("It carries generated architecture documentation.")
 })).describe("One entry per repository, worked out in a single pass so nothing has to walk the workspace file by file.") });
 var PanelRepoParamSchema = object({ repo: string().describe("Which repository.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/panels.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/panels.contract.js
 var panelsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/panels",
 		summary: "Repos you can run and preview",
 		description: "Every repo with whether its dev server is up and what the sandbox worked out about its contents."
 	}).output(PanelsListSchema),
-	start: oc.route({
+	start: procedure.route({
 		method: "POST",
 		path: "/panels/{repo}/start",
 		summary: "Start a repo's dev server",
 		description: "Brings the repo's own runnable app up in a terminal you can attach to, so its preview address starts answering."
 	}).input(PanelRepoParamSchema).output(OkSchema$1),
-	stop: oc.route({
+	stop: procedure.route({
 		method: "POST",
 		path: "/panels/{repo}/stop",
 		summary: "Stop a repo's dev server",
@@ -21298,27 +18255,32 @@ var PortsListSchema = object({ ports: array(object({
 	command: string().optional().describe("The command behind it, as it was run. Absent only when nothing could be attributed at all."),
 	cwd: string().optional().describe("Where it is running from, which is how a port gets attributed to a repository."),
 	session: string().optional().describe("The terminal it came from, to watch it in or stop it from. Absent when nothing in its ancestry is one, which is the honest \"you cannot reach this from here\"."),
+	job: object({
+		conversationId: string().describe("The conversation whose turn left it running."),
+		jobId: string().describe("The job, as that conversation's card names it; stopping it stops this port."),
+		label: string().describe("What the job is, in the agent's own words when it gave any.")
+	}).optional().describe("The background job an agent left running for you on this port, when that is what answers here."),
 	forwarded: boolean().describe("Whether it is currently reachable from outside."),
 	previewUrl: string().optional().describe("Where to open it. Present only while forwarded, and only on a sandbox that has an outside address.")
 })).describe("Everything listening inside the sandbox right now, read fresh each time rather than from a register the sandbox keeps.") });
 var PortParamSchema = object({ port: number$1().int().min(1).max(65535).describe("Which port.") });
 var PortForwardResultSchema = object({ previewUrl: string().optional().describe("Where it can now be reached. Absent on a sandbox with no outside address, where the mapping exists but has no public name.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/ports.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/ports.contract.js
 var portsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/ports",
 		summary: "What is listening inside the sandbox",
 		description: "Every port something is answering on, and whether each one is reachable from outside."
-	}).output(PortsListSchema),
-	forward: oc.route({
+	}).meta({ sync: "poll" }).output(PortsListSchema),
+	forward: procedure.route({
 		method: "POST",
 		path: "/ports/forward",
 		summary: "Make a port reachable",
 		description: "Gives one port an address on the outside. Asking twice is harmless: the second call hands back the address the first one made."
 	}).input(PortParamSchema).output(PortForwardResultSchema),
-	unforward: oc.route({
+	unforward: procedure.route({
 		method: "POST",
 		path: "/ports/unforward",
 		summary: "Stop exposing a port",
@@ -21326,7 +18288,7 @@ var portsContract = {
 	}).input(PortParamSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/public.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/public.js
 var PublicFileSchema = object({
 	path: string().describe("Where it sits inside the outbox."),
 	size: number$1().describe("Size in bytes."),
@@ -21345,21 +18307,21 @@ var PublishResultSchema = object({
 	url: string().optional().describe("Its public address. Absent on a sandbox with nowhere to publish to.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/public.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/public.contract.js
 var publicContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/public",
 		summary: "What is published to the internet",
 		description: "Everything currently in the outbox and the address it answers on. There is no call to read a published file back: it is served openly to anyone with the link, which is the entire point of having put it there."
 	}).output(PublicListSchema),
-	publish: oc.route({
+	publish: procedure.route({
 		method: "POST",
 		path: "/public/publish",
 		summary: "Put a file on the internet",
 		description: "Copies a workspace file or folder into the outbox, where it is served to anyone with the link and no sign-in. Answers with the address."
 	}).input(PublishSchema).output(PublishResultSchema),
-	unpublish: oc.route({
+	unpublish: procedure.route({
 		method: "POST",
 		path: "/public/unpublish",
 		summary: "Take something off the internet",
@@ -21367,31 +18329,32 @@ var publicContract = {
 	}).input(UnpublishSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/prepush.contract.js
-var PrepushRunSchema = object({ repos: array(string().min(1)).max(100).default([]).describe("The repositories going out, by workspace id. Empty runs only what stands for every push, whichever repository it is.") }).prefault({});
-var prepushContract = {
-	state: oc.route({
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/netdisk.contract.js
+var netdiskRoute = procedure.meta({ agent: true });
+var netdiskContract = {
+	list: netdiskRoute.route({
 		method: "GET",
-		path: "/prepush/state",
-		summary: "How the pre-push check is going",
-		description: "The verdict, or the progress so far. Nothing is addressed by id here, because there is one working tree and so exactly one check."
-	}).output(CommandRunSchema),
-	run: oc.route({
+		path: "/netdisk",
+		summary: "Configured disks and which are mounted",
+		description: "Every stored network disk with its live mount state, read back from the kernel's mount table rather than from memory, so a disk unmounted from a shell and one unmounted from a screen look the same here."
+	}).output(NetdiskListSchema),
+	mount: netdiskRoute.route({
 		method: "POST",
-		path: "/prepush/run",
-		summary: "Run the checks before pushing",
-		description: "Starts the suite the workspace runs before anything leaves the machine, and answers immediately. A suite takes minutes, and a request held open that long dies at the first proxy. It runs in a real terminal, so watch it there and poll for the verdict. Name the repositories going out, and each one's own checks run in its own directory."
-	}).input(PrepushRunSchema).output(OkSchema$1),
-	cancel: oc.route({
+		path: "/netdisk/{id}/mount",
+		summary: "Mount a disk",
+		description: "Mounts a stored disk at its place under /mnt/netdisk, streaming progress. Mounting one that is already mounted simply says so. A read-only disk is mounted read-only; the kernel refuses writes to it."
+	}).input(NetdiskIdParamSchema).output(streamOf(IntenticLineSchema)),
+	unmount: netdiskRoute.route({
 		method: "POST",
-		path: "/prepush/cancel",
-		summary: "Stop the pre-push check",
-		description: "Kills the run. It settles as cancelled and the push it was gating does not go."
-	}).output(OkSchema$1)
+		path: "/netdisk/{id}/unmount",
+		summary: "Unmount a disk",
+		description: "Takes the disk down. One that was already unmounted is fine: the promise is that it is not mounted afterwards."
+	}).input(NetdiskIdParamSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/providers.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/providers.contract.js
 var RunnableProvidersSchema = object({
+	native: array(NativeProviderParamSchema.shape.provider).describe("Native providers with a working credential here, by id; never what holds it."),
 	agents: array(object({
 		id: string(),
 		label: string()
@@ -21403,18 +18366,18 @@ var RunnableProvidersSchema = object({
 	})).describe("Model endpoints, already prefixed `endpoint/`, including the daemon-provisioned free trial.")
 });
 var providersContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/providers",
 		summary: "Providers a chat can run on here",
 		description: "The installed ACP agents and model endpoints, which are the providers this sandbox adds to the fixed native list. A read for anyone who may watch or drive a turn: it names what a message can be addressed to, not what credential stands behind it."
-	}).output(RunnableProvidersSchema),
-	models: oc.route({
+	}).meta({ guest: true }).output(RunnableProvidersSchema),
+	models: procedure.route({
 		method: "GET",
 		path: "/providers/{provider}/models",
 		summary: "Models one provider offers",
 		description: "Every model this provider serves and which one it defaults to. Never empty: it is discovered live with a stored list behind it. The order is the provider's own preference and is not rearranged here."
-	}).input(NativeProviderParamSchema).output(ModelsSchema)
+	}).meta({ guest: true }).input(NativeProviderParamSchema).output(ModelsSchema)
 };
 var PushChannelSchema = discriminatedUnion("kind", [object({
 	kind: literal("webpush").describe("A browser, which the sandbox can reach directly and encrypt end to end."),
@@ -21434,7 +18397,8 @@ object({
 	body: string().describe("The line under it. Push services cap the whole payload at a few kilobytes, which is why nothing here carries a transcript or a diff: a notification is a pointer back, not a delivery."),
 	url: string().optional().describe("Where tapping it goes. An existing tab is focused rather than a new one opened."),
 	tag: string().optional().describe("Collapses repeats: a second notification with the same tag replaces the first instead of stacking beside it."),
-	requireInteraction: boolean().optional().describe("Keep it on screen until it is dismissed. Used when the agent is waiting for you, where one that fades away is a question that went unanswered in silence.")
+	requireInteraction: boolean().optional().describe("Keep it on screen until it is dismissed. Used when the agent is waiting for you, where one that fades away is a question that went unanswered in silence."),
+	silent: boolean().optional().describe("Arrive without sound or vibration. Used for the replacement that says an ask stopped waiting: it takes the waiting one's place under the same tag, and is news nobody has to act on.")
 });
 var PushConfigSchema = object({
 	publicKey: string().describe("The key a browser needs in order to subscribe. Native apps ignore it."),
@@ -21444,49 +18408,231 @@ var PushChannelIdSchema = object({ id: string().min(1).describe("Which device: a
 var PushConfigQuerySchema = object({ id: string().min(1).optional().describe("Which device is asking. Without it the answer can only speak for the sandbox as a whole, which is rarely the question.") });
 var PushTestSchema = object({ delivered: number$1().int().nonnegative().describe("How many devices actually accepted it. A count rather than a yes, because this button exists to prove a chain nobody can inspect, and the sandbox having accepted the request is not the question being asked.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/push.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/push.contract.js
+var pushRoute = procedure.meta({ control: "never" });
 var pushContract = {
-	config: oc.route({
+	config: pushRoute.route({
 		method: "GET",
 		path: "/push/config",
 		summary: "What a device needs to subscribe",
 		description: "The public key and settings a browser or app needs before it can register for notifications from this sandbox."
 	}).input(PushConfigQuerySchema).output(PushConfigSchema),
-	subscribe: oc.route({
+	subscribe: pushRoute.route({
 		method: "POST",
 		path: "/push/subscribe",
 		summary: "Send notifications to this device",
 		description: "Registers one device. The sandbox only interrupts you on the three moments where attention is genuinely wanted: a turn has finished, the agent is stuck on a question, and something is waiting for approval."
-	}).input(PushChannelSchema).output(OkSchema$1),
-	unsubscribe: oc.route({
+	}).meta({ floor: "collaborator" }).input(PushChannelSchema).output(OkSchema$1),
+	unsubscribe: pushRoute.route({
 		method: "POST",
 		path: "/push/unsubscribe",
 		summary: "Stop notifying a device",
 		description: "Removes one registered device. Others keep receiving."
-	}).input(PushChannelIdSchema).output(OkSchema$1),
-	test: oc.route({
+	}).meta({ floor: "collaborator" }).input(PushChannelIdSchema).output(OkSchema$1),
+	test: pushRoute.route({
 		method: "POST",
 		path: "/push/test",
 		summary: "Send a test notification",
 		description: "Proves the whole chain end to end. Worth having, because there are four separate places a notification can be lost that nobody can inspect from the outside: the device's permission, its registration, the sandbox's key, and the delivery service."
-	}).output(PushTestSchema)
+	}).meta({ floor: "collaborator" }).output(PushTestSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/safety.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/privacy.js
+var PERSONAL_DATA_CLASSES = [
+	"person-name",
+	"national-id",
+	"tax-id",
+	"identity-document",
+	"bank-account",
+	"payment-card",
+	"email",
+	"phone",
+	"address"
+];
+var PersonalDataClassSchema = _enum(PERSONAL_DATA_CLASSES);
+var PrivacyShieldModeSchema = _enum([
+	"off",
+	"watch",
+	"on"
+]);
+var PrivacyImagesSchema = _enum(["mask", "allow"]);
+var PrivacyNamesSchema = _enum(["dictionary", "model"]);
+var PRIVACY_ALLOW_MAX = 1e3;
+var PrivacyConversationTrustSchema = object({
+	conversationId: string().min(1).max(200),
+	provider: string().min(1).max(200).describe("Provider id, as the trusted list names it.")
+});
+var PrivacyShieldPolicySchema = object({
+	mode: PrivacyShieldModeSchema.default("off").describe("Whether the shield is off, only watching, or masking."),
+	trusted: array(string().min(1).max(200)).max(200).default([]).describe("Providers that may read personal data as it is, by provider id (`claude`, `codex`, `endpoint/<id>`). A local model is always trusted."),
+	classes: array(PersonalDataClassSchema).default([...PERSONAL_DATA_CLASSES]).describe("Which kinds of personal data are looked for."),
+	images: PrivacyImagesSchema.default("mask").describe("What an image bound for an untrusted provider becomes."),
+	names: PrivacyNamesSchema.default("dictionary").describe("How names are found."),
+	allow: array(string().min(1).max(200)).max(PRIVACY_ALLOW_MAX).default([]).describe("Values never masked: your own company, a public figure, a word the detector keeps mistaking for a name."),
+	conversations: array(PrivacyConversationTrustSchema).max(200).default([]).describe("Providers that may read one conversation's personal data as it is, each granted from that conversation; oldest first.")
+});
+PrivacyShieldPolicySchema.parse({});
+var PrivacyProviderSchema = object({
+	id: string().describe("Provider id, as the trusted list names it."),
+	label: string(),
+	shieldable: boolean().describe("Its runtime can be put behind the gateway; one that cannot is refused while the shield is on, unless trusted."),
+	local: boolean().describe("It runs on this machine, so it is trusted whatever the list says.")
+});
+var PrivacyShieldStatusSchema = object({
+	policy: PrivacyShieldPolicySchema,
+	known: number$1().int().describe("Values taught from your datasets, matched exactly wherever they appear."),
+	tokens: number$1().int().describe("Values the shield has given a token so far."),
+	readers: object({
+		ocr: boolean().describe("The local text reader (PaddleOCR) that finds personal data in images is installed."),
+		model: boolean().describe("A local named-entity model for names is installed.")
+	}),
+	providers: array(PrivacyProviderSchema)
+});
+var PrivacyLedgerActionSchema = _enum([
+	"masked",
+	"watched",
+	"passed",
+	"refused"
+]);
+var PrivacyLedgerEntrySchema = object({
+	at: string().describe("When, as an ISO timestamp."),
+	conversationId: string().optional(),
+	provider: string(),
+	trusted: boolean(),
+	action: PrivacyLedgerActionSchema,
+	counts: partialRecord(PersonalDataClassSchema, number$1().int()).describe("How many of each kind were found in what this request added."),
+	images: number$1().int().describe("Images the shield changed: personal data painted over, or held back when they could not be read."),
+	documents: number$1().int().describe("Documents replaced by their masked text."),
+	protocol: string().describe("Which wire format the request spoke."),
+	detail: string().optional().describe("Why it was refused, when it was.")
+});
+var PRIVACY_KNOWN_BATCH_MAX = 5e4;
+var PrivacyKnownValueSchema = object({
+	value: string().min(2).max(500),
+	class: PersonalDataClassSchema
+});
+var PrivacyKnownSourceSchema = object({
+	source: string().describe("Where the values came from, as whoever taught them named it."),
+	count: number$1().int(),
+	at: string().describe("When they were last taught.")
+});
+var PrivacyNameListSchema = object({
+	id: string().describe("Stable id of the list."),
+	kind: _enum([
+		"first-name",
+		"surname",
+		"ambiguous",
+		"title",
+		"never"
+	]).describe("What a word on it says about a name."),
+	languages: array(_enum(["pl", "en"])).describe("The languages its words come from."),
+	count: number$1().int().describe("How many words it holds."),
+	matching: _enum(["inflected", "as-written"]).describe("inflected: matched in every grammatical form of a listed word; as-written: matched only exactly as listed."),
+	source: string().describe("Where the words come from: the register or dataset, or that they were written by hand."),
+	url: string().optional().describe("The source's page, where it has one."),
+	license: string().optional()
+});
+var PrivacyNameWordSchema = object({
+	word: string(),
+	firstName: boolean().describe("A listed first name, in this form or as an inflection of one."),
+	surname: boolean().describe("A listed surname, in this form or as an inflection of one."),
+	surnameForm: boolean().describe("Shaped like a Polish surname (-ski, -cki, -wicz…), listed or not."),
+	ambiguous: boolean().describe("Also an ordinary word, so found only beside other evidence (a surname, a title)."),
+	never: boolean().describe("Never taken as part of a name (a title, an institution, a function word).")
+});
+var PrivacyNameLookupSchema = object({
+	text: string().describe("The query as a name is written: each word capitalized."),
+	found: boolean().describe("Whether the dictionary alone masks it as a name, written so on its own."),
+	words: array(PrivacyNameWordSchema)
+});
+var PrivacyDictionarySchema = object({
+	lists: array(PrivacyNameListSchema),
+	totals: object({
+		firstNames: number$1().int(),
+		surnames: number$1().int()
+	}).describe("Distinct words across the first-name lists, and across the surname lists."),
+	matches: array(object({
+		word: string(),
+		lists: array(string()).describe("Ids of the lists holding it.")
+	})),
+	lookup: PrivacyNameLookupSchema.optional()
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/privacy.contract.js
+var privacyContract = {
+	status: procedure.route({
+		method: "GET",
+		path: "/privacy/shield",
+		summary: "The privacy shield and what it covers",
+		description: "Whether personal data is kept from untrusted model providers, which providers are trusted, which local readers are installed, and how many values it has learned."
+	}).meta({ agent: true }).output(PrivacyShieldStatusSchema),
+	setPolicy: procedure.route({
+		method: "POST",
+		path: "/privacy/shield",
+		summary: "Change the privacy shield",
+		description: "Replaces the policy whole. Turning the shield on puts every turn that starts from then on, whose runtime can be shielded, behind the gateway, and refuses the turns that cannot be shielded on an untrusted provider; a turn already running keeps the route it started with. A change to what is masked or trusted holds from the next model request."
+	}).meta({
+		floor: "owner",
+		control: "never",
+		panel: false
+	}).input(PrivacyShieldPolicySchema).output(OkSchema$1),
+	log: procedure.route({
+		method: "GET",
+		path: "/privacy/log",
+		summary: "What the privacy shield did lately",
+		description: "Each model request the gateway handled: which provider, whether it was trusted, and how many of each kind of personal data it found. Never the values."
+	}).output(array(PrivacyLedgerEntrySchema)),
+	dictionary: procedure.route({
+		method: "GET",
+		path: "/privacy/dictionary",
+		summary: "The name lists the shield finds names by",
+		description: "Every list the dictionary holds (first names, surnames, words that are names only beside other evidence, titles), how many words each has and where they come from. With a query, what the dictionary makes of it as a name, and for one word the listed words starting with it."
+	}).meta({ agent: true }).input(object({ query: string().max(100).optional().describe("A word, the start of one, or a full name.") })).output(PrivacyDictionarySchema),
+	sources: procedure.route({
+		method: "GET",
+		path: "/privacy/known",
+		summary: "The datasets taught to the shield",
+		description: "Each source values were taught from, and how many. The values themselves are never sent back."
+	}).meta({ agent: true }).output(array(PrivacyKnownSourceSchema)),
+	learn: procedure.route({
+		method: "POST",
+		path: "/privacy/known",
+		summary: "Teach the shield a dataset's values",
+		description: "Each value is masked wherever it appears from now on, in every form it is written, whether or not the detectors would have found it. Teaching only ever masks more, so the agent may do it."
+	}).meta({ agent: true }).input(object({
+		source: string().min(1).max(200).describe("Where the values came from: a file and its column, a table."),
+		values: array(PrivacyKnownValueSchema).max(PRIVACY_KNOWN_BATCH_MAX)
+	})).output(object({
+		added: number$1().int(),
+		known: number$1().int()
+	})),
+	forget: procedure.route({
+		method: "POST",
+		path: "/privacy/known/forget",
+		summary: "Forget a taught dataset",
+		description: "Stops matching the values taught from one source. Tokens already given to them still resolve, so earlier conversations keep reading right."
+	}).meta({
+		floor: "owner",
+		control: "never",
+		panel: false
+	}).input(object({ source: string().min(1).max(200) })).output(object({ forgotten: number$1().int() }))
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/safety.contract.js
 var safetyContract = {
-	policy: oc.route({
+	policy: procedure.route({
 		method: "GET",
 		path: "/safety/policy",
 		summary: "The safety policy this sandbox is judged against",
 		description: "The document that decides when an agent stops to ask you before running something. Prose, not settings: it is read by the model that judges each command. When nobody has written one, this is the text the product ships with, and it describes the behaviour a fresh sandbox already has."
 	}).output(SafetyPolicySchema),
-	setPolicy: oc.route({
+	setPolicy: procedure.route({
 		method: "POST",
 		path: "/safety/policy",
 		summary: "Rewrite the safety policy",
 		description: "Replaces the document whole. Nothing in it can widen what the sandbox is structurally allowed to do: it decides which of the things an agent may already do are worth interrupting you about."
 	}).input(object({ text: string().describe("The policy, as you want it written.") })).output(OkSchema$1),
-	log: oc.route({
+	log: procedure.route({
 		method: "GET",
 		path: "/safety/log",
 		summary: "Recent safety verdicts",
@@ -21494,65 +18640,147 @@ var safetyContract = {
 	}).output(array(SafetyLogEntrySchema))
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/secrets.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/needs.contract.js
+var agentDoor = procedure.meta({
+	agent: true,
+	control: "never"
+});
+var answerRoute = procedure.meta({
+	floor: "maintainer",
+	control: "never"
+});
+var needsContract = {
+	ask: agentDoor.route({
+		method: "POST",
+		path: "/needs/ask",
+		summary: "Ask a person for something the task needs",
+		description: "Raises a need in the conversation the calling shell belongs to and holds the call up to `wait` seconds for an answer. Answers `met` when it is usable now (or already was), `open` when it is still waiting, and `refused` when nothing was raised or a person declined. An open need's answer reaches the conversation by itself."
+	}).meta({ stream: true }).input(NeedRaiseSchema).output(NeedRaisedSchema),
+	mine: agentDoor.route({
+		method: "GET",
+		path: "/needs/mine",
+		summary: "This conversation's needs",
+		description: "Every need the calling shell's conversation raised, newest first, open or answered."
+	}).output(NeedsListSchema),
+	withdraw: agentDoor.route({
+		method: "POST",
+		path: "/needs/{id}/withdraw",
+		summary: "Withdraw a need",
+		description: "Closes one of this conversation's open needs because the task no longer needs it. Its card says so."
+	}).input(NeedIdParamSchema).output(NeedSchema),
+	list: procedure.route({
+		method: "GET",
+		path: "/needs",
+		summary: "What agents are waiting on people for",
+		description: "Needs across the sandbox, or one conversation's, newest first. Never a secret's value."
+	}).input(NeedsQuerySchema).output(NeedsListSchema),
+	answer: answerRoute.route({
+		method: "POST",
+		path: "/needs/{id}/answer",
+		summary: "Answer a need",
+		description: "Declines it, or says yes the way its card offered: accept a connection being set up, apply a change, grant for this conversation or the persona, release a gated credential, approve an environment proposal. A release is refused from anyone the gate does not name."
+	}).input(NeedAnswerInputSchema).output(NeedSchema),
+	provideSecret: answerRoute.route({
+		method: "POST",
+		path: "/needs/{id}/secret",
+		summary: "Give a secret a need asked for",
+		description: "Stores the value under the name the need asked for and meets it. The value goes to the sandbox's secret store and nowhere else: not the answer, not the transcript, not a log."
+	}).meta({ panel: false }).input(NeedSecretInputSchema).output(NeedSchema),
+	grants: answerRoute.route({
+		method: "GET",
+		path: "/needs/grants",
+		summary: "The yeses still standing",
+		description: "What people allowed conversations beyond their persona or area, and the gated credentials released to them, by conversation. Names only, never a value."
+	}).output(StandingGrantsSchema),
+	revokeGrant: answerRoute.route({
+		method: "POST",
+		path: "/needs/grants/revoke",
+		summary: "Take a yes back",
+		description: "Takes back one grant or one release. The conversation's next turn runs without it; a turn already running keeps what it mounted."
+	}).input(GrantRevokeSchema).output(OkSchema$1)
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/secrets.contract.js
+var secretRoute = procedure.meta({
+	floor: "maintainer",
+	control: "never"
+});
 var secretsContract = {
-	set: oc.route({
+	set: secretRoute.route({
 		method: "POST",
 		path: "/secrets",
 		summary: "Store a secret",
-		description: "Writes one name and value into the sandbox's own store, where running processes pick it up without a restart. Refused until the sandbox has somewhere to keep them."
+		description: "Writes one name and value where the agent's references resolve it, without a restart: desired-state/.env once DevOps is active, the sandbox's own secret store before that."
 	}).input(SecretSetSchema).output(OkSchema$1),
-	list: oc.route({
+	generate: secretRoute.route({
+		method: "POST",
+		path: "/secrets/generate",
+		summary: "Make and store a random secret",
+		description: "Makes a random value and stores it under a new name, where `set` would have put it, for a secret nobody has to find or paste (a session key, a signing secret, a password the task sets up itself). Answers the name and its length, never the value. Refused for a name something here already holds."
+	}).meta({ agent: true }).input(SecretGenerateSchema).output(SecretGeneratedSchema),
+	list: secretRoute.route({
 		method: "GET",
 		path: "/secrets",
 		summary: "Names of the stored secrets",
 		description: "Which secrets exist here. Names only, never values."
 	}).output(SecretKeysSchema),
-	remove: oc.route({
+	remove: secretRoute.route({
 		method: "DELETE",
 		path: "/secrets/{key}",
 		summary: "Delete a secret",
 		description: "Removes one by name."
 	}).input(SecretKeyParamSchema).output(OkSchema$1),
-	inventory: oc.route({
+	inventory: secretRoute.route({
 		method: "GET",
 		path: "/secrets/inventory",
 		summary: "Every secret this sandbox holds, from everywhere",
 		description: "One view across all the places secrets live here: what exists, where it came from and whether it is working. Never any values. This one always answers, even before there is a store to write to."
 	}).output(SecretInventorySchema),
-	reveal: oc.route({
+	reveal: secretRoute.route({
 		method: "POST",
 		path: "/secrets/reveal",
 		summary: "Show one secret's value",
 		description: "The only call that hands a value back, and it is for the owner alone. Sent as a body rather than in the address, so the name never ends up in a log or a browser's history."
-	}).input(SecretKeyParamSchema).output(SecretRevealSchema),
-	gates: oc.route({
+	}).meta({ panel: false }).input(SecretKeyParamSchema).output(SecretRevealSchema),
+	gates: secretRoute.route({
 		method: "GET",
 		path: "/secrets/gates",
 		summary: "Which credentials need somebody's approval",
 		description: "What is gated and who may release it. Names and addresses only, never values, and the agent may read it too: knowing a credential needs Bob is what stops it concluding the account is simply not connected."
-	}).output(CredentialGatesSchema),
-	setGate: oc.route({
+	}).meta({ agent: true }).output(CredentialGatesSchema),
+	setGate: secretRoute.route({
 		method: "PUT",
 		path: "/secrets/gates/{subject}",
 		summary: "Put a credential behind named approvers",
 		description: "Names exactly who may release one secret or one connected account, and how far a single release goes. The owner's call alone. A signed-in browser or a mounted server cannot be released for one use, so those are always for the rest of the conversation."
 	}).input(CredentialGateSchema).output(OkSchema$1),
-	removeGate: oc.route({
+	removeGate: secretRoute.route({
 		method: "DELETE",
 		path: "/secrets/gates/{subject}",
 		summary: "Stop requiring approval for a credential",
 		description: "Removes one gate, so the agent can use that credential the way it uses any other. The owner's call alone."
-	}).input(CredentialGateSubjectParamSchema).output(OkSchema$1),
-	request: oc.route({
+	}).input(CredentialGuardSubjectParamSchema).output(OkSchema$1),
+	hosts: secretRoute.route({
+		method: "GET",
+		path: "/secrets/hosts",
+		summary: "Which secrets are host-guarded, and where they may go",
+		description: "Every secret and connected account whose host guard is set, on or off, and its hosts. With the guard on, a use aimed off the list, or anywhere a command's text does not show, asks a person first, whatever the safety judge says. Names and hosts only, never values."
+	}).meta({ agent: true }).output(SecretHostGuardsSchema),
+	setHosts: secretRoute.route({
+		method: "PUT",
+		path: "/secrets/hosts/{subject}",
+		summary: "Turn a secret's host guard on or off, and set its hosts",
+		description: "Replaces one secret's host guard. Anybody who may use secrets can turn it on or take hosts away; turning it off or adding a host is the owner's: from the agent it raises a card for the owner in the live conversation and waits for their answer."
+	}).meta({ agent: true }).input(SecretHostGuardSetSchema).output(SecretHostGuardSetResultSchema),
+	request: secretRoute.route({
 		method: "POST",
 		path: "/secrets/request",
 		summary: "Ask a named person to release a credential",
 		description: "Raises the release card in the live conversation and waits for one of the people named on it. Refused, rather than held, when there is nobody to ask: an unattended turn, no live conversation, or a click with no verified identity behind it."
-	}).input(CredentialRequestSchema).output(CredentialGrantSchema)
+	}).meta({ agent: true }).input(CredentialRequestSchema).output(CredentialGrantSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/sessions.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/sessions.js
 var SessionIdParamSchema = object({ id: string().describe("Which past conversation.") });
 var SessionsListSchema = object({ sessions: array(object({
 	id: string().describe("Its id."),
@@ -21561,23 +18789,23 @@ var SessionsListSchema = object({ sessions: array(object({
 	snippet: MatchSnippetSchema.optional().describe("Why a search matched: the line it hit, with a little around it, and who said it. Absent on an unfiltered list, and on a match the title already shows, where repeating it would be noise rather than evidence.")
 })).describe("Past conversations, newest first.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/sessions.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/sessions.contract.js
 var sessionsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/sessions",
 		summary: "Past conversations in this workspace",
 		description: "Summaries for a history menu, filtered when you pass a search. Covers conversations that worked in their own private copies too, so nothing is hidden just because it happened on a branch."
-	}).input(object({
+	}).meta({ control: "editor" }).input(object({
 		query: string().optional(),
 		caseSensitive: stringbool().optional()
 	})).output(SessionsListSchema),
-	get: oc.route({
+	get: procedure.route({
 		method: "GET",
 		path: "/sessions/{id}",
 		summary: "Read one past conversation",
 		description: "The full record of a single conversation, restored for display."
-	}).input(SessionIdParamSchema).output(SessionTranscriptSchema)
+	}).meta({ control: "editor" }).input(SessionIdParamSchema).output(SessionTranscriptSchema)
 };
 object({
 	at: number$1().describe("When the turn ended, in milliseconds."),
@@ -21596,11 +18824,12 @@ object({
 	errorMessage: string().optional().describe("What the failure said, trimmed."),
 	conversationId: string().optional().describe("Which conversation it belonged to, so spending can be traced to a card. Absent only for an internal one-off with no conversation at all."),
 	turns: number$1().describe("The provider's own count for the request, since one exchange can be several under the hood. One when it reported none."),
-	inputTokens: number$1().describe("Tokens sent."),
+	inputTokens: number$1().describe("Uncached input tokens, excluding cache reads and cache writes."),
 	outputTokens: number$1().describe("Tokens received."),
 	cacheReadTokens: number$1().describe("Tokens served from cache, which cost less."),
 	cacheCreationTokens: number$1().describe("Tokens written to cache, which cost more up front and less afterwards."),
 	costUsd: number$1().describe("What it cost, in dollars."),
+	costKnown: boolean().optional().describe("False when the vendor did not report a cost and the recorded zero is a placeholder, not a price. Absent or true means the cost is real."),
 	durationMs: number$1().describe("How long it took, in milliseconds."),
 	iqSearchArm: boolean().optional(),
 	iqSearchCohort: string().optional(),
@@ -21608,8 +18837,23 @@ object({
 	openingSearches: number$1().optional(),
 	openingListings: number$1().optional(),
 	callsBeforeTarget: number$1().optional(),
+	failedCalls: number$1().optional(),
 	mapArm: boolean().optional(),
 	mapChars: number$1().optional(),
+	notesArm: boolean().optional(),
+	notesChars: number$1().optional(),
+	notesCohort: string().optional(),
+	guidanceArm: boolean().optional(),
+	guidanceCohort: string().optional(),
+	turnContext: _enum([
+		"delivered",
+		"ineligible",
+		"deadline",
+		"indexing",
+		"no-hits",
+		"failed"
+	]).optional(),
+	turnContextMs: number$1().optional(),
 	turnIndex: number$1().optional(),
 	verification: _enum([
 		"verified",
@@ -21625,12 +18869,11 @@ object({
 	compactions: number$1().optional(),
 	contextTokens: number$1().optional(),
 	contextWindow: number$1().optional(),
-	tierScore: number$1().optional(),
-	tierRules: array(string()).optional(),
-	tierRouted: boolean().optional(),
-	tierFast: boolean().optional(),
-	tierCeiling: number$1().optional(),
-	tierDenied: boolean().optional()
+	purpose: _enum(["keep-warm"]).optional().describe("What the row is when it is not a turn: `keep-warm` is a cache refresh sent while the conversation sat idle."),
+	openingCacheReadTokens: number$1().optional().describe("Tokens the turn's first request read from the provider's cache."),
+	openingCacheCreationTokens: number$1().optional().describe("Tokens the turn's first request wrote to the provider's cache."),
+	promptFingerprint: string().optional().describe("A short hash over the parts of the prompt a cache is keyed on; a change between two turns names why the second could not reuse the first's cache."),
+	autoPicked: boolean().optional()
 });
 var UsageRollupRowSchema = object({
 	day: string().describe("The day, as YYYY-MM-DD in UTC."),
@@ -21640,11 +18883,12 @@ var UsageRollupRowSchema = object({
 	harness: string().describe("Which agentic loop."),
 	conversationId: string().optional().describe("Which conversation."),
 	turns: number$1().describe("Turns in this group."),
-	inputTokens: number$1().describe("Tokens sent."),
+	inputTokens: number$1().describe("Uncached input tokens, excluding cache reads and cache writes."),
 	outputTokens: number$1().describe("Tokens received."),
 	cacheReadTokens: number$1().describe("Tokens served from cache."),
 	cacheCreationTokens: number$1().describe("Tokens written to cache."),
 	costUsd: number$1().describe("What the group cost, in dollars."),
+	costKnown: boolean().optional().describe("False when the cost includes unpriced turns and is a lower bound rather than the true total."),
 	durationMs: number$1().describe("Time spent, in milliseconds.")
 });
 var DayWindowQuerySchema = object({
@@ -21663,45 +18907,72 @@ var UsageSummarySchema = object({ accounts: array(object({
 	costUsd: number$1()
 })) });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/settings.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/settings.contract.js
 var settingsContract = {
-	get: oc.route({
+	get: procedure.route({
 		method: "GET",
 		path: "/settings",
 		summary: "How this sandbox is configured",
 		description: "Every setting that governs how agents behave here, with the defaults filled in for anything nobody has chosen."
-	}).output(SandboxSettingsSchema),
-	set: oc.route({
+	}).meta({ guest: true }).output(SandboxSettingsSchema),
+	set: procedure.route({
 		method: "POST",
 		path: "/settings",
 		summary: "Change the sandbox settings",
 		description: "Writes the settings whole, so send the complete object rather than the fields you changed."
-	}).input(SandboxSettingsSchema).output(OkSchema$1),
-	savings: oc.route({
+	}).input(SandboxSettingsWriteSchema).output(OkSchema$1),
+	savings: procedure.route({
 		method: "GET",
 		path: "/settings/savings",
 		summary: "What the token-saving measures were worth",
 		description: "Measured rather than estimated: what each mechanism actually saved over a range of days. The same day range the spending ledger takes, so one calendar filters both."
 	}).input(DayWindowQuerySchema).output(SavingsReportSchema),
-	builtinPrompt: oc.route({
+	builtinPrompt: procedure.route({
 		method: "GET",
 		path: "/settings/system-prompt/{base}",
 		summary: "Read a built-in system prompt",
 		description: "The actual text behind one of the built-in modes, so a settings screen can show the prompt instead of asking anyone to trust a description of it, and so either can be forked into a custom one."
 	}).input(BuiltinPromptSchema).output(BuiltinPromptTextSchema),
-	firings: oc.route({
+	firings: procedure.route({
 		method: "GET",
 		path: "/settings/rule-firings",
 		summary: "When each rule last did something",
 		description: "A separate read rather than a field on the settings, because a rule firing is not somebody editing anything: folding it in would turn every firing into a settings write and put a self-changing value inside the object a screen edits."
 	}).output(RuleFiringsSchema),
-	repoChecks: oc.route({
+	repoChecks: procedure.route({
 		method: "GET",
 		path: "/settings/repo-checks",
 		summary: "What each repository asks to run on its own code",
 		description: `Every repository that declares its own checks at \`${REPO_CHECKS_FILE}\`, what it declares, and whether you have switched it on. A repository declares what to run because the command belongs beside the scripts it names; nothing it declares runs until you say so.`
 	}).output(RepoChecksListSchema),
-	adoptRepoChecks: oc.route({
+	fieldNotes: procedure.route({
+		method: "GET",
+		path: "/settings/field-notes",
+		summary: "The state of this sandbox's field notes",
+		description: `Whether \`${FIELD_NOTES_FILE}\` exists, when it was last rewritten, how much of it the current budget reaches, and whether a monthly rewrite is scheduled.`
+	}).output(FieldNotesStatusSchema),
+	adoptTimezone: procedure.route({
+		method: "POST",
+		path: "/settings/timezone",
+		summary: "Offer this sandbox a clock, if it has none",
+		description: "Sets which timezone this sandbox's schedules are meant in, but only while it has none set. Already answered, the stored zone wins and comes back unchanged, so any number of browsers can offer theirs without fighting over it. To change a zone that is already set, write the settings."
+	}).input(TimezoneOfferSchema).output(TimezoneStateSchema),
+	audience: procedure.route({
+		method: "GET",
+		path: "/settings/audience",
+		summary: "Which words the editor uses for you here",
+		description: "Whether your editor speaks git's own words (developer) or plain ones (maker) on this sandbox, in every browser and on every device. Absent until you have chosen here."
+	}).meta({ guest: true }).output(MemberAudienceSchema),
+	setAudience: procedure.route({
+		method: "POST",
+		path: "/settings/audience",
+		summary: "Choose which words the editor uses for you here",
+		description: "Sets whether your editor speaks git's own words (developer) or plain ones (maker) on this sandbox, for every browser and device you open it on. Other members keep their own. With `offer` it is taken only while you have none kept, and the kept answer comes back unchanged."
+	}).meta({
+		guest: true,
+		floor: "viewer"
+	}).input(AudienceAnswerSchema).output(AudienceStateSchema),
+	adoptRepoChecks: procedure.route({
 		method: "POST",
 		path: "/settings/repo-checks/adopt",
 		summary: "Switch a repository's own checks on or off",
@@ -21709,27 +18980,27 @@ var settingsContract = {
 	}).input(RepoChecksAdoptSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/share.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/share.contract.js
 var shareContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/share",
 		summary: "Conversations published as pages",
 		description: "Every conversation that has been turned into a read-only page, with its link. There is no call to read one back: the page itself is the read, and it answers to anyone who has the link."
 	}).output(ShareListSchema),
-	create: oc.route({
+	create: procedure.route({
 		method: "POST",
 		path: "/share",
 		summary: "Publish a conversation",
 		description: "Renders a conversation into a page anybody with the link can read, without signing in. Answers with the link, so nothing has to be listed again to find it."
 	}).input(ShareCreateSchema).output(SharedConversationSchema),
-	update: oc.route({
+	update: procedure.route({
 		method: "POST",
 		path: "/share/update",
 		summary: "Refresh a published page",
 		description: "Re-renders an existing page from the conversation as it stands now. Same link, newer contents."
 	}).input(ShareUpdateSchema).output(SharedConversationSchema),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "POST",
 		path: "/share/remove",
 		summary: "Unpublish a conversation",
@@ -21737,33 +19008,33 @@ var shareContract = {
 	}).input(ShareRemoveSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/skills.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/skills.contract.js
 var skillsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/skills",
 		summary: "What the agent knows how to do",
 		description: "Every skill available here and whether it is switched on, joined from all the places they come from: the owner's own, the settings, plugins a connection installed, folders inside extensions, and persona kits."
 	}).output(SkillsListSchema),
-	read: oc.route({
+	read: procedure.route({
 		method: "GET",
 		path: "/skills/read",
 		summary: "Read one skill",
 		description: "The full text of a single skill. The name travels in the query rather than the address, because a name can carry the owner it came from and that will not fit in a path."
 	}).input(SkillIdSchema).output(SkillBodySchema),
-	save: oc.route({
+	save: procedure.route({
 		method: "POST",
 		path: "/skills",
 		summary: "Write a skill",
 		description: "Creates or rewrites a skill by name. A new one starts switched on, because you wrote it in order to use it; rewriting one you switched off leaves it off. Renaming is saving under the new name and deleting the old."
 	}).input(SkillDraftSchema).output(OkSchema$1),
-	switch: oc.route({
+	switch: procedure.route({
 		method: "POST",
 		path: "/skills/switch",
 		summary: "Switch one of your own skills on or off",
 		description: "Off takes the agent's copy away and keeps your text; on writes the copy back from it. Built-in tools are switched in the agent settings instead, and nothing else has a switch."
 	}).input(SkillSwitchSchema).output(OkSchema$1),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "POST",
 		path: "/skills/remove",
 		summary: "Delete a skill",
@@ -21771,9 +19042,11 @@ var skillsContract = {
 	}).input(SkillRemoveSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/hosts.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/hosts.js
 var WslEnvironmentSchema = object({ distro: string() });
-var HostFactsSchema = object({
+var MachineIdSchema = string().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$/);
+var DeviceFactsSchema = object({
+	machineId: MachineIdSchema.optional(),
 	os: string(),
 	arch: string(),
 	shell: string(),
@@ -21785,40 +19058,91 @@ var HostFactsSchema = object({
 	}).optional(),
 	hostname: string().optional(),
 	wsl: WslEnvironmentSchema.optional(),
-	wslDistros: array(string()).optional()
+	wslDistros: array(string()).optional(),
+	links: object({
+		total: number$1(),
+		unreachable: number$1(),
+		unreachableSince: number$1().optional()
+	}).optional(),
+	features: array(string()).optional(),
+	icOutOfDate: string().optional()
 });
+_enum([
+	"reshape-later",
+	"set-shape",
+	"rollback-to",
+	"loopback-catch",
+	"background-prepare"
+]);
 var HostEnvironmentSchema = object({
 	key: string().min(1),
+	machineId: MachineIdSchema.optional(),
 	online: boolean(),
 	version: string().optional(),
 	lastSeen: number$1().optional(),
-	facts: HostFactsSchema.optional()
+	facts: DeviceFactsSchema.optional()
 });
 object({ hosts: array(object({
 	id: string(),
+	card: string().optional(),
 	platform: string().min(1),
 	environments: array(HostEnvironmentSchema).min(1),
 	online: boolean(),
 	version: string().optional(),
 	lastSeen: number$1().optional(),
-	facts: HostFactsSchema.optional()
+	facts: DeviceFactsSchema.optional()
 })) });
+var UpdateOutcomeSchema = object({
+	result: _enum([
+		"updated",
+		"kept",
+		"restored",
+		"rolled-back"
+	]).describe("What happened. Updated: the new version passed its first health check and runs, with the previous one kept ready until keepUntil. Kept: that probation ended and the new version stays. Restored: the new version never came up, so the previous container was put back at once. Rolled back: the new version came up and then failed its probation (it kept crashing, never became ready, or lost its tunnel), so the host went back to the previous one by itself."),
+	verb: string().optional().describe("What was asked for: update, rollback, rebuild, dev, reshape, or the probation watch acting on its own."),
+	at: number$1().describe("When it happened, in milliseconds."),
+	from: string().optional().describe("The version (or, when it would not say, the image) that ran before."),
+	to: string().optional().describe("The version (or image) that was moved onto, or that was tried and given up on."),
+	reason: string().optional().describe("Why the host gave up on the new version, in plain words. Absent when nothing went wrong."),
+	log: string().optional().describe("Where the host kept the full log of the swap, as a path on the machine that runs the sandbox."),
+	keepUntil: number$1().optional().describe("Until when the previous version stays parked and ready, in milliseconds. While it does, going back takes seconds and nothing is downloaded or rebuilt; after it, going back uses the pinned image.")
+});
+var WithdrawnReleaseSchema = object({
+	version: string().describe("The withdrawn version, which is the one this sandbox is running."),
+	reason: string().optional().describe("Why it was withdrawn, as the people who withdrew it put it.")
+});
+var SkipUpdateInputSchema = object({ version: string().min(1).nullable().describe("The release to stop offering, or null to offer the newest release again. A newer release than the skipped one is always offered.") });
+var RollbackTargetSchema = object({
+	image: string().describe("The local image a rollback would run, pinned under a tag no other flow writes."),
+	version: string().optional().describe("What that image says it is. Absent when it would not say.")
+});
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/devices.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/devices.js
+var SandboxResourcesAskFieldsSchema = object({
+	memoryGib: int().positive().nullable().optional(),
+	cpus: int().positive().nullable().optional(),
+	privileged: boolean().optional(),
+	gpu: boolean().optional()
+});
+var SandboxShapeSchema = object({
+	memoryGib: int().positive().nullable(),
+	cpus: int().positive().nullable(),
+	privileged: boolean(),
+	gpu: boolean()
+});
+var SandboxShapeWhenSchema = _enum(["now", "nextRestart"]);
 var SandboxResourcesSchema = object({
 	memoryBytes: number$1().optional(),
 	cpus: number$1().optional(),
 	privileged: boolean(),
 	gpu: boolean(),
 	hostRuntime: array(string()),
-	overlayRuntime: array(string())
+	overlayRuntime: array(string()),
+	shape: SandboxShapeSchema.optional(),
+	desired: SandboxShapeSchema.optional(),
+	saved: SandboxResourcesAskFieldsSchema.optional()
 });
-var SandboxResourcesAskSchema = object({
-	memoryGib: int().positive().nullable().optional(),
-	cpus: int().positive().nullable().optional(),
-	privileged: boolean().optional(),
-	gpu: boolean().optional()
-}).refine((ask) => Object.values(ask).some((value) => value !== void 0), { message: "a reshape must change at least one thing" });
+var SandboxResourcesAskSchema = SandboxResourcesAskFieldsSchema.strict().refine((ask) => Object.values(ask).some((value) => value !== void 0), { message: "a reshape must change at least one thing" });
 var DeviceSandboxSchema = object({
 	slug: string(),
 	container: string(),
@@ -21826,35 +19150,57 @@ var DeviceSandboxSchema = object({
 	running: boolean(),
 	image: string(),
 	tunnelRunning: boolean().optional(),
-	resources: SandboxResourcesSchema.optional()
+	resources: SandboxResourcesSchema.optional(),
+	staged: object({
+		image: string(),
+		version: string().optional(),
+		channel: string().optional()
+	}).optional(),
+	version: string().optional(),
+	parked: boolean().optional(),
+	probationUntil: number$1().optional(),
+	lastUpdate: UpdateOutcomeSchema.optional(),
+	rollbackTargets: array(RollbackTargetSchema).optional()
 });
-var DeviceSandboxFlowSchema = object({
+var DeviceSandboxFlowSchema = strictObject({
 	op: _enum([
 		"start",
 		"stop",
 		"restart",
 		"prepare",
+		"prepare-background",
 		"update",
 		"rebuild",
 		"rollback",
 		"reshape",
+		"set-shape",
+		"forget-shape",
 		"remove",
 		"logs",
 		"reconnect",
+		"create",
 		"runner-up",
 		"runner-remove"
 	]),
 	slug: string().min(1),
 	hash: string().optional(),
+	to: string().min(1).optional(),
+	shape: strictObject(SandboxShapeSchema.shape).optional(),
+	when: SandboxShapeWhenSchema.optional(),
 	resources: SandboxResourcesAskSchema.optional(),
+	later: boolean().optional(),
 	parentUrl: string().optional(),
 	pair: string().optional().meta({ secret: true }),
 	setupCode: string().optional().meta({ secret: true }),
+	platformUrl: string().optional(),
 	definition: string().optional(),
 	overlay: string().optional(),
 	overlayHash: string().optional()
 });
-var DeviceSandboxFlowInputSchema = DeviceSandboxFlowSchema.extend({ id: string().min(1) });
+var DeviceSandboxFlowInputSchema = DeviceSandboxFlowSchema.extend({
+	id: string().min(1),
+	resumeTurns: boolean().optional()
+});
 var DeviceFlowLineSchema = discriminatedUnion("kind", [
 	object({
 		kind: literal("line"),
@@ -21869,33 +19215,43 @@ var DeviceFlowLineSchema = discriminatedUnion("kind", [
 		message: string()
 	})
 ]);
-var DeviceAgentFlowSchema = object({ op: _enum(["upgrade", "restart"]) });
+var DeviceAgentFlowSchema = strictObject({ op: _enum([
+	"upgrade",
+	"restart",
+	"forget-unreachable"
+]) });
 var DeviceAgentFlowInputSchema = DeviceAgentFlowSchema.extend({ id: string().min(1) });
 var DeviceCommandSchema = _enum([
 	"mirror-off",
 	"mirror-on",
+	"mirror-ignore",
+	"mirror-unignore",
 	"sync-pause",
 	"sync-resume",
 	"sync-unpair",
-	"dev-reload",
+	"sync-clean",
+	"dev-restart",
 	"dev-rebuild",
 	"dev-rebuild-log",
 	"sync-install"
 ]);
 DeviceCommandSchema.exclude([
-	"dev-reload",
+	"dev-restart",
 	"dev-rebuild",
 	"dev-rebuild-log",
-	"sync-install"
+	"sync-install",
+	"sync-clean"
 ]);
 var DeviceSandboxIdSchema = string().max(200).regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/);
 var DeviceLocalDirSchema = string().min(1).max(4096).regex(/^(?:~|\/|[A-Za-z]:[\\/])[^"'`$;|&\n\r]*$/);
+var PortNumberSchema = number$1().int().min(1).max(65535);
 var DeviceCommandInputSchema = object({
 	id: string().min(1),
 	command: DeviceCommandSchema,
 	sandboxId: DeviceSandboxIdSchema.optional(),
 	mode: _enum(["sync", "mirror"]).optional(),
-	localDir: DeviceLocalDirSchema.optional()
+	localDir: DeviceLocalDirSchema.optional(),
+	port: PortNumberSchema.optional()
 });
 var DeviceCommandResultSchema = object({
 	ok: boolean(),
@@ -21906,17 +19262,21 @@ var DeviceCommandResultSchema = object({
 var DeviceConflictChangeSchema = _enum([
 	"created",
 	"modified",
-	"deleted"
+	"deleted",
+	"untracked"
 ]);
+var DeviceConflictNatureSchema = _enum(["derived-leftover", "both-edited"]);
 var DeviceConflictSchema = object({
 	path: string(),
 	local: DeviceConflictChangeSchema.optional(),
-	sandbox: DeviceConflictChangeSchema.optional()
+	sandbox: DeviceConflictChangeSchema.optional(),
+	nature: DeviceConflictNatureSchema.optional()
 });
 var DevicePairingSchema = object({
 	sandboxId: string(),
 	mode: _enum(["sync", "mirror"]),
 	localDir: string().optional(),
+	remoteDir: string().optional(),
 	mirroring: _enum(["on", "off"]).optional(),
 	mutagenStatus: string().optional(),
 	conflicts: number$1().int().nonnegative().optional(),
@@ -21927,10 +19287,12 @@ var DevicePairingSchema = object({
 var DevicePortStateSchema = _enum([
 	"mirrored",
 	"held-by-sandbox",
-	"busy"
+	"busy",
+	"ignored"
 ]);
+DevicePortStateSchema.exclude(["mirrored"]);
 var DevicePortSchema = object({
-	port: number$1().int().min(1).max(65535),
+	port: PortNumberSchema,
 	host: _enum(["127.0.0.1", "::1"]),
 	sandboxId: string(),
 	state: DevicePortStateSchema,
@@ -21945,6 +19307,7 @@ var DeviceAgentSchema = object({
 	lastTickAt: number$1().optional()
 });
 var DeviceReportSchema = object({
+	machineId: MachineIdSchema.optional(),
 	hostname: string(),
 	os: string(),
 	wsl: WslEnvironmentSchema.optional(),
@@ -21956,22 +19319,37 @@ var DeviceReportSchema = object({
 var DeviceGapSchema = _enum([
 	"offline",
 	"scope-off",
-	"no-agent",
 	"unreported"
 ]);
 var DeviceSyncSchema = object({
 	machine: string(),
 	mode: _enum(["sync", "mirror"]),
-	seenAt: number$1().optional()
+	seenAt: number$1().optional(),
+	machineId: MachineIdSchema.optional(),
+	environment: string().optional()
+});
+string().regex(/^(?:ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(?:256|384|521)|sk-ssh-ed25519@openssh\.com|sk-ecdsa-sha2-nistp256@openssh\.com) [A-Za-z0-9+/]+={0,2}$/);
+object({
+	key: string(),
+	machineId: MachineIdSchema.optional(),
+	environment: string().min(1).optional()
+});
+object({
+	ok: literal(true).optional(),
+	syncToken: string().optional(),
+	mode: _enum(["sync", "mirror"]).optional(),
+	hostKey: string().optional()
 });
 var DevicesListSchema = object({ devices: array(object({
 	key: string(),
 	label: string(),
 	sync: DeviceSyncSchema.optional(),
 	hostId: string().optional(),
+	card: string().optional(),
+	machineId: MachineIdSchema.optional(),
 	online: boolean().optional(),
 	platform: string().optional(),
-	facts: HostFactsSchema.optional(),
+	facts: DeviceFactsSchema.optional(),
 	agentVersion: string().optional(),
 	lastSeen: number$1().optional(),
 	report: DeviceReportSchema.optional(),
@@ -21980,11 +19358,169 @@ var DevicesListSchema = object({ devices: array(object({
 })) });
 object({
 	enrolled: boolean(),
+	syncing: boolean().optional(),
 	available: boolean().optional(),
 	machines: array(DeviceReportSchema).optional()
 });
+var ProcessRoleSchema = _enum([
+	"languageServer",
+	"searchEngine",
+	"agentRuntime",
+	"browser",
+	"git",
+	"translator",
+	"extension",
+	"terminal",
+	"toolchain",
+	"localModel",
+	"container",
+	"other"
+]);
+var ProcessGroupMetricsSchema = object({
+	processes: number$1().describe("How many processes."),
+	rssBytes: number$1().describe("Their resident memory added up, in bytes. Memory two processes share is counted in each, so this can exceed what they cost together.")
+});
+var SessionMetricsSchema = ProcessGroupMetricsSchema.extend({ cpuPercent: number$1().optional().describe("CPU its processes used over the window, as a percentage of one core, so a conversation busy on four cores reads 400. Counts commands that finished inside the window too. Absent on a first reading, which has nothing earlier to measure from.") });
+var PressureMetricsSchema = object({
+	cpu: number$1().describe("Percent of the last ten seconds in which something was waiting for a CPU."),
+	memory: number$1().describe("Percent of the last ten seconds in which something was waiting on memory: reclaim, swap-in, or a refault."),
+	io: number$1().describe("Percent of the last ten seconds in which something was waiting on disk.")
+});
+var MemoryRoomSchema = object({
+	freeBytes: number$1().optional().describe("The limit less what is used and what work admitted in the last minute and a half still holds. Absent where nothing measures it."),
+	reservedBytes: number$1().describe("What work admitted in the last minute and a half holds before it shows in `memoryBytes`."),
+	personNeedBytes: number$1().describe("What a person's turn needs free to start without a warning: below it, the sandbox is short."),
+	stallPercent: number$1().describe("Percent of the last ten seconds in which everything in the sandbox waited on memory (pressure `full`)."),
+	stallLimitPercent: number$1().describe("The stall at or past which the sandbox counts as short of memory, whatever `freeBytes` says.")
+});
+var SandboxUsageSchema = object({
+	cpuPercent: number$1().optional().describe("CPU the whole sandbox used over the window, as a percentage of all it may use (`cores`). Absent on a first reading."),
+	cores: number$1().describe("How many cores the sandbox may use: its CPU quota, or every core it is allowed to run on when it has none."),
+	memoryBytes: number$1().describe("Memory in use as the daemon admits work by it: resident memory less the file cache the kernel takes back on demand, plus what was pushed to swap."),
+	memoryLimitBytes: number$1().describe("The memory limit work is admitted against: where the kernel starts throttling the container (memory.high), else its hard limit, else the machine's memory."),
+	swapBytes: number$1().optional().describe("Of `memoryBytes`, what was pushed out to swap. Absent where the sandbox cannot see its own memory."),
+	memoryRoom: MemoryRoomSchema.optional().describe("What admission reads off the same reading. Absent from a daemon that predates it."),
+	diskBytes: number$1().optional().describe("Space used on the volume the workspace lives on. Absent when the volume would not say."),
+	diskTotalBytes: number$1().optional().describe("That volume's size. Absent when the volume would not say."),
+	loadAverage: tuple([
+		number$1(),
+		number$1(),
+		number$1()
+	]).describe("The load average over 1, 5 and 15 minutes. It is the machine's, so other sandboxes on it count too."),
+	machineCores: number$1().optional().describe("Cores the machine's load average reads against: every core the sandbox may be scheduled on, before any quota. Absent from a daemon that predates it."),
+	processes: number$1().describe("How many processes are running in the sandbox."),
+	pressure: PressureMetricsSchema.optional().describe("How much work waited on CPU, memory or disk lately. Absent where the kernel does not report it.")
+});
+var DaemonUsageSchema = object({
+	rssBytes: number$1().describe("The daemon's own resident memory."),
+	heapUsedBytes: number$1().describe("Of that, JavaScript objects in use."),
+	cpuPercent: number$1().optional().describe("CPU the daemon itself used over the window, as a percentage of one core. Absent on a first reading."),
+	eventLoopPercent: number$1().optional().describe("How much of the window the daemon spent busy rather than waiting. Near 100, every request queues behind whatever it is doing. Absent on a first reading.")
+});
+var SandboxMetricsSchema = object({
+	at: number$1().describe("When this reading was taken, in milliseconds."),
+	windowMs: number$1().optional().describe("How long the CPU figures were measured over, in milliseconds. Absent on a first reading, and then so is every CPU figure."),
+	sandbox: SandboxUsageSchema.describe("The sandbox as a whole."),
+	daemon: DaemonUsageSchema.describe("The daemon that runs it, which none of the other figures include."),
+	sessions: record(string(), SessionMetricsSchema).describe("What each conversation's processes use, by conversation id: the agent's own process and everything it started. Only conversations with processes running, and only those the caller may see."),
+	roles: partialRecord(ProcessRoleSchema, ProcessGroupMetricsSchema).describe("Every process in the sandbox but the daemon, by what kind of work it is. A kind with nothing running is absent.")
+});
+var StorageCleanabilitySchema = _enum([
+	"none",
+	"safe",
+	"confirm"
+]);
+var StorageCategoryIdSchema = _enum(Object.keys({
+	workspace: "none",
+	conversations: "none",
+	checkouts: "none",
+	restorePoints: "none",
+	repositories: "none",
+	engines: "none",
+	indexes: "none",
+	extensions: "none",
+	docker: "none",
+	state: "none",
+	other: "none",
+	trash: "confirm",
+	backups: "confirm",
+	exports: "confirm",
+	artifacts: "confirm",
+	browserCaptures: "confirm",
+	browserProfiles: "confirm",
+	modelWeights: "confirm",
+	logs: "safe",
+	scratch: "safe",
+	packageStores: "safe",
+	buildCaches: "safe"
+}));
+var StorageItemSchema = object({
+	path: string().describe("Where it is, as an absolute path inside the sandbox."),
+	bytes: number$1().describe("Its size in bytes.")
+});
+var StorageCategoryUsageSchema = object({
+	id: StorageCategoryIdSchema,
+	cleanability: StorageCleanabilitySchema.describe("Whether this category can be cleaned from here, and whether cleaning it asks first."),
+	bytes: number$1().describe("Its size in bytes."),
+	files: number$1().describe("How many files it holds."),
+	cleanableBytes: number$1().optional().describe("What cleaning it would free right now: only what is old enough and not in use. Absent where nothing here may be cleaned, and for a package store, whose own tool decides what no project needs."),
+	items: array(StorageItemSchema).describe("Its biggest parts, largest first, at most eight.")
+});
+var StorageReportSchema = object({
+	scan: object({
+		startedAt: number$1().describe("When the scan began, in milliseconds."),
+		finishedAt: number$1().describe("When it ended, in milliseconds: the moment these sizes describe."),
+		outcome: _enum(["complete", "partial"]).describe("`partial` when the scan hit its time limit first, so every size is at least what it says rather than exactly it."),
+		disk: object({
+			usedBytes: number$1().describe("Space used on the volume the workspace lives on."),
+			totalBytes: number$1().describe("That volume's size.")
+		}).optional().describe("The volume as a whole. Absent when the volume would not say."),
+		categories: array(StorageCategoryUsageSchema).describe("Every category that holds anything, largest first."),
+		unreadable: number$1().describe("Files and folders the scan could not read, and so did not count.")
+	}).optional().describe("The last scan that finished. Absent until one has, and again after the daemon restarts."),
+	scanning: boolean().describe("Whether a scan is running now.")
+});
+var StorageCleanInputSchema = object({ category: StorageCategoryIdSchema.describe("The category to clean; one whose cleanability is `none` is refused.") });
+var StorageCleanResultSchema = object({
+	category: StorageCategoryIdSchema,
+	freedBytes: number$1().describe("Space the removals gave back, in bytes. A file that is still linked elsewhere frees nothing and is not counted."),
+	removed: number$1().describe("How many items were removed."),
+	kept: number$1().describe("How many were left in place: changed too recently, in use by a running program, or no longer this category's."),
+	failed: number$1().describe("How many removals the filesystem refused.")
+});
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/system.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/state-plan.js
+var PlanStepSchema = object({
+	document: string().describe("The stored file, workspace-relative, or `<volume>:<path>` for one on another volume; a structural step's id."),
+	change: string().describe("What is done to it, in one line."),
+	detail: string().optional().describe("What was particular about this one: a conflict's losing value, a retired entry, a mapped value.")
+});
+var PlanFailureSchema = object({
+	document: string().describe("The stored file whose conversion would fail, or the structural step that would."),
+	detail: string().describe("Why, in the conversion's own words.")
+});
+var StatePlanSchema = object({
+	plan: literal(1).describe("The format of this line. A reader refuses any other rather than guessing at its fields."),
+	version: string().describe("The release of the image that planned it; 0.0.0 for a development build."),
+	engine: number$1().describe("The conversion count builds before the digest compared. Reported, never decided by."),
+	digest: string().describe("What identifies the planning build's conversion set: its episodes resume only under the same one."),
+	ok: boolean().describe("False when a conversion would fail on this sandbox's files, which refuses the update before anything is touched."),
+	downgrade: boolean().describe("A newer release than the planning build ran here: it opens what it cannot read read-only."),
+	failures: array(PlanFailureSchema).describe("Each conversion or step that would fail, and why."),
+	steps: array(PlanStepSchema).describe("What the first boot changes on disk: documents moved, structural steps run."),
+	converts: array(PlanStepSchema).optional().describe("What the build's conversions change as its stores read these files, written by each store's next save. Absent from a build before it."),
+	files: array(string()).describe("Every file the first boot writes, workspace-relative where it can be.")
+});
+object({
+	journal: _enum([
+		"open",
+		"none",
+		"failed"
+	]).describe("Open from the start of a boot that changed stored files until that boot has converged. Failed when a conversion threw partway: the files were put back as they were, and a host takes that as the update not having taken."),
+	engine: number$1().describe("The running build's conversion count.")
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/system.js
 var AdapterHealthSchema = object({
 	state: _enum([
 		"ready",
@@ -21997,7 +19533,15 @@ var AdapterHealthSchema = object({
 var StagedUpdateSchema = object({
 	version: string().optional().describe("What the downloaded build says it is. Absent means ready but unnamed, never that nothing is ready."),
 	channel: string().describe("Which channel it was taken from. Not necessarily the one this sandbox follows: downloading a beta build is not the same as moving onto beta."),
-	at: number$1().describe("When the download finished, in milliseconds, which answers whether this is still the update being offered.")
+	at: number$1().describe("When the download finished, in milliseconds, which answers whether this is still the update being offered."),
+	plan: StatePlanSchema.partial().extend({ ok: StatePlanSchema.shape.ok }).optional().describe("What the downloaded build's first boot would convert in this sandbox's stored files. Absent when no plan could be had, which says nothing either way.")
+});
+var PreparingUpdateSchema = object({
+	channel: string().describe("Which channel it is being taken from."),
+	startedAt: number$1().describe("When the download began, in milliseconds."),
+	at: number$1().describe("When the machine last said it is still working on it, in milliseconds."),
+	phase: string().describe("What it is doing: download (pulling the new image), build (building this sandbox's environment on it), or check (checking this sandbox's stored files against it)."),
+	percent: number$1().min(0).max(100).optional().describe("How far through the download it is, from 0 to 100. Absent for a step with no measure of its own.")
 });
 var InfoSchema = object({
 	name: string().optional().describe("What this sandbox is called."),
@@ -22011,7 +19555,11 @@ var InfoSchema = object({
 	updateNotes: array(string()).optional().describe("What is in the update, in the words of the people it is for, newest first. Absent or empty whenever there is nothing worth saying, which reads on screen exactly as it did before there were notes at all."),
 	moreUpdateNotes: number$1().optional().describe("How many further notes there are beyond the ones sent, for a sandbox left alone a long time. Absent or zero means you have all of them."),
 	breakingNotes: array(string()).optional().describe("What the update takes away, uncapped, because a warning that fell off a shortened list is a breaking update taken unwarned. Absent for the overwhelming majority, which break nothing."),
-	staged: StagedUpdateSchema.optional().describe("An update already downloaded and built on the machine running this container, waiting only for the restart that applies it. That restart is seconds, where an unprepared update is minutes, which is a different decision entirely. Absent when nothing is waiting.")
+	staged: StagedUpdateSchema.optional().describe("An update already downloaded and built on the machine running this container, waiting only for the restart that applies it. That restart is seconds, where an unprepared update is minutes, which is a different decision entirely. Absent when nothing is waiting."),
+	preparing: PreparingUpdateSchema.optional().describe("A download of the next update running on the machine right now, and how far it has got. Absent when nothing is downloading, or when the machine stopped saying it is."),
+	lastUpdate: UpdateOutcomeSchema.optional().describe("What the machine running this sandbox last did about its version: an update that took, one it gave up on and why, and until when the previous version stays ready. Absent when that machine has never said."),
+	withdrawn: WithdrawnReleaseSchema.optional().describe("Set when the version this sandbox runs was withdrawn after it shipped, which is the moment to go back to the one before it. Absent for every version still standing."),
+	skippedVersion: string().optional().describe("A release the owner chose to skip. While it is the newest, no update is offered; a newer one is. Absent when nothing is skipped.")
 });
 var ManifestProblemSchema = object({
 	kind: _enum([
@@ -22019,12 +19567,18 @@ var ManifestProblemSchema = object({
 		"unknownKey",
 		"invalidEntry"
 	]).describe("What to do about it. Unreadable means the whole file is being ignored and everything in it is at its default. An unknown key means only that key is ignored. An invalid entry means one item of a list was skipped and the rest is fine."),
+	reason: _enum([
+		"io",
+		"not-json",
+		"conversion-failed",
+		"rejected"
+	]).optional().describe("Why it could not be read: the file could not be opened (io), it is not JSON, a conversion to this version's shape failed, or its contents are not what this version expects (rejected). A rejected file after a newer version ran is usually that version's, not a broken one."),
 	detail: string().describe("What exactly was wrong, as one sentence and nothing else. Never the remedy: that is `fix`."),
 	suggestion: string().optional().describe("The name it was probably meant to be, when one is close enough to guess honestly."),
 	fix: string().optional().describe("What to do about it, when that is something other than 'correct the file'. Absent whenever the file itself is the thing to edit.")
 });
 var ManifestProblemsSchema = array(object({
-	path: string().describe("The file, as a workspace path. The file is the unit somebody fixes, which is why problems are grouped by it."),
+	path: string().describe("The file, as a workspace path, or as its absolute path on the daemon's own history volume for one kept there (the conversation registry). The file is the unit somebody fixes, which is why problems are grouped by it."),
 	problems: array(ManifestProblemSchema).describe("Everything currently wrong with it. A file with nothing wrong is absent rather than present and empty.")
 }));
 var ManifestRepairSchema = object({
@@ -22096,133 +19650,176 @@ object({
 });
 object({ response: AuthenticationResponseSchema });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/system.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/system.contract.js
+var systemRoute = procedure.meta({ control: "never" });
 var systemContract = {
-	info: oc.route({
+	info: procedure.route({
 		method: "GET",
 		path: "/info",
 		summary: "What this sandbox is",
 		description: "The sandbox's own identity and state: which workspace it holds, which image it runs, what it is called, and the list of calls it actually implements. Start here, because a browser is routinely newer than the sandbox it is talking to and this is how it finds out what is there."
-	}).output(InfoSchema),
-	manifestProblems: oc.route({
+	}).meta({ guest: true }).output(InfoSchema),
+	skipUpdate: systemRoute.route({
+		method: "POST",
+		path: "/system/update/skip",
+		summary: "Stop offering one release",
+		description: "Stops offering the named release as an update, typically one this sandbox already tried and went back from. A newer release is offered as usual. Null offers the newest release again."
+	}).meta({ floor: "maintainer" }).input(SkipUpdateInputSchema).output(OkSchema$1),
+	manifestProblems: systemRoute.route({
 		method: "GET",
 		path: "/system/manifest-problems",
 		summary: "Settings files the sandbox could not read",
 		description: "Anything the daemon tripped over in its own configuration on disk: a file it had to fall back from, a key it did not recognise, an entry it skipped. Separate from the identity call because it goes stale for a different reason, namely a file changing."
 	}).output(ManifestProblemsSchema),
-	repairManifest: oc.route({
+	repairManifest: systemRoute.route({
 		method: "POST",
 		path: "/system/manifest-problems/repair",
 		summary: "Take a stray setting out of a file",
 		description: "Removes a key the sandbox does not recognise from one of its settings files, or renames it to the one it was probably meant to be, keeping the value. Only the files a person hand-edits can be named, and only a key — never a value — so this can only ever remove something already being ignored. Renaming onto a key the file already has is refused instead of overwriting it."
 	}).input(ManifestRepairSchema).output(OkSchema$1),
-	session: oc.route({
+	session: systemRoute.route({
 		method: "POST",
 		path: "/system/session",
 		summary: "Trade a sign-in for a session",
 		description: "Exchanges a verified sign-in, or a session that has not expired yet, for a fresh session the daemon minted. That session is the credential every other call carries, and calling this again with a live one renews it."
+	}).meta({
+		beforeBoot: true,
+		floor: "viewer",
+		guest: true
 	}).output(DaemonSessionSchema),
-	events: oc.route({
+	events: procedure.route({
 		method: "GET",
 		path: "/events",
 		summary: "The live event stream",
 		description: "A stream held open for as long as you want it, carrying heartbeats so a caller notices the sandbox dying at once, batches of file changes so a tree or an editor can refresh itself, and the roster of who else is looking. Give it an id for this connection to appear in that roster; leave it out and you watch without being seen."
-	}).input(object({ clientId: string().optional() })).output(eventIterator(SystemEventSchema)),
-	presence: oc.route({
+	}).meta({
+		beforeBoot: true,
+		stream: true,
+		guest: true
+	}).input(object({ clientId: string().optional() })).output(streamOf(SystemEventSchema)),
+	presence: systemRoute.route({
 		method: "POST",
 		path: "/system/presence",
 		summary: "Say what you are looking at",
 		description: "Reports which view, conversation or file this connection is on, or that it has gone idle. The daemon fans it back out on the event stream so everyone else's roster updates."
+	}).meta({
+		beforeBoot: true,
+		floor: "viewer",
+		guest: true
 	}).input(PresenceReportSchema).output(OkSchema$1),
-	usage: oc.route({
+	usage: systemRoute.route({
 		method: "GET",
 		path: "/system/usage",
 		summary: "What has been spent",
 		description: "Token and cost totals per account, added up from the record of every finished turn."
-	}).output(UsageSummarySchema),
-	terminals: oc.route({
+	}).meta({ floor: "maintainer" }).output(UsageSummarySchema),
+	metrics: systemRoute.route({
+		method: "GET",
+		path: "/system/metrics",
+		summary: "What the sandbox is using right now",
+		description: "CPU and memory for the sandbox as a whole, for the daemon that runs it, for each kind of process, and for each conversation's own processes. Measured when you ask and never in between, so CPU is the use since the previous reading: the first reading after a quiet spell has memory and no CPU, and the next one a few seconds later has both."
+	}).output(SandboxMetricsSchema),
+	storage: systemRoute.route({
+		method: "GET",
+		path: "/system/storage",
+		summary: "What is filling the disk",
+		description: "The last measurement of the sandbox's disk, by what the space is for: conversations, checkouts, restore points, caches, logs, the trash and the rest, each with its biggest parts and whether it can be cleaned from here. Reading it measures nothing; ask for a scan to measure again."
+	}).meta({ floor: "maintainer" }).output(StorageReportSchema),
+	scanStorage: systemRoute.route({
+		method: "POST",
+		path: "/system/storage/scan",
+		summary: "Measure what is filling the disk",
+		description: "Walks the sandbox's volumes and answers with the new measurement once it is done. A scan already running is joined rather than doubled. It stops at a time limit and says so, since a size it could not finish is still worth reading. A cancelled scan answers with the previous measurement."
+	}).output(StorageReportSchema),
+	cancelStorageScan: systemRoute.route({
+		method: "DELETE",
+		path: "/system/storage/scan",
+		summary: "Stop measuring the disk",
+		description: "Stops a running scan. Whoever was waiting on it gets the previous measurement back; nothing is lost but the time."
+	}).output(OkSchema$1),
+	cleanStorage: systemRoute.route({
+		method: "POST",
+		path: "/system/storage/clean",
+		summary: "Free the space one category holds",
+		description: "Removes what one cleanable category holds, and says how much space that gave back. Only what is old enough and not in use goes: today's logs, a browser that is open, the weights a running model reads and a pack still being written all stay. Nothing outside the sandbox's own volumes, and nothing a category may not hold, is ever removed. Categories that cannot be cleaned are refused."
+	}).input(StorageCleanInputSchema).output(StorageCleanResultSchema),
+	terminals: systemRoute.route({
 		method: "GET",
 		path: "/system/terminals",
 		summary: "Open terminals",
 		description: "The terminal sessions this sandbox is holding, which is what a terminal panel rebuilds its tabs from after a reload. The live typing and output run over a separate socket; this is the list."
-	}).output(TerminalsListSchema),
-	killTerminal: oc.route({
+	}).meta({ beforeBoot: true }).output(TerminalsListSchema),
+	killTerminal: systemRoute.route({
 		method: "DELETE",
 		path: "/system/terminals/{name}",
 		summary: "Close a terminal",
 		description: "Destroys one terminal session and whatever was running inside it."
 	}).input(TerminalNameParamSchema).output(OkSchema$1),
-	terminalScrollback: oc.route({
+	terminalScrollback: systemRoute.route({
 		method: "GET",
 		path: "/system/terminals/{name}/scrollback",
 		summary: "A terminal's history as plain text",
 		description: "What has scrolled past in one terminal, as text you can select and copy. The live view is a picture of a screen on the far side of a socket, with nothing in the page to select, so scrolling back and copying is this call rather than a gesture."
 	}).input(TerminalScrollbackQuerySchema).output(TerminalScrollbackSchema),
-	browsers: oc.route({
+	browsers: systemRoute.route({
 		method: "GET",
 		path: "/system/browsers",
 		summary: "Browsers the agent has open",
 		description: "Every browser a conversation currently has running and the pages inside each one. The picture of what they are showing comes over a separate socket; this is the roster."
 	}).output(BrowsersListSchema),
-	closeBrowser: oc.route({
+	closeBrowser: systemRoute.route({
 		method: "DELETE",
 		path: "/system/browsers/{name}",
 		summary: "Shut a browser down",
 		description: "Closes one of the agent's browsers. Its next attempt to use that browser then fails as though it had crashed, which is the honest account of somebody pulling the plug."
 	}).input(BrowserNameParamSchema).output(OkSchema$1),
-	subagents: oc.route({
+	subagents: systemRoute.route({
 		method: "GET",
 		path: "/system/subagents",
 		summary: "Subagents the agents have started",
-		description: "Every subagent and child agent this sandbox's conversations have delegated work to, whichever tool started it, with what each one is doing."
+		description: "Every subagent that conversations the caller can see have delegated work to, whichever tool started it, with what each one is doing: all that are still working, and the most recent that have settled."
 	}).output(SubagentsListSchema),
-	subagentTranscript: oc.route({
-		method: "GET",
-		path: "/system/subagents/{id}/transcript",
-		summary: "A subagent's record",
-		description: "The full record of one delegated subagent, in the same shape as any other conversation. It comes live from the parent turn while it works, and from stored history once it has finished."
-	}).input(SubagentIdParamSchema).output(SessionTranscriptSchema),
-	devices: oc.route({
+	devices: systemRoute.route({
 		method: "GET",
 		path: "/system/devices",
 		summary: "The machines you have connected",
 		description: "Every computer this sandbox can see, whether it reached it through desktop sync or through a connected device, in one row per machine: what it says about itself, which sandboxes it holds, and what stopped it answering when nothing came back."
 	}).output(DevicesListSchema),
-	manageDeviceSandbox: oc.route({
+	manageDeviceSandbox: systemRoute.route({
 		method: "POST",
 		path: "/system/devices/{id}/sandboxes/{slug}",
 		summary: "Drive a sandbox on one of your own devices",
 		description: "Start, stop, restart, update, rebuild, roll back, reshape (its memory and CPU caps, privileged, GPU) or remove a sandbox running on a machine you own, relayed over the connection that machine holds open. The answer is a stream because the slowest of these takes minutes, and it is the same stream whichever you ask for. The daemon adds no opinion: the machine enforces its own permissions and a refusal arrives as the last line, in the machine's words, naming the switch to flip."
-	}).input(DeviceSandboxFlowInputSchema).output(eventIterator(DeviceFlowLineSchema)),
-	runDeviceCommand: oc.route({
+	}).input(DeviceSandboxFlowInputSchema).output(streamOf(DeviceFlowLineSchema)),
+	runDeviceCommand: systemRoute.route({
 		method: "POST",
 		path: "/system/devices/{id}/commands/{command}",
 		summary: "Run one of your device's own CLI actions",
 		description: "Performs a named action on a machine you own by running its own intentic-machine command there — turning that device's port mirroring off, say — over the connection it holds open. The set of actions is fixed and the command line is built here from the name, never sent by the caller. The machine enforces its own permissions and a refusal comes back as its own sentence, naming the switch to flip."
 	}).input(DeviceCommandInputSchema).output(DeviceCommandResultSchema),
-	runDeviceAgentFlow: oc.route({
+	runDeviceAgentFlow: systemRoute.route({
 		method: "POST",
 		path: "/system/devices/{id}/agent/{op}",
-		summary: "Update or restart the agent on one of your own devices",
-		description: "Updates a machine you own to the current intentic-machine agent, or restarts the loop it is running, over the connection that machine holds open. The answer is a stream of the run's own output — and it normally stops mid-run, because the agent's loop is what carries this connection: the work is detached from it first, so it finishes regardless, and the device's reported version is what confirms it. Takes the machine's \"Run commands\" permission, the same one a command typed there would."
-	}).input(DeviceAgentFlowInputSchema).output(eventIterator(DeviceFlowLineSchema))
+		summary: "Update, restart, or clean up the links of the agent on one of your own devices",
+		description: "Updates a machine you own to the current intentic-machine agent, restarts the loop it is running, or drops the links it holds to sandboxes that have stopped answering — over the connection that machine holds open. The answer is a stream of the run's own output — and it normally stops mid-run, because the agent's loop is what carries this connection: the work is detached from it first, so it finishes regardless, and the device's reported version is what confirms it. Takes the machine's \"Run commands\" permission, the same one a command typed there would."
+	}).input(DeviceAgentFlowInputSchema).output(streamOf(DeviceFlowLineSchema))
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/translator.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/translator.contract.js
 var translatorContract = {
-	accounts: oc.route({
+	accounts: procedure.route({
 		method: "GET",
 		path: "/translator/accounts",
 		summary: "Subscriptions connected through the translator",
 		description: "What is signed in per provider. Each provider can hold several accounts at once, and the translator spreads work across them."
 	}).output(TranslatorAccountsSchema),
-	connect: oc.route({
+	connect: procedure.route({
 		method: "POST",
 		path: "/translator/{provider}/connect",
 		summary: "Start connecting a subscription",
 		description: "Begins the sign-in for one provider and says which of the two shapes it is: a code you type into a device page, which finishes by itself in the background, or a redirect whose landing address you hand back afterwards."
 	}).input(object({ provider: KeyedProviderSchema })).output(TranslatorStartSchema),
-	status: oc.route({
+	status: procedure.route({
 		method: "GET",
 		path: "/translator/{provider}/connect",
 		summary: "Read a subscription connection attempt",
@@ -22231,13 +19828,13 @@ var translatorContract = {
 		provider: KeyedProviderSchema,
 		state: string().min(1)
 	})).output(TranslatorStatusSchema),
-	complete: oc.route({
+	complete: procedure.route({
 		method: "POST",
 		path: "/translator/{provider}/complete",
 		summary: "Finish a redirect sign-in",
 		description: "For the providers that redirect somewhere this sandbox cannot receive: hand back the address you landed on and the connection completes."
 	}).input(TranslatorCompleteSchema).output(OkSchema$1),
-	disconnect: oc.route({
+	disconnect: procedure.route({
 		method: "POST",
 		path: "/translator/{provider}/disconnect",
 		summary: "Disconnect one subscription",
@@ -22248,28 +19845,36 @@ var translatorContract = {
 	})).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/usage.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/usage.contract.js
 var RefreshPlanLimitsSchema = object({ force: boolean().default(false).describe("Measure again even if a reading was taken a moment ago.") });
+var PlanLimitsRefreshedSchema = object({
+	ok: literal(true),
+	held: array(object({
+		provider: string().describe("Which provider is holding the read off."),
+		account: string().describe("The account as its provider's list names it: an account id, or a routed auth file's name."),
+		resumesAt: number$1().describe("Unix seconds: when this account may be read again, the provider's own retry-after.")
+	})).describe("Accounts whose plan limits could not be read now because the provider is rate-limiting them.")
+});
 var usageContract = {
-	rollup: oc.route({
+	rollup: procedure.route({
 		method: "GET",
 		path: "/usage/rollup",
 		summary: "What was spent, grouped",
 		description: "The spending record over a range of days, grouped by day, provider, account and model. Everything a cost screen shows is a rearrangement of this one answer, so nothing needs a second call. Read-only: rows are written by the sandbox as turns end, which is what makes it worth trusting."
 	}).input(DayWindowQuerySchema).output(UsageRollupSchema),
-	refreshPlanLimits: oc.route({
+	refreshPlanLimits: procedure.route({
 		method: "POST",
 		path: "/usage/plan-limits/refresh",
 		summary: "Measure every account's plan limits again",
-		description: "Reads how full each connected account's plan limits are, for every provider, and records it. Forced, it measures even accounts read a moment ago, which is the right thing when a plan was just changed and the question is whether the number on screen is still true."
-	}).input(RefreshPlanLimitsSchema).output(object({ ok: literal(true) })),
-	limitReset: oc.route({
+		description: "Reads how full each connected account's plan limits are, for every provider, and records it. Forced, it measures even accounts read a moment ago, which is the right thing when a plan was just changed and the question is whether the number on screen is still true. Answers with the accounts it could not read because the provider is rate-limiting them, and when each may be asked again: those keep the reading they already had, so a number that does not move is explained rather than silent."
+	}).input(RefreshPlanLimitsSchema).output(PlanLimitsRefreshedSchema),
+	limitReset: procedure.route({
 		method: "GET",
 		path: "/usage/limit-reset/{account}",
 		summary: "Whether this account's session window can be reopened now",
 		description: "Asks the provider whether it will reopen this account's spent session window immediately, which some plans grant once a week. Only worth asking about an account that has actually been refused: the answer is the provider's judgement at this moment, it is not cached, and an account with no such grant answers plainly that it has none."
 	}).input(object({ account: string().min(1).describe("Which account.") })).output(LimitResetStatusSchema),
-	claimLimitReset: oc.route({
+	claimLimitReset: procedure.route({
 		method: "POST",
 		path: "/usage/limit-reset/{account}/claim",
 		summary: "Reopen this account's session window now",
@@ -22277,27 +19882,97 @@ var usageContract = {
 	}).input(object({ account: string().min(1).describe("Which account.") })).output(LimitResetClaimSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/vpn.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/offload.js
+var OffloadTargetSchema = object({
+	runner: string().min(1),
+	name: string().min(1),
+	ready: boolean(),
+	why: string().optional()
+});
+var OffloadRunSchema = RunnerCommandSchema.extend({ runner: string().min(1) });
+var OffloadFrameSchema = union([...RunnerCommandFrameSchema.options, object({
+	kind: literal("refused"),
+	why: string()
+})]);
+var OffloadRecordSchema = object({
+	runId: string(),
+	runner: string(),
+	name: string(),
+	label: string(),
+	command: string(),
+	startedAt: number$1(),
+	endedAt: number$1().optional(),
+	code: number$1().int().optional(),
+	failure: string().optional()
+});
+var OffloadKindSchema = object({
+	id: string().min(1),
+	pattern: string()
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/offload.contract.js
+var offloadRoute = procedure.meta({
+	agent: true,
+	control: "never"
+});
+var offloadContract = {
+	target: offloadRoute.route({
+		method: "GET",
+		path: "/offload/runners/{runner}",
+		summary: "Whether a runner can take a heavy command",
+		description: "Answers whether the runner a kind of heavy work is sent to is connected and able to run it, before anything is copied to it. When it is not, the command runs in this sandbox and says why."
+	}).input(object({ runner: string().min(1) })).output(OffloadTargetSchema),
+	run: offloadRoute.route({
+		method: "POST",
+		path: "/offload/runs",
+		summary: "Run a heavy command on a runner",
+		description: "Hands one command to a runner on one of your machines, together with a snapshot of the code as it stands, and streams its output back as it comes. It ends with the exit code, every file the command changed and any report it wrote."
+	}).meta({ stream: true }).input(OffloadRunSchema).output(streamOf(OffloadFrameSchema)),
+	cancel: offloadRoute.route({
+		method: "POST",
+		path: "/offload/runs/{runId}/cancel",
+		summary: "Stop an offloaded command",
+		description: "Stops a command running on a runner, with everything it started there."
+	}).input(object({ runId: string().min(1) })).output(OkSchema$1),
+	kinds: procedure.route({
+		method: "GET",
+		path: "/offload/kinds",
+		summary: "Kinds of heavy work that can run elsewhere",
+		description: "The kinds this sandbox sorts heavy commands into (tests, typechecks, verify…), each of which can be sent to a runner on one of your machines instead of running here."
+	}).output(object({ kinds: array(OffloadKindSchema) })),
+	runs: procedure.route({
+		method: "GET",
+		path: "/offload/runs",
+		summary: "Recent offloaded commands",
+		description: "The heavy commands this sandbox sent to runners lately, newest first, with where they ran and how they ended."
+	}).output(object({ runs: array(OffloadRecordSchema) }))
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/vpn.contract.js
+var vpnRoute = procedure.meta({
+	agent: true,
+	control: "never"
+});
 var vpnContract = {
-	list: oc.route({
+	list: vpnRoute.route({
 		method: "GET",
 		path: "/vpn",
 		summary: "Configured tunnels and which are up",
 		description: "Every stored VPN with its live link state, read back from the operating system rather than from memory, so a tunnel dropped from a shell and one dropped from a screen look the same here."
 	}).output(VpnListSchema),
-	connect: oc.route({
+	connect: vpnRoute.route({
 		method: "POST",
 		path: "/vpn/{id}/connect",
 		summary: "Dial a VPN",
 		description: "Brings a stored tunnel up, streaming the client's progress as it authenticates and then sets up routing. Streamed because a dial takes seconds and can fail with something you have to read: a wrong password, a gateway certificate nobody trusts, a code it wants. Connecting one that is already up simply says so."
-	}).input(VpnConnectInputSchema).output(eventIterator(IntenticLineSchema)),
-	disconnect: oc.route({
+	}).input(VpnConnectInputSchema).output(streamOf(IntenticLineSchema)),
+	disconnect: vpnRoute.route({
 		method: "POST",
 		path: "/vpn/{id}/disconnect",
 		summary: "Drop a tunnel",
 		description: "Takes the tunnel down. One that was already down is fine: the promise is that it is not up afterwards."
 	}).input(VpnIdParamSchema).output(OkSchema$1),
-	importForticlient: oc.route({
+	importForticlient: vpnRoute.route({
 		method: "POST",
 		path: "/vpn/import-forticlient",
 		summary: "Read connections out of an exported config",
@@ -22305,7 +19980,7 @@ var vpnContract = {
 	}).input(ForticlientImportInputSchema).output(ForticlientImportSchema)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/workflows.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/workflows.js
 var StepIdSchema = string().min(1).max(24).regex(/^[a-z0-9][a-z0-9-]*$/);
 var WorkflowHandoffSchema = _enum(["fresh", "continue"]);
 var WORKFLOW_STEPS_MAX = 24;
@@ -22313,7 +19988,7 @@ var WorkflowStepSchema = object({
 	id: StepIdSchema.describe("This step's own name, which other steps use to say they wait on it."),
 	title: string().min(1).max(60).describe("What to call it on screen. Short: the instruction below is where the detail goes."),
 	goal: string().min(1).optional().describe("What done means for this step, in your words. It is what the step is judged against, and a different sentence from what it is told to do."),
-	prompt: string().min(1).optional().describe("What the step is told to do. The goal is the suite is green; this is run the tests, take the top failure, fix it. Leaving it out hands over the run's own request untouched, which is right for a step whose whole job is do what was asked."),
+	prompt: string().min(1).optional().describe("What the step is told to do. The goal is the suite passes; this is run the tests, take the top failure, fix it. Leaving it out hands over the run's own request untouched, which is right for a step whose whole job is do what was asked."),
 	needs: array(StepIdSchema).describe("Which steps must finish first. Empty means it starts when the run does. Naming a step that does not exist, or a loop between steps, is refused when the workflow is saved."),
 	handoff: WorkflowHandoffSchema.describe("How it meets what came before: a fresh conversation handed the previous step's result, or the same conversation carried on."),
 	output: LoopOutputSchema.describe("What it has to produce for the step to count."),
@@ -22337,7 +20012,7 @@ object({
 		"pass",
 		"fail",
 		"blocked"
-	]).describe("Ship it, do not, or we could not tell. That third answer exists because could not reach a judgement is not the product is broken: a gate that reported its own outages as failures is one a team switches off, so it should be the honest answer far more often than the convenient one, and it means a neutral build rather than a red one."),
+	]).describe("Ship it, do not, or we could not tell. That third answer exists because could not reach a judgement is not the product is broken: a gate that reported its own outages as failures is one a team switches off, so it should be the honest answer far more often than the convenient one, and it means a neutral build rather than a failed one."),
 	reason: string().describe("Why, in one line. Realistically the only part of this a build log will ever show."),
 	runId: string().describe("The run behind the verdict, so somebody can go and read it."),
 	value: string().optional().describe("What the step actually answered. Absent when there was nothing to read, which is most of the could-not-tell cases.")
@@ -22360,7 +20035,7 @@ var WorkflowStepStateSchema = _enum([
 ]);
 var WorkflowStepRunSchema = object({
 	stepId: StepIdSchema.describe("Which step this is."),
-	state: WorkflowStepStateSchema.describe("How it went. Skipped carries what the others cannot: it never ran, because something it was waiting on did not finish. That is why a failed run shows one red step and a trail of grey ones."),
+	state: WorkflowStepStateSchema.describe("How it went. Skipped carries what the others cannot: it never ran, because something it was waiting on did not finish. That is why a failed run shows one failed step and a trail of skipped ones."),
 	conversationId: string().describe("The conversation it ran on, and the way from a node on the graph to a real record. Shared with the step before it when they were chained, which is what makes those two one card."),
 	startedAt: number$1().optional().describe("When it began, in milliseconds."),
 	endedAt: number$1().optional().describe("When it ended, in milliseconds."),
@@ -22408,57 +20083,57 @@ var WorkflowSaveSchema = object({
 	create: boolean().describe("Whether you mean to make a new one or replace an existing one. Said outright rather than inferred, so an id that happens to collide is a refusal instead of one saved design quietly overwriting another.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/workflows.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/workflows.contract.js
 var workflowsContract = {
-	list: oc.route({
+	list: procedure.route({
 		method: "GET",
 		path: "/workflows",
 		summary: "Saved workflows and their runs",
 		description: "Every workflow somebody has designed, each with its own run history, newest first. One answer rather than two, because a workflow that has never been run is the interesting case rather than a mistake."
 	}).output(WorkflowsListSchema),
-	save: oc.route({
+	save: procedure.route({
 		method: "POST",
 		path: "/workflows",
 		summary: "Create or replace a workflow",
 		description: "Writes a workflow design. Say which of the two you mean, so an id that happens to collide cannot silently overwrite somebody's work. A design that could never run is refused, in the same words the editor shows while you type: a loop in the steps, a step waiting on one that is not there, a step with no way of knowing it is finished."
 	}).input(WorkflowSaveSchema).output(WorkflowSavedSchema),
-	rotateGateToken: oc.route({
+	rotateGateToken: procedure.route({
 		method: "POST",
 		path: "/workflows/{id}/gate/rotate",
 		summary: "Rotate a release gate's token",
 		description: "Mints a new credential for the workflow's release gate and retires the old one at once. Every pipeline wired to the gate has to be handed the new URL. Refused for a workflow that declares no gate."
 	}).input(WorkflowIdParamSchema).output(DoorTokenSchema),
-	remove: oc.route({
+	remove: procedure.route({
 		method: "DELETE",
 		path: "/workflows/{id}",
 		summary: "Delete a workflow",
 		description: "Removes the design. A run of it that is already going keeps going and stays readable and stoppable, because a run takes its own copy of the design when it starts."
 	}).input(WorkflowIdParamSchema).output(OkSchema$1),
-	run: oc.route({
+	run: procedure.route({
 		method: "POST",
 		path: "/workflows/{id}/run",
 		summary: "Start a workflow",
 		description: "Kicks a workflow off and answers immediately with the run as recorded; the work carries on without you. Point it at a question and every step gets that on top of its own instructions. Every step is written down as waiting up front, so the picture is complete from the first frame. Several runs of one design can be in flight at once without colliding."
 	}).input(WorkflowRunStartSchema).output(WorkflowRunSchema),
-	runs: oc.route({
+	runs: procedure.route({
 		method: "GET",
 		path: "/workflows/runs",
 		summary: "Every workflow run",
 		description: "All runs across all workflows, newest first. This is also the only place the runs of a deleted workflow are still reachable."
 	}).output(WorkflowRunsListSchema),
-	stopRun: oc.route({
+	stopRun: procedure.route({
 		method: "POST",
 		path: "/workflows/runs/{runId}/stop",
 		summary: "Stop a run now",
 		description: "Nothing further starts, and the steps already going are cut off where they stand. Whatever they had written stays on their branches. Deliberately abrupt rather than letting the current step finish: a step is a whole agent turn, and a stop that kept spending for minutes afterwards is indistinguishable from a button that does nothing. It always ends the run, including one left stranded by a daemon that was replaced mid-flight."
 	}).input(WorkflowRunIdParamSchema).output(OkSchema$1),
-	archiveRun: oc.route({
+	archiveRun: procedure.route({
 		method: "POST",
 		path: "/workflows/runs/{runId}/archive",
 		summary: "Take a finished run off the board",
 		description: "Nothing is lost and the working copies are reclaimed. Every conversation the run started is put away with it, which is what makes this an archive rather than a dismissal: a step has no card of its own, so merely dropping the run would spill its conversations onto the board at the moment somebody said they were done. Refused while the run is still going."
 	}).input(WorkflowRunIdParamSchema).output(OkSchema$1),
-	unarchiveRun: oc.route({
+	unarchiveRun: procedure.route({
 		method: "POST",
 		path: "/workflows/runs/{runId}/unarchive",
 		summary: "Bring an archived run back",
@@ -22466,7 +20141,7 @@ var workflowsContract = {
 	}).input(WorkflowRunIdParamSchema).output(OkSchema$1)
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/workspace/workspace-repos.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/workspace/workspace-repos.js
 var ReposListSchema = object({ repos: array(string()).describe("Every repository's id, sorted. An id is its folder relative to the workspace root, and \"root\" is the workspace itself.") });
 var CloneRepoSchema = object({
 	name: string().min(1).describe("What to call it in the workspace."),
@@ -22563,244 +20238,245 @@ var WorkspaceSetupSchema = object({ projects: array(object({
 var WorkspaceInstallSchema = object({ dirs: array(string().max(500)).min(1).max(50).describe("Which projects to install, by folder. Ones already ready, already installing, or with no tool to install them are skipped rather than refused.") });
 var WorkspaceInstallResultSchema = object({ queued: array(string()).describe("Which of them actually started, which is not necessarily what you asked for.") });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/contracts/workspace.contract.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/contracts/workspace.contract.js
 var workspaceContract = {
-	tree: oc.route({
+	tree: procedure.route({
 		method: "GET",
 		path: "/workspace/tree",
 		summary: "The workspace file tree",
 		description: "Every folder and file under the workspace root, as one walk. Name a conversation to read its own private copy of the tree instead of the shared one. Folders the daemon skips, such as installed packages, come back without their contents; ask for those separately."
-	}).input(WorkspaceScopeSchema).output(WorkspaceTreeSchema),
-	children: oc.route({
+	}).meta({ guest: true }).input(WorkspaceScopeSchema).output(WorkspaceTreeSchema),
+	children: procedure.route({
 		method: "GET",
 		path: "/workspace/children",
 		summary: "A bounded folder listing",
 		description: "The entries inside a folder as one flat list. Direct children are the default, which is how the explorer opens a folder the full tree walk left closed; callers that need a small subtree can ask for up to five levels without a request per directory."
-	}).input(WorkspaceChildrenQuerySchema).output(WorkspaceChildrenSchema),
-	file: oc.route({
+	}).meta({ guest: true }).input(WorkspaceChildrenQuerySchema).output(WorkspaceChildrenSchema),
+	file: procedure.route({
 		method: "GET",
 		path: "/workspace/file",
 		summary: "Read part of a text file",
 		description: "A window of one file's text, plus how large the whole file is. Never the entire file: an unbounded read is how a single enormous log stalls the daemon for everyone, so ask for the slice you mean to show and page through if you need more."
-	}).input(WorkspaceFileReadQuerySchema).output(WorkspaceFileSchema),
-	derived: oc.route({
+	}).meta({ guest: true }).input(WorkspaceFileReadQuerySchema).output(WorkspaceFileSchema),
+	derived: procedure.route({
 		method: "GET",
 		path: "/workspace/derived",
 		summary: "Read a file's derived text",
 		description: "What a document, picture, recording or archive says, as text, from the shadow the sandbox keeps beside it. This is the same rendering an agent reads instead of the bytes, so it is also the way to check what one is working from. Nothing is derived here: a file with no shadow yet answers that it has none, and whether it could have one."
-	}).input(WorkspaceDerivedQuerySchema).output(WorkspaceDerivedSchema),
-	derive: oc.route({
+	}).meta({ guest: true }).input(WorkspaceDerivedQuerySchema).output(WorkspaceDerivedSchema),
+	derive: procedure.route({
 		method: "POST",
 		path: "/workspace/derive",
 		summary: "Derive a file's text now",
 		description: "Renders one file to text and answers with the result, for when its shadow is missing or you want it rebuilt. The same work the background pass does when that setting is on, so this is how a reader gets the text without turning it on for the whole workspace. Costs a parse of exactly one file; a format nothing can read says so rather than failing."
+	}).meta({
+		floor: "viewer",
+		guest: true
 	}).input(WorkspaceDerivedQuerySchema).output(WorkspaceDerivedSchema),
-	derivedStatus: oc.route({
-		method: "GET",
-		path: "/workspace/derived-status",
-		summary: "How the background rendering is doing",
-		description: "Whether documents, pictures, recordings and archives are being rendered to text in the background, how many are waiting, which are being read right now, and how many shadows the last whole-tree pass counted. Ask this to tell a file nothing can read from a file whose turn has not come."
-	}).output(SidecarStatusSchema),
-	mediaTicket: oc.route({
+	mediaTicket: procedure.route({
 		method: "POST",
 		path: "/workspace/media-ticket",
 		summary: "Get a pass for streaming a media file",
 		description: "Mints the short-lived ticket a video or audio element hands to the streaming route, which serves byte ranges and so cannot carry an ordinary header. Minting it here means a caller can tell whether this sandbox streams media at all, rather than discovering it mid-playback."
+	}).meta({
+		floor: "viewer",
+		guest: true
 	}).input(WorkspaceMediaTicketQuerySchema).output(WorkspaceMediaTicketSchema),
-	resolve: oc.route({
+	downloadTicket: procedure.route({
+		method: "POST",
+		path: "/workspace/download-ticket",
+		summary: "Get a pass for downloading files and folders together",
+		description: "Mints the short-lived ticket the download route takes, bound to a selection of files and folders. The route answers one ZIP streamed straight from disk: folders whole, already-compressed formats stored as they are and everything else deflated. Minting it first means a missing or unreadable path is refused here, before the browser starts a download that cannot finish."
+	}).meta({
+		floor: "viewer",
+		guest: true
+	}).input(WorkspaceDownloadTicketQuerySchema).output(WorkspaceDownloadTicketSchema),
+	resolve: procedure.route({
 		method: "GET",
 		path: "/workspace/resolve",
 		summary: "Turn a written path into a real file",
 		description: "Matches a path somebody wrote in prose against the real tree and says which file it means. A path mentioned in a message is often only the tail of the real one, so this is the lookup behind every clickable file reference rather than a plain existence check."
-	}).input(WorkspaceResolveQuerySchema).output(WorkspaceResolveSchema),
-	search: oc.route({
+	}).meta({ guest: true }).input(WorkspaceResolveQuerySchema).output(WorkspaceResolveSchema),
+	search: procedure.route({
 		method: "GET",
 		path: "/workspace/search",
 		summary: "Search the code",
 		description: "Ranked results across the whole workspace, grouped, each carrying why it matched and how fresh it is. Left alone it blends plain text, structure, meaning and history in one pass; narrow it to a single kind of search when you already know which you want. Long result sets resume from the cursor it hands back."
+	}).meta({
+		guest: true,
+		control: "editor"
 	}).input(WorkspaceSearchQuerySchema).output(WorkspaceSearchResultSchema),
-	health: oc.route({
+	health: procedure.route({
 		method: "GET",
 		path: "/workspace/health",
 		summary: "A repo's shape in numbers",
 		description: "Where one repo's risk sits: the files that change often and are complicated at once, what the index holds, and which modules the rest of the code leans on most. Scoped to a repo, because a codebase is a repo rather than the whole drop."
 	}).input(WorkspaceHealthQuerySchema).output(WorkspaceHealthSchema),
-	classify: oc.route({
+	classify: procedure.route({
 		method: "GET",
 		path: "/workspace/classify",
 		summary: "Sort a messy drop into buckets",
 		description: "Proposes which of the loose things in the workspace are code, documents, media or archives. A read-only suggestion by fixed rules, with no model involved: nothing moves until a caller applies the moves it likes through the move call."
 	}).output(WorkspaceClassificationSchema),
-	mkdir: oc.route({
+	mkdir: procedure.route({
 		method: "POST",
 		path: "/workspace/dir",
 		summary: "Create a folder",
 		description: "Makes a folder, and any missing folders above it."
-	}).input(WorkspaceDirSchema).output(OkSchema$1),
-	delete: oc.route({
+	}).meta({ floor: "writer" }).input(WorkspaceDirSchema).output(OkSchema$1),
+	delete: procedure.route({
 		method: "DELETE",
 		path: "/workspace/entry",
 		summary: "Delete a file or folder",
-		description: "Removes one entry and everything under it. The path travels in the body rather than the address, the same as every other write in this group."
-	}).input(WorkspaceFileQuerySchema).output(OkSchema$1),
-	move: oc.route({
+		description: "Removes one entry and everything under it. It goes to the trash rather than being erased, and the answer carries the id that brings it back through the restore call for a day. The path travels in the body rather than the address, the same as every other write in this group."
+	}).meta({ floor: "writer" }).input(WorkspaceFileQuerySchema).output(WorkspaceDeletedSchema),
+	restore: procedure.route({
+		method: "POST",
+		path: "/workspace/restore",
+		summary: "Bring back something deleted",
+		description: "Puts an entry a delete sent to the trash back where it was, recreating the folders above it. Nothing is written over: when something new holds the name, it comes back beside it and the answer says where. Trash older than a day is gone."
+	}).meta({ floor: "writer" }).input(WorkspaceRestoreSchema).output(WorkspaceRestoredSchema),
+	move: procedure.route({
 		method: "POST",
 		path: "/workspace/move",
 		summary: "Move or rename something",
 		description: "Moves one entry to a new path, which is also how you rename it."
-	}).input(WorkspaceMoveSchema).output(OkSchema$1),
-	copy: oc.route({
+	}).meta({ floor: "writer" }).input(WorkspaceMoveSchema).output(OkSchema$1),
+	copy: procedure.route({
 		method: "POST",
 		path: "/workspace/copy",
 		summary: "Copy a file or folder",
 		description: "Duplicates one entry at a new path, recursively for a folder."
-	}).input(WorkspaceMoveSchema).output(OkSchema$1),
-	setup: oc.route({
+	}).meta({ floor: "writer" }).input(WorkspaceMoveSchema).output(OkSchema$1),
+	extract: procedure.route({
+		method: "POST",
+		path: "/workspace/extract",
+		summary: "Unpack an archive",
+		description: "Unpacks a zip or tar already in the workspace into a new folder beside it, named after the archive. An archive that is one folder of its own name lands as that folder rather than as it twice, and a .gz, .bz2, .xz or .zst holding a single file lands as that file. Nothing is ever written over: the answer says where it landed. Formats with no tool here, such as .7z and .rar, are refused."
+	}).meta({ floor: "writer" }).input(WorkspaceFileQuerySchema).output(WorkspaceExtractSchema),
+	setup: procedure.route({
 		method: "GET",
 		path: "/workspace/setup",
 		summary: "Which projects have their dependencies installed",
 		description: "Per project, whether its dependencies are actually present. A project that arrives by import comes without them, so files landing is not the same as the project working: until this says a project is ready, its type checks and tests can only mislead you."
 	}).output(WorkspaceSetupSchema),
-	install: oc.route({
+	install: procedure.route({
 		method: "POST",
 		path: "/workspace/setup/install",
 		summary: "Install a project's dependencies",
 		description: "Starts the install for one or more projects in a terminal you can attach to, and answers immediately. The run survives a page reload and its output stays in the terminal history."
 	}).input(WorkspaceInstallSchema).output(WorkspaceInstallResultSchema),
-	repos: oc.route({
+	repos: procedure.route({
 		method: "GET",
 		path: "/workspace/repos",
 		summary: "Repos in the workspace",
 		description: "Every git repo the daemon found in the workspace, with where each one sits and what it is called."
-	}).output(ReposListSchema),
-	addRepo: oc.route({
+	}).meta({ guest: true }).output(ReposListSchema),
+	addRepo: procedure.route({
 		method: "POST",
 		path: "/workspace/repos",
 		summary: "Clone a repo in",
 		description: "Clones a repository into the workspace beside the others, using whatever forge credentials the sandbox already holds."
 	}).input(CloneRepoSchema).output(CloneResultSchema),
-	createRepo: oc.route({
+	createRepo: procedure.route({
 		method: "POST",
 		path: "/workspace/repos/new",
 		summary: "Start a new repo",
 		description: "Makes an empty repository in the workspace: a folder named after it, initialised, with a README that names it and one commit, so an agent can start on it at once. Nothing is cloned and nothing leaves the machine."
 	}).input(CreateRepoSchema).output(CloneResultSchema),
-	sync: oc.route({
+	sync: procedure.route({
 		method: "POST",
 		path: "/workspace/sync",
 		summary: "Pull every repo up to date",
 		description: "Fetches every repo that has a remote and fast-forwards the ones that can move safely, reporting what happened to each. This runs by itself at the start of a turn; call it directly to refresh on demand, or to re-sync a repo that had drifted."
 	}).output(WorkspaceSyncSchema),
-	templates: oc.route({
+	templates: procedure.route({
 		method: "GET",
 		path: "/workspace/templates",
 		summary: "App templates you can add",
 		description: "The kinds of app the configured source repo knows how to scaffold, which is what an add-app picker lists."
 	}).output(TemplatesListSchema),
-	addApps: oc.route({
+	addApps: procedure.route({
 		method: "POST",
 		path: "/workspace/repos/{repo}/apps",
 		summary: "Scaffold new apps into a repo",
 		description: "Starts scaffolding one or more apps inside an existing multi-package repo and answers straight away. Watch the terminal it opens for progress and for anything that goes wrong."
 	}).input(AddAppsSchema).output(OkSchema$1),
-	appsList: oc.route({
+	appsList: procedure.route({
 		method: "GET",
 		path: "/workspace/repos/{repo}/apps",
 		summary: "Apps inside a repo",
 		description: "The apps in one multi-package repo, each with its preview address and whether its dev server is up."
 	}).input(RepoAppsParamSchema).output(AppsListSchema),
-	packageGraph: oc.route({
+	packageGraph: procedure.route({
 		method: "GET",
 		path: "/workspace/repos/{repo}/graph",
 		summary: "How a repo's packages depend on each other",
 		description: "Every package in one multi-package repo and which of its siblings each one uses, which is what a dependency view draws."
 	}).input(RepoAppsParamSchema).output(WorkspaceGraphSchema),
-	modules: oc.route({
+	modules: procedure.route({
 		method: "GET",
 		path: "/workspace/modules",
 		summary: "Every package across every repo",
 		description: "The named packages in the whole workspace, which is what a review list groups changed files under when a reader wants packages rather than paths. Whole-workspace in one answer, because a review spans repos and asking per repo would be a fan-out on every open."
 	}).output(WorkspaceModulesSchema),
-	startApp: oc.route({
+	startApp: procedure.route({
 		method: "POST",
 		path: "/workspace/repos/{repo}/apps/{app}/start",
 		summary: "Start an app's dev server",
 		description: "Brings up one app's preview server in an attachable terminal, so its address starts answering."
 	}).input(AppParamSchema).output(OkSchema$1),
-	stopApp: oc.route({
+	stopApp: procedure.route({
 		method: "POST",
 		path: "/workspace/repos/{repo}/apps/{app}/stop",
 		summary: "Stop an app's dev server",
 		description: "Shuts one app's preview server down and frees its port."
 	}).input(AppParamSchema).output(OkSchema$1),
-	runTests: oc.route({
+	runTests: procedure.route({
 		method: "POST",
 		path: "/workspace/repos/{repo}/tests",
 		summary: "Run a project's tests",
 		description: "Starts the test run for the projects you name in an attachable terminal and answers straight away. The terminal is where the results appear."
 	}).input(RunTestsSchema).output(OkSchema$1)
 };
-oc.output(HostFactsSchema), oc.input(HostScopesSchema).output(OkSchema$1), oc.output(OkSchema$1), oc.input(unknown()).output(unknown()), oc.input(DeviceSandboxFlowSchema).output(eventIterator(DeviceFlowLineSchema)), oc.input(DeviceAgentFlowSchema).output(eventIterator(DeviceFlowLineSchema));
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/webext.js
-var WebExtGrantSchema = object({
-	origin: string(),
-	mode: _enum(["read", "act"])
-});
-var WebExtFactsSchema = object({
-	browser: string(),
-	tabs: number$1(),
-	grants: array(WebExtGrantSchema),
-	paused: boolean()
-});
-object({ browsers: array(object({
-	id: string(),
-	platform: string().min(1),
-	online: boolean(),
-	version: string().optional(),
-	lastSeen: number$1().optional(),
-	facts: WebExtFactsSchema.optional()
-})) });
-var WebExtCookieSchema = object({
-	name: string(),
-	value: string(),
-	domain: string(),
-	path: string(),
-	expires: number$1().optional(),
-	httpOnly: boolean(),
-	secure: boolean(),
-	sameSite: _enum([
-		"Strict",
-		"Lax",
-		"None"
-	])
-});
-object({
-	account: string().min(1),
-	origin: string().min(1),
-	cookies: array(WebExtCookieSchema).min(1).max(300)
-});
-object({
-	account: string().min(1),
-	domain: string().min(1)
-});
-object({
-	ok: boolean(),
-	message: string(),
-	cookies: array(WebExtCookieSchema).optional()
-});
-oc.output(WebExtFactsSchema), oc.input(WebExtScopesSchema).output(OkSchema$1), oc.output(OkSchema$1), oc.input(unknown()).output(unknown());
-oc.output(RunnerFactsSchema), oc.input(RunnerSyncSchema).output(eventIterator(RunnerSyncLineSchema)), oc.input(RunnerTurnSchema).output(eventIterator(AgentEventSchema)), oc.input(AgentReplySchema).output(object({ applied: boolean() })), oc.input(object({
+oc.output(DeviceFactsSchema), oc.output(DeviceReportSchema), oc.input(DeviceScopesSchema.extend({ platform: string().optional() }).strict()).output(OkSchema$1), oc.output(OkSchema$1), oc.input(unknown()).output(unknown()), oc.input(DeviceSandboxFlowSchema).output(streamOf(DeviceFlowLineSchema)), oc.input(DeviceAgentFlowSchema).output(streamOf(DeviceFlowLineSchema)), oc.input(LoopbackCatchSchema).output(streamOf(LoopbackCatchEventSchema));
+oc.output(WebExtFactsSchema), oc.input(WebExtScopesSchema).output(OkSchema$1), oc.output(OkSchema$1), oc.input(unknown()).output(unknown()), oc.input(LoopbackCatchSchema).output(streamOf(LoopbackCatchEventSchema));
+oc.output(RunnerFactsSchema), oc.input(RunnerSyncSchema).output(streamOf(RunnerSyncLineSchema)), oc.input(RunnerTurnSchema).output(streamOf(AgentEventSchema)), oc.input(AgentReplySchema).output(object({ applied: boolean() })), oc.input(object({
 	conversationId: string().min(1),
 	text: string(),
 	attachments: array(string()).optional(),
+	mentions: array(string()).optional(),
 	editorContext: EditorContextSchema.optional()
 })).output(object({
 	applied: boolean(),
 	invalid: string().optional()
-})), oc.input(object({ toml: string() })).output(object({ settings: array(string()) })), oc.input(RunnerTurnSchema.pick({ conversationId: true })).output(OkSchema$1), oc.output(OkSchema$1);
+})), oc.input(object({ toml: string() })).output(object({ settings: array(string()) })), oc.input(RunnerTurnSchema.pick({ conversationId: true })).output(OkSchema$1), oc.input(RunnerCommandSchema).output(streamOf(RunnerCommandFrameSchema)), oc.input(RunnerCommandSchema.pick({ runId: true })).output(OkSchema$1), oc.output(OkSchema$1);
+new Set(Object.keys({
+	"no-tunnel": true,
+	"unknown-sandbox": true,
+	dropped: true
+}));
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/events/resume.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/protocol/vitals.js
+var NODE_LINKS = {
+	starting: "starting",
+	up: "up",
+	restarting: "restarting"
+};
+var PressureSchema = object({
+	cpu: number$1(),
+	memory: number$1(),
+	io: number$1()
+});
+object({
+	node: _enum(NODE_LINKS),
+	lagMs: number$1().nonnegative().nullable().catch(null),
+	restarts: number$1().int().nonnegative(),
+	uptimeS: number$1().int().nonnegative(),
+	pressure: PressureSchema.nullable().catch(null)
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/events/resume.js
 var REPEATED = "The interrupted request is repeated below, where part of it was already completed in this session, continue from that point instead of starting over.";
 ({
 	auth: `The Claude credential that interrupted this conversation has been renewed, and this turn resumed automatically. ${REPEATED}`,
@@ -22811,6 +20487,10 @@ var REPEATED = "The interrupted request is repeated below, where part of it was 
 	switched: "The model provider's usage allowance ran out while this turn was running, which stopped it, and it has been sent again on a different account, which starts a fresh session. The conversation so far has been carried across above, including the part of the request that was already completed, and the sandbox has measured where the work actually stands (the files changed on this branch, what was verified, what the checklist still holds) in the note headed 'Where the work stands': trust that note over anything recalled, then continue from that point instead of starting over.",
 	carried: `The model provider's usage allowance ran out while this turn was running, which stopped it, and it has been sent again on a different account of the same provider, in this same session: everything you knew is still here. ${REPEATED}`,
 	refused: "The model provider refused the previous attempt at this request outright, because its usage allowance was spent: no part of the request below was read or acted on, and nothing has been done towards it. It has been sent again, and starts from the beginning. Where the sandbox has measured earlier work on this branch, it is in the note headed 'Where the work stands'.",
+	door: "The previous attempt at this request was turned away before any of it reached you: no part of the request below was read or acted on. It has now been sent, and starts from the beginning.",
+	overflow: "This conversation's session grew larger than the model's context window can hold, which stopped this turn, and it has been sent again in a fresh session. The conversation so far has been carried across above, including the part of the request that was already completed, and the sandbox has measured where the work actually stands (the files changed on this branch, what was verified, what the checklist still holds) in the note headed 'Where the work stands': trust that note over anything recalled, then continue from that point instead of starting over. Keep this session small: read large files and long command output in parts rather than whole.",
+	flagged: `The model provider's safety classifier stopped the previous attempt at this request partway, and it has been sent again after the person looking at this conversation chose to go on. The stopped response has been removed from this session. ${REPEATED}`,
+	continued: "The previous turn in this conversation ended before it finished (it was stopped, or something cut it short, such as a sandbox restart), and the person looking at this conversation chose to carry on without writing anything new: continue the work from where the conversation left off. Anything they declined along the way stays declined.",
 	answered: "The sandbox restarted while this conversation was waiting for the user to respond; it is back, and their response follows below: continue from where the session left off."
 }).answered;
 _enum([
@@ -22824,6 +20504,7 @@ var WORKSPACE_STATE_FILES = [
 		path: ".intentic/config/capabilities.json",
 		invalidates: [
 			"capabilities",
+			"extensions",
 			"environment",
 			"panels",
 			"manifests"
@@ -22855,6 +20536,12 @@ var WORKSPACE_STATE_FILES = [
 			"capabilities",
 			"manifests"
 		],
+		portability: "carry",
+		versioned: true
+	},
+	{
+		path: ".intentic/config/areas.json",
+		invalidates: ["areas", "manifests"],
 		portability: "carry",
 		versioned: true
 	},
@@ -22901,6 +20588,12 @@ var WORKSPACE_STATE_FILES = [
 		note: "The target starts its own record of what it decided."
 	},
 	{
+		path: ".intentic/local/privacy-log.json",
+		invalidates: ["privacy-log"],
+		portability: "derived",
+		note: "The target starts its own record of what its shield did."
+	},
+	{
 		path: ".intentic/config/autostart.json",
 		invalidates: [],
 		why: "The browser reads what is running off /panels; this file only tells the daemon what to start at boot.",
@@ -22914,12 +20607,11 @@ var WORKSPACE_STATE_FILES = [
 		versioned: true
 	},
 	{
-		path: ".intentic/config/hooks/",
-		invalidates: [],
-		why: "The settings screen renders the rules that name these scripts, out of settings.json; nothing in the browser reads the scripts themselves.",
+		path: ".intentic/config/field-notes.toon",
+		invalidates: ["settings"],
 		portability: "carry",
 		versioned: true,
-		outsideWriter: "the owner or an agent, authoring them; the daemon only ever RUNS one, by the path a rule's command names"
+		outsideWriter: "the field-notes automation's agent turn (the daemon only reads it, through FIELD_NOTES_FILE)"
 	},
 	{
 		path: ".intentic/local/rule-firings.json",
@@ -22930,6 +20622,11 @@ var WORKSPACE_STATE_FILES = [
 	{
 		path: ".intentic/records/runtime-installs.json",
 		invalidates: ["environment"],
+		portability: "carry"
+	},
+	{
+		path: ".intentic/records/needs.json",
+		invalidates: ["needs"],
 		portability: "carry"
 	},
 	{
@@ -22956,6 +20653,12 @@ var WORKSPACE_STATE_FILES = [
 		path: ".intentic/records/automation-runs.json",
 		invalidates: [],
 		why: "Declared by the intentic.automations extension's contributes.files, `automations` is its query key, not core's.",
+		portability: "carry"
+	},
+	{
+		path: ".intentic/records/automation-schedule.json",
+		invalidates: [],
+		why: "Scheduler bookkeeping nothing in the browser renders: what a catch-up fire produces reaches the run ledger, which carries the automations key.",
 		portability: "carry"
 	},
 	{
@@ -23010,25 +20713,25 @@ var WORKSPACE_STATE_FILES = [
 	{
 		path: ".intentic/records/webchat-installs.json",
 		invalidates: [],
-		why: "Which origins have loaded a Front Desk's widget, written on a 30s flush timer while a customer's site serves page views. The install panel that renders it fetches on open and polls itself while it is on screen, which is the whole window in which the answer changes for anyone. Pushing instead would bill every connected browser a refetch per flush, for a panel almost nobody has open.",
+		why: "Which origins have loaded a Visitor chat's widget, written on a 30s flush timer while a customer's site serves page views. The install panel that renders it fetches on open and polls itself while it is on screen, which is the whole window in which the answer changes for anyone. Pushing instead would bill every connected browser a refetch per flush, for a panel almost nobody has open.",
 		portability: "carry"
 	},
 	{
 		path: ".intentic/records/issue-installs.json",
 		invalidates: [],
-		why: "The same probe for the bug reporter's script, on the same flush timer and read by the same kind of panel, so it is outside the push path for the same reason the Front Desk's is.",
+		why: "The same probe for the bug reporter's script, on the same flush timer and read by the same kind of panel, so it is outside the push path for the same reason the Visitor chat's is.",
 		portability: "carry"
 	},
 	{
 		path: ".intentic/records/webchat-outbox.json",
 		invalidates: [],
-		why: "Front Desk replies a visitor has not collected yet, written when an approved wake answers or a human writes as the agent. The only reader is a stranger's browser polling the public /webchat door, which no query key in this app addresses; the owner's own view of the same words is the conversation's transcript, which the agent registry already pushes.",
+		why: "Visitor chat replies a visitor has not collected yet, written when an approved wake answers or a human writes as the agent. The only reader is a stranger's browser polling the public /webchat door, which no query key in this app addresses; the owner's own view of the same words is the conversation's transcript, which the agent registry already pushes.",
 		portability: "carry"
 	},
 	{
 		path: ".intentic/records/thread-sessions.json",
 		invalidates: [],
-		why: "Thread bookkeeping (an inbound thread, a Front Desk visitor, a Discord or Slack channel, → sandbox conversation + provider session), written on EVERY inbound message. Nothing in the browser reads it: what a thread produces is a conversation, and the fleet board already learns about that from the agent registry's own push. Naming a key here would bill every connected browser a refetch per inbound message, the request storm this table's own note warns about, to refresh nothing it can see.",
+		why: "Thread bookkeeping (an inbound thread, a Visitor chat visitor, a Discord or Slack channel, → sandbox conversation + provider session), written on EVERY inbound message. Nothing in the browser reads it: what a thread produces is a conversation, and the fleet board already learns about that from the agent registry's own push. Naming a key here would bill every connected browser a refetch per inbound message, the request storm this table's own note warns about, to refresh nothing it can see.",
 		portability: "carry"
 	},
 	{
@@ -23060,6 +20763,12 @@ var WORKSPACE_STATE_FILES = [
 	{
 		path: ".intentic/records/extension-updates.json",
 		invalidates: ["extensions"],
+		portability: "carry"
+	},
+	{
+		path: ".intentic/records/conversions.json",
+		invalidates: [],
+		why: "Written once per update that converted something, at boot before any browser is connected; the update card reads the plan from the new image instead.",
 		portability: "carry"
 	},
 	{
@@ -23101,6 +20810,13 @@ var WORKSPACE_STATE_FILES = [
 		portability: "carry"
 	},
 	{
+		path: ".intentic/records/artifacts/browser/",
+		invalidates: [],
+		why: "Page snapshots, screenshots and console logs a turn's browser wrote while looking at a site; read back by that turn and by nothing after it.",
+		portability: "carry",
+		backup: false
+	},
+	{
 		path: ".intentic/local/cache/",
 		invalidates: [],
 		why: "Rebuildable indexes and caches, the iq index and its vector sidecar, the whisper model, fileq's derived/ markdown shadows of binary files; ignored by the watcher and recreated from carried workspace content.",
@@ -23120,6 +20836,12 @@ var WORKSPACE_STATE_FILES = [
 		portability: "derived"
 	},
 	{
+		path: ".intentic/local/trash/",
+		invalidates: [],
+		why: "Entries deleted from the file view, held for a day so Undo can restore them; nothing renders it, and the janitor expires it.",
+		portability: "derived"
+	},
+	{
 		path: ".intentic/local/.pnpm-store/",
 		invalidates: [],
 		why: "pnpm's content-addressable store, auto-created by installs run from under .intentic; the next install rebuilds it.",
@@ -23134,16 +20856,11 @@ var WORKSPACE_STATE_FILES = [
 		note: "The target stamps its own daemon version on first boot."
 	},
 	{
-		path: ".intentic/records/verify.json",
+		path: ".intentic/secrets/converting/",
 		invalidates: [],
-		why: "The dependency verifier's verdict memory; nothing renders it directly, outcomes reach the owner as activity entries and workspace events.",
-		portability: "carry"
-	},
-	{
-		path: ".intentic/local/verify/",
-		invalidates: [],
-		why: "A running check's wrapper artifacts (log + exit status), read once by the daemon when the panel finishes.",
-		portability: "derived"
+		why: "Pre-images of the files an update's conversions changed; only the boot step reads them, to put a rolled-back version's files back.",
+		portability: "secret",
+		note: "An export does not carry an update's undo record; the target converts its own files."
 	},
 	{
 		path: ".intentic/secrets/ci.json",
@@ -23252,10 +20969,38 @@ var BACKED_UP_STATE_PATHS = WORKSPACE_STATE_FILES.filter((file) => file.backup !
 WORKSPACE_STATE_FILES.filter((file) => !BACKED_UP_STATE_PATHS.includes(file.path)).map((file) => file.path);
 var extensionRuntimeDir = (extension) => `${STATE_GROUP_DIR.local}/runtime/extensions/${extension.replaceAll(/[^a-zA-Z0-9._-]/g, "_")}`;
 WORKSPACE_STATE_FILES.filter((file) => file.invalidates.includes("manifests")).map((file) => file.path);
+`${HISTORY_ROOT}`;
 `${STATE_DIR}`;
 `${STATE_DIR}`;
+PROVIDER_SPECS.map((spec) => ({
+	label: spec.label,
+	value: spec.id
+}));
+Object.fromEntries(PROVIDER_SPECS.map((spec) => [spec.id, spec.access]));
+PROVIDER_SPECS.filter((spec) => spec.access.kind === "free").map((spec) => spec.id);
+Object.fromEntries(PROVIDER_SPECS.map((spec) => [spec.id, spec.vendor]));
+PROVIDER_SPECS.filter((spec) => spec.planLimits).map((spec) => spec.id);
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/policy/credential-material.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/reserved-servers.js
+var DAEMON_MCP_SERVERS = {
+	ui: "control",
+	accounts: "control",
+	terminal: "control",
+	code: "control",
+	secrets: "control",
+	hashline: "control",
+	subagents: "control",
+	watch: "control",
+	deps: "control",
+	diagnostics: "outside",
+	web: "outside",
+	browser: "outside"
+};
+new Set(Object.keys(DAEMON_MCP_SERVERS));
+new Set(Object.entries(DAEMON_MCP_SERVERS).filter(([, provenance]) => provenance === "control").map(([name]) => name));
+[...contributedServerMintingKinds()];
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/credential-material.js
 var CREDENTIAL_ASSIGNMENT = /(?:auth[_-]?token|access[_-]?token|refresh[_-]?token|api[_-]?key|access[_-]?key|secret[_-]?key|client[_-]?secret|private[_-]?key|passwo?rd|passphrase|credentials?|secret|token|bearer)["']?[ \t]*[:=][ \t]*(?:"([^"\n]*)"|'([^'\n]*)'|([^\s"',;}\n]*))/gi;
 var STRUCTURAL_SHAPES = [
 	/-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/,
@@ -23281,6 +21026,14 @@ var ISSUED_TOKENS = [
 var globally = (patterns) => patterns.map((pattern) => new RegExp(pattern.source, `${pattern.flags}g`));
 globally(ISSUED_TOKENS);
 new RegExp(CREDENTIAL_ASSIGNMENT.source, CREDENTIAL_ASSIGNMENT.flags);
+[...(/* @__PURE__ */ new Map([
+	["docx", "docx"],
+	["pptx", "pptx"],
+	["xlsx", "xlsx"],
+	["pdf", "pdf"],
+	["html", "html"],
+	["htm", "html"]
+])).keys()];
 object({
 	type: literal("hello"),
 	token: string(),
@@ -23330,11 +21083,23 @@ ActivityStatusSchema.extend({
 	whisperReady: boolean().optional(),
 	pairing: record(string(), ListenerPairingSchema).optional()
 });
-({
-	cautious: 0,
-	balanced: .25,
-	eager: .4
-}).balanced;
+Object.keys({
+	".zip": "zip",
+	".tar": "tar",
+	".tar.gz": "tar",
+	".tgz": "tar",
+	".tar.bz2": "tar",
+	".tbz": "tar",
+	".tbz2": "tar",
+	".tar.xz": "tar",
+	".txz": "tar",
+	".tar.zst": "tar",
+	".tzst": "tar",
+	".gz": "gzip",
+	".bz2": "bzip2",
+	".xz": "xz",
+	".zst": "zstd"
+}).sort((a, b) => b.length - a.length);
 var EngineIdSchema = _enum([
 	"claude",
 	"codex",
@@ -23403,7 +21168,7 @@ object({
 	fromNextTurn: boolean().describe("Whether the change reaches turns already in flight, or only the next one.")
 });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/schemas/environment.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/environment.js
 var environmentFileSchema = object({
 	content: string(),
 	hash: string()
@@ -23426,18 +21191,25 @@ var RuntimeInstallKindSchema = _enum([
 	"go",
 	"other"
 ]);
+var RuntimeInstallSchema = object({
+	tool: string(),
+	kind: RuntimeInstallKindSchema,
+	sessions: array(string()),
+	commands: array(string()),
+	firstAt: number$1(),
+	lastAt: number$1(),
+	count: number$1(),
+	declinedAt: number$1().optional()
+});
+var SettledDraftSchema = object({
+	tool: string(),
+	hash: string(),
+	at: number$1()
+});
 object({
-	installs: array(object({
-		tool: string(),
-		kind: RuntimeInstallKindSchema,
-		sessions: array(string()),
-		commands: array(string()),
-		firstAt: number$1(),
-		lastAt: number$1(),
-		count: number$1(),
-		declinedAt: number$1().optional()
-	})),
-	drift: EnvironmentDriftSchema.optional()
+	installs: array(RuntimeInstallSchema),
+	drift: EnvironmentDriftSchema.optional(),
+	settled: array(SettledDraftSchema).optional()
 });
 var EnvironmentRecurringSchema = object({
 	tool: string(),
@@ -23461,6 +21233,22 @@ var EnvironmentLocalImageSchema = object({
 	base: string(),
 	root: string().optional()
 });
+var EnvironmentRebuildWaitSchema = object({
+	hash: string(),
+	host: string(),
+	requestedAt: number$1(),
+	phase: _enum([
+		"waiting",
+		"rebuilding",
+		"failed"
+	]),
+	waitingOn: array(string()),
+	message: string().optional()
+});
+object({
+	host: string().min(1),
+	hash: string().min(1)
+});
 object({
 	proposal: environmentFileSchema.optional(),
 	custom: environmentFileSchema.optional(),
@@ -23469,14 +21257,16 @@ object({
 	container: string().optional(),
 	drift: EnvironmentDriftSchema.optional(),
 	recurring: array(EnvironmentRecurringSchema).optional(),
-	localImage: EnvironmentLocalImageSchema.optional()
+	localImage: EnvironmentLocalImageSchema.optional(),
+	rebuildWhenIdle: EnvironmentRebuildWaitSchema.optional(),
+	waitsForAgents: literal(true).optional()
 });
 object({ hash: string().min(1) });
 var environmentToolSchema = object({
 	name: string(),
 	version: string().optional()
 });
-object({ items: array(object({
+var EnvironmentItemSchema = object({
 	id: string(),
 	name: string(),
 	origin: _enum([
@@ -23494,8 +21284,11 @@ object({ items: array(object({
 	extras: number$1().optional(),
 	purpose: string().optional(),
 	detail: string().optional(),
-	commands: string().optional()
-})) });
+	commands: string().optional(),
+	block: string().optional()
+});
+object({ block: string() });
+object({ items: array(EnvironmentItemSchema) });
 object({ exports: array(object({
 	name: string(),
 	status: _enum([
@@ -23509,7 +21302,151 @@ object({ exports: array(object({
 	error: string().optional()
 })) });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/state/arrival.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/platform-link.js
+var AnnounceStateSchema = object({
+	state: _enum([
+		"off",
+		"pending",
+		"registered",
+		"rejected",
+		"unreachable"
+	]),
+	detail: string().optional(),
+	retrying: boolean().optional(),
+	reason: _enum(["unknown", "deleted"]).optional(),
+	identity: string().optional(),
+	at: number$1().optional()
+});
+object({
+	ticket: string().min(1).optional(),
+	name: string().max(60).optional(),
+	image: string().max(15e4).optional()
+});
+object({
+	announce: AnnounceStateSchema,
+	adoption: object({
+		status: number$1(),
+		detail: string()
+	}).optional()
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/documents/conversions.js
+var isJsonObject = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
+var drop = (key) => ({
+	kind: "drop",
+	describe: `drops ${key}`,
+	key
+});
+var retype = (key, guard, convert, describe = `converts ${key} to its new form`) => ({
+	kind: "retype",
+	describe,
+	key,
+	guard,
+	convert
+});
+var mapValue = (key, mapping) => {
+	const cyclic = Object.values(mapping).filter((mapped) => typeof mapped === "string" && Object.hasOwn(mapping, mapped));
+	if (cyclic.length > 0) throw new Error(`mapValue(${key}) maps onto its own keys (${cyclic.join(", ")}), so it would not settle`);
+	return {
+		kind: "mapValue",
+		describe: `converts ${key} from its old values`,
+		key,
+		mapping
+	};
+};
+var fold = (describe, shape) => ({
+	kind: "fold",
+	describe,
+	from: shape.from,
+	into: shape.into,
+	applies: shape.applies,
+	convert: shape.convert
+});
+var dropAll = (keys) => keys.map((key) => drop(key));
+var at = (path, inner) => ({
+	kind: "at",
+	describe: `${inner.describe} under ${path}`,
+	path,
+	inner
+});
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/schemas/settings-history.js
+var RETIRED_MOMENTS = /* @__PURE__ */ new Set(["push.starting"]);
+var RETIRED_ACTIONS = /* @__PURE__ */ new Set(["instruct"]);
+var RETIRED_BUILTINS = /* @__PURE__ */ new Set([
+	"verify-edits",
+	"verify-removals",
+	"verify-tests"
+]);
+var isRetiredRule = (rule) => {
+	if (!isJsonObject(rule)) return false;
+	const action = isJsonObject(rule["action"]) ? rule["action"] : {};
+	return RETIRED_MOMENTS.has(rule["moment"]) || RETIRED_ACTIONS.has(action["kind"]) || action["kind"] === "builtin" && RETIRED_BUILTINS.has(action["name"]);
+};
+var holdsRetiredRule = (value) => Array.isArray(value) && value.some(isRetiredRule);
+var isInertRule = (rule) => isJsonObject(rule) && (rule["moment"] === "turn.ending" || isJsonObject(rule["action"]) && rule["action"]["kind"] === "builtin" && rule["action"]["name"] === "verify-ui-edits");
+var holdsInertRule = (value) => Array.isArray(value) && value.some(isInertRule);
+var KEEP_WARM_FLAT = [
+	"keepWarm",
+	"keepWarmHours",
+	"keepWarmMinTokens",
+	"keepWarmReserve"
+];
+var FlatSwitch = boolean();
+var FlatNumber = number$1();
+fold("folds keepWarm, keepWarmHours, keepWarmMinTokens and keepWarmReserve into one keepWarm object", {
+	from: KEEP_WARM_FLAT,
+	into: "keepWarm",
+	applies: (settings) => FlatSwitch.safeParse(settings["keepWarm"]).success || KEEP_WARM_FLAT.slice(1).some((key) => Object.hasOwn(settings, key)),
+	convert: ({ keepWarm, keepWarmHours, keepWarmMinTokens, keepWarmReserve }) => {
+		const folded = {};
+		const auto = FlatSwitch.safeParse(keepWarm);
+		const hours = FlatNumber.safeParse(keepWarmHours);
+		const minTokens = FlatNumber.safeParse(keepWarmMinTokens);
+		const reserve = FlatNumber.safeParse(keepWarmReserve);
+		if (auto.success) folded.auto = auto.data;
+		if (hours.success) folded.hours = hours.data;
+		if (minTokens.success) folded.minTokens = minTokens.data;
+		if (reserve.success) folded.reserve = reserve.data;
+		return folded;
+	}
+});
+[
+	...dropAll([
+		"agentRunEffort",
+		"agentRunModel",
+		"agentRunModels",
+		"autoFastModels",
+		"autoTier",
+		"autoTierEagerness",
+		"commandJudgeModels",
+		"commandRules",
+		"contextShelf",
+		"dependencyFreshness",
+		"explainCommands",
+		"iqContext",
+		"iqContextHoldout",
+		"moveAfterLimit",
+		"quickModel",
+		"resumeAfterLimit",
+		"resumeAfterOutage",
+		"sidecars",
+		"terseHoldout",
+		"terseOutput",
+		"testFaultDetection"
+	]),
+	retype("rules", holdsRetiredRule, (rules) => rules.filter((rule) => !isRetiredRule(rule)), "drops rules at a withdrawn moment or with a withdrawn action (push.starting, instruct, three built-in checks)"),
+	mapValue("personaRouting", {
+		off: false,
+		suggest: true,
+		auto: true
+	}),
+	retype("rules", holdsInertRule, (rules) => rules.filter((rule) => !isInertRule(rule)), "drops rules at the retired turn.ending moment (and the verify-ui-edits built-in), which run nothing"),
+	at("offload", drop("landCheck")),
+	at("modelRoles", drop("pre-push-fix"))
+];
+//#endregion
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/state/arrival.js
 var ArrivalSourceSchema = _enum([
 	"definition",
 	"bundle",
@@ -23580,7 +21517,7 @@ object({ hosts: array(object({
 })) });
 object({ host: string().min(1) });
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/state/definition.js
+//#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/state/definition.js
 var DefinitionRepositorySchema = strictObject({
 	id: string().min(1),
 	remote: string().min(1),
@@ -23649,21 +21586,22 @@ object({
 		note: string().optional()
 	}))
 });
-//#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+sandbox-contract@1.281.0/node_modules/@intentic/sandbox-contract/dist/index.js
-var sandboxContract = {
+contractRoutes({
 	accounts: accountsContract,
 	activity: activityContract,
 	agent: agentContract,
 	agents: agentsContract,
 	approvals: approvalsContract,
+	areas: areasContract,
 	automations: automationsContract,
 	capabilities: capabilitiesContract,
 	chores: choresContract,
 	ci: ciContract,
+	diff: diffContract,
 	endpoints: endpointsContract,
 	extensions: extensionsContract,
 	personas: personasContract,
+	privacy: privacyContract,
 	safety: safetyContract,
 	sessions: sessionsContract,
 	settings: settingsContract,
@@ -23680,131 +21618,131 @@ var sandboxContract = {
 	panels: panelsContract,
 	ports: portsContract,
 	public: publicContract,
-	prepush: prepushContract,
 	providers: providersContract,
 	push: pushContract,
+	needs: needsContract,
 	secrets: secretsContract,
 	system: systemContract,
 	translator: translatorContract,
 	usage: usageContract,
 	vpn: vpnContract,
+	offload: offloadContract,
 	exit: exitContract,
+	netdisk: netdiskContract,
 	workflows: workflowsContract
-};
-contractRoutes(sandboxContract).map((route) => route.name);
-routeShapes(sandboxContract);
+}).map((route) => route.name);
 //#endregion
 //#region src/contract.ts
-var DeployStateSchema = _enum$1([
+var DeployStateSchema = _enum([
 	"running",
 	"deploying",
 	"stopped",
 	"unhealthy",
 	"unknown"
 ]);
-var DeployResourceKindSchema = _enum$1(["deployment", "stack"]);
-var DeployServiceSchema = object$1({
-	name: string$2(),
-	image: string$2(),
-	updateAvailable: boolean$2()
+var DeployResourceKindSchema = _enum(["deployment", "stack"]);
+var DeployServiceSchema = object({
+	name: string(),
+	image: string(),
+	updateAvailable: boolean()
 });
-var DeployResourceSchema = object$1({
+var DeployResourceSchema = object({
 	kind: DeployResourceKindSchema,
-	id: string$2(),
-	name: string$2(),
+	id: string(),
+	name: string(),
 	state: DeployStateSchema,
-	status: string$2().optional(),
-	server: string$2().optional(),
-	image: string$2().optional(),
-	updateAvailable: boolean$2(),
-	services: array$1(DeployServiceSchema),
-	url: string$2()
+	status: string().optional(),
+	server: string().optional(),
+	image: string().optional(),
+	updateAvailable: boolean(),
+	services: array(DeployServiceSchema),
+	url: string()
 });
-var DeployServerStateSchema = _enum$1([
+var DeployServerStateSchema = _enum([
 	"ok",
 	"unreachable",
 	"disabled"
 ]);
-var DeployServerSchema = object$1({
-	id: string$2(),
-	name: string$2(),
+var DeployServerSchema = object({
+	id: string(),
+	name: string(),
 	state: DeployServerStateSchema,
-	cpuPercent: number$3().optional(),
-	memPercent: number$3().optional(),
-	diskPercent: number$3().optional(),
-	url: string$2()
+	cpuPercent: number$1().optional(),
+	memPercent: number$1().optional(),
+	diskPercent: number$1().optional(),
+	url: string()
 });
-var DeployAlertSchema = object$1({
-	id: string$2(),
-	type: string$2(),
-	level: _enum$1([
+var DeployAlertSchema = object({
+	id: string(),
+	type: string(),
+	level: _enum([
 		"ok",
 		"warning",
 		"critical"
 	]),
-	resolved: boolean$2(),
-	ts: number$3(),
-	resource: string$2().optional(),
-	server: string$2().optional(),
-	from: string$2().optional(),
-	to: string$2().optional()
+	resolved: boolean(),
+	ts: number$1(),
+	resource: string().optional(),
+	server: string().optional(),
+	from: string().optional(),
+	to: string().optional()
 });
-var DeployViewerSchema = object$1({
-	username: string$2(),
-	admin: boolean$2()
+var DeployViewerSchema = object({
+	username: string(),
+	admin: boolean()
 });
-var DeployRepoLinkSchema = object$1({
-	repo: string$2(),
-	projectName: string$2(),
-	composePath: string$2(),
-	linkedStack: string$2().optional(),
-	suggestions: array$1(string$2())
+var DeployRepoLinkSchema = object({
+	repo: string(),
+	projectName: string(),
+	composePath: string(),
+	linkedStack: string().optional(),
+	suggestions: array(string())
 });
-var DeployLinkParamSchema = object$1({
-	capability: string$2(),
-	repo: string$2(),
-	stack: string$2()
+var DeployLinkParamSchema = object({
+	capability: string(),
+	repo: string(),
+	stack: string()
 });
-var DeployOverviewResponseSchema = object$1({
-	komodoUrl: string$2(),
-	reachable: boolean$2(),
-	unreachableReason: string$2().optional(),
+var DeployOverviewResponseSchema = object({
+	komodoUrl: string(),
+	reachable: boolean(),
+	unreachableReason: string().optional(),
 	viewer: DeployViewerSchema.optional(),
-	repos: array$1(DeployRepoLinkSchema).default([]),
-	resources: array$1(DeployResourceSchema),
-	servers: array$1(DeployServerSchema),
-	alerts: array$1(DeployAlertSchema),
-	seenAt: number$3().optional()
+	repos: array(DeployRepoLinkSchema).default([]),
+	resources: array(DeployResourceSchema),
+	servers: array(DeployServerSchema),
+	alerts: array(DeployAlertSchema),
+	seenAt: number$1().optional()
 });
-var DeployCapabilityParamSchema = object$1({ capability: string$2() });
-var DeployActionSchema = _enum$1([
+var DeployCapabilityParamSchema = object({ capability: string() });
+var DeployActionSchema = _enum([
 	"deploy",
 	"restart",
 	"start",
 	"stop",
 	"pull"
 ]);
-var DeployActionParamSchema = object$1({
-	capability: string$2(),
+var DeployActionParamSchema = object({
+	capability: string(),
 	kind: DeployResourceKindSchema,
-	id: string$2(),
+	id: string(),
 	action: DeployActionSchema
 });
-var DeployLogsParamSchema = object$1({
-	capability: string$2(),
+var DeployLogsParamSchema = object({
+	capability: string(),
 	kind: DeployResourceKindSchema,
-	id: string$2()
+	id: string()
 });
 var DeployFixParamSchema = DeployLogsParamSchema.extend({ pick: AgentRunPickSchema });
-var DeployLogsResponseSchema = object$1({
-	stdout: string$2(),
-	stderr: string$2()
+var DeployLogsResponseSchema = object({
+	stdout: string(),
+	stderr: string()
 });
-var DeployFixResponseSchema = object$1({ conversationId: string$2() });
-var DeploySeenResponseSchema = object$1({ seenAt: number$3() });
+var DeployFixResponseSchema = object({ conversationId: string() });
+var DeploySeenResponseSchema = object({ seenAt: number$1() });
 //#endregion
 //#region src/server/contract.ts
-var OkSchema = object$1({ ok: literal$1(true) });
+var OkSchema = object({ ok: literal(true) });
 var komodoContract = {
 	overview: oc$1.route({
 		method: "GET",
@@ -24104,9 +22042,9 @@ var repoLinks = async (deps, repoDirs, stacks, links) => {
 };
 //#endregion
 //#region src/server/komodo-store.ts
-var KomodoStateSchema = object$1({
-	seenAt: record$1(string$2(), number$3()),
-	links: record$1(string$2(), record$1(string$2(), string$2())).default({})
+var KomodoStateSchema = object({
+	seenAt: record(string(), number$1()),
+	links: record(string(), record(string(), string())).default({})
 });
 var EMPTY = {
 	seenAt: {},
@@ -24158,7 +22096,7 @@ var fileKomodoStore = (path) => {
 	};
 };
 //#endregion
-//#region ../../../tmp/extbuild/deployments/node_modules/.pnpm/@intentic+base@1.281.0/node_modules/@intentic/base/dist/plain-text.js
+//#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/plain-text.js
 var ANSI = /\x1b(?:\[[0-9;?]*[ -/]*[@-~]|\][^\x07\x1b]*(?:\x07|\x1b\\)|[@-Z\\-_])/g;
 var CONTROL = /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g;
 var lastFrame = (line) => line.split("\r").findLast((frame) => frame !== "") ?? "";

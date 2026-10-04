@@ -5,9 +5,6 @@ import { z } from "zod";
 // here: the UI half imports it and must not pull the oRPC contract into the web bundle. Route table for these shapes is
 // in server/contract.ts.
 
-// Own namespace, no permissions.sandbox entry needed; kept literal so the conformance scanner can resolve it.
-export const DEPLOYMENTS_BASE = "/x/intentic.deployments";
-
 // Komodo deployments: the daemon does vendor translation (Komodo's shapes to the flat ones below); the extension layers
 // an attention model on top, unit-testable without a daemon. Routes are per-connection; the browser never holds the
 // Komodo API key itself.
