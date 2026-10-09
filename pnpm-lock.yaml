@@ -173,8 +173,8 @@ importers:
         specifier: ^1.323.0
         version: 1.323.0(vue@3.5.42(typescript@5.9.3))
       '@intentic/extension-ui':
-        specifier: ^1.323.0
-        version: 1.323.0(vue@3.5.42(typescript@5.9.3))
+        specifier: ^1.326.0
+        version: 1.329.0(vue@3.5.42(typescript@5.9.3))
       '@intentic/sandbox-contract':
         specifier: ^1.323.0
         version: 1.323.0
@@ -252,8 +252,8 @@ packages:
   '@intentic/extension-manifest@1.323.0':
     resolution: {integrity: sha512-sRnQ0PAUEP+0XbqJHT2FQMddaLYetk0HEhR1EhuKWsQyECw5DILOBvaci6yPI5Yyy5q4lCqfYSnaJQeYsICjtw==}
 
-  '@intentic/extension-ui@1.323.0':
-    resolution: {integrity: sha512-4K9TBosWwW4QNAEZ8Ue5UwI3spQ0yNQcgvhlh210rtqK45wc3m1lelA+VByQSzevEY/Em7/hzN0Yvd3WxMwDPw==}
+  '@intentic/extension-ui@1.329.0':
+    resolution: {integrity: sha512-ZqAHzGRvRlECTWEjp+WM8JbPLAgUKtaCrrCNE3XwTSJDoRcHcn0is/bd/Mr2TshRNxaxqnSv2NCgvheOB43hwA==}
     peerDependencies:
       vue: '3'
 
@@ -973,7 +973,7 @@ snapshots:
       tslib: 2.8.1
       zod: 4.6.5
 
-  '@intentic/extension-ui@1.323.0(vue@3.5.42(typescript@5.9.3))':
+  '@intentic/extension-ui@1.329.0(vue@3.5.42(typescript@5.9.3))':
     dependencies:
       primevue: 4.5.5(vue@3.5.42(typescript@5.9.3))
       vue: 3.5.42(typescript@5.9.3)

@@ -13,6 +13,8 @@ import {
     PageAction,
     PageHeader,
     RowGroup,
+    SkeletonSnapshot,
+    vSkeletonSource,
     type AgentRunChoice,
     type TallyItem,
     ProjectChip,
@@ -214,10 +216,13 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
     <!-- No nested scroller: it breaks `scroll-margin` and `:target`, and loses the reader's place on remount. -->
     <Page width="wide">
         <PageHeader title="Deployments">
-            <!-- Hidden while the first read is in flight: "0 running" would be a claim the list is about to contradict. -->
+            <!-- Not drawn from guesses while the first read is in flight: "0 running" would be a claim the list is about to
+                 contradict. Its last shape (no numbers, no colours) stands in once it has been seen; nothing before that. -->
             <template #info>
+                <SkeletonSnapshot v-if="isPending" of="deployments.tally" />
                 <StatusTally
-                    v-if="!isPending && board?.reachable && resources.length > 0"
+                    v-else-if="board?.reachable && resources.length > 0"
+                    v-skeleton-source="`deployments.tally`"
                     :items="counts"
                     class="ml-2"
                 />
@@ -261,7 +266,9 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
             <Button class="mt-3" label="Try again" size="small" severity="secondary" @click="refetch()" />
         </Notice>
 
-        <template v-else>
+        <!-- One element in the skeleton's place, so its imprint (drawn by DeploymentsSkeleton) is the whole board as it last
+             stood: the incident strip, every host group with its rows, and the repo links. -->
+        <div v-else v-skeleton-source="`deployments.board`">
             <!-- 1. Needs you: only when something is open; the one boxed panel, so its frame reads as the alarm. -->
             <div v-if="worst" class="mb-6 rounded-lg border px-4 py-3" :class="INCIDENT_TONE[worst].panel">
                 <div class="flex items-center gap-2">
@@ -329,6 +336,6 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                     />
                 </RowGroup>
             </div>
-        </template>
+        </div>
     </Page>
 </template>
