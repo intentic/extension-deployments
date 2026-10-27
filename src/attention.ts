@@ -1,12 +1,12 @@
 import { type DeployOverviewResponse, DeployOverviewResponseSchema, DeploySeenResponseSchema } from "./contract";
 import type { ViewBadge } from "@intentic/extension-api";
 import { sandboxPoll, sandboxValue } from "@intentic/extension-api";
-import { incidents, incidentTooltip, topTier, unseenIncidents } from "./incidents";
+import { type Incident, incidents, incidentTooltip, topTier, unseenIncidents } from "./incidents";
 import { host } from "./host";
 
 // Rail badge source: module state owned by activate(), not the view, so it updates even while nobody is looking at
-// Deployments. Polled per connection, since a sandbox can hold multiple Komodo capabilities, each its own rail tile.
-// Which connections exist isn't this module's concern: the host's detect() call hands each key straight to badge().
+// Deployments. Polled per connection, since a sandbox can hold multiple Komodo capabilities; the one rail tile sums them
+// (deploymentsBadge), and the view's connection picker reads each one's own (deployBadge).
 
 // Not a sandboxRef: written from inside the render computed, so a reactive ref here would self-loop.
 const watched = sandboxValue<readonly string[]>(() => []);
@@ -76,6 +76,52 @@ export const deployBadge = (capability: string): ViewBadge | undefined => {
         count: unseen.length,
         tone: unseen[0]?.tone ?? `info`,
         tooltip: incidentTooltip(unseen),
+        ...(running === undefined ? {} : { running }),
+    };
+};
+
+// The one tile's badge over every connected Komodo. Still one number of one tier: the worst tier unseen anywhere, counted
+// across connections, so two estates' outages add up while an update on staging never inflates production's "down".
+// With several connections the tooltip names which one, since the reader has to pick it in the view's switcher.
+export const deploymentsBadge = (): ViewBadge | undefined => {
+    const connections = watched.value;
+    const several = connections.length > 1;
+    const named = (capability: string, text: string): string => (several ? `${capability}: ${text}` : text);
+    const unseen: { readonly capability: string; readonly incident: Incident }[] = [];
+    const unreachable: string[] = [];
+    let deploying = 0;
+    for (const capability of connections) {
+        const board = boards.value.get(capability);
+        if (board === undefined) {
+            continue;
+        }
+        if (!board.reachable) {
+            if (board.seenAt === undefined) {
+                unreachable.push(capability);
+            }
+            continue;
+        }
+        deploying += board.resources.filter((resource) => resource.state === `deploying`).length;
+        for (const incident of unseenIncidents(incidents(board.alerts), board.seenAt)) {
+            unseen.push({ capability, incident });
+        }
+    }
+    const running = deploying === 0 ? undefined : `${deploying} deploying`;
+    const top = new Set(topTier(unseen.map((entry) => entry.incident)));
+    const shown = unseen.filter((entry) => top.has(entry.incident));
+    if (shown.length === 0) {
+        if (unreachable.length > 0) {
+            return { mark: `exclamation-circle`, tone: `warning`, tooltip: several ? `can't reach Komodo ${unreachable.join(`, `)}` : `can't reach Komodo` };
+        }
+        return running === undefined ? undefined : { running };
+    }
+    const owners = [...new Set(shown.map((entry) => entry.capability))];
+    const [owner] = owners;
+    const tooltip = incidentTooltip(shown.map((entry) => entry.incident));
+    return {
+        count: shown.length,
+        tone: shown[0]?.incident.tone ?? `info`,
+        tooltip: owners.length === 1 && owner !== undefined ? named(owner, tooltip) : `${tooltip} on ${owners.join(`, `)}`,
         ...(running === undefined ? {} : { running }),
     };
 };

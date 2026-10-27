@@ -126,7 +126,7 @@ export const DeployOverviewResponseSchema = z.object({
 });
 export type DeployOverviewResponse = z.infer<typeof DeployOverviewResponseSchema>;
 
-// Which Komodo connection a call addresses: the capability id, same as the rail tile's key.
+// Which Komodo connection a call addresses: the capability id, the view's `?connection=`.
 export const DeployCapabilityParamSchema = z.object({ capability: z.string() });
 
 // No `write/*` here: it would drift against the desired-state repo; `pull` fetches and deploys in one click.

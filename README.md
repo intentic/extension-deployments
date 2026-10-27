@@ -33,15 +33,17 @@ What is actually running on the servers you own, read from a Komodo you already 
 - [src/incidents.ts](src/incidents.ts): what counts as an incident rather than as noise.
 - [src/stateVisual.ts](src/stateVisual.ts): one mapping from a state to how it reads, so nothing invents its own colour.
 - [src/RepoLinkRow.vue](src/RepoLinkRow.vue): the join from a deployment back to a repo.
-- [src/extension.ts](src/extension.ts): activation, and why it is one tile per connection.
+- [src/extension.ts](src/extension.ts): activation, and why it is one tile however many Komodos are connected.
 
 ## How it fits
 
 Capability-driven, not repo-driven: the same shape as `ext-pipelines`, for the same reason. Gating on the
 intent and desired-state repos would mean someone who simply connects a Komodo they already run gets nothing.
 
-**One tile per connection**, not one for the extension: two Komodos are two production estates, and looking at
-staging must not silence the other.
+**One tile, a switcher for connections.** Several Komodos share the one Deployments tile, the way Documentation
+serves every repository from one: the header's picker chooses the connection (`?connection=`, remembered per
+browser) and is absent over a single one. Two Komodos are still two production estates, so each keeps its own seen
+mark: the tile's badge adds up what every connection still owes, and looking at staging never silences production.
 
 **The repo rows narrow to the open project.** The board comes from the Komodo routes, not from
 `api.workspace.repos()`, so the "Repositories" group filters itself with `api.workspace.inProject` and wears the

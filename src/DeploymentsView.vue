@@ -8,6 +8,8 @@ import {
     noticeOf,
     type NoticeModel,
     PageAction,
+    Picker,
+    type PickerOption,
     ProjectChip,
     Row,
     RowGroup,
@@ -17,9 +19,10 @@ import {
     type AgentRunChoice,
     type TallyItem,
     ui,
+    useRailMemory,
 } from "@intentic/extension-ui";
-import { computed, onBeforeUnmount, onMounted, ref, toRef } from "vue";
-import { markDeploymentsSeen } from "./attention";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { deployBadge, markDeploymentsSeen } from "./attention";
 import { incidents, topTier } from "./incidents";
 import IncidentRow from "./IncidentRow.vue";
 import KomodoLink from "./KomodoLink.vue";
@@ -35,13 +38,40 @@ import { useDeploymentBoard } from "./useDeploymentBoard";
 // 3. resources grouped by host
 // 4. the repo → stack links (setup, not operations)
 
-const props = defineProps<{ capability?: string }>();
-// Rail passes the capability id via props; a directly-mounted view with none falls back to the default id.
-const capability = computed(() => props.capability ?? `komodo`);
-const { loaded, board, act, link, fix, refetch } = useDeploymentBoard(toRef(capability));
+// Every connected Komodo, handed over by detect(); one view switches between them rather than one tile each.
+const props = defineProps<{ connections?: readonly string[] }>();
+const api = host();
+// A directly-mounted view with none falls back to the default id.
+const connections = computed<readonly string[]>(() => (props.connections === undefined || props.connections.length === 0 ? [`komodo`] : props.connections));
 
-// Opening the view counts as reading it; only on mount, or a background poll would swallow a new breakage.
-onMounted(() => void markDeploymentsSeen(capability.value));
+// Which one is open lives in the URL (`?connection=`), so it is linkable and Back works; the bare address reopens on the
+// last one picked in this browser, else the first.
+const chosen = computed<string | undefined>({
+    get: () => api.route.query()[`connection`],
+    set: (next) => api.route.setQuery({ connection: next }),
+});
+// Picks write through the memory; a URL naming a connection (a shared link, Back) is remembered too.
+const pick = useRailMemory(`deployments.connection`, chosen, () => connections.value);
+const choose = (next: string | undefined): void => {
+    if (next !== undefined) {
+        pick.value = next;
+    }
+};
+const capability = computed(() => {
+    const named = chosen.value;
+    return named !== undefined && connections.value.includes(named) ? named : (connections.value[0] ?? `komodo`);
+});
+// Each connection's own unseen count, so the switcher says which estate the rail's number came from.
+const connectionOptions = computed<PickerOption[]>(() =>
+    connections.value.map((name) => {
+        const count = deployBadge(name)?.count;
+        return { value: name, label: name, icon: `box`, mono: true, ...(count === undefined ? {} : { description: `${count} new` }) };
+    }),
+);
+const { loaded, board, act, link, fix, refetch } = useDeploymentBoard(capability);
+
+// Opening a connection counts as reading it; only when it opens, or a background poll would swallow a new breakage.
+watch(capability, (name) => void markDeploymentsSeen(name), { immediate: true });
 
 const open = computed(() => topTier(incidents(board.value?.alerts ?? [])));
 // topTier returns one tier; undefined when nothing is open, which also hides the group.
@@ -56,7 +86,6 @@ const resources = computed(() => board.value?.resources ?? []);
 const servers = computed(() => board.value?.servers ?? []);
 // The open project's repositories only (api.workspace.inProject): the board comes from the Komodo routes, not from
 // repos(), so the view narrows its repo rows itself and says on its chip how many it put out of sight.
-const api = host();
 const allRepos = computed(() => board.value?.repos ?? []);
 const repos = computed(() => allRepos.value.filter((entry) => api.workspace.inProject(entry.repo)));
 const projectHidden = computed(() => allRepos.value.length - repos.value.length);
@@ -248,6 +277,16 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
         <template #actions>
             <!-- The open project, and the way out of it: the same scope every other area narrows by. -->
             <ProjectChip :project="api.workspace.project()" :hidden="projectHidden" noun="repositories" @clear="api.workspace.setProject(undefined)" />
+            <!-- Which Komodo, where every other view puts its repository picker; absent over a single connection. -->
+            <Picker
+                v-if="connections.length > 1"
+                :model-value="capability"
+                :options="connectionOptions"
+                variant="ghost"
+                aria-label="Komodo connection"
+                placeholder="Komodo connection"
+                @update:model-value="choose"
+            />
             <PageAction v-if="stacksUrl !== undefined" icon="box" label="Open Komodo stacks" :href="stacksUrl" />
         </template>
 

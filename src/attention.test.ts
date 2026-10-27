@@ -2,7 +2,7 @@ import type { IntenticApi } from "@intentic/extension-api";
 import { computed, nextTick, ref, watchEffect } from "vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetSandboxScope } from "@intentic/extension-api";
-import { deployBadge, watchConnections } from "./attention";
+import { deployBadge, deploymentsBadge, watchConnections } from "./attention";
 import { bindHost } from "./host";
 
 // Pins that watchConnections (called from detect(), inside the host's render computed) must not leave that computed
@@ -56,5 +56,68 @@ describe(`watchConnections`, () => {
         watchConnections([`production`]);
         await nextTick();
         expect(asked).toHaveLength(1);
+    });
+});
+
+// One tile for every Komodo: its badge must sum what each still owes, in one tier, and say whose it is.
+describe(`deploymentsBadge`, () => {
+    beforeEach(resetSandboxScope);
+
+    const down = (id: string, resource: string, ts = 2) => ({
+        id,
+        type: `ContainerStateChange`,
+        level: `critical`,
+        resolved: false,
+        ts,
+        resource,
+        to: `exited`,
+    });
+    const update = (id: string, resource: string) => ({ id, type: `StackImageUpdateAvailable`, level: `ok`, resolved: false, ts: 2, resource });
+    const board = (alerts: unknown[], extra: Record<string, unknown> = {}) => ({
+        komodoUrl: `https://komodo.example`,
+        reachable: true,
+        alerts,
+        resources: [],
+        servers: [],
+        ...extra,
+    });
+
+    const serve = async (boards: Record<string, unknown>): Promise<void> => {
+        bindHost({
+            sandbox: { reachable: () => true },
+            backend: { json: (path: string) => Promise.resolve(boards[path.split(`/`)[1] ?? ``]) },
+        } as unknown as IntenticApi);
+        watchConnections(Object.keys(boards));
+        // One poll reads every connection before it publishes, so the first badge already covers them all.
+        await vi.waitFor(() => expect(deploymentsBadge()).toBeDefined());
+    };
+
+    it(`adds the worst tier across connections and names both`, async () => {
+        await serve({
+            production: board([down(`a`, `api`)]),
+            staging: board([down(`b`, `web`), update(`c`, `db`)]),
+        });
+        expect(deploymentsBadge()).toEqual({ count: 2, tone: `danger`, tooltip: `2 needing you on production, staging` });
+    });
+
+    it(`names the one connection the trouble is on`, async () => {
+        await serve({
+            production: board([down(`a`, `api`)]),
+            staging: board([update(`c`, `db`)]),
+        });
+        expect(deploymentsBadge()).toEqual({ count: 1, tone: `danger`, tooltip: `production: api exited` });
+    });
+
+    it(`keeps a single connection's words as they were`, async () => {
+        await serve({ komodo: board([down(`a`, `api`)]) });
+        expect(deploymentsBadge()).toEqual({ count: 1, tone: `danger`, tooltip: `api exited` });
+    });
+
+    it(`does not let reading one connection silence another`, async () => {
+        await serve({
+            production: board([down(`a`, `api`)]),
+            staging: board([down(`b`, `web`)], { seenAt: 5 }),
+        });
+        expect(deploymentsBadge()).toEqual({ count: 1, tone: `danger`, tooltip: `production: api exited` });
     });
 });
