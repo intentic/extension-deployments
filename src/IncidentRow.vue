@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { AgentRunButton, ui, Icon, Notice, noticeOf, timeAgo, type AgentRunChoice, useAgentRunPick } from "@intentic/extension-ui";
+import { AgentRunButton, formatTimestamp, Notice, noticeOf, Row, timeAgo, type AgentRunChoice, type ButtonTier, useAgentRunPick } from "@intentic/extension-ui";
 import type { DeployResource } from "./contract";
 import { host } from "./host";
 import type { Incident } from "./incidents";
-import { INCIDENT_TONE } from "./stateVisual";
+import { INCIDENT_ICON } from "./stateVisual";
 
-// One line of the incident panel: what moved, when, and the button to put an agent on it. A component because each
-// row's model pick must be independent in this v-for. The button matters because it can choose what it spends; a
+// One open incident: what moved, where and when, and the button to put an agent on it. A component because each row's
+// model pick must be independent in the parent's v-for. The button matters because it can choose what it spends; a
 // shortcut that couldn't wouldn't save the trip to the board.
 
-const { incident, resource } = defineProps<{
+const { incident, resource, tier } = defineProps<{
     incident: Incident;
     // Alert's named resource, when it's on this board; absent means the line states the problem with no button.
     resource: DeployResource | undefined;
     failure: string | undefined;
+    // The fix's tier: the step asked of the reader on a lone breakage, quiet when it repeats down a list of them.
+    tier: ButtonTier;
 }>();
 const emit = defineEmits<{ fix: [resource: DeployResource, pick: AgentRunChoice | undefined] }>();
 
@@ -27,25 +29,17 @@ const startFix = (): void => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-1">
-        <!-- items-start, not items-center: a wrapped summary would otherwise push the dot onto its own line. -->
-        <div class="flex items-start gap-2">
-            <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full" :class="INCIDENT_TONE[incident.tone].dot"></span>
-            <span class="min-w-0 flex-1 text-sm text-content">
-                {{ incident.summary }}
-                <span class="whitespace-nowrap text-2xs text-subtle">{{ timeAgo(incident.alert.ts) }}</span>
-            </span>
-            <AgentRunButton
-                v-if="resource"
-                label="Ask the agent"
-                icon="sparkles"
-                class="-my-1 shrink-0"
-                severity="secondary"
-                text
-                :picker="fixModel"
-                @run="startFix"
-            />
-        </div>
-        <Notice v-if="failure" :of="noticeOf(failure)" />
-    </div>
+    <Row :icon="INCIDENT_ICON[incident.tone]" :tone="incident.tone">
+        <!-- A slot, not the prop: the summary is the whole point of the row, so on a narrow pane it wraps rather than truncates. -->
+        <template #title>{{ incident.summary }}</template>
+        <template #description>
+            <span v-tooltip.top="formatTimestamp(incident.alert.ts)">{{ timeAgo(incident.alert.ts) }}</span>
+        </template>
+        <template v-if="resource" #control>
+            <AgentRunButton label="Ask the agent" icon="sparkles" size="small" :tier="tier" :picker="fixModel" @run="startFix" />
+        </template>
+        <template v-if="failure" #below>
+            <Notice :of="noticeOf(failure)" />
+        </template>
+    </Row>
 </template>

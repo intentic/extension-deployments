@@ -3,51 +3,55 @@ import { errorMessage } from "@intentic/base/errors";
 import type { DeployAction, DeployResource, DeployServer } from "./contract";
 import { host } from "./host.js";
 import {
-    Button,
-    ui,
-    StatusTally,
-    Icon,
+    Await,
     Notice,
     noticeOf,
-    Page,
+    type NoticeModel,
     PageAction,
-    PageHeader,
+    ProjectChip,
+    Row,
     RowGroup,
-    SkeletonSnapshot,
-    vSkeletonSource,
+    SkeletonRows,
+    SplitView,
+    StatusTally,
     type AgentRunChoice,
     type TallyItem,
-    ProjectChip,
+    ui,
 } from "@intentic/extension-ui";
-import { computed, onMounted, ref, toRef } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, toRef } from "vue";
 import { markDeploymentsSeen } from "./attention";
-import DeploymentsSkeleton from "./DeploymentsSkeleton.vue";
 import { incidents, topTier } from "./incidents";
+import IncidentRow from "./IncidentRow.vue";
+import KomodoLink from "./KomodoLink.vue";
 import RepoLinkRow from "./RepoLinkRow.vue";
 import ResourceRow from "./ResourceRow.vue";
 import ServerMeta from "./ServerMeta.vue";
-import { INCIDENT_TONE } from "./stateVisual";
-import IncidentRow from "./IncidentRow.vue";
 import { useDeploymentBoard } from "./useDeploymentBoard";
 
-// Is what's running healthy, and what changed, a different question from Live status's drift-against-declared-state;
+// Is what's running healthy, and what changed: a different question from Live status's drift-against-declared-state;
 // gated on the Komodo connection rather than a repo. Reading order is worst-first:
-// 1. the incident strip
+// 1. what needs you, as its own group headed in its state's ink
 // 2. one tally on the title row
 // 3. resources grouped by host
-// 4. the repo → stack mapping (setup, not operations)
+// 4. the repo → stack links (setup, not operations)
 
 const props = defineProps<{ capability?: string }>();
 // Rail passes the capability id via props; a directly-mounted view with none falls back to the default id.
 const capability = computed(() => props.capability ?? `komodo`);
-const { board, error, isPending, act, link, logs, fix, refetch } = useDeploymentBoard(toRef(capability));
+const { loaded, board, act, link, fix, refetch } = useDeploymentBoard(toRef(capability));
 
 // Opening the view counts as reading it; only on mount, or a background poll would swallow a new breakage.
 onMounted(() => void markDeploymentsSeen(capability.value));
 
 const open = computed(() => topTier(incidents(board.value?.alerts ?? [])));
-// topTier returns one tier; undefined when nothing is open, which also hides the strip.
+// topTier returns one tier; undefined when nothing is open, which also hides the group.
 const worst = computed(() => open.value[0]?.tone);
+// A group that IS a state heads itself in that state's ink; an image update is news, not a breakage, so it stays neutral.
+const openLabel = computed(() => (worst.value === `info` ? `Updates available` : `Needs you`));
+const openTone = computed(() => (worst.value === `danger` || worst.value === `warning` ? worst.value : undefined));
+// The fix is the step asked of the reader on a lone breakage; repeated down a list of them it is quiet.
+const fixTier = computed(() => (worst.value === `danger` && open.value.length === 1 ? `accent` : `quiet`));
+
 const resources = computed(() => board.value?.resources ?? []);
 const servers = computed(() => board.value?.servers ?? []);
 // The open project's repositories only (api.workspace.inProject): the board comes from the Komodo routes, not from
@@ -62,31 +66,36 @@ const stackNames = computed(() => resources.value.filter((resource) => resource.
 const stacksUrl = computed(() => (board.value === undefined ? undefined : `${board.value.komodoUrl}/stacks`));
 
 // Empty resources doesn't mean an empty Komodo: a permission-less key gets an empty array from Komodo too. `viewer`
-// absent might just mean an older daemon, so that gets its own case rather than assuming emptiness.
-const emptyReason = computed(() => {
+// absent might just mean an older daemon, so that gets its own case rather than assuming emptiness. The two that are a
+// key's problem are a notice with what to change; a Komodo that really is empty is the list's own empty state.
+const emptyReason = computed<{ readonly notice?: NoticeModel; readonly empty?: string } | undefined>(() => {
     if (resources.value.length > 0 || board.value === undefined || !board.value.reachable) {
         return undefined;
     }
     const viewer = board.value.viewer;
     if (viewer === undefined) {
         return {
-            title: `Komodo returned nothing`,
-            detail:
-                `Nothing came back for this connection. If you expect stacks or deployments here, the usual cause is that the API key's ` +
-                `user has no permissions on them: Komodo answers every list with nothing rather than refusing. Check the key's user in ` +
-                `Komodo, or use one made on an admin account.`,
+            notice: {
+                tone: `warning`,
+                title: `Komodo returned nothing`,
+                detail:
+                    `If you expect stacks or deployments here, the API key's user most likely has no permissions on them: Komodo ` +
+                    `answers every list with nothing rather than refusing. Check that user in Komodo, or use a key made on an admin account.`,
+            },
         };
     }
     if (!viewer.admin) {
         return {
-            title: `This API key can't see anything in Komodo`,
-            detail:
-                `The key acts as "${viewer.username}", which is not an admin and has no permissions on any resource, so Komodo answers ` +
-                `every list with nothing. Grant that user access in Komodo (Settings → Users → ${viewer.username}), or replace the key ` +
-                `with one made on an admin account.`,
+            notice: {
+                tone: `warning`,
+                title: `This API key can't see anything in Komodo`,
+                detail:
+                    `The key acts as "${viewer.username}", which is not an admin and has no permissions on any resource. Grant that ` +
+                    `user access in Komodo (Settings → Users → ${viewer.username}), or replace the key with one made on an admin account.`,
+            },
         };
     }
-    return { title: `Komodo has no stacks or deployments yet`, detail: `Once you add one there, it appears here.` };
+    return { empty: `Komodo has no stacks or deployments yet. Once you add one there, it appears here.` };
 });
 
 // Orientation tally: `running` always shows, even at zero, since an entirely silent tally reads as broken; the other
@@ -134,17 +143,33 @@ const groups = computed<ServerGroup[]>(() => {
     ];
 });
 
-// An empty host gets one row, not a full section, or several empty hosts read as walls of "nothing deployed".
+// An empty host gets one row, not a group of its own, or several empty hosts read as walls of "nothing deployed".
 const carrying = computed(() => groups.value.filter((group) => group.resources.length > 0));
 const idle = computed(() => groups.value.flatMap((group) => (group.resources.length === 0 && group.server !== undefined ? [group.server] : [])));
 
+// What the title row's strips say: a poll that failed under a board still shown, and a Komodo that didn't answer. The
+// latter is a warning, not an error: not seeing Komodo isn't the same as it being down, and red would cry wolf on every blip.
+const strips = computed<NoticeModel[]>(() => {
+    const notices: NoticeModel[] = [];
+    if (loaded.value.state === `ready` && loaded.value.refreshError !== undefined) {
+        notices.push(noticeOf(loaded.value.refreshError));
+    }
+    if (board.value !== undefined && !board.value.reachable) {
+        notices.push({
+            tone: `warning`,
+            title: `Can't reach Komodo at ${board.value.komodoUrl}`,
+            detail: board.value.unreachableReason ?? `Nothing here is current. This is not a report that your deployments are down, only that we couldn't ask.`,
+            action: { label: `Try again`, run: () => void refetch() },
+        });
+    }
+    return notices;
+});
+
 // Row currently mid-action; its buttons disable without freezing the rest of the board.
 const busyId = ref<string | undefined>(undefined);
-const logsFor = ref(new Map<string, { stdout: string; stderr: string }>());
-const logsPendingId = ref<string | undefined>(undefined);
 
-// Failures keyed by what failed (resource id, repo dir, incident id) so each shows beside the button that caused it,
-// not as a page-wide banner. Komodo's own refusal reaches the operator via the daemon's BAD_GATEWAY passthrough.
+// Failures keyed by what failed (resource id, repo dir, incident id) so each shows at the row that caused it, not as a
+// page-wide banner. Komodo's own refusal reaches the operator via the daemon's BAD_GATEWAY passthrough.
 const failures = ref(new Map<string, string>());
 const clearFailure = (key: string): void => {
     const next = new Map(failures.value);
@@ -167,26 +192,22 @@ const runAction = async (resource: DeployResource, action: DeployAction): Promis
     }
 };
 
-const loadLogs = async (resource: DeployResource): Promise<void> => {
-    logsPendingId.value = resource.id;
-    clearFailure(resource.id);
-    try {
-        logsFor.value = new Map(logsFor.value).set(resource.id, await logs.mutateAsync(resource));
-    } catch (cause) {
-        recordFailure(resource.id, cause);
-    } finally {
-        logsPendingId.value = undefined;
-    }
-};
+// The board was left while a fix was starting: its answer then starts the agent without pulling the reader back here.
+let left = false;
+onBeforeUnmount(() => {
+    left = true;
+});
 
-// `key` is where the failure lands: the row if the click came from the board, the incident if from the strip.
+// `key` is where the failure lands: the row if the press came from the board, the incident if from the group above it.
 const askAgent = async (resource: DeployResource, key: string, pick?: AgentRunChoice | undefined): Promise<void> => {
     busyId.value = resource.id;
     clearFailure(key);
     try {
         const { conversationId } = await fix.mutateAsync({ resource, pick });
         // The conversation id is the fleet card id, so this lands the board on the card that just started.
-        window.location.assign(`/agents?focus=${encodeURIComponent(conversationId)}`);
+        if (!left) {
+            api.navigate(`/agents?focus=${encodeURIComponent(conversationId)}`);
+        }
     } catch (cause) {
         recordFailure(key, cause);
     } finally {
@@ -194,7 +215,7 @@ const askAgent = async (resource: DeployResource, key: string, pick?: AgentRunCh
     }
 };
 
-// Resolves the alert's named resource, when it's on the board, for the incident strip's fix button.
+// Resolves the alert's named resource, when it's on the board, for the incident's fix button.
 const resourceFor = (name: string | undefined): DeployResource | undefined =>
     name === undefined ? undefined : resources.value.find((resource) => resource.name === name);
 
@@ -213,129 +234,102 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
 </script>
 
 <template>
-    <!-- No nested scroller: it breaks `scroll-margin` and `:target`, and loses the reader's place on remount. -->
-    <Page width="wide">
-        <PageHeader title="Deployments">
+    <!-- `scroll="page"`: a report read top-down, with nothing beside it worth keeping a place in. -->
+    <SplitView title="Deployments" scroll="page" :scroll-key="capability">
+        <template #info>
             <!-- Not drawn from guesses while the first read is in flight: "0 running" would be a claim the list is about to
-                 contradict. Its last shape (no numbers, no colours) stands in once it has been seen; nothing before that. -->
-            <template #info>
-                <SkeletonSnapshot v-if="isPending" of="deployments.tally" />
-                <StatusTally
-                    v-else-if="board?.reachable && resources.length > 0"
-                    v-skeleton-source="`deployments.tally`"
-                    :items="counts"
-                    class="ml-2"
-                />
-            </template>
-            <template #actions>
-                <!-- The open project, and the way out of it: the same scope every other area narrows by. -->
-                <ProjectChip :project="api.workspace.project()" :hidden="projectHidden" noun="repositories" @clear="api.workspace.setProject(undefined)" />
-                <PageAction v-if="stacksUrl !== undefined" icon="box" label="Open Komodo stacks" :href="stacksUrl" />
-            </template>
-        </PageHeader>
+                 contradict. Absent for a board that never answered, which its body says. -->
+            <Await v-if="loaded.state !== `failed`" :of="loaded" imprint="deployments.tally">
+                <StatusTally v-if="board?.reachable && resources.length > 0" :items="counts" class="ml-2" />
+                <template #fallback><StatusTally :skeleton="2" class="ml-2" /></template>
+            </Await>
+        </template>
 
-        <!-- A poll failure with a board already shown; small, since the rows below are still the last good answer. -->
-        <Notice v-if="error && board !== undefined" :of="noticeOf(error)" class="mb-4" />
+        <template #actions>
+            <!-- The open project, and the way out of it: the same scope every other area narrows by. -->
+            <ProjectChip :project="api.workspace.project()" :hidden="projectHidden" noun="repositories" @clear="api.workspace.setProject(undefined)" />
+            <PageAction v-if="stacksUrl !== undefined" icon="box" label="Open Komodo stacks" :href="stacksUrl" />
+        </template>
 
-        <!-- Nothing back yet, including while the handshake still gates the fetch; shows the board's shape, not text. -->
-        <DeploymentsSkeleton v-if="isPending" />
+        <template v-if="strips.length > 0" #strips>
+            <Notice v-for="notice in strips" :key="notice.title" :of="notice" />
+        </template>
 
-        <!-- Daemon call failed outright (old daemon, dropped connection); its own branch, not the empty-board case. -->
-        <!-- Title, cause, and the one action: the three parts <Notice> expects, in the app's order and wording. -->
-        <Notice
-            v-else-if="board === undefined"
-            :of="{
-                tone: `danger`,
-                title: `Couldn't load this Komodo connection`,
-                detail: error ?? `The sandbox did not answer.`,
-                action: { label: `Try again`, run: () => void refetch() },
-            }"
-        />
+        <template #detail>
+            <!-- Also covers the window before the sandbox handshake unblocks the read; a read that failed outright says so
+                 here in the kit's words, with its retry. -->
+            <Await :of="loaded" imprint="deployments.board" label="Reading this Komodo">
+                <template #fallback>
+                    <RowGroup role="status" aria-busy="true">
+                        <template #label><span class="skeleton block h-2.5 w-28" aria-hidden="true" /></template>
+                        <SkeletonRows :rows="4" lead description control />
+                    </RowGroup>
+                </template>
 
-        <!-- Warning, not error: not seeing Komodo isn't the same as it being down; red would cry wolf on every blip. -->
-        <Notice
-            v-else-if="!board.reachable"
-            class="px-4 py-3"
-            :of="{
-                tone: `warning`,
-                title: `Can't reach Komodo at ${board.komodoUrl}`,
-                detail: `Nothing below is current, this is not a report that your deployments are down, only that we couldn't ask.`,
-            }"
-        >
-            <div v-if="board.unreachableReason" class="mt-2 font-mono text-2xs">{{ board.unreachableReason }}</div>
-            <Button class="mt-3" label="Try again" size="small" severity="secondary" @click="refetch()" />
-        </Notice>
+                <div class="flex flex-col gap-6">
+                    <!-- 1. Only when something is open: its own group, first, headed in the state it reports. -->
+                    <RowGroup v-if="worst" :label="openLabel" :tone="openTone">
+                        <IncidentRow
+                            v-for="incident in open"
+                            :key="incident.alert.id"
+                            :incident="incident"
+                            :resource="resourceFor(incident.alert.resource)"
+                            :failure="failures.get(incident.alert.id)"
+                            :tier="fixTier"
+                            @fix="(resource, pick) => askAgent(resource, incident.alert.id, pick)"
+                        />
+                    </RowGroup>
 
-        <!-- One element in the skeleton's place, so its imprint (drawn by DeploymentsSkeleton) is the whole board as it last
-             stood: the incident strip, every host group with its rows, and the repo links. -->
-        <div v-else v-skeleton-source="`deployments.board`">
-            <!-- 1. Needs you: only when something is open; the one boxed panel, so its frame reads as the alarm. -->
-            <div v-if="worst" class="mb-6 rounded-lg border px-4 py-3" :class="INCIDENT_TONE[worst].panel">
-                <div class="flex items-center gap-2">
-                    <Icon name="exclamation-circle" class="text-sm" :class="INCIDENT_TONE[worst].text" />
-                    <span class="text-sm font-semibold text-content">Needs you</span>
-                </div>
-                <div class="mt-2 flex flex-col gap-2">
-                    <IncidentRow
-                        v-for="incident in open"
-                        :key="incident.alert.id"
-                        :incident="incident"
-                        :resource="resourceFor(incident.alert.resource)"
-                        :failure="failures.get(incident.alert.id)"
-                        @fix="(resource, pick) => askAgent(resource, incident.alert.id, pick)"
-                    />
-                </div>
-            </div>
+                    <Notice v-if="emptyReason?.notice" :of="emptyReason.notice" />
+                    <p v-else-if="emptyReason?.empty" :class="ui.emptyState(`py-6`)">{{ emptyReason.empty }}</p>
 
-            <div class="flex flex-col gap-6">
-                <div v-if="emptyReason" :class="ui.emptyState(`text-left`)">
-                    <div class="font-medium text-content">{{ emptyReason.title }}</div>
-                    <div class="mt-1">{{ emptyReason.detail }}</div>
-                </div>
-
-                <!-- ---- 3. Grouped by host ---- -->
-                <template v-else>
+                    <!-- 3. Grouped by host, each headed by its name and its figures. -->
                     <RowGroup v-for="group in carrying" :key="group.label" :label="group.label">
-                        <template #info>
-                            <ServerMeta v-if="group.server" :server="group.server" />
+                        <template v-if="group.server" #info>
+                            <ServerMeta :server="group.server" />
+                        </template>
+                        <template v-if="group.server" #actions>
+                            <KomodoLink :href="group.server.url" :name="group.server.name" />
                         </template>
 
                         <ResourceRow
                             v-for="resource in group.resources"
                             :key="resource.id"
+                            :capability="capability"
                             :resource="resource"
                             :busy="busyId === resource.id"
-                            :logs="logsFor.get(resource.id)"
-                            :logs-pending="logsPendingId === resource.id"
                             :error="failures.get(resource.id)"
                             @act="runAction"
-                            @logs="loadLogs"
                             @fix="(resource, pick) => askAgent(resource, resource.id, pick)"
                         />
                     </RowGroup>
 
-                    <!-- Empty hosts: one shared list, still carrying the state and gauges that make an empty box worth knowing. -->
-                    <RowGroup v-if="idle.length > 0" label="Other hosts" caption="Connected to this Komodo with nothing deployed on them.">
-                        <div v-for="server in idle" :key="server.id" class="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-4 py-3">
-                            <span class="text-sm font-medium text-content">{{ server.name }}</span>
-                            <ServerMeta :server="server" class="ml-auto" />
-                        </div>
+                    <!-- Empty hosts: one shared list, still carrying the state and figures that make an empty box worth knowing. -->
+                    <RowGroup v-if="idle.length > 0" label="Hosts with nothing deployed">
+                        <Row v-for="server in idle" :key="server.id" icon="server" :title="server.name">
+                            <template #control>
+                                <div class="flex shrink-0 items-center gap-2">
+                                    <ServerMeta :server="server" />
+                                    <KomodoLink :href="server.url" :name="server.name" />
+                                </div>
+                            </template>
+                        </Row>
                     </RowGroup>
-                </template>
 
-                <!-- 4. Your repos: setup, not operations; still renders with no resources, since that's when it matters most. -->
-                <RowGroup v-if="repos.length > 0" label="Your repos" caption="Which Komodo stack each repo in this workspace deploys to.">
-                    <RepoLinkRow
-                        v-for="repoLink in repos"
-                        :key="repoLink.repo"
-                        :link="repoLink"
-                        :stacks="stackNames"
-                        :busy="linking === repoLink.repo"
-                        :error="failures.get(repoLink.repo)"
-                        @link="setLink"
-                    />
-                </RowGroup>
-            </div>
-        </div>
-    </Page>
+                    <!-- 4. Setup, not operations; still drawn with no resources, since that's when linking matters most. -->
+                    <RowGroup v-if="repos.length > 0" label="Repositories">
+                        <RepoLinkRow
+                            v-for="repoLink in repos"
+                            :key="repoLink.repo"
+                            :link="repoLink"
+                            :stacks="stackNames"
+                            :busy="linking === repoLink.repo"
+                            :error="failures.get(repoLink.repo)"
+                            @link="setLink"
+                        />
+                    </RowGroup>
+                </div>
+            </Await>
+        </template>
+    </SplitView>
 </template>

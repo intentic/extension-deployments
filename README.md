@@ -44,7 +44,7 @@ intent and desired-state repos would mean someone who simply connects a Komodo t
 staging must not silence the other.
 
 **The repo rows narrow to the open project.** The board comes from the Komodo routes, not from
-`api.workspace.repos()`, so the "Your repos" group filters itself with `api.workspace.inProject` and wears the
+`api.workspace.repos()`, so the "Repositories" group filters itself with `api.workspace.inProject` and wears the
 shared `ProjectChip`. Stacks, servers and incidents are the estate's and stay whole.
 
 ## Conventions & gotchas

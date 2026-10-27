@@ -10,14 +10,17 @@ import {
     DeployOverviewResponseSchema,
     type DeployResource,
 } from "./contract";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { computed, type Ref } from "vue";
 import { host } from "./host";
 
-// One Komodo connection's board, via the daemon's /komodo routes: the browser never holds the API key, which is why
-// these routes exist instead of calling Komodo directly. Polls faster than the rail's own badge, for someone actually
-// watching a deploy land.
+// One Komodo connection's board, via the extension's own /komodo routes: the browser never holds the API key, which is
+// why these routes exist instead of calling Komodo directly. Read through `api.sandbox.query`, so the view draws its wait,
+// its answer and its failure with the kit's <Await> rather than from raw flags. Polls faster than the rail's own badge,
+// for someone actually watching a deploy land.
 const POLL_MS = 10_000;
+// An open log tail follows the container, like a terminal; a closed one is not read at all.
+const LOG_POLL_MS = 5_000;
 
 const post = (payload: Record<string, unknown>): RequestInit => ({
     method: `POST`,
@@ -29,13 +32,11 @@ export function useDeploymentBoard(capability: Ref<string>) {
     const api = host();
     const queryClient = useQueryClient();
     const queryKey = computed(() => api.sandbox.key(`komodo-overview`, capability.value));
-    const enabled = computed(() => api.sandbox.reachable());
 
-    const query = useQuery({
+    const { query, loaded } = api.sandbox.query({
         queryKey,
         queryFn: async (): Promise<DeployOverviewResponse> =>
             DeployOverviewResponseSchema.parse(await api.backend.json(`komodo/${capability.value}/overview`)),
-        enabled,
         refetchInterval: POLL_MS,
     });
     const invalidate = (): Promise<void> => queryClient.invalidateQueries({ queryKey: queryKey.value });
@@ -56,13 +57,6 @@ export function useDeploymentBoard(capability: Ref<string>) {
         onSuccess: invalidate,
     });
 
-    const logs = useMutation({
-        mutationFn: async (resource: DeployResource): Promise<DeployLogsResponse> =>
-            DeployLogsResponseSchema.parse(
-                await api.backend.json(`komodo/${capability.value}/logs`, post({ kind: resource.kind, id: resource.id })),
-            ),
-    });
-
     // Starts an isolated agent seeded with the resource and its logs; resolves to the conversation/card id.
     const fix = useMutation({
         mutationFn: async ({ resource, pick }: { resource: DeployResource; pick?: AgentRunChoice | undefined }): Promise<DeployFixResponse> =>
@@ -81,14 +75,28 @@ export function useDeploymentBoard(capability: Ref<string>) {
     });
 
     return {
+        // What the view has of the board, for <Await :of>: waiting (including while the sandbox wakes), ready, or failed.
+        loaded,
+        // The last answer, for what sits outside the awaited region (the title row's link, the strips).
         board: computed(() => query.data.value),
-        error: computed(() => query.error.value?.message),
-        // isPending, not isLoading: true through the handshake window too, where isLoading would flash an empty state.
-        isPending: query.isPending,
+        refetch: query.refetch,
         act,
         link,
-        logs,
         fix,
-        refetch: query.refetch,
     };
+}
+
+// One resource's log tail, read only while its row is open and followed while it stays open.
+export function useResourceLogs(capability: () => string, resource: () => DeployResource, open: () => boolean) {
+    const api = host();
+    const { loaded } = api.sandbox.query({
+        queryKey: computed(() => api.sandbox.key(`komodo-logs`, capability(), resource().kind, resource().id)),
+        queryFn: async (): Promise<DeployLogsResponse> =>
+            DeployLogsResponseSchema.parse(
+                await api.backend.json(`komodo/${capability()}/logs`, post({ kind: resource().kind, id: resource().id })),
+            ),
+        enabled: open,
+        refetchInterval: LOG_POLL_MS,
+    });
+    return loaded;
 }
