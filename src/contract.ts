@@ -161,8 +161,25 @@ export type DeployFixResponse = z.infer<typeof DeployFixResponseSchema>;
 
 export const DeploySeenResponseSchema = z.object({ seenAt: z.number() });
 
+// The name a host-folder stack gets when the owner leaves it blank, shared so the dialog's placeholder and the server
+// agree. `~/.intentic/compose/acme/` → `intentic-acme`; a segment already carrying the prefix keeps it once. Lowercased
+// and reduced to Komodo-safe characters, since the name also becomes the compose project name.
+const HOST_STACK_PREFIX = "intentic-";
+export const defaultStackName = (folder: string): string => {
+    const segment = folder.replace(/\/+$/u, "").split("/").at(-1) ?? "";
+    const slug = segment
+        .toLowerCase()
+        .replaceAll(/[^a-z0-9_-]+/gu, "-")
+        .replaceAll(/^-+|-+$/gu, "");
+    if (slug === "") {
+        throw new Error(`can't name a stack after "${folder}": give it a name`);
+    }
+    return slug.startsWith(HOST_STACK_PREFIX) ? slug : `${HOST_STACK_PREFIX}${slug}`;
+};
+
 // "Run a sandbox from a host folder": a folder on a Komodo server's disk (what `ic sandbox compose <slug>` writes)
-// becomes a files-on-host stack, created or updated by name, then deployed.
+// becomes a files-on-host stack, created by name, then deployed. An existing stack of that name is updated only when it is
+// already a host-folder stack for the same folder on the same server (a redeploy); any other is refused, never repointed.
 export const DeployHostStackParamSchema = z.object({
     capability: z.string(),
     // Komodo's server id, chosen from the board's servers.
@@ -176,7 +193,7 @@ export type DeployHostStackParam = z.infer<typeof DeployHostStackParamSchema>;
 
 export const DeployHostStackResponseSchema = z.object({
     stack: z.string(),
-    // False when a stack of that name already existed and was repointed.
+    // False when the same host-folder stack already existed and was redeployed.
     created: z.boolean(),
 });
 export type DeployHostStackResponse = z.infer<typeof DeployHostStackResponseSchema>;

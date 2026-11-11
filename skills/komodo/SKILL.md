@@ -56,8 +56,8 @@ from there:
    - Plain compose: `cd <dir> && docker compose up -d`.
    - As a Komodo stack, so it shows on the board with its logs and alerts: a stack with `files_on_host` and
      `run_directory` set to the folder's absolute path on that server. The Deployments view's "Run a sandbox from a
-     host folder" does this for you (it creates or updates the stack by name, default `intentic-<slug>`, then deploys
-     it). By hand, `komodo write/CreateStack '{"name":"intentic-<slug>","config":{"server_id":"<SERVER_ID>","files_on_host":true,"run_directory":"<ABSOLUTE DIR>","file_paths":["compose.yaml"]}}'`
+     host folder" does this for you (it creates the stack by name, default `intentic-<slug>`, then deploys it; it
+     redeploys only a stack that is already that folder's host stack, and refuses a name any other stack uses). By hand, `komodo write/CreateStack '{"name":"intentic-<slug>","config":{"server_id":"<SERVER_ID>","files_on_host":true,"run_directory":"<ABSOLUTE DIR>","file_paths":["compose.yaml"]}}'`
      (`write/UpdateStack '{"id":"intentic-<slug>","config":{…}}'` if it exists), then `execute/DeployStack`. Leave
      the stack's `environment` empty: Komodo writes it over the folder's `.env` when it isn't.
 

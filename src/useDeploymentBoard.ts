@@ -76,7 +76,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
             ),
     });
 
-    // Points a stack at a folder on a server's disk (created or repointed by name) and deploys it.
+    // Points a stack at a folder on a server's disk (created, or redeployed when it is already that folder's stack) and deploys it.
     const hostStack = useMutation({
         mutationFn: async (input: { server: string; folder: string; name?: string | undefined }): Promise<DeployHostStackResponse> =>
             DeployHostStackResponseSchema.parse(await api.backend.json(`komodo/${capability.value}/host-stack`, post(input))),

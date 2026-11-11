@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { type FetchFn, komodoClient } from "./komodo-client.js";
-import { defaultStackName, planHostStack, runFromHostFolder } from "./komodo-host-stack.js";
+import { defaultStackName } from "../contract.js";
+import { HostStackConflict, planHostStack, runFromHostFolder } from "./komodo-host-stack.js";
 
 const BASE = "https://komodo.example.com";
 const connection = { capability: "komodo", baseUrl: BASE, apiKey: "key", apiSecret: "secret" };
@@ -78,16 +79,36 @@ describe("runFromHostFolder", () => {
         expect(komodo.sent[1]?.headers["x-api-key"]).toBe("key");
     });
 
-    test("a stack of that name already: UpdateStack by its id, never a second stack", async () => {
+    test("the same host-folder stack already: GetStack, then UpdateStack by its id and redeploy, never a second stack", async () => {
         const komodo = fakeKomodo({
             "/read/ListStacks": [{ id: "s1", name: "intentic-acme", info: {} }],
+            "/read/GetStack": { name: "intentic-acme", config: { server_id: "sv1", files_on_host: true, run_directory: "/srv/compose/acme/" } },
             "/write/UpdateStack": { _id: { $oid: "s1" }, name: "intentic-acme" },
             "/execute/DeployStack": {},
         });
         const result = await runFromHostFolder(komodoClient(connection, komodo.fetch), plan);
         expect(result).toEqual({ stack: "intentic-acme", created: false });
-        expect(komodo.sent.map((call) => call.path)).toEqual(["/read/ListStacks", "/write/UpdateStack", "/execute/DeployStack"]);
-        expect(komodo.sent[1]?.body).toEqual({ id: "s1", config: plan.config });
+        expect(komodo.sent.map((call) => call.path)).toEqual(["/read/ListStacks", "/read/GetStack", "/write/UpdateStack", "/execute/DeployStack"]);
+        expect(komodo.sent[1]?.body).toEqual({ stack: "s1" });
+        expect(komodo.sent[2]?.body).toEqual({ id: "s1", config: plan.config });
+    });
+
+    // A git-backed or UI-defined stack, a host stack for another folder, or one on another server: repointing any of
+    // them would hijack it and wipe its environment.
+    test.each([
+        ["git-backed", { server_id: "sv1", files_on_host: false, run_directory: "" }],
+        ["UI-defined", { server_id: "sv1" }],
+        ["host stack for another folder", { server_id: "sv1", files_on_host: true, run_directory: "/srv/compose/other" }],
+        ["same folder on another server", { server_id: "sv2", files_on_host: true, run_directory: "/srv/compose/acme" }],
+    ])("a %s stack of that name is refused, left untouched and not deployed", async (_kind, config) => {
+        const komodo = fakeKomodo({
+            "/read/ListStacks": [{ id: "s1", name: "intentic-acme", info: {} }],
+            "/read/GetStack": { name: "intentic-acme", config },
+        });
+        await expect(runFromHostFolder(komodoClient(connection, komodo.fetch), plan)).rejects.toThrow(HostStackConflict);
+        await expect(runFromHostFolder(komodoClient(connection, komodo.fetch), plan)).rejects.toThrow(/"intentic-acme".*another name/);
+        expect(komodo.sent.map((call) => call.path)).not.toContain("/write/UpdateStack");
+        expect(komodo.sent.map((call) => call.path)).not.toContain("/execute/DeployStack");
     });
 
     test("a refused write stops before the deploy and carries Komodo's own words", async () => {

@@ -3,10 +3,11 @@
 import { errorMessage } from "@intentic/base/errors";
 import { Button, Modal, Notice, noticeOf, Picker, type PickerOption, ui } from "@intentic/extension-ui";
 import { computed, ref, watch } from "vue";
-import type { DeployServer } from "./contract";
-import { defaultStackName } from "./server/komodo-host-stack";
+import { defaultStackName, type DeployServer } from "./contract";
 
-const { servers, run } = defineProps<{
+const { connection, servers, run } = defineProps<{
+    // The Komodo connection the servers and the run belong to; switching it starts the form over.
+    connection: string;
     servers: readonly DeployServer[];
     // Resolves to the stack's name once Komodo accepted the deploy; throws with Komodo's words otherwise.
     run: (input: { server: string; folder: string; name?: string | undefined }) => Promise<{ stack: string }>;
@@ -23,17 +24,41 @@ const failure = ref<string | undefined>(undefined);
 
 const serverOptions = computed<PickerOption[]>(() => servers.map((entry) => ({ value: entry.id, label: entry.name, icon: `server`, mono: true })));
 
+// A lone server is the only answer; several are the owner's to pick. A choice no longer among the servers (another
+// connection's, or one Komodo dropped) is let go rather than sent to a Komodo that doesn't know it.
+const settleServer = (): void => {
+    const known = servers.some((entry) => entry.id === server.value);
+    server.value = servers.length === 1 ? servers[0]?.id : known ? server.value : undefined;
+};
+
+const clearForm = (): void => {
+    folder.value = ``;
+    name.value = ``;
+    failure.value = undefined;
+};
+
 watch(
     open,
     (value) => {
         if (value) {
             failure.value = undefined;
-            // A lone server is the only answer; several are the owner's to pick.
-            server.value = servers.length === 1 ? servers[0]?.id : server.value;
+            settleServer();
         }
     },
     { immediate: true },
 );
+
+// Another connection is another Komodo: its server ids, and the folder typed for the old one, don't carry over. The
+// board refetches that connection's servers, and the watch below settles the choice once they arrive.
+watch(
+    () => connection,
+    () => {
+        server.value = undefined;
+        clearForm();
+        settleServer();
+    },
+);
+watch(() => servers, settleServer);
 
 // What the name will be when left blank, said as the field's placeholder rather than prefilled, so a changed folder
 // keeps it in step.
@@ -54,6 +79,8 @@ const start = async (): Promise<void> => {
     failure.value = undefined;
     try {
         await run({ server: server.value, folder: folder.value.trim(), ...(name.value.trim() === `` ? {} : { name: name.value.trim() }) });
+        // Done: the next run starts from an empty folder and name, not this one's.
+        clearForm();
         open.value = false;
     } catch (cause) {
         failure.value = errorMessage(cause);
@@ -66,7 +93,7 @@ const start = async (): Promise<void> => {
         <div class="flex flex-col gap-4">
             <p class="text-sm text-muted">
                 Point a Komodo stack at a folder on the server's own disk, the one <code>ic sandbox compose &lt;slug&gt; --out &lt;dir&gt;</code> wrote
-                there, and deploy it. A stack of the same name is updated in place rather than duplicated.
+                there, and deploy it. Running the same folder again redeploys its stack; a name another stack already uses is refused.
             </p>
 
             <label class="flex flex-col gap-1.5 text-sm">

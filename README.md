@@ -14,8 +14,9 @@ What is actually running on the servers you own, read from a Komodo you already 
 - Notice incidents and carry them to the rail as a badge.
 - Act on what is running: deploy, restart, start, stop, pull-and-deploy, and start an agent to fix a broken one.
 - Run a sandbox from a host folder: point a Komodo stack at a folder already on one of its servers (what
-  `ic sandbox compose <slug> --out <dir>` writes there), with `files_on_host` and `run_directory`, created or
-  updated by name (default `intentic-<slug>`), then deployed.
+  `ic sandbox compose <slug> --out <dir>` writes there), with `files_on_host` and `run_directory`, created by
+  name (default `intentic-<slug>`), then deployed. Running the same folder again redeploys its stack; a name another
+  stack already uses (git-backed, defined in Komodo, or another folder's) is refused rather than repointed.
 - Talk to Komodo itself: the extension ships its own backend, and the daemon core carries no Komodo feature.
 - Own the Komodo connection: the `komodo` card on the Capabilities page, its agent skill and the deployment-alert
   automation template all come from this manifest, so connecting Komodo and getting this view are one install.

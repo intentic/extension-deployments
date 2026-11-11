@@ -377,5 +377,5 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
             </Await>
         </template>
     </SplitView>
-    <HostStackDialog v-model="hostStackOpen" :servers="servers" :run="runHostStack" />
+    <HostStackDialog v-model="hostStackOpen" :connection="capability" :servers="servers" :run="runHostStack" />
 </template>

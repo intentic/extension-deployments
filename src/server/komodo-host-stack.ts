@@ -1,3 +1,4 @@
+import { defaultStackName } from "../contract.js";
 import type { KomodoClient, KomodoHostStackConfig } from "./komodo-client.js";
 
 // "Run a sandbox from a host folder": a folder already on a Komodo server's disk (what `ic sandbox compose <slug>`
@@ -6,7 +7,6 @@ import type { KomodoClient, KomodoHostStackConfig } from "./komodo-client.js";
 
 // What `ic sandbox compose` names the file; Komodo would assume the same, but saying it keeps the stack self-describing.
 const COMPOSE_FILE = "compose.yaml";
-const PREFIX = "intentic-";
 
 export interface HostStackInput {
     // Komodo's server id, as ListServers gives it.
@@ -19,23 +19,9 @@ export interface HostStackInput {
 
 export interface HostStackResult {
     readonly stack: string;
-    // False when a stack of that name already existed and was updated in place.
+    // False when the same host-folder stack already existed and was redeployed.
     readonly created: boolean;
 }
-
-// `~/.intentic/compose/acme/` → `intentic-acme`; a segment already carrying the prefix keeps it once. Lowercased and
-// reduced to Komodo-safe characters, since the name also becomes the compose project name.
-export const defaultStackName = (folder: string): string => {
-    const segment = folder.replace(/\/+$/u, "").split("/").at(-1) ?? "";
-    const slug = segment
-        .toLowerCase()
-        .replaceAll(/[^a-z0-9_-]+/gu, "-")
-        .replaceAll(/^-+|-+$/gu, "");
-    if (slug === "") {
-        throw new Error(`can't name a stack after "${folder}": give it a name`);
-    }
-    return slug.startsWith(PREFIX) ? slug : `${PREFIX}${slug}`;
-};
 
 // Komodo runs the stack on the server, so the folder is that server's path: `~` would expand to the periphery agent's
 // home, not the owner's, and a relative path to wherever the agent was started. Both are refused rather than guessed.
@@ -71,15 +57,35 @@ export const planHostStack = (input: HostStackInput): HostStackPlan => {
     return { stack: named === "" ? defaultStackName(folder) : named, config: hostStackConfig(input.server, folder) };
 };
 
-// Finds the stack by name and updates it, else creates it; then deploys. Running it twice is a redeploy of the same
-// stack, never a second one.
+const sameFolder = (a: string | undefined, b: string): boolean => a !== undefined && a.replace(/(?<=.)\/+$/u, "") === b;
+
+// Creates the stack, else redeploys it when one of that name is already this very host-folder stack (files on host, the
+// same folder, the same server); then deploys. Any other stack of that name (git-backed, defined in Komodo's UI, owned
+// by a resource sync, or a host stack for another folder) is refused: updating it would repoint it here and wipe its
+// environment. Running it twice is a redeploy of the same stack, never a second one.
 export const runFromHostFolder = async (client: KomodoClient, { stack, config }: HostStackPlan): Promise<HostStackResult> => {
     const existing = (await client.listStacks()).find((item) => item.name === stack);
     if (existing === undefined) {
         await client.createStack(stack, config);
     } else {
+        const current = (await client.getStack(existing.id)).config ?? {};
+        const ours = current.files_on_host === true && current.server_id === config.server_id && sameFolder(current.run_directory, config.run_directory);
+        if (!ours) {
+            throw new HostStackConflict(stack, config.run_directory);
+        }
         await client.updateStack(existing.id, config);
     }
     await client.deployStack(stack);
     return { stack, created: existing === undefined };
 };
+
+// The owner's to resolve (pick another name), so the route answers it as a conflict rather than Komodo's failure.
+export class HostStackConflict extends Error {
+    constructor(stack: string, folder: string) {
+        super(
+            `Komodo already has a stack named "${stack}" that isn't a host-folder stack for ${folder} on that server; ` +
+                `it was left untouched. Give this one another name.`,
+        );
+        this.name = "HostStackConflict";
+    }
+}

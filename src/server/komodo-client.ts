@@ -110,10 +110,16 @@ export interface KomodoHostStackConfig {
     readonly environment: "";
 }
 
-// What CreateStack and UpdateStack answer with: the whole Stack, of which only its id is read.
+// What GetStack, CreateStack and UpdateStack answer with: the whole Stack. Only the config fields that say whether it is
+// a host-folder stack (and for which folder) are read, by GetStack before an update.
 export interface KomodoStack {
     readonly _id?: { readonly $oid?: string } | string;
     readonly name?: string;
+    readonly config?: {
+        readonly server_id?: string;
+        readonly files_on_host?: boolean;
+        readonly run_directory?: string;
+    };
 }
 
 // Who the API key acts as: Komodo filters every list by permission, so a key with no grants gets an empty array
@@ -134,6 +140,8 @@ export interface KomodoClient {
     readonly listAlerts: () => Promise<readonly KomodoAlert[]>;
     // Both channels of Komodo's `Log` for a deployment or a stack.
     readonly logs: (kind: "deployment" | "stack", name: string, tail: number) => Promise<{ stdout: string; stderr: string }>;
+    // `id` takes the stack's id or its name.
+    readonly getStack: (id: string) => Promise<KomodoStack>;
     // Komodo's write API; the key's user needs Create on stacks (or Write on the one being updated).
     readonly createStack: (name: string, config: KomodoHostStackConfig) => Promise<KomodoStack>;
     // `id` takes the stack's id or its name, as everywhere in Komodo's API.
@@ -169,6 +177,7 @@ export const komodoClient = (connection: KomodoConnection, fetchFn: FetchFn = fe
                 : await call<{ stdout?: string; stderr?: string }>(connection, fetchFn, "read", "GetDeploymentLog", { deployment: name, tail });
         return { stdout: log.stdout ?? "", stderr: log.stderr ?? "" };
     },
+    getStack: (id) => call(connection, fetchFn, "read", "GetStack", { stack: id }),
     createStack: (name, config) => call(connection, fetchFn, "write", "CreateStack", { name, config }),
     updateStack: (id, config) => call(connection, fetchFn, "write", "UpdateStack", { id, config }),
     deployStack: async (stack) => {
