@@ -5,6 +5,8 @@ import {
     DeployCapabilityParamSchema,
     DeployFixParamSchema,
     DeployFixResponseSchema,
+    DeployHostStackParamSchema,
+    DeployHostStackResponseSchema,
     DeployLinkParamSchema,
     DeployLogsParamSchema,
     DeployLogsResponseSchema,
@@ -28,6 +30,11 @@ export const komodoContract = {
     link: oc.route({ method: "POST", path: "/komodo/{capability}/link" }).input(DeployLinkParamSchema).output(OkSchema),
     logs: oc.route({ method: "POST", path: "/komodo/{capability}/logs" }).input(DeployLogsParamSchema).output(DeployLogsResponseSchema),
     fix: oc.route({ method: "POST", path: "/komodo/{capability}/fix" }).input(DeployFixParamSchema).output(DeployFixResponseSchema),
+    // Creates or repoints a files-on-host stack at a folder on a server, then deploys it.
+    hostStack: oc
+        .route({ method: "POST", path: "/komodo/{capability}/host-stack" })
+        .input(DeployHostStackParamSchema)
+        .output(DeployHostStackResponseSchema),
     // Marks this connection read, per capability; backend's own clock, so a skewed browser can't fake it.
     seen: oc.route({ method: "POST", path: "/komodo/{capability}/seen" }).input(DeployCapabilityParamSchema).output(DeploySeenResponseSchema),
 };

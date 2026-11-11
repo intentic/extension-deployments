@@ -6,6 +6,7 @@ import type { DeployResource } from "../contract.js";
 import { komodoContract } from "./contract.js";
 import { discoverRepoDirs, readFileOrUndefined } from "./discover.js";
 import { type FetchFn, komodoClient, type KomodoConnection } from "./komodo-client.js";
+import { planHostStack, runFromHostFolder } from "./komodo-host-stack.js";
 import { deployAlerts, deploymentResource, serverEntry, stackResource } from "./komodo-overview.js";
 import { repoLinks } from "./komodo-repos.js";
 import { fileKomodoStore, komodoStorePath } from "./komodo-store.js";
@@ -168,6 +169,17 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
                 await upstream(client.execute(operation, { [input.kind]: resource.name }));
             }
             return { ok: true as const };
+        }),
+        hostStack: i.hostStack.handler(async ({ input }) => {
+            // Checked before Komodo is dialled: a relative path is the owner's to fix, not Komodo's refusal.
+            let plan;
+            try {
+                plan = planHostStack(input);
+            } catch (error) {
+                throw new ORPCError("BAD_REQUEST", { message: errorMessage(error) });
+            }
+            const connection = await connect(input.capability);
+            return upstream(runFromHostFolder(komodoClient(connection, fetchFn), plan));
         }),
         logs: i.logs.handler(async ({ input }) => {
             const [connection, resource] = await resolve(input.capability, input.kind, input.id);

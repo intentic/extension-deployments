@@ -4,6 +4,8 @@ import {
     type DeployAction,
     type DeployFixResponse,
     DeployFixResponseSchema,
+    type DeployHostStackResponse,
+    DeployHostStackResponseSchema,
     type DeployLogsResponse,
     DeployLogsResponseSchema,
     type DeployOverviewResponse,
@@ -74,6 +76,13 @@ export function useDeploymentBoard(capability: Ref<string>) {
             ),
     });
 
+    // Points a stack at a folder on a server's disk (created or repointed by name) and deploys it.
+    const hostStack = useMutation({
+        mutationFn: async (input: { server: string; folder: string; name?: string | undefined }): Promise<DeployHostStackResponse> =>
+            DeployHostStackResponseSchema.parse(await api.backend.json(`komodo/${capability.value}/host-stack`, post(input))),
+        onSuccess: invalidate,
+    });
+
     return {
         // What the view has of the board, for <Await :of>: waiting (including while the sandbox wakes), ready, or failed.
         loaded,
@@ -83,6 +92,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
         act,
         link,
         fix,
+        hostStack,
     };
 }
 

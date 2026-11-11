@@ -12,6 +12,10 @@ What is actually running on the servers you own, read from a Komodo you already 
 - Show the estate: servers, stacks, deployments, and the state each is in.
 - Join a running thing back to the repository it was built from.
 - Notice incidents and carry them to the rail as a badge.
+- Act on what is running: deploy, restart, start, stop, pull-and-deploy, and start an agent to fix a broken one.
+- Run a sandbox from a host folder: point a Komodo stack at a folder already on one of its servers (what
+  `ic sandbox compose <slug> --out <dir>` writes there), with `files_on_host` and `run_directory`, created or
+  updated by name (default `intentic-<slug>`), then deployed.
 - Talk to Komodo itself: the extension ships its own backend, and the daemon core carries no Komodo feature.
 - Own the Komodo connection: the `komodo` card on the Capabilities page, its agent skill and the deployment-alert
   automation template all come from this manifest, so connecting Komodo and getting this view are one install.
@@ -26,6 +30,8 @@ What is actually running on the servers you own, read from a Komodo you already 
   serves a connection only to the extension that contributes its card, which is why the card lives here.
 - [skills/komodo/SKILL.md](skills/komodo/SKILL.md): the agent's Komodo skill, mounted with the `komodo` card.
 - [src/server/komodo-client.ts](src/server/komodo-client.ts): the Komodo Core API behind one client shape.
+- [src/server/komodo-host-stack.ts](src/server/komodo-host-stack.ts): "Run a sandbox from a host folder", the
+  stack it writes and the create-or-update-then-deploy order; [src/HostStackDialog.vue](src/HostStackDialog.vue) asks for it.
 - [src/server/komodo-overview.ts](src/server/komodo-overview.ts): Komodo's vocabulary → the view's, pure and tested.
 - [src/server/komodo-repos.ts](src/server/komodo-repos.ts): which workspace repo belongs to which stack.
 - [src/server/komodo-store.ts](src/server/komodo-store.ts): seen-timestamps and repo→stack links (its runtime home, `.intentic/local/runtime/extensions/deployments/komodo.json`).
@@ -51,7 +57,9 @@ shared `ProjectChip`. Stacks, servers and incidents are the estate's and stay wh
 
 ## Conventions & gotchas
 
-- This reads an estate; it does not create one. The bundled deployment engine (`intentic deploy`) is a separate
+- This reads an estate and acts on what is in it; the one thing it writes to Komodo is the host-folder stack, whose
+  folder the owner put on the server. It never writes into that folder, and it leaves the stack's `environment`
+  empty so Komodo writes no `.env` over the folder's own. The bundled deployment engine (`intentic deploy`) is a separate
   tool with its own repo layout, and nothing here depends on it.
 
 ## Building and publishing

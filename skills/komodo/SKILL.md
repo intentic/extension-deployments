@@ -44,6 +44,29 @@ Say what you are about to do before running one, and report the result. Each ret
 - Run a build: `komodo execute/RunBuild '{"build":"<NAME>"}'`
 - Run a procedure / action: `komodo execute/RunProcedure '{"procedure":"<NAME>"}'` · `komodo execute/RunAction '{"action":"<NAME>"}'`
 
+## Run an Intentic sandbox on a Komodo server
+
+To run one of the owner's sandboxes on a server Komodo manages, put its compose folder on that server and run it
+from there:
+
+1. On the server, `ic sandbox compose <slug> --out <dir>` writes `<dir>` (default `~/.intentic/compose/<slug>/`)
+   holding `compose.yaml`, `.env` (mode 0600) and `at-rest.key`. Or run it elsewhere and copy the folder over,
+   keeping `.env` at 0600.
+2. Start it either way:
+   - Plain compose: `cd <dir> && docker compose up -d`.
+   - As a Komodo stack, so it shows on the board with its logs and alerts: a stack with `files_on_host` and
+     `run_directory` set to the folder's absolute path on that server. The Deployments view's "Run a sandbox from a
+     host folder" does this for you (it creates or updates the stack by name, default `intentic-<slug>`, then deploys
+     it). By hand, `komodo write/CreateStack '{"name":"intentic-<slug>","config":{"server_id":"<SERVER_ID>","files_on_host":true,"run_directory":"<ABSOLUTE DIR>","file_paths":["compose.yaml"]}}'`
+     (`write/UpdateStack '{"id":"intentic-<slug>","config":{…}}'` if it exists), then `execute/DeployStack`. Leave
+     the stack's `environment` empty: Komodo writes it over the folder's `.env` when it isn't.
+
+The compose file's volumes and network are `external: true`: the sandbox's named volumes must already exist on that
+host (moved there from where the sandbox ran before), and so must its network (`docker network create
+intentic-workspace-<slug>` if it does not), or `up` refuses to start. On the machine the sandbox already runs on, stop
+it through ic and `docker rm intentic-sandbox-<slug>` first (its volumes stay), or Compose finds the name taken. Its containers get a 30 s stop grace, so a
+stop or redeploy takes up to that long before Docker kills them.
+
 ## Secrets in stack configs
 
 When a config needs a stored secret (an env var in a stack's `environment`, a registry password), write its

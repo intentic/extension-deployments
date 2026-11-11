@@ -25,7 +25,7 @@ const USER_AGENT = "intentic-sandbox";
 const call = async <T>(
     connection: KomodoConnection,
     fetchFn: FetchFn,
-    module: "read" | "execute",
+    module: "read" | "write" | "execute",
     operation: string,
     params: Readonly<Record<string, unknown>> = {},
 ): Promise<T> => {
@@ -99,6 +99,23 @@ export interface KomodoAlert {
     readonly data?: { readonly type?: string; readonly data?: Record<string, unknown> };
 }
 
+// The part of a stack's config this extension writes: a compose folder already on the server's disk (files_on_host),
+// run from `run_directory`. Komodo's _PartialStackConfig, so a field left out is left as it was on UpdateStack.
+export interface KomodoHostStackConfig {
+    readonly server_id: string;
+    readonly files_on_host: true;
+    readonly run_directory: string;
+    readonly file_paths: readonly string[];
+    // Empty, so Komodo writes no env file of its own over the folder's `.env`: it writes one only when this is non-empty.
+    readonly environment: "";
+}
+
+// What CreateStack and UpdateStack answer with: the whole Stack, of which only its id is read.
+export interface KomodoStack {
+    readonly _id?: { readonly $oid?: string } | string;
+    readonly name?: string;
+}
+
 // Who the API key acts as: Komodo filters every list by permission, so a key with no grants gets an empty array
 // indistinguishable from an empty Komodo. Lets the view tell those two apart.
 export interface KomodoViewer {
@@ -117,6 +134,12 @@ export interface KomodoClient {
     readonly listAlerts: () => Promise<readonly KomodoAlert[]>;
     // Both channels of Komodo's `Log` for a deployment or a stack.
     readonly logs: (kind: "deployment" | "stack", name: string, tail: number) => Promise<{ stdout: string; stderr: string }>;
+    // Komodo's write API; the key's user needs Create on stacks (or Write on the one being updated).
+    readonly createStack: (name: string, config: KomodoHostStackConfig) => Promise<KomodoStack>;
+    // `id` takes the stack's id or its name, as everywhere in Komodo's API.
+    readonly updateStack: (id: string, config: KomodoHostStackConfig) => Promise<KomodoStack>;
+    // DeployStack, named, since the host-folder action calls it outright rather than through the action table.
+    readonly deployStack: (stack: string) => Promise<void>;
     // One of the five execute operations, already resolved to Komodo's operation name by the caller.
     readonly execute: (operation: string, params: Readonly<Record<string, unknown>>) => Promise<void>;
 }
@@ -145,6 +168,11 @@ export const komodoClient = (connection: KomodoConnection, fetchFn: FetchFn = fe
                 ? await call<{ stdout?: string; stderr?: string }>(connection, fetchFn, "read", "GetStackLog", { stack: name, services: [], tail })
                 : await call<{ stdout?: string; stderr?: string }>(connection, fetchFn, "read", "GetDeploymentLog", { deployment: name, tail });
         return { stdout: log.stdout ?? "", stderr: log.stderr ?? "" };
+    },
+    createStack: (name, config) => call(connection, fetchFn, "write", "CreateStack", { name, config }),
+    updateStack: (id, config) => call(connection, fetchFn, "write", "UpdateStack", { id, config }),
+    deployStack: async (stack) => {
+        await call(connection, fetchFn, "execute", "DeployStack", { stack });
     },
     execute: async (operation, params) => {
         // Execute's Update record isn't read; the view refetches the overview for the authoritative answer.

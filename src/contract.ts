@@ -129,7 +129,8 @@ export type DeployOverviewResponse = z.infer<typeof DeployOverviewResponseSchema
 // Which Komodo connection a call addresses: the capability id, the view's `?connection=`.
 export const DeployCapabilityParamSchema = z.object({ capability: z.string() });
 
-// No `write/*` here: it would drift against the desired-state repo; `pull` fetches and deploys in one click.
+// No `write/*` on an existing resource here: it would drift against the desired-state repo; `pull` fetches and deploys in
+// one click. The one write is `host-stack` below, which points a stack at a folder the owner put on the server.
 export const DeployActionSchema = z.enum(["deploy", "restart", "start", "stop", "pull"]);
 export type DeployAction = z.infer<typeof DeployActionSchema>;
 
@@ -159,3 +160,23 @@ export const DeployFixResponseSchema = z.object({ conversationId: z.string() });
 export type DeployFixResponse = z.infer<typeof DeployFixResponseSchema>;
 
 export const DeploySeenResponseSchema = z.object({ seenAt: z.number() });
+
+// "Run a sandbox from a host folder": a folder on a Komodo server's disk (what `ic sandbox compose <slug>` writes)
+// becomes a files-on-host stack, created or updated by name, then deployed.
+export const DeployHostStackParamSchema = z.object({
+    capability: z.string(),
+    // Komodo's server id, chosen from the board's servers.
+    server: z.string(),
+    // Absolute path on that server.
+    folder: z.string(),
+    // Absent or blank: `intentic-<last segment of folder>`.
+    name: z.string().optional(),
+});
+export type DeployHostStackParam = z.infer<typeof DeployHostStackParamSchema>;
+
+export const DeployHostStackResponseSchema = z.object({
+    stack: z.string(),
+    // False when a stack of that name already existed and was repointed.
+    created: z.boolean(),
+});
+export type DeployHostStackResponse = z.infer<typeof DeployHostStackResponseSchema>;

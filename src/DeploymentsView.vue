@@ -24,6 +24,7 @@ import {
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { deployBadge, markDeploymentsSeen } from "./attention";
 import { incidents, topTier } from "./incidents";
+import HostStackDialog from "./HostStackDialog.vue";
 import IncidentRow from "./IncidentRow.vue";
 import KomodoLink from "./KomodoLink.vue";
 import RepoLinkRow from "./RepoLinkRow.vue";
@@ -68,7 +69,7 @@ const connectionOptions = computed<PickerOption[]>(() =>
         return { value: name, label: name, icon: `box`, mono: true, ...(count === undefined ? {} : { description: `${count} new` }) };
     }),
 );
-const { loaded, board, act, link, fix, refetch } = useDeploymentBoard(capability);
+const { loaded, board, act, link, fix, hostStack, refetch } = useDeploymentBoard(capability);
 
 // Opening a connection counts as reading it; only when it opens, or a background poll would swallow a new breakage.
 watch(capability, (name) => void markDeploymentsSeen(name), { immediate: true });
@@ -90,6 +91,10 @@ const allRepos = computed(() => board.value?.repos ?? []);
 const repos = computed(() => allRepos.value.filter((entry) => api.workspace.inProject(entry.repo)));
 const projectHidden = computed(() => allRepos.value.length - repos.value.length);
 const stackNames = computed(() => resources.value.filter((resource) => resource.kind === `stack`).map((resource) => resource.name));
+
+// "Run a sandbox from a host folder": offered once Komodo has a server to put it on.
+const hostStackOpen = ref(false);
+const runHostStack = (input: { server: string; folder: string; name?: string | undefined }) => hostStack.mutateAsync(input);
 
 // Links to Komodo's stacks list: the level this view is really about, same route family as each row's link.
 const stacksUrl = computed(() => (board.value === undefined ? undefined : `${board.value.komodoUrl}/stacks`));
@@ -287,6 +292,7 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                 placeholder="Komodo connection"
                 @update:model-value="choose"
             />
+            <PageAction v-if="board?.reachable && servers.length > 0" icon="folder" label="Run a sandbox from a host folder" @click="hostStackOpen = true" />
             <PageAction v-if="stacksUrl !== undefined" icon="box" label="Open Komodo stacks" :href="stacksUrl" />
         </template>
 
@@ -371,4 +377,5 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
             </Await>
         </template>
     </SplitView>
+    <HostStackDialog v-model="hostStackOpen" :servers="servers" :run="runHostStack" />
 </template>
