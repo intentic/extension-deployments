@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { DeployOverviewResponseSchema } from "../contract.js";
 import type { KomodoAlert, KomodoDeploymentInfo, KomodoListItem, KomodoServerInfo, KomodoStackInfo } from "./komodo-client.js";
 import { deployAlert, deployAlerts, deploymentResource, deployState, serverEntry, stackResource } from "./komodo-overview.js";
 
@@ -78,6 +79,22 @@ describe("resources", () => {
 
     test("a resource Komodo has not placed still renders, without a server", () => {
         expect(deploymentResource(BASE, deployment({ state: "running" })).server).toBeUndefined();
+    });
+
+    // Komodo sends an empty Option as null (a stopped stack's `status`); passing it through failed the overview's
+    // output validation and blanked the whole board.
+    test("null fields from Komodo drop out and the overview still validates", () => {
+        const resources = [
+            stackResource(BASE, stack({ state: "stopped", status: null, server_name: null, services: null })),
+            deploymentResource(BASE, deployment({ state: null, status: null, image: null, server_name: null, update_available: null })),
+        ];
+        const servers = [serverEntry(BASE, server({ state: "Ok", stats: { cpu_perc: null, mem_used_gb: null, mem_total_gb: 16 } }))];
+        expect(resources[0]).not.toHaveProperty("status");
+        expect(resources[1]).not.toHaveProperty("image");
+        expect(servers[0]).not.toHaveProperty("cpuPercent");
+        expect(servers[0]).not.toHaveProperty("memPercent");
+        const overview = { komodoUrl: BASE, reachable: true, resources, servers, alerts: [] };
+        expect(DeployOverviewResponseSchema.safeParse(overview).success).toBe(true);
     });
 });
 

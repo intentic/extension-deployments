@@ -49,7 +49,8 @@ const call = async <T>(
 
 // Raw shapes we consume, named as Komodo names them. Typed loosely on purpose: Komodo adds fields to `info` release
 // over release, and typing only what we read keeps an upgrade from emptying this view instead of erroring on new
-// fields.
+// fields. Komodo is Rust: an `Option` it has no value for arrives as `null`, not as a missing key, so every optional
+// field admits both.
 
 export interface KomodoListItem<Info> {
     readonly id: string;
@@ -58,35 +59,35 @@ export interface KomodoListItem<Info> {
 }
 
 export interface KomodoDeploymentInfo {
-    readonly state?: string;
-    readonly status?: string;
-    readonly image?: string;
-    readonly update_available?: boolean;
-    readonly server_name?: string;
+    readonly state?: string | null;
+    readonly status?: string | null;
+    readonly image?: string | null;
+    readonly update_available?: boolean | null;
+    readonly server_name?: string | null;
 }
 
 export interface KomodoStackService {
-    readonly service?: string;
-    readonly image?: string;
-    readonly update_available?: boolean;
+    readonly service?: string | null;
+    readonly image?: string | null;
+    readonly update_available?: boolean | null;
 }
 
 export interface KomodoStackInfo {
-    readonly state?: string;
-    readonly status?: string;
-    readonly server_name?: string;
-    readonly services?: readonly KomodoStackService[];
+    readonly state?: string | null;
+    readonly status?: string | null;
+    readonly server_name?: string | null;
+    readonly services?: readonly KomodoStackService[] | null;
 }
 
 export interface KomodoServerInfo {
-    readonly state?: string;
+    readonly state?: string | null;
     readonly stats?: {
-        readonly cpu_perc?: number;
-        readonly mem_used_gb?: number;
-        readonly mem_total_gb?: number;
-        readonly disk_used_gb?: number;
-        readonly disk_total_gb?: number;
-    };
+        readonly cpu_perc?: number | null;
+        readonly mem_used_gb?: number | null;
+        readonly mem_total_gb?: number | null;
+        readonly disk_used_gb?: number | null;
+        readonly disk_total_gb?: number | null;
+    } | null;
 }
 
 // Komodo serializes an alert's mongo id as `{_id: {$oid}}` or a bare string, depending on the path; both are read.

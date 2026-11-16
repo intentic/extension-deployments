@@ -7522,7 +7522,7 @@ var ZodType = /*@__PURE__*/ $constructor("ZodType", (inst, def) => {
 		return this.check(/* @__PURE__ */ _overwrite(fn));
 	},
 	optional() {
-		return optional(this);
+		return optional$1(this);
 	},
 	exactOptional() {
 		return exactOptional(this);
@@ -7531,7 +7531,7 @@ var ZodType = /*@__PURE__*/ $constructor("ZodType", (inst, def) => {
 		return nullable(this);
 	},
 	nullish() {
-		return optional(nullable(this));
+		return optional$1(nullable(this));
 	},
 	nonoptional(params) {
 		return nonoptional(this, params);
@@ -8298,7 +8298,7 @@ var ZodOptional = /*@__PURE__*/ $constructor("ZodOptional", (inst, def) => {
 	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor(inst, ctx, json, params);
 	inst.unwrap = () => inst._zod.def.innerType;
 });
-function optional(innerType) {
+function optional$1(innerType) {
 	return new ZodOptional({
 		type: "optional",
 		innerType
@@ -21740,6 +21740,22 @@ var DeployLogsResponseSchema = object({
 });
 var DeployFixResponseSchema = object({ conversationId: string() });
 var DeploySeenResponseSchema = object({ seenAt: number$1() });
+var HOST_STACK_PREFIX = "intentic-";
+var defaultStackName = (folder) => {
+	const slug = (folder.replace(/\/+$/u, "").split("/").at(-1) ?? "").toLowerCase().replaceAll(/[^a-z0-9_-]+/gu, "-").replaceAll(/^-+|-+$/gu, "");
+	if (slug === "") throw new Error(`can't name a stack after "${folder}": give it a name`);
+	return slug.startsWith(HOST_STACK_PREFIX) ? slug : `${HOST_STACK_PREFIX}${slug}`;
+};
+var DeployHostStackParamSchema = object({
+	capability: string(),
+	server: string(),
+	folder: string(),
+	name: string().optional()
+});
+var DeployHostStackResponseSchema = object({
+	stack: string(),
+	created: boolean()
+});
 //#endregion
 //#region src/server/contract.ts
 var OkSchema = object({ ok: literal(true) });
@@ -21764,6 +21780,10 @@ var komodoContract = {
 		method: "POST",
 		path: "/komodo/{capability}/fix"
 	}).input(DeployFixParamSchema).output(DeployFixResponseSchema),
+	hostStack: oc$1.route({
+		method: "POST",
+		path: "/komodo/{capability}/host-stack"
+	}).input(DeployHostStackParamSchema).output(DeployHostStackResponseSchema),
 	seen: oc$1.route({
 		method: "POST",
 		path: "/komodo/{capability}/seen"
@@ -21876,10 +21896,67 @@ var komodoClient = (connection, fetchFn = fetch) => ({
 			stderr: log.stderr ?? ""
 		};
 	},
+	getStack: (id) => call(connection, fetchFn, "read", "GetStack", { stack: id }),
+	createStack: (name, config) => call(connection, fetchFn, "write", "CreateStack", {
+		name,
+		config
+	}),
+	updateStack: (id, config) => call(connection, fetchFn, "write", "UpdateStack", {
+		id,
+		config
+	}),
+	deployStack: async (stack) => {
+		await call(connection, fetchFn, "execute", "DeployStack", { stack });
+	},
 	execute: async (operation, params) => {
 		await call(connection, fetchFn, "execute", operation, params);
 	}
 });
+//#endregion
+//#region src/server/komodo-host-stack.ts
+var COMPOSE_FILE = "compose.yaml";
+var checkedFolder = (folder) => {
+	const trimmed = folder.trim().replace(/(?<=.)\/+$/u, "");
+	if (!trimmed.startsWith("/")) throw new Error(`the folder must be an absolute path on the server, not "${folder}"`);
+	return trimmed;
+};
+var hostStackConfig = (server, folder) => ({
+	server_id: server,
+	files_on_host: true,
+	run_directory: folder,
+	file_paths: [COMPOSE_FILE],
+	environment: ""
+});
+var planHostStack = (input) => {
+	if (input.server.trim() === "") throw new Error("choose the server the folder is on");
+	const folder = checkedFolder(input.folder);
+	const named = input.name?.trim() ?? "";
+	return {
+		stack: named === "" ? defaultStackName(folder) : named,
+		config: hostStackConfig(input.server, folder)
+	};
+};
+var sameFolder = (a, b) => a !== void 0 && a.replace(/(?<=.)\/+$/u, "") === b;
+var runFromHostFolder = async (client, { stack, config }) => {
+	const existing = (await client.listStacks()).find((item) => item.name === stack);
+	if (existing === void 0) await client.createStack(stack, config);
+	else {
+		const current = (await client.getStack(existing.id)).config ?? {};
+		if (!(current.files_on_host === true && current.server_id === config.server_id && sameFolder(current.run_directory, config.run_directory))) throw new HostStackConflict(stack, config.run_directory);
+		await client.updateStack(existing.id, config);
+	}
+	await client.deployStack(stack);
+	return {
+		stack,
+		created: existing === void 0
+	};
+};
+var HostStackConflict = class extends Error {
+	constructor(stack, folder) {
+		super(`Komodo already has a stack named "${stack}" that isn't a host-folder stack for ${folder} on that server; it was left untouched. Give this one another name.`);
+		this.name = "HostStackConflict";
+	}
+};
 //#endregion
 //#region src/server/komodo-overview.ts
 var resourceUrl = (baseUrl, path, id) => `${baseUrl}/${path}/${id}`;
@@ -21898,7 +21975,8 @@ var STATE = {
 	dead: "unhealthy",
 	unhealthy: "unhealthy"
 };
-var deployState = (state) => state === void 0 ? "unknown" : STATE[state] ?? "unknown";
+var deployState = (state) => state === void 0 || state === null ? "unknown" : STATE[state] ?? "unknown";
+var optional = (key, value) => value === null || value === void 0 ? {} : { [key]: value };
 var service = (raw) => ({
 	name: raw.service ?? "",
 	image: raw.image ?? "",
@@ -21909,9 +21987,9 @@ var deploymentResource = (baseUrl, item) => ({
 	id: item.id,
 	name: item.name,
 	state: deployState(item.info.state),
-	...item.info.status !== void 0 ? { status: item.info.status } : {},
-	...item.info.server_name !== void 0 ? { server: item.info.server_name } : {},
-	...item.info.image !== void 0 ? { image: item.info.image } : {},
+	...optional("status", item.info.status),
+	...optional("server", item.info.server_name),
+	...optional("image", item.info.image),
 	updateAvailable: item.info.update_available === true,
 	services: [],
 	url: resourceUrl(baseUrl, "deployments", item.id)
@@ -21923,8 +22001,8 @@ var stackResource = (baseUrl, item) => {
 		id: item.id,
 		name: item.name,
 		state: deployState(item.info.state),
-		...item.info.status !== void 0 ? { status: item.info.status } : {},
-		...item.info.server_name !== void 0 ? { server: item.info.server_name } : {},
+		...optional("status", item.info.status),
+		...optional("server", item.info.server_name),
 		updateAvailable: services.some((entry) => entry.updateAvailable),
 		services,
 		url: resourceUrl(baseUrl, "stacks", item.id)
@@ -21934,7 +22012,7 @@ var serverState = (state) => {
 	if (state === "Ok") return "ok";
 	return state === "Disabled" ? "disabled" : "unreachable";
 };
-var percent = (used, total) => used === void 0 || total === void 0 || total <= 0 ? void 0 : Math.round(used / total * 100);
+var percent = (used, total) => used === void 0 || used === null || total === void 0 || total === null || total <= 0 ? void 0 : Math.round(used / total * 100);
 var serverEntry = (baseUrl, item) => {
 	const stats = item.info.stats;
 	const cpu = stats?.cpu_perc;
@@ -21944,9 +22022,9 @@ var serverEntry = (baseUrl, item) => {
 		id: item.id,
 		name: item.name,
 		state: serverState(item.info.state),
-		...cpu !== void 0 ? { cpuPercent: Math.round(cpu) } : {},
-		...mem !== void 0 ? { memPercent: mem } : {},
-		...disk !== void 0 ? { diskPercent: disk } : {},
+		...optional("cpuPercent", cpu === void 0 || cpu === null ? void 0 : Math.round(cpu)),
+		...optional("memPercent", mem),
+		...optional("diskPercent", disk),
 		url: resourceUrl(baseUrl, "servers", item.id)
 	};
 };
@@ -22213,6 +22291,20 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 			const client = komodoClient(connection, fetchFn);
 			for (const operation of OPERATIONS[input.kind][input.action]) await upstream(client.execute(operation, { [input.kind]: resource.name }));
 			return { ok: true };
+		}),
+		hostStack: i.hostStack.handler(async ({ input }) => {
+			let plan;
+			try {
+				plan = planHostStack(input);
+			} catch (error) {
+				throw new ORPCError$1("BAD_REQUEST", { message: errorMessage(error) });
+			}
+			const connection = await connect(input.capability);
+			try {
+				return await runFromHostFolder(komodoClient(connection, fetchFn), plan);
+			} catch (error) {
+				throw error instanceof HostStackConflict ? new ORPCError$1("CONFLICT", { message: error.message }) : new ORPCError$1("BAD_GATEWAY", { message: errorMessage(error) });
+			}
 		}),
 		logs: i.logs.handler(async ({ input }) => {
 			const [connection, resource] = await resolve(input.capability, input.kind, input.id);

@@ -25,7 +25,12 @@ const STATE: Record<string, DeployState> = {
     unhealthy: "unhealthy",
 };
 
-export const deployState = (state: string | undefined): DeployState => (state === undefined ? "unknown" : (STATE[state] ?? "unknown"));
+export const deployState = (state: string | null | undefined): DeployState => (state === undefined || state === null ? "unknown" : (STATE[state] ?? "unknown"));
+
+// Komodo sends an empty `Option` as `null` (a stopped stack's `status`), which the wire schema's optional fields refuse;
+// both null and undefined drop the key.
+const optional = <K extends string, V>(key: K, value: V | null | undefined): Partial<Record<K, V>> =>
+    value === null || value === undefined ? {} : ({ [key]: value } as Record<K, V>);
 
 const service = (raw: KomodoStackService): { name: string; image: string; updateAvailable: boolean } => ({
     name: raw.service ?? "",
@@ -38,9 +43,9 @@ export const deploymentResource = (baseUrl: string, item: KomodoListItem<KomodoD
     id: item.id,
     name: item.name,
     state: deployState(item.info.state),
-    ...(item.info.status !== undefined ? { status: item.info.status } : {}),
-    ...(item.info.server_name !== undefined ? { server: item.info.server_name } : {}),
-    ...(item.info.image !== undefined ? { image: item.info.image } : {}),
+    ...optional("status", item.info.status),
+    ...optional("server", item.info.server_name),
+    ...optional("image", item.info.image),
     updateAvailable: item.info.update_available === true,
     services: [],
     url: resourceUrl(baseUrl, "deployments", item.id),
@@ -53,8 +58,8 @@ export const stackResource = (baseUrl: string, item: KomodoListItem<KomodoStackI
         id: item.id,
         name: item.name,
         state: deployState(item.info.state),
-        ...(item.info.status !== undefined ? { status: item.info.status } : {}),
-        ...(item.info.server_name !== undefined ? { server: item.info.server_name } : {}),
+        ...optional("status", item.info.status),
+        ...optional("server", item.info.server_name),
         updateAvailable: services.some((entry) => entry.updateAvailable),
         services,
         url: resourceUrl(baseUrl, "stacks", item.id),
@@ -62,7 +67,7 @@ export const stackResource = (baseUrl: string, item: KomodoListItem<KomodoStackI
 };
 
 // ServerState is Ok | NotOk | Disabled; anything unrecognized reads as unreachable, the safe direction, never healthy.
-const serverState = (state: string | undefined): DeployServer["state"] => {
+const serverState = (state: string | null | undefined): DeployServer["state"] => {
     if (state === "Ok") {
         return "ok";
     }
@@ -71,8 +76,8 @@ const serverState = (state: string | undefined): DeployServer["state"] => {
 
 // Memory/disk arrive in GB, not percentages (cpu already is one); a zero total means no stats, not "100% full", so the
 // gauge just doesn't render.
-const percent = (used: number | undefined, total: number | undefined): number | undefined =>
-    used === undefined || total === undefined || total <= 0 ? undefined : Math.round((used / total) * 100);
+const percent = (used: number | null | undefined, total: number | null | undefined): number | undefined =>
+    used === undefined || used === null || total === undefined || total === null || total <= 0 ? undefined : Math.round((used / total) * 100);
 
 export const serverEntry = (baseUrl: string, item: KomodoListItem<KomodoServerInfo>): DeployServer => {
     const stats = item.info.stats;
@@ -83,9 +88,9 @@ export const serverEntry = (baseUrl: string, item: KomodoListItem<KomodoServerIn
         id: item.id,
         name: item.name,
         state: serverState(item.info.state),
-        ...(cpu !== undefined ? { cpuPercent: Math.round(cpu) } : {}),
-        ...(mem !== undefined ? { memPercent: mem } : {}),
-        ...(disk !== undefined ? { diskPercent: disk } : {}),
+        ...optional("cpuPercent", cpu === undefined || cpu === null ? undefined : Math.round(cpu)),
+        ...optional("memPercent", mem),
+        ...optional("diskPercent", disk),
         url: resourceUrl(baseUrl, "servers", item.id),
     };
 };
