@@ -31,10 +31,13 @@ const props = defineProps<{
     busy: boolean;
     // Last failure from an action on this row, shown here rather than a page banner.
     error: string | undefined;
+    // On one of the owner's computers rather than in a Komodo: the row can also put an agent on the stack's `.env`.
+    device?: boolean;
 }>();
 const emit = defineEmits<{
     act: [resource: DeployResource, action: DeployAction];
     fix: [resource: DeployResource, pick: AgentRunChoice | undefined];
+    environment: [resource: DeployResource];
 }>();
 
 // Model this row's fix will spend; asked of the host so the button and the daemon can't disagree.
@@ -149,7 +152,7 @@ const stop = (): void => {
 
         <template #below>
             <div class="flex flex-col gap-4">
-                <!-- Whatever Komodo refused, at the row that asked. -->
+                <!-- Whatever Komodo or the computer refused, at the row that asked. -->
                 <Notice v-if="error" :of="noticeOf(error)" />
 
                 <!-- The one thing this surface can do that Komodo's own UI cannot: put an agent on it with the repo that
@@ -164,6 +167,15 @@ const stop = (): void => {
                         :loading="busy"
                         :disabled="busy"
                         @run="startFix"
+                    />
+                    <Button
+                        v-if="device"
+                        label="Set up its .env with the agent"
+                        icon="key"
+                        size="small"
+                        tier="quiet"
+                        :disabled="busy"
+                        @click="emit(`environment`, resource)"
                     />
                     <Button
                         v-if="resource.state !== `stopped`"
@@ -212,7 +224,7 @@ const stop = (): void => {
             <ConfirmDialog
                 :open="confirmingStop"
                 :header="`Stop ${resource.name}?`"
-                description="It stays down until someone starts it again, here or in Komodo."
+                :description="device ? `It stays down until someone starts it again.` : `It stays down until someone starts it again, here or in Komodo.`"
                 confirm-label="Stop"
                 confirm-icon="stop"
                 @cancel="confirmingStop = false"

@@ -2,14 +2,20 @@ import { errorMessage } from "@intentic/base/errors";
 import type { ExtensionServerApi, ExtensionServerContext } from "@intentic/extension-api";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { implement, ORPCError } from "@orpc/server";
-import type { DeployResource } from "../contract.js";
-import { komodoContract } from "./contract.js";
+import { type DeployResource, deviceConnection } from "../contract.js";
+import { startAgentTurn } from "./agent-turn.js";
+import { deploymentsContract } from "./contract.js";
+import { deviceBoard } from "./device-board.js";
+import { daemonDevices } from "./device-daemon.js";
+import { deviceOperations } from "./device-operations.js";
 import { discoverRepoDirs, readFileOrUndefined } from "./discover.js";
 import { type FetchFn, komodoClient, type KomodoConnection } from "./komodo-client.js";
 import { HostStackConflict, planHostStack, runFromHostFolder } from "./komodo-host-stack.js";
 import { deployAlerts, deploymentResource, serverEntry, stackResource } from "./komodo-overview.js";
 import { repoLinks } from "./komodo-repos.js";
 import { fileKomodoStore, komodoStorePath } from "./komodo-store.js";
+import { fileNativeStore, nativeStorePath } from "./native-store.js";
+import { deploymentTools } from "./tools.js";
 import { plainText } from "@intentic/base/plain-text";
 
 // Deployments backend for one connected komodo capability. The credential never reaches the browser: the backend reads
@@ -22,12 +28,6 @@ import { plainText } from "@intentic/base/plain-text";
 const LOG_TAIL = 200;
 // Log tail bytes sent into a fix conversation: enough to see the error, small enough to stay about fixing.
 const FIX_LOG_BYTES = 24_000;
-const TITLE_MAX = 80;
-
-// Mirrors the scheduler's conversation id recipe: bounded, charset-safe, unique per process.
-let fixSeq = 0;
-const mintFixConversationId = (name: string, now: number): string =>
-    `deploy-fix-${name.replaceAll(/[^a-zA-Z0-9-]/g, "-").slice(0, 32)}-${now.toString(36)}${(fixSeq++).toString(36)}`;
 
 const upstream = async <T>(action: Promise<T>): Promise<T> => {
     try {
@@ -56,8 +56,21 @@ const OPERATIONS = {
 } as const;
 
 export const activateServer = (api: ExtensionServerApi, _context: ExtensionServerContext, fetchFn: FetchFn = fetch): void => {
-    const i = implement(komodoContract);
+    const i = implement(deploymentsContract);
     const store = fileKomodoStore(komodoStorePath(api.workspaceRoot));
+    const scan = { root: api.workspaceRoot, read: readFileOrUndefined };
+    const repoDirs = () => discoverRepoDirs(api.workspaceRoot);
+    const devices = daemonDevices(api);
+    const board = deviceBoard({
+        daemon: devices,
+        store,
+        memory: fileNativeStore(nativeStorePath(api.workspaceRoot)),
+        operations: deviceOperations(),
+        scan,
+        repoDirs,
+        startAgent: (request) => startAgentTurn(api, request),
+        log: api.log,
+    });
 
     // Resolved per call so a rotated key applies immediately. Kind and provider are re-checked here, since the route
     // hands back whatever capability the id names, and a non-Komodo one holds someone else's credential.
@@ -104,9 +117,8 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
             // Computed outside the try, so it survives an unreachable Komodo (with no suggestions, since there are no
             // stack names to draw from): a repo with nothing linked yet is exactly when the owner needs to see this
             // section most.
-            const scan = { root: api.workspaceRoot, read: readFileOrUndefined };
             const links = await store.links(input.capability);
-            const repoDirs = await discoverRepoDirs(api.workspaceRoot);
+            const dirs = await repoDirs();
             try {
                 // One fan-out: five independent reads in parallel, so one slow call bounds the response, not the sum.
                 const [viewer, deployments, stacks, servers, alerts] = await Promise.all([
@@ -122,7 +134,7 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
                     viewer,
                     repos: await repoLinks(
                         scan,
-                        repoDirs,
+                        dirs,
                         stacks.map((item) => item.name),
                         links,
                     ),
@@ -142,7 +154,7 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
                     komodoUrl: connection.baseUrl,
                     reachable: false,
                     unreachableReason: reason,
-                    repos: await repoLinks(scan, repoDirs, [], links),
+                    repos: await repoLinks(scan, dirs, [], links),
                     resources: [],
                     servers: [],
                     alerts: [],
@@ -208,30 +220,34 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
                 `Find the cause in this workspace's source where it is a code or config problem, fix it there, and say plainly when the cause is outside the workspace (a bad env var, a full disk, an unreachable dependency) rather than inventing a code change. You are in an isolated worktree: commit your fix and it goes through review.`,
                 ...(tail !== "" ? [`--- container log tail ---\n${tail}`] : []),
             ].join("\n\n");
-            const conversationId = mintFixConversationId(resource.name, Date.now());
-            // Detached run with a fleet card; `unattended` defers to the default list unless a pick overrides it.
-            await api.daemon
-                .json(`/agent`, {
-                    method: "POST",
-                    body: JSON.stringify({
-                        prompt,
-                        conversationId,
-                        isolated: true,
-                        unattended: true,
-                        // Which of the owner's model lists pays for it (Sandbox ▸ Agent ▸ Models).
-                        runRole: `deployment-fix`,
-                        // Spread verbatim: AgentRunPick's fields ARE the turn's, so nothing is translated here
-                        // and nothing can be left behind (contract AgentRunPickSchema).
-                        ...input.pick,
-                        title: `Fix deployment: ${resource.name}`.slice(0, TITLE_MAX),
-                    }),
-                })
-                .catch((error: unknown) => {
-                    throw new ORPCError("CONFLICT", { message: errorMessage(error) });
-                });
-            return { conversationId };
+            return startAgentTurn(api, {
+                kind: "deploy-fix",
+                name: resource.name,
+                title: `Fix deployment: ${resource.name}`,
+                prompt,
+                ...(input.pick === undefined ? {} : { pick: input.pick }),
+            });
         }),
+        // One of the owner's own computers, through the daemon's device-stack routes (device-board.ts).
+        deviceOverview: i.deviceOverview.handler(({ input }) => board.overview(input.device)),
+        deviceAction: i.deviceAction.handler(({ input }) => board.action(input.device, input.id, input.action)),
+        deviceLink: i.deviceLink.handler(async ({ input }) => {
+            await store.link(deviceConnection(input.device), input.repo, input.stack);
+            return { ok: true as const };
+        }),
+        deviceLogs: i.deviceLogs.handler(({ input }) => board.logs(input.device, input.id)),
+        deviceFix: i.deviceFix.handler(({ input }) => board.fix(input.device, input.id, input.pick)),
+        deviceSeen: i.deviceSeen.handler(async ({ input }) => {
+            const at = Date.now();
+            await store.markSeen(deviceConnection(input.device), at);
+            return { seenAt: at };
+        }),
+        deviceDeploy: i.deviceDeploy.handler(({ input }) => board.deploy(input.device, input.repo, input.stack)),
+        deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick)),
     });
+
+    // The agent's `deployments` server (tools.ts): what lets a fix turn, or the CI automation, deploy.
+    api.tools.serve(() => deploymentTools({ board, daemon: devices, store, scan, repoDirs }));
 
     const handler = new OpenAPIHandler(router);
     api.routes.mount(async (request) => {

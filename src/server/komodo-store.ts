@@ -24,6 +24,8 @@ export interface KomodoStore {
     readonly links: (capability: string) => Promise<Record<string, string>>;
     // An empty `stack` clears the link, whether unlinking or replacing one that no longer exists.
     readonly link: (capability: string, repo: string, stack: string) => Promise<void>;
+    // Every connection's links at once, for the agent's view of what deploys where.
+    readonly allLinks: () => Promise<Record<string, Record<string, string>>>;
 }
 
 export const komodoStorePath = (workspaceRoot: string): string => join(workspaceRoot, extensionRuntimeDir("deployments"), "komodo.json");
@@ -54,6 +56,7 @@ export const fileKomodoStore = (path: string): KomodoStore => {
         seenAt: async (capability) => (await read()).seenAt[capability],
         markSeen: (capability, at) => update((state) => ({ ...state, seenAt: { ...state.seenAt, [capability]: at } })),
         links: async (capability) => (await read()).links[capability] ?? {},
+        allLinks: async () => (await read()).links,
         link: (capability, repo, stack) =>
             update((state) => {
                 const forCapability = { ...state.links[capability] };

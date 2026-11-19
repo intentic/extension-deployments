@@ -1,5 +1,5 @@
-import { access, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, dirname, join, relative } from "node:path";
+import { access, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 //#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/errors.js
 var errorMessage = (error) => error instanceof Error ? error.message : String(error);
 //#endregion
@@ -2496,6 +2496,562 @@ var OpenAPIHandler = class extends FetchHandler {
 		super(new StandardOpenAPIHandler(router, options), options);
 	}
 };
+//#endregion
+//#region node_modules/.pnpm/@orpc+shared@1.15.4/node_modules/@orpc/shared/dist/index.mjs
+function resolveMaybeOptionalOptions(rest) {
+	return rest[0] ?? {};
+}
+var ORPC_SHARED_PACKAGE_NAME = "@orpc/shared";
+var ORPC_SHARED_PACKAGE_VERSION = "1.15.4";
+function sequential(fn) {
+	let lastOperationPromise = Promise.resolve();
+	return (...args) => {
+		return lastOperationPromise = lastOperationPromise.catch(() => {}).then(() => {
+			return fn(...args);
+		});
+	};
+}
+`${ORPC_SHARED_PACKAGE_NAME}${ORPC_SHARED_PACKAGE_VERSION}`;
+function isAsyncIteratorObject(maybe) {
+	if (!maybe || typeof maybe !== "object") return false;
+	return "next" in maybe && typeof maybe.next === "function" && Symbol.asyncIterator in maybe && typeof maybe[Symbol.asyncIterator] === "function";
+}
+var asyncDisposeSymbol = Symbol.asyncDispose ?? Symbol.for("asyncDispose");
+var AsyncIteratorClass = class {
+	#isDone = false;
+	#isExecuteComplete = false;
+	#cleanup;
+	#next;
+	constructor(next, cleanup) {
+		this.#cleanup = cleanup;
+		this.#next = sequential(async () => {
+			if (this.#isDone) return {
+				done: true,
+				value: void 0
+			};
+			try {
+				const result = await next();
+				if (result.done) this.#isDone = true;
+				return result;
+			} catch (err) {
+				this.#isDone = true;
+				throw err;
+			} finally {
+				if (this.#isDone && !this.#isExecuteComplete) {
+					this.#isExecuteComplete = true;
+					await this.#cleanup("next");
+				}
+			}
+		});
+	}
+	next() {
+		return this.#next();
+	}
+	async return(value) {
+		this.#isDone = true;
+		if (!this.#isExecuteComplete) {
+			this.#isExecuteComplete = true;
+			await this.#cleanup("return");
+		}
+		return {
+			done: true,
+			value
+		};
+	}
+	async throw(err) {
+		this.#isDone = true;
+		if (!this.#isExecuteComplete) {
+			this.#isExecuteComplete = true;
+			await this.#cleanup("throw");
+		}
+		throw err;
+	}
+	/**
+	* asyncDispose symbol only available in esnext, we should fallback to Symbol.for('asyncDispose')
+	*/
+	async [asyncDisposeSymbol]() {
+		this.#isDone = true;
+		if (!this.#isExecuteComplete) {
+			this.#isExecuteComplete = true;
+			await this.#cleanup("dispose");
+		}
+	}
+	[Symbol.asyncIterator]() {
+		return this;
+	}
+};
+function getConstructor(value) {
+	if (!isTypescriptObject(value)) return null;
+	return Object.getPrototypeOf(value)?.constructor;
+}
+function isTypescriptObject(value) {
+	return !!value && (typeof value === "object" || typeof value === "function");
+}
+//#endregion
+//#region node_modules/.pnpm/@orpc+client@1.15.4/node_modules/@orpc/client/dist/shared/client.DS9vjH_1.mjs
+var ORPC_CLIENT_PACKAGE_NAME = "@orpc/client";
+var ORPC_CLIENT_PACKAGE_VERSION = "1.15.4";
+var COMMON_ORPC_ERROR_DEFS = {
+	BAD_REQUEST: {
+		status: 400,
+		message: "Bad Request"
+	},
+	UNAUTHORIZED: {
+		status: 401,
+		message: "Unauthorized"
+	},
+	FORBIDDEN: {
+		status: 403,
+		message: "Forbidden"
+	},
+	NOT_FOUND: {
+		status: 404,
+		message: "Not Found"
+	},
+	METHOD_NOT_SUPPORTED: {
+		status: 405,
+		message: "Method Not Supported"
+	},
+	NOT_ACCEPTABLE: {
+		status: 406,
+		message: "Not Acceptable"
+	},
+	TIMEOUT: {
+		status: 408,
+		message: "Request Timeout"
+	},
+	CONFLICT: {
+		status: 409,
+		message: "Conflict"
+	},
+	PRECONDITION_FAILED: {
+		status: 412,
+		message: "Precondition Failed"
+	},
+	PAYLOAD_TOO_LARGE: {
+		status: 413,
+		message: "Payload Too Large"
+	},
+	UNSUPPORTED_MEDIA_TYPE: {
+		status: 415,
+		message: "Unsupported Media Type"
+	},
+	UNPROCESSABLE_CONTENT: {
+		status: 422,
+		message: "Unprocessable Content"
+	},
+	TOO_MANY_REQUESTS: {
+		status: 429,
+		message: "Too Many Requests"
+	},
+	CLIENT_CLOSED_REQUEST: {
+		status: 499,
+		message: "Client Closed Request"
+	},
+	INTERNAL_SERVER_ERROR: {
+		status: 500,
+		message: "Internal Server Error"
+	},
+	NOT_IMPLEMENTED: {
+		status: 501,
+		message: "Not Implemented"
+	},
+	BAD_GATEWAY: {
+		status: 502,
+		message: "Bad Gateway"
+	},
+	SERVICE_UNAVAILABLE: {
+		status: 503,
+		message: "Service Unavailable"
+	},
+	GATEWAY_TIMEOUT: {
+		status: 504,
+		message: "Gateway Timeout"
+	}
+};
+function fallbackORPCErrorStatus(code, status) {
+	return status ?? COMMON_ORPC_ERROR_DEFS[code]?.status ?? 500;
+}
+function fallbackORPCErrorMessage(code, message) {
+	return message || COMMON_ORPC_ERROR_DEFS[code]?.message || code;
+}
+var globalORPCErrorConstructors;
+var ORPCError = class ORPCError extends Error {
+	defined;
+	code;
+	status;
+	data;
+	static {
+		const GLOBAL_ORPC_ERROR_CONSTRUCTORS_SYMBOL = Symbol.for(`__${ORPC_CLIENT_PACKAGE_NAME}@${ORPC_CLIENT_PACKAGE_VERSION}/error/ORPC_ERROR_CONSTRUCTORS__`);
+		globalThis[GLOBAL_ORPC_ERROR_CONSTRUCTORS_SYMBOL] ??= /* @__PURE__ */ new WeakSet();
+		globalORPCErrorConstructors = globalThis[GLOBAL_ORPC_ERROR_CONSTRUCTORS_SYMBOL];
+		globalORPCErrorConstructors.add(ORPCError);
+	}
+	constructor(code, ...rest) {
+		const options = resolveMaybeOptionalOptions(rest);
+		if (options.status !== void 0 && !isORPCErrorStatus(options.status)) throw new Error("[ORPCError] Invalid error status code.");
+		const message = fallbackORPCErrorMessage(code, options.message);
+		super(message, options);
+		this.code = code;
+		this.status = fallbackORPCErrorStatus(code, options.status);
+		this.defined = options.defined ?? false;
+		this.data = options.data;
+	}
+	toJSON() {
+		return {
+			defined: this.defined,
+			code: this.code,
+			status: this.status,
+			message: this.message,
+			data: this.data
+		};
+	}
+	/**
+	* Workaround for Next.js where different contexts use separate
+	* dependency graphs, causing multiple ORPCError constructors existing and breaking
+	* `instanceof` checks across contexts.
+	*
+	* This is particularly problematic with "Optimized SSR", where orpc-client
+	* executes in one context but is invoked from another. When an error is thrown
+	* in the execution context, `instanceof ORPCError` checks fail in the
+	* invocation context due to separate class constructors.
+	*
+	* @todo Remove this and related code if Next.js resolves the multiple dependency graph issue.
+	*/
+	static [Symbol.hasInstance](instance) {
+		if (globalORPCErrorConstructors.has(this)) {
+			const constructor = getConstructor(instance);
+			if (constructor && globalORPCErrorConstructors.has(constructor)) return true;
+		}
+		return super[Symbol.hasInstance](instance);
+	}
+};
+function isORPCErrorStatus(status) {
+	return status < 200 || status >= 400;
+}
+//#endregion
+//#region node_modules/.pnpm/@orpc+standard-server@1.15.4/node_modules/@orpc/standard-server/dist/index.mjs
+var EventEncoderError = class extends TypeError {};
+TransformStream;
+var LINE_ENDING_REGEX = /\r\n|[\n\r]/;
+function containsLineBreak(value) {
+	return LINE_ENDING_REGEX.test(value);
+}
+function assertEventId(id) {
+	if (containsLineBreak(id)) throw new EventEncoderError("Event's id must not contain a carriage return or newline character");
+}
+function assertEventRetry(retry) {
+	if (!Number.isInteger(retry) || retry < 0) throw new EventEncoderError("Event's retry must be a integer and >= 0");
+}
+function assertEventComment(comment) {
+	if (containsLineBreak(comment)) throw new EventEncoderError("Event's comment must not contain a carriage return or newline character");
+}
+var EVENT_SOURCE_META_SYMBOL = Symbol("ORPC_EVENT_SOURCE_META");
+function withEventMeta(container, meta) {
+	if (meta.id === void 0 && meta.retry === void 0 && !meta.comments?.length) return container;
+	if (meta.id !== void 0) assertEventId(meta.id);
+	if (meta.retry !== void 0) assertEventRetry(meta.retry);
+	if (meta.comments !== void 0) for (const comment of meta.comments) assertEventComment(comment);
+	return new Proxy(container, { get(target, prop, receiver) {
+		if (prop === EVENT_SOURCE_META_SYMBOL) return meta;
+		return Reflect.get(target, prop, receiver);
+	} });
+}
+function getEventMeta(container) {
+	return isTypescriptObject(container) ? Reflect.get(container, EVENT_SOURCE_META_SYMBOL) : void 0;
+}
+//#endregion
+//#region node_modules/.pnpm/@orpc+client@1.15.4/node_modules/@orpc/client/dist/shared/client.BLtwTQUg.mjs
+function mapEventIterator(iterator, maps) {
+	const mapError = async (error) => {
+		let mappedError = await maps.error(error);
+		if (mappedError !== error) {
+			const meta = getEventMeta(error);
+			if (meta && isTypescriptObject(mappedError)) mappedError = withEventMeta(mappedError, meta);
+		}
+		return mappedError;
+	};
+	return new AsyncIteratorClass(async () => {
+		const { done, value } = await (async () => {
+			try {
+				return await iterator.next();
+			} catch (error) {
+				throw await mapError(error);
+			}
+		})();
+		let mappedValue = await maps.value(value, done);
+		if (mappedValue !== value) {
+			const meta = getEventMeta(value);
+			if (meta && isTypescriptObject(mappedValue)) mappedValue = withEventMeta(mappedValue, meta);
+		}
+		return {
+			done,
+			value: mappedValue
+		};
+	}, async () => {
+		try {
+			await iterator.return?.();
+		} catch (error) {
+			throw await mapError(error);
+		}
+	});
+}
+//#endregion
+//#region node_modules/.pnpm/@orpc+contract@1.15.4/node_modules/@orpc/contract/dist/shared/contract.D_dZrO__.mjs
+var ValidationError = class extends Error {
+	issues;
+	data;
+	constructor(options) {
+		super(options.message, options);
+		this.issues = options.issues;
+		this.data = options.data;
+	}
+};
+function mergeErrorMap(errorMap1, errorMap2) {
+	return {
+		...errorMap1,
+		...errorMap2
+	};
+}
+var ContractProcedure = class {
+	/**
+	* This property holds the defined options for the contract procedure.
+	*/
+	"~orpc";
+	constructor(def) {
+		if (def.route?.successStatus && isORPCErrorStatus(def.route.successStatus)) throw new Error("[ContractProcedure] Invalid successStatus.");
+		if (Object.values(def.errorMap).some((val) => val && val.status && !isORPCErrorStatus(val.status))) throw new Error("[ContractProcedure] Invalid error status code.");
+		this["~orpc"] = def;
+	}
+};
+function isContractProcedure(item) {
+	if (item instanceof ContractProcedure) return true;
+	return (typeof item === "object" || typeof item === "function") && item !== null && "~orpc" in item && typeof item["~orpc"] === "object" && item["~orpc"] !== null && "errorMap" in item["~orpc"] && "route" in item["~orpc"] && "meta" in item["~orpc"];
+}
+//#endregion
+//#region node_modules/.pnpm/@orpc+contract@1.15.4/node_modules/@orpc/contract/dist/index.mjs
+function mergeMeta(meta1, meta2) {
+	return {
+		...meta1,
+		...meta2
+	};
+}
+function mergeRoute(a, b) {
+	return {
+		...a,
+		...b
+	};
+}
+function prefixRoute(route, prefix) {
+	if (!route.path) return route;
+	return {
+		...route,
+		path: `${prefix}${route.path}`
+	};
+}
+function unshiftTagRoute(route, tags) {
+	return {
+		...route,
+		tags: [...tags, ...route.tags ?? []]
+	};
+}
+function mergePrefix(a, b) {
+	return a ? `${a}${b}` : b;
+}
+function mergeTags(a, b) {
+	return a ? [...a, ...b] : b;
+}
+function enhanceRoute(route, options) {
+	let router = route;
+	if (options.prefix) router = prefixRoute(router, options.prefix);
+	if (options.tags?.length) router = unshiftTagRoute(router, options.tags);
+	return router;
+}
+function enhanceContractRouter(router, options) {
+	if (isContractProcedure(router)) return new ContractProcedure({
+		...router["~orpc"],
+		errorMap: mergeErrorMap(options.errorMap, router["~orpc"].errorMap),
+		route: enhanceRoute(router["~orpc"].route, options)
+	});
+	if (typeof router !== "object" || router === null) return router;
+	const enhanced = {};
+	for (const key in router) enhanced[key] = enhanceContractRouter(router[key], options);
+	return enhanced;
+}
+var oc = new class ContractBuilder extends ContractProcedure {
+	constructor(def) {
+		super(def);
+		this["~orpc"].prefix = def.prefix;
+		this["~orpc"].tags = def.tags;
+	}
+	/**
+	* Sets or overrides the initial meta.
+	*
+	* @see {@link https://orpc.dev/docs/metadata Metadata Docs}
+	*/
+	$meta(initialMeta) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			meta: initialMeta
+		});
+	}
+	/**
+	* Sets or overrides the initial route.
+	* This option is typically relevant when integrating with OpenAPI.
+	*
+	* @see {@link https://orpc.dev/docs/openapi/routing OpenAPI Routing Docs}
+	* @see {@link https://orpc.dev/docs/openapi/input-output-structure OpenAPI Input/Output Structure Docs}
+	*/
+	$route(initialRoute) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			route: initialRoute
+		});
+	}
+	/**
+	* Sets or overrides the initial input schema.
+	*
+	* @see {@link https://orpc.dev/docs/procedure#initial-configuration Initial Procedure Configuration Docs}
+	*/
+	$input(initialInputSchema) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			inputSchema: initialInputSchema
+		});
+	}
+	/**
+	* Adds type-safe custom errors to the contract.
+	* The provided errors are spared-merged with any existing errors in the contract.
+	*
+	* @see {@link https://orpc.dev/docs/error-handling#type%E2%80%90safe-error-handling Type-Safe Error Handling Docs}
+	*/
+	errors(errors) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			errorMap: mergeErrorMap(this["~orpc"].errorMap, errors)
+		});
+	}
+	/**
+	* Sets or updates the metadata for the contract.
+	* The provided metadata is spared-merged with any existing metadata in the contract.
+	*
+	* @see {@link https://orpc.dev/docs/metadata Metadata Docs}
+	*/
+	meta(meta) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			meta: mergeMeta(this["~orpc"].meta, meta)
+		});
+	}
+	/**
+	* Sets or updates the route definition for the contract.
+	* The provided route is spared-merged with any existing route in the contract.
+	* This option is typically relevant when integrating with OpenAPI.
+	*
+	* @see {@link https://orpc.dev/docs/openapi/routing OpenAPI Routing Docs}
+	* @see {@link https://orpc.dev/docs/openapi/input-output-structure OpenAPI Input/Output Structure Docs}
+	*/
+	route(route) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			route: mergeRoute(this["~orpc"].route, route)
+		});
+	}
+	/**
+	* Defines the input validation schema for the contract.
+	*
+	* @see {@link https://orpc.dev/docs/procedure#input-output-validation Input Validation Docs}
+	*/
+	input(schema) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			inputSchema: schema
+		});
+	}
+	/**
+	* Defines the output validation schema for the contract.
+	*
+	* @see {@link https://orpc.dev/docs/procedure#input-output-validation Output Validation Docs}
+	*/
+	output(schema) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			outputSchema: schema
+		});
+	}
+	/**
+	* Prefixes all procedures in the contract router.
+	* The provided prefix is post-appended to any existing router prefix.
+	*
+	* @note This option does not affect procedures that do not define a path in their route definition.
+	*
+	* @see {@link https://orpc.dev/docs/openapi/routing#route-prefixes OpenAPI Route Prefixes Docs}
+	*/
+	prefix(prefix) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			prefix: mergePrefix(this["~orpc"].prefix, prefix)
+		});
+	}
+	/**
+	* Adds tags to all procedures in the contract router.
+	* This helpful when you want to group procedures together in the OpenAPI specification.
+	*
+	* @see {@link https://orpc.dev/docs/openapi/openapi-specification#operation-metadata OpenAPI Operation Metadata Docs}
+	*/
+	tag(...tags) {
+		return new ContractBuilder({
+			...this["~orpc"],
+			tags: mergeTags(this["~orpc"].tags, tags)
+		});
+	}
+	/**
+	* Applies all of the previously defined options to the specified contract router.
+	*
+	* @see {@link https://orpc.dev/docs/router#extending-router Extending Router Docs}
+	*/
+	router(router) {
+		return enhanceContractRouter(router, this["~orpc"]);
+	}
+}({
+	errorMap: {},
+	route: {},
+	meta: {}
+});
+var EVENT_ITERATOR_DETAILS_SYMBOL = Symbol("ORPC_EVENT_ITERATOR_DETAILS");
+function eventIterator(yields, returns) {
+	return { "~standard": {
+		[EVENT_ITERATOR_DETAILS_SYMBOL]: {
+			yields,
+			returns
+		},
+		vendor: "orpc",
+		version: 1,
+		validate(iterator) {
+			if (!isAsyncIteratorObject(iterator)) return { issues: [{
+				message: "Expect event iterator",
+				path: []
+			}] };
+			return { value: mapEventIterator(iterator, {
+				async value(value, done) {
+					const schema = done ? returns : yields;
+					if (!schema) return value;
+					const result = await schema["~standard"].validate(value);
+					if (result.issues) throw new ORPCError("EVENT_ITERATOR_VALIDATION_FAILED", {
+						message: "Event iterator validation failed",
+						cause: new ValidationError({
+							issues: result.issues,
+							message: "Event iterator validation failed",
+							data: value
+						})
+					});
+					return result.value;
+				},
+				error: async (error) => error
+			}) };
+		}
+	} };
+}
 //#endregion
 //#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/core/util.js
 function getEnumValues(entries) {
@@ -8453,562 +9009,6 @@ function datetime(params) {
 //#region node_modules/.pnpm/zod@4.6.5/node_modules/zod/v4/classic/coerce.js
 function number(params) {
 	return /* @__PURE__ */ _coercedNumber(ZodNumber, params);
-}
-//#endregion
-//#region node_modules/.pnpm/@orpc+shared@1.15.4/node_modules/@orpc/shared/dist/index.mjs
-function resolveMaybeOptionalOptions(rest) {
-	return rest[0] ?? {};
-}
-var ORPC_SHARED_PACKAGE_NAME = "@orpc/shared";
-var ORPC_SHARED_PACKAGE_VERSION = "1.15.4";
-function sequential(fn) {
-	let lastOperationPromise = Promise.resolve();
-	return (...args) => {
-		return lastOperationPromise = lastOperationPromise.catch(() => {}).then(() => {
-			return fn(...args);
-		});
-	};
-}
-`${ORPC_SHARED_PACKAGE_NAME}${ORPC_SHARED_PACKAGE_VERSION}`;
-function isAsyncIteratorObject(maybe) {
-	if (!maybe || typeof maybe !== "object") return false;
-	return "next" in maybe && typeof maybe.next === "function" && Symbol.asyncIterator in maybe && typeof maybe[Symbol.asyncIterator] === "function";
-}
-var asyncDisposeSymbol = Symbol.asyncDispose ?? Symbol.for("asyncDispose");
-var AsyncIteratorClass = class {
-	#isDone = false;
-	#isExecuteComplete = false;
-	#cleanup;
-	#next;
-	constructor(next, cleanup) {
-		this.#cleanup = cleanup;
-		this.#next = sequential(async () => {
-			if (this.#isDone) return {
-				done: true,
-				value: void 0
-			};
-			try {
-				const result = await next();
-				if (result.done) this.#isDone = true;
-				return result;
-			} catch (err) {
-				this.#isDone = true;
-				throw err;
-			} finally {
-				if (this.#isDone && !this.#isExecuteComplete) {
-					this.#isExecuteComplete = true;
-					await this.#cleanup("next");
-				}
-			}
-		});
-	}
-	next() {
-		return this.#next();
-	}
-	async return(value) {
-		this.#isDone = true;
-		if (!this.#isExecuteComplete) {
-			this.#isExecuteComplete = true;
-			await this.#cleanup("return");
-		}
-		return {
-			done: true,
-			value
-		};
-	}
-	async throw(err) {
-		this.#isDone = true;
-		if (!this.#isExecuteComplete) {
-			this.#isExecuteComplete = true;
-			await this.#cleanup("throw");
-		}
-		throw err;
-	}
-	/**
-	* asyncDispose symbol only available in esnext, we should fallback to Symbol.for('asyncDispose')
-	*/
-	async [asyncDisposeSymbol]() {
-		this.#isDone = true;
-		if (!this.#isExecuteComplete) {
-			this.#isExecuteComplete = true;
-			await this.#cleanup("dispose");
-		}
-	}
-	[Symbol.asyncIterator]() {
-		return this;
-	}
-};
-function getConstructor(value) {
-	if (!isTypescriptObject(value)) return null;
-	return Object.getPrototypeOf(value)?.constructor;
-}
-function isTypescriptObject(value) {
-	return !!value && (typeof value === "object" || typeof value === "function");
-}
-//#endregion
-//#region node_modules/.pnpm/@orpc+client@1.15.4/node_modules/@orpc/client/dist/shared/client.DS9vjH_1.mjs
-var ORPC_CLIENT_PACKAGE_NAME = "@orpc/client";
-var ORPC_CLIENT_PACKAGE_VERSION = "1.15.4";
-var COMMON_ORPC_ERROR_DEFS = {
-	BAD_REQUEST: {
-		status: 400,
-		message: "Bad Request"
-	},
-	UNAUTHORIZED: {
-		status: 401,
-		message: "Unauthorized"
-	},
-	FORBIDDEN: {
-		status: 403,
-		message: "Forbidden"
-	},
-	NOT_FOUND: {
-		status: 404,
-		message: "Not Found"
-	},
-	METHOD_NOT_SUPPORTED: {
-		status: 405,
-		message: "Method Not Supported"
-	},
-	NOT_ACCEPTABLE: {
-		status: 406,
-		message: "Not Acceptable"
-	},
-	TIMEOUT: {
-		status: 408,
-		message: "Request Timeout"
-	},
-	CONFLICT: {
-		status: 409,
-		message: "Conflict"
-	},
-	PRECONDITION_FAILED: {
-		status: 412,
-		message: "Precondition Failed"
-	},
-	PAYLOAD_TOO_LARGE: {
-		status: 413,
-		message: "Payload Too Large"
-	},
-	UNSUPPORTED_MEDIA_TYPE: {
-		status: 415,
-		message: "Unsupported Media Type"
-	},
-	UNPROCESSABLE_CONTENT: {
-		status: 422,
-		message: "Unprocessable Content"
-	},
-	TOO_MANY_REQUESTS: {
-		status: 429,
-		message: "Too Many Requests"
-	},
-	CLIENT_CLOSED_REQUEST: {
-		status: 499,
-		message: "Client Closed Request"
-	},
-	INTERNAL_SERVER_ERROR: {
-		status: 500,
-		message: "Internal Server Error"
-	},
-	NOT_IMPLEMENTED: {
-		status: 501,
-		message: "Not Implemented"
-	},
-	BAD_GATEWAY: {
-		status: 502,
-		message: "Bad Gateway"
-	},
-	SERVICE_UNAVAILABLE: {
-		status: 503,
-		message: "Service Unavailable"
-	},
-	GATEWAY_TIMEOUT: {
-		status: 504,
-		message: "Gateway Timeout"
-	}
-};
-function fallbackORPCErrorStatus(code, status) {
-	return status ?? COMMON_ORPC_ERROR_DEFS[code]?.status ?? 500;
-}
-function fallbackORPCErrorMessage(code, message) {
-	return message || COMMON_ORPC_ERROR_DEFS[code]?.message || code;
-}
-var globalORPCErrorConstructors;
-var ORPCError = class ORPCError extends Error {
-	defined;
-	code;
-	status;
-	data;
-	static {
-		const GLOBAL_ORPC_ERROR_CONSTRUCTORS_SYMBOL = Symbol.for(`__${ORPC_CLIENT_PACKAGE_NAME}@${ORPC_CLIENT_PACKAGE_VERSION}/error/ORPC_ERROR_CONSTRUCTORS__`);
-		globalThis[GLOBAL_ORPC_ERROR_CONSTRUCTORS_SYMBOL] ??= /* @__PURE__ */ new WeakSet();
-		globalORPCErrorConstructors = globalThis[GLOBAL_ORPC_ERROR_CONSTRUCTORS_SYMBOL];
-		globalORPCErrorConstructors.add(ORPCError);
-	}
-	constructor(code, ...rest) {
-		const options = resolveMaybeOptionalOptions(rest);
-		if (options.status !== void 0 && !isORPCErrorStatus(options.status)) throw new Error("[ORPCError] Invalid error status code.");
-		const message = fallbackORPCErrorMessage(code, options.message);
-		super(message, options);
-		this.code = code;
-		this.status = fallbackORPCErrorStatus(code, options.status);
-		this.defined = options.defined ?? false;
-		this.data = options.data;
-	}
-	toJSON() {
-		return {
-			defined: this.defined,
-			code: this.code,
-			status: this.status,
-			message: this.message,
-			data: this.data
-		};
-	}
-	/**
-	* Workaround for Next.js where different contexts use separate
-	* dependency graphs, causing multiple ORPCError constructors existing and breaking
-	* `instanceof` checks across contexts.
-	*
-	* This is particularly problematic with "Optimized SSR", where orpc-client
-	* executes in one context but is invoked from another. When an error is thrown
-	* in the execution context, `instanceof ORPCError` checks fail in the
-	* invocation context due to separate class constructors.
-	*
-	* @todo Remove this and related code if Next.js resolves the multiple dependency graph issue.
-	*/
-	static [Symbol.hasInstance](instance) {
-		if (globalORPCErrorConstructors.has(this)) {
-			const constructor = getConstructor(instance);
-			if (constructor && globalORPCErrorConstructors.has(constructor)) return true;
-		}
-		return super[Symbol.hasInstance](instance);
-	}
-};
-function isORPCErrorStatus(status) {
-	return status < 200 || status >= 400;
-}
-//#endregion
-//#region node_modules/.pnpm/@orpc+standard-server@1.15.4/node_modules/@orpc/standard-server/dist/index.mjs
-var EventEncoderError = class extends TypeError {};
-TransformStream;
-var LINE_ENDING_REGEX = /\r\n|[\n\r]/;
-function containsLineBreak(value) {
-	return LINE_ENDING_REGEX.test(value);
-}
-function assertEventId(id) {
-	if (containsLineBreak(id)) throw new EventEncoderError("Event's id must not contain a carriage return or newline character");
-}
-function assertEventRetry(retry) {
-	if (!Number.isInteger(retry) || retry < 0) throw new EventEncoderError("Event's retry must be a integer and >= 0");
-}
-function assertEventComment(comment) {
-	if (containsLineBreak(comment)) throw new EventEncoderError("Event's comment must not contain a carriage return or newline character");
-}
-var EVENT_SOURCE_META_SYMBOL = Symbol("ORPC_EVENT_SOURCE_META");
-function withEventMeta(container, meta) {
-	if (meta.id === void 0 && meta.retry === void 0 && !meta.comments?.length) return container;
-	if (meta.id !== void 0) assertEventId(meta.id);
-	if (meta.retry !== void 0) assertEventRetry(meta.retry);
-	if (meta.comments !== void 0) for (const comment of meta.comments) assertEventComment(comment);
-	return new Proxy(container, { get(target, prop, receiver) {
-		if (prop === EVENT_SOURCE_META_SYMBOL) return meta;
-		return Reflect.get(target, prop, receiver);
-	} });
-}
-function getEventMeta(container) {
-	return isTypescriptObject(container) ? Reflect.get(container, EVENT_SOURCE_META_SYMBOL) : void 0;
-}
-//#endregion
-//#region node_modules/.pnpm/@orpc+client@1.15.4/node_modules/@orpc/client/dist/shared/client.BLtwTQUg.mjs
-function mapEventIterator(iterator, maps) {
-	const mapError = async (error) => {
-		let mappedError = await maps.error(error);
-		if (mappedError !== error) {
-			const meta = getEventMeta(error);
-			if (meta && isTypescriptObject(mappedError)) mappedError = withEventMeta(mappedError, meta);
-		}
-		return mappedError;
-	};
-	return new AsyncIteratorClass(async () => {
-		const { done, value } = await (async () => {
-			try {
-				return await iterator.next();
-			} catch (error) {
-				throw await mapError(error);
-			}
-		})();
-		let mappedValue = await maps.value(value, done);
-		if (mappedValue !== value) {
-			const meta = getEventMeta(value);
-			if (meta && isTypescriptObject(mappedValue)) mappedValue = withEventMeta(mappedValue, meta);
-		}
-		return {
-			done,
-			value: mappedValue
-		};
-	}, async () => {
-		try {
-			await iterator.return?.();
-		} catch (error) {
-			throw await mapError(error);
-		}
-	});
-}
-//#endregion
-//#region node_modules/.pnpm/@orpc+contract@1.15.4/node_modules/@orpc/contract/dist/shared/contract.D_dZrO__.mjs
-var ValidationError = class extends Error {
-	issues;
-	data;
-	constructor(options) {
-		super(options.message, options);
-		this.issues = options.issues;
-		this.data = options.data;
-	}
-};
-function mergeErrorMap(errorMap1, errorMap2) {
-	return {
-		...errorMap1,
-		...errorMap2
-	};
-}
-var ContractProcedure = class {
-	/**
-	* This property holds the defined options for the contract procedure.
-	*/
-	"~orpc";
-	constructor(def) {
-		if (def.route?.successStatus && isORPCErrorStatus(def.route.successStatus)) throw new Error("[ContractProcedure] Invalid successStatus.");
-		if (Object.values(def.errorMap).some((val) => val && val.status && !isORPCErrorStatus(val.status))) throw new Error("[ContractProcedure] Invalid error status code.");
-		this["~orpc"] = def;
-	}
-};
-function isContractProcedure(item) {
-	if (item instanceof ContractProcedure) return true;
-	return (typeof item === "object" || typeof item === "function") && item !== null && "~orpc" in item && typeof item["~orpc"] === "object" && item["~orpc"] !== null && "errorMap" in item["~orpc"] && "route" in item["~orpc"] && "meta" in item["~orpc"];
-}
-//#endregion
-//#region node_modules/.pnpm/@orpc+contract@1.15.4/node_modules/@orpc/contract/dist/index.mjs
-function mergeMeta(meta1, meta2) {
-	return {
-		...meta1,
-		...meta2
-	};
-}
-function mergeRoute(a, b) {
-	return {
-		...a,
-		...b
-	};
-}
-function prefixRoute(route, prefix) {
-	if (!route.path) return route;
-	return {
-		...route,
-		path: `${prefix}${route.path}`
-	};
-}
-function unshiftTagRoute(route, tags) {
-	return {
-		...route,
-		tags: [...tags, ...route.tags ?? []]
-	};
-}
-function mergePrefix(a, b) {
-	return a ? `${a}${b}` : b;
-}
-function mergeTags(a, b) {
-	return a ? [...a, ...b] : b;
-}
-function enhanceRoute(route, options) {
-	let router = route;
-	if (options.prefix) router = prefixRoute(router, options.prefix);
-	if (options.tags?.length) router = unshiftTagRoute(router, options.tags);
-	return router;
-}
-function enhanceContractRouter(router, options) {
-	if (isContractProcedure(router)) return new ContractProcedure({
-		...router["~orpc"],
-		errorMap: mergeErrorMap(options.errorMap, router["~orpc"].errorMap),
-		route: enhanceRoute(router["~orpc"].route, options)
-	});
-	if (typeof router !== "object" || router === null) return router;
-	const enhanced = {};
-	for (const key in router) enhanced[key] = enhanceContractRouter(router[key], options);
-	return enhanced;
-}
-var oc = new class ContractBuilder extends ContractProcedure {
-	constructor(def) {
-		super(def);
-		this["~orpc"].prefix = def.prefix;
-		this["~orpc"].tags = def.tags;
-	}
-	/**
-	* Sets or overrides the initial meta.
-	*
-	* @see {@link https://orpc.dev/docs/metadata Metadata Docs}
-	*/
-	$meta(initialMeta) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			meta: initialMeta
-		});
-	}
-	/**
-	* Sets or overrides the initial route.
-	* This option is typically relevant when integrating with OpenAPI.
-	*
-	* @see {@link https://orpc.dev/docs/openapi/routing OpenAPI Routing Docs}
-	* @see {@link https://orpc.dev/docs/openapi/input-output-structure OpenAPI Input/Output Structure Docs}
-	*/
-	$route(initialRoute) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			route: initialRoute
-		});
-	}
-	/**
-	* Sets or overrides the initial input schema.
-	*
-	* @see {@link https://orpc.dev/docs/procedure#initial-configuration Initial Procedure Configuration Docs}
-	*/
-	$input(initialInputSchema) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			inputSchema: initialInputSchema
-		});
-	}
-	/**
-	* Adds type-safe custom errors to the contract.
-	* The provided errors are spared-merged with any existing errors in the contract.
-	*
-	* @see {@link https://orpc.dev/docs/error-handling#type%E2%80%90safe-error-handling Type-Safe Error Handling Docs}
-	*/
-	errors(errors) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			errorMap: mergeErrorMap(this["~orpc"].errorMap, errors)
-		});
-	}
-	/**
-	* Sets or updates the metadata for the contract.
-	* The provided metadata is spared-merged with any existing metadata in the contract.
-	*
-	* @see {@link https://orpc.dev/docs/metadata Metadata Docs}
-	*/
-	meta(meta) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			meta: mergeMeta(this["~orpc"].meta, meta)
-		});
-	}
-	/**
-	* Sets or updates the route definition for the contract.
-	* The provided route is spared-merged with any existing route in the contract.
-	* This option is typically relevant when integrating with OpenAPI.
-	*
-	* @see {@link https://orpc.dev/docs/openapi/routing OpenAPI Routing Docs}
-	* @see {@link https://orpc.dev/docs/openapi/input-output-structure OpenAPI Input/Output Structure Docs}
-	*/
-	route(route) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			route: mergeRoute(this["~orpc"].route, route)
-		});
-	}
-	/**
-	* Defines the input validation schema for the contract.
-	*
-	* @see {@link https://orpc.dev/docs/procedure#input-output-validation Input Validation Docs}
-	*/
-	input(schema) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			inputSchema: schema
-		});
-	}
-	/**
-	* Defines the output validation schema for the contract.
-	*
-	* @see {@link https://orpc.dev/docs/procedure#input-output-validation Output Validation Docs}
-	*/
-	output(schema) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			outputSchema: schema
-		});
-	}
-	/**
-	* Prefixes all procedures in the contract router.
-	* The provided prefix is post-appended to any existing router prefix.
-	*
-	* @note This option does not affect procedures that do not define a path in their route definition.
-	*
-	* @see {@link https://orpc.dev/docs/openapi/routing#route-prefixes OpenAPI Route Prefixes Docs}
-	*/
-	prefix(prefix) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			prefix: mergePrefix(this["~orpc"].prefix, prefix)
-		});
-	}
-	/**
-	* Adds tags to all procedures in the contract router.
-	* This helpful when you want to group procedures together in the OpenAPI specification.
-	*
-	* @see {@link https://orpc.dev/docs/openapi/openapi-specification#operation-metadata OpenAPI Operation Metadata Docs}
-	*/
-	tag(...tags) {
-		return new ContractBuilder({
-			...this["~orpc"],
-			tags: mergeTags(this["~orpc"].tags, tags)
-		});
-	}
-	/**
-	* Applies all of the previously defined options to the specified contract router.
-	*
-	* @see {@link https://orpc.dev/docs/router#extending-router Extending Router Docs}
-	*/
-	router(router) {
-		return enhanceContractRouter(router, this["~orpc"]);
-	}
-}({
-	errorMap: {},
-	route: {},
-	meta: {}
-});
-var EVENT_ITERATOR_DETAILS_SYMBOL = Symbol("ORPC_EVENT_ITERATOR_DETAILS");
-function eventIterator(yields, returns) {
-	return { "~standard": {
-		[EVENT_ITERATOR_DETAILS_SYMBOL]: {
-			yields,
-			returns
-		},
-		vendor: "orpc",
-		version: 1,
-		validate(iterator) {
-			if (!isAsyncIteratorObject(iterator)) return { issues: [{
-				message: "Expect event iterator",
-				path: []
-			}] };
-			return { value: mapEventIterator(iterator, {
-				async value(value, done) {
-					const schema = done ? returns : yields;
-					if (!schema) return value;
-					const result = await schema["~standard"].validate(value);
-					if (result.issues) throw new ORPCError("EVENT_ITERATOR_VALIDATION_FAILED", {
-						message: "Event iterator validation failed",
-						cause: new ValidationError({
-							issues: result.issues,
-							message: "Event iterator validation failed",
-							data: value
-						})
-					});
-					return result.value;
-				},
-				error: async (error) => error
-			}) };
-		}
-	} };
 }
 //#endregion
 //#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/needs-action.js
@@ -21704,7 +21704,9 @@ var DeployLinkParamSchema = object({
 	stack: string()
 });
 var DeployOverviewResponseSchema = object({
+	source: _enum(["komodo", "device"]).default("komodo"),
 	komodoUrl: string(),
+	deviceRoot: string().optional(),
 	reachable: boolean(),
 	unreachableReason: string().optional(),
 	viewer: DeployViewerSchema.optional(),
@@ -21712,7 +21714,8 @@ var DeployOverviewResponseSchema = object({
 	resources: array(DeployResourceSchema),
 	servers: array(DeployServerSchema),
 	alerts: array(DeployAlertSchema),
-	seenAt: number$1().optional()
+	seenAt: number$1().optional(),
+	operations: array(lazy(() => DeployOperationSchema)).default([])
 });
 var DeployCapabilityParamSchema = object({ capability: string() });
 var DeployActionSchema = _enum([
@@ -21738,8 +21741,46 @@ var DeployLogsResponseSchema = object({
 	stdout: string(),
 	stderr: string()
 });
+var DeviceActionParamSchema = DeployActionParamSchema.omit({ capability: true }).extend({ device: string().min(1) });
+var DeviceLogsParamSchema = DeployLogsParamSchema.omit({ capability: true }).extend({ device: string().min(1) });
+var DeviceFixParamSchema = DeployFixParamSchema.omit({ capability: true }).extend({ device: string().min(1) });
+var DeviceLinkParamSchema = DeployLinkParamSchema.omit({ capability: true }).extend({ device: string().min(1) });
 var DeployFixResponseSchema = object({ conversationId: string() });
 var DeploySeenResponseSchema = object({ seenAt: number$1() });
+var DeployOperationSchema = object({
+	stack: string(),
+	action: string(),
+	repo: string().optional(),
+	startedAt: number$1(),
+	finishedAt: number$1().optional(),
+	error: string().optional(),
+	commit: string().optional()
+});
+var DEVICE_CONNECTION_PREFIX = "device:";
+var deviceOf = (connection) => connection.slice(7);
+var deviceConnection = (device) => `${DEVICE_CONNECTION_PREFIX}${device}`;
+var StackNameSchema = string().regex(/^[a-z0-9][a-z0-9_-]{0,62}$/, "lowercase letters, digits, dash and underscore, starting with a letter or digit");
+var stackNameFor = (projectName) => {
+	const slug = projectName.toLowerCase().replaceAll(/[^a-z0-9_-]+/gu, "-").replaceAll(/^[-_]+|-+$/gu, "").slice(0, 63);
+	return slug === "" ? "app" : slug;
+};
+var DeviceParamSchema = object({ device: string().min(1) });
+var DeviceDeployParamSchema = object({
+	device: string().min(1),
+	repo: string().min(1),
+	stack: StackNameSchema
+});
+object({
+	stack: string(),
+	path: string(),
+	commit: string()
+});
+var DeviceEnvironmentParamSchema = object({
+	device: string().min(1),
+	stack: StackNameSchema,
+	repo: string().min(1).optional(),
+	pick: AgentRunPickSchema
+});
 var HOST_STACK_PREFIX = "intentic-";
 var defaultStackName = (folder) => {
 	const slug = (folder.replace(/\/+$/u, "").split("/").at(-1) ?? "").toLowerCase().replaceAll(/[^a-z0-9_-]+/gu, "-").replaceAll(/^-+|-+$/gu, "");
@@ -21756,6 +21797,29 @@ var DeployHostStackResponseSchema = object({
 	stack: string(),
 	created: boolean()
 });
+//#endregion
+//#region src/server/agent-turn.ts
+var TITLE_MAX = 80;
+var seq = 0;
+var mintConversationId = (kind, name, now) => `${kind}-${name.replaceAll(/[^a-zA-Z0-9-]/g, "-").slice(0, 32)}-${now.toString(36)}${(seq++).toString(36)}`;
+var startAgentTurn = async (api, request) => {
+	const conversationId = mintConversationId(request.kind, request.name, Date.now());
+	await api.daemon.json(`/agent`, {
+		method: "POST",
+		body: JSON.stringify({
+			prompt: request.prompt,
+			conversationId,
+			isolated: true,
+			unattended: true,
+			runRole: `deployment-fix`,
+			...request.pick,
+			title: request.title.slice(0, TITLE_MAX)
+		})
+	}).catch((error) => {
+		throw new ORPCError$1("CONFLICT", { message: errorMessage(error) });
+	});
+	return { conversationId };
+};
 //#endregion
 //#region src/server/contract.ts
 var OkSchema = object({ ok: literal(true) });
@@ -21788,6 +21852,476 @@ var komodoContract = {
 		method: "POST",
 		path: "/komodo/{capability}/seen"
 	}).input(DeployCapabilityParamSchema).output(DeploySeenResponseSchema)
+};
+var deviceContract = {
+	deviceOverview: oc$1.route({
+		method: "GET",
+		path: "/device/{device}/overview"
+	}).input(DeviceParamSchema).output(DeployOverviewResponseSchema),
+	deviceAction: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/action"
+	}).input(DeviceActionParamSchema).output(OkSchema),
+	deviceLink: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/link"
+	}).input(DeviceLinkParamSchema).output(OkSchema),
+	deviceLogs: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/logs"
+	}).input(DeviceLogsParamSchema).output(DeployLogsResponseSchema),
+	deviceFix: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/fix"
+	}).input(DeviceFixParamSchema).output(DeployFixResponseSchema),
+	deviceSeen: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/seen"
+	}).input(DeviceParamSchema).output(DeploySeenResponseSchema),
+	deviceDeploy: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/deploy"
+	}).input(DeviceDeployParamSchema).output(OkSchema),
+	deviceEnvironment: oc$1.route({
+		method: "POST",
+		path: "/device/{device}/environment"
+	}).input(DeviceEnvironmentParamSchema).output(DeployFixResponseSchema)
+};
+var deploymentsContract = {
+	...komodoContract,
+	...deviceContract
+};
+//#endregion
+//#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/plain-text.js
+var ANSI = /\x1b(?:\[[0-9;?]*[ -/]*[@-~]|\][^\x07\x1b]*(?:\x07|\x1b\\)|[@-Z\\-_])/g;
+var CONTROL = /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g;
+var lastFrame = (line) => line.split("\r").findLast((frame) => frame !== "") ?? "";
+var plainText = (output) => output.replace(ANSI, "").split("\n").map(lastFrame).join("\n").replace(CONTROL, "");
+//#endregion
+//#region src/server/komodo-repos.ts
+var COMPOSE_NAMES = [
+	"compose.yaml",
+	"compose.yml",
+	"docker-compose.yaml",
+	"docker-compose.yml"
+];
+var composeProjectName = (contents) => {
+	const matched = /^name:[ \t]*(?:"([^"]+)"|'([^']+)'|([^\s#]+))/m.exec(contents);
+	if (matched === null) return;
+	const value = matched[1] ?? matched[2] ?? matched[3];
+	return value === void 0 || value === "" ? void 0 : value;
+};
+var normalize = (name) => name.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
+var rankStacks = (projectName, stacks) => {
+	const target = normalize(projectName);
+	if (target === "") return [];
+	const tier = (stack) => {
+		const candidate = normalize(stack);
+		if (candidate === target) return 0;
+		if (candidate.startsWith(target)) return 1;
+		return candidate.includes(target) || target.includes(candidate) ? 2 : 3;
+	};
+	return stacks.map((stack) => ({
+		stack,
+		rank: tier(stack)
+	})).filter((entry) => entry.rank < 3).toSorted((a, b) => a.rank - b.rank || a.stack.localeCompare(b.stack)).map((entry) => entry.stack);
+};
+var repoComposeName = async (deps, repoDir) => {
+	for (const name of COMPOSE_NAMES) {
+		const path = join(repoDir, name);
+		const contents = await deps.read(path);
+		if (contents === void 0) continue;
+		return {
+			projectName: composeProjectName(contents) ?? basename(repoDir),
+			composePath: relative(deps.root, path) || name
+		};
+	}
+};
+var repoLinks = async (deps, repoDirs, stacks, links) => {
+	const found = [];
+	for (const dir of repoDirs) {
+		const compose = await repoComposeName(deps, dir);
+		if (compose === void 0) continue;
+		const repo = relative(deps.root, dir) || basename(dir);
+		const linkedStack = links[repo];
+		found.push({
+			repo,
+			projectName: compose.projectName,
+			composePath: compose.composePath,
+			...linkedStack !== void 0 && stacks.includes(linkedStack) ? { linkedStack } : {},
+			suggestions: rankStacks(compose.projectName, stacks)
+		});
+	}
+	return found;
+};
+//#endregion
+//#region src/server/native-overview.ts
+var ServiceSchema = looseObject({
+	service: string(),
+	container: string(),
+	image: string(),
+	state: string(),
+	status: string(),
+	health: string().optional()
+});
+var StackSchema = looseObject({
+	name: string(),
+	status: string(),
+	configFiles: array(string()).default([]),
+	workingDir: string().optional(),
+	managed: boolean().default(false),
+	sandbox: boolean().default(false),
+	services: array(ServiceSchema).default([])
+});
+var DeviceStacksSchema = looseObject({
+	root: string(),
+	stacks: array(StackSchema)
+});
+var exitCode = (status) => {
+	const matched = /^Exited \((-?\d+)\)/u.exec(status);
+	return matched?.[1] === void 0 ? void 0 : Number(matched[1]);
+};
+var failing = (service) => service.health === "unhealthy" || service.state === "restarting" || service.state === "dead";
+var crashedBeside = (service, stack) => service.state === "exited" && (exitCode(service.status) ?? 1) !== 0 && stack.services.some((other) => other.state === "running");
+var broken = (stack) => (service) => failing(service) || crashedBeside(service, stack);
+var stackState = (stack) => {
+	if (stack.services.length === 0) return "unknown";
+	if (stack.services.some(broken(stack))) return "unhealthy";
+	if (stack.services.some((service) => service.state === "running")) return stack.services.some((service) => service.health === "starting") ? "deploying" : "running";
+	return "stopped";
+};
+var stackStatus = (stack) => {
+	const failed = stack.services.filter(broken(stack));
+	if (failed.length === 0) return stack.status;
+	return failed.map((service) => `${service.service}: ${service.health === "unhealthy" ? "unhealthy" : service.status}`).join(", ");
+};
+var deviceResources = (device, stacks) => stacks.filter((stack) => !stack.sandbox).map((stack) => {
+	const image = stack.services[0]?.image;
+	return {
+		kind: "stack",
+		id: stack.name,
+		name: stack.name,
+		state: stackState(stack),
+		status: stackStatus(stack),
+		server: device,
+		...image === void 0 ? {} : { image },
+		updateAvailable: false,
+		services: stack.services.map((service) => ({
+			name: service.service,
+			image: service.image,
+			updateAvailable: false
+		})),
+		url: ""
+	};
+});
+var deviceServer = (device, reachable) => ({
+	id: device,
+	name: device,
+	state: reachable ? "ok" : "unreachable",
+	url: ""
+});
+var EMPTY_MEMORY = {
+	states: {},
+	alerts: []
+};
+var UP = /* @__PURE__ */ new Set(["running", "deploying"]);
+var alertTarget = (state) => state === "unhealthy" ? "unhealthy" : state === "stopped" ? "exited" : void 0;
+var foldStates = (memory, device, resources, at, quiet = /* @__PURE__ */ new Set()) => {
+	const states = {};
+	let alerts = [...memory.alerts];
+	const resolveFor = (name) => {
+		alerts = alerts.map((alert) => alert.resource === name && !alert.resolved ? {
+			...alert,
+			resolved: true
+		} : alert);
+	};
+	for (const resource of resources) {
+		states[resource.name] = resource.state;
+		const before = memory.states[resource.name];
+		const open = alerts.some((alert) => alert.resource === resource.name && !alert.resolved);
+		const wentBroken = resource.state === "unhealthy" && (before !== "unhealthy" || !open);
+		const wentDown = resource.state === "stopped" && before !== void 0 && UP.has(before) && !quiet.has(resource.name);
+		const to = alertTarget(resource.state);
+		if ((wentBroken || wentDown) && to !== void 0) alerts.unshift({
+			id: `${resource.name}-${at.toString(36)}`,
+			type: "StackStateChange",
+			level: "critical",
+			resolved: false,
+			ts: at,
+			resource: resource.name,
+			server: device,
+			...before === void 0 ? {} : { from: before },
+			to
+		});
+		else if (UP.has(resource.state) || resource.state === "stopped" && before === "unhealthy") resolveFor(resource.name);
+	}
+	for (const name of Object.keys(memory.states)) if (states[name] === void 0) resolveFor(name);
+	return {
+		states,
+		alerts: alerts.slice(0, 50)
+	};
+};
+//#endregion
+//#region src/server/device-board.ts
+var LOG_TAIL$1 = 200;
+var OPS = {
+	deploy: "up",
+	pull: "pull",
+	restart: "restart",
+	start: "start",
+	stop: "stop"
+};
+var conflict = (error) => {
+	throw new ORPCError$1("CONFLICT", { message: errorMessage(error) });
+};
+var gateway = (action) => action.catch((error) => {
+	throw new ORPCError$1("BAD_GATEWAY", { message: errorMessage(error) });
+});
+var deviceBoard = (deps) => {
+	const now = deps.now ?? Date.now;
+	const offeredRepo = async (device, repo) => {
+		if (!(await repoLinks(deps.scan, await deps.repoDirs(), [], await deps.store.links(deviceConnection(device)))).some((entry) => entry.repo === repo)) throw new ORPCError$1("BAD_REQUEST", { message: `"${repo}" is not a workspace repository with a compose file at its root` });
+	};
+	const findStack = async (device, name) => {
+		const stack = (await gateway(deps.daemon.stacks(device))).stacks.find((entry) => entry.name === name && !entry.sandbox);
+		if (stack === void 0) throw new ORPCError$1("NOT_FOUND", { message: `${device} has no stack "${name}" any more` });
+		return stack;
+	};
+	const overview = async (device) => {
+		const connection = deviceConnection(device);
+		const seenAt = await deps.store.seenAt(connection);
+		const links = await deps.store.links(connection);
+		const repoDirs = await deps.repoDirs();
+		const operations = [...deps.operations.list(connection)];
+		const remembered = await deps.memory.memory(connection);
+		const common = {
+			source: "device",
+			komodoUrl: "",
+			operations,
+			...seenAt === void 0 ? {} : { seenAt }
+		};
+		let listed;
+		try {
+			listed = await deps.daemon.stacks(device);
+		} catch (error) {
+			const reason = errorMessage(error);
+			deps.log(`device board unreachable for "${device}": ${reason}`);
+			return {
+				...common,
+				reachable: false,
+				unreachableReason: reason,
+				repos: await repoLinks(deps.scan, repoDirs, [], links),
+				resources: [],
+				servers: [deviceServer(device, false)],
+				alerts: [...remembered.alerts]
+			};
+		}
+		const resources = deviceResources(device, listed.stacks);
+		const observed = resources.map((resource) => {
+			const before = remembered.states[resource.name];
+			return deps.operations.running(connection, resource.name) && before !== void 0 ? {
+				...resource,
+				state: before
+			} : resource;
+		});
+		const latest = /* @__PURE__ */ new Map();
+		for (const operation of operations) if (!latest.has(operation.stack)) latest.set(operation.stack, operation);
+		const quiet = new Set([...latest.values()].filter((operation) => operation.action === "stop" && operation.error === void 0).map((operation) => operation.stack));
+		const memory = foldStates(remembered, device, observed, now(), quiet);
+		await deps.memory.remember(connection, memory).catch((error) => deps.log(`could not record ${device}'s stack states: ${errorMessage(error)}`));
+		const shown = resources.map((resource) => deps.operations.running(connection, resource.name) ? {
+			...resource,
+			state: "deploying"
+		} : resource);
+		return {
+			...common,
+			deviceRoot: listed.root,
+			reachable: true,
+			repos: await repoLinks(deps.scan, repoDirs, shown.map((resource) => resource.name), links),
+			resources: shown,
+			servers: [deviceServer(device, true)],
+			alerts: [...memory.alerts]
+		};
+	};
+	const action = (device, stack, verb) => {
+		try {
+			deps.operations.start(deviceConnection(device), {
+				stack,
+				action: OPS[verb]
+			}, async () => {
+				await deps.daemon.op(device, stack, OPS[verb]);
+			});
+		} catch (error) {
+			conflict(error);
+		}
+		return { ok: true };
+	};
+	const logs = async (device, stack) => ({
+		stdout: await gateway(deps.daemon.logs(device, stack, LOG_TAIL$1)),
+		stderr: ""
+	});
+	const deployNow = async (device, repo, stack) => {
+		const deployed = await deps.daemon.deploy(device, stack, repo);
+		await deps.store.link(deviceConnection(device), repo, stack);
+		return deployed;
+	};
+	const startDeploy = async (device, repo, stack) => {
+		await offeredRepo(device, repo);
+		try {
+			return deps.operations.start(deviceConnection(device), {
+				stack,
+				action: "deploy",
+				repo
+			}, async () => {
+				return { commit: (await deployNow(device, repo, stack)).commit };
+			});
+		} catch (error) {
+			return conflict(error);
+		}
+	};
+	const deploy = async (device, repo, stack) => {
+		await startDeploy(device, repo, stack);
+		return { ok: true };
+	};
+	const repoOf = async (device, stack) => Object.entries(await deps.store.links(deviceConnection(device))).find(([, linked]) => linked === stack)?.[0];
+	const fix = async (device, stack, pick) => {
+		const found = await findStack(device, stack);
+		const [resource] = deviceResources(device, [found]);
+		const repo = await repoOf(device, stack);
+		const tail = plainText(await deps.daemon.logs(device, stack, LOG_TAIL$1).catch(() => "")).trim().slice(-24e3);
+		const files = found.configFiles.length === 0 ? "compose no longer knows its files" : `its compose files are ${found.configFiles.join(", ")}`;
+		const prompt = [
+			`The Docker compose stack "${stack}" on the computer "${device}" is ${resource?.state ?? "unknown"}${resource?.status === void 0 ? "" : ` (${resource.status})`}. Investigate and fix it.`,
+			`It runs from ${found.workingDir ?? "a folder compose did not record"} on ${device}; ${files}. Reach ${device} with the devices tools: run_command there with \`docker compose -p ${stack} ps\`, \`logs\` and the like.`,
+			repo === void 0 ? `It was not deployed from this workspace, so a fix is made on ${device} itself (its files, its .env) or said plainly when it is outside your reach.` : `It was deployed from the workspace repository "${repo}" (its committed HEAD). Find the cause there when it is a code or config problem, fix it and commit it, then redeploy with the deployments server's deploy_to_device tool (device "${device}", repo "${repo}", stack "${stack}"). Say plainly when the cause is outside the workspace (a missing variable in its .env, a full disk, an unreachable dependency) rather than inventing a code change.`,
+			`Never put a secret's value into the conversation: a variable it is missing goes into the .env beside its compose file on ${device}, written from the sandbox's stored secrets (a \`{{secret:NAME}}\` reference in the Bash tool, then \`devices copy\` to ${device}).`,
+			...tail === "" ? [] : [`--- stack log tail ---\n${tail}`]
+		].join("\n\n");
+		return deps.startAgent({
+			kind: "deploy-fix",
+			name: stack,
+			title: `Fix ${stack} on ${device}`,
+			prompt,
+			...pick === void 0 ? {} : { pick }
+		});
+	};
+	const environment = async (device, stack, given, pick) => {
+		const listed = await gateway(deps.daemon.stacks(device));
+		const repo = given ?? await repoOf(device, stack);
+		const folder = listed.stacks.find((entry) => entry.name === stack)?.workingDir ?? `${listed.root}/${stack}`;
+		const prompt = [
+			`Set up the environment of the Docker compose stack "${stack}" on the computer "${device}". It runs from ${folder} there, and compose reads the \`.env\` in that folder.`,
+			repo === void 0 ? `Read its compose file there (devices tools, run_command on ${device}) to see which variables it expects.` : `It is deployed from the workspace repository "${repo}": read its compose file and code to see which variables it expects and which are secrets.`,
+			`Write the .env WITHOUT ever showing a secret's value in this conversation: build the file in the Bash tool with \`{{secret:NAME}}\` references (they are replaced with the stored values when the command runs) into a private temporary file, then \`devices copy\` it to ${device}:${folder}/.env and delete the temporary file. List the stored secrets with \`secrets list\`; for one that is missing, ask the owner with \`secrets ask NAME --why "…"\` rather than inventing a value. Keep any variable the .env there already has unless it is wrong.`,
+			`Then apply it: run_command on ${device} with \`docker compose -p ${stack} up -d\` in that folder, and check its services come up.`
+		].join("\n\n");
+		return deps.startAgent({
+			kind: "deploy-env",
+			name: stack,
+			title: `Environment for ${stack} on ${device}`,
+			prompt,
+			...pick === void 0 ? {} : { pick }
+		});
+	};
+	return {
+		overview,
+		action,
+		logs,
+		deploy,
+		startDeploy,
+		fix,
+		environment,
+		repoOf
+	};
+};
+//#endregion
+//#region src/server/device-daemon.ts
+var READ_DEADLINE_MS = 6e4;
+var OP_DEADLINE_MS = 6e5;
+var DEPLOY_DEADLINE_MS = 12e5;
+var OpAnswerSchema = object({ output: string() });
+var LogsAnswerSchema = object({ text: string() });
+var DeployAnswerSchema = object({
+	stack: string(),
+	path: string(),
+	commit: string(),
+	output: string()
+});
+var refusalOf = (status, body) => {
+	if (status === 404 && !body.includes("message")) return "this sandbox does not serve device stacks yet: update it, then try again";
+	try {
+		const parsed = JSON.parse(body);
+		if (typeof parsed.message === "string" && parsed.message !== "") return parsed.message;
+	} catch {}
+	const line = body.trim().split("\n")[0] ?? "";
+	return line === "" ? `the sandbox answered ${status}` : line.slice(0, 500);
+};
+var segment = encodeURIComponent;
+var daemonDevices = (api) => {
+	const call = async (path, schema, deadlineMs, body) => {
+		const response = await api.daemon.request(path, {
+			method: body === void 0 ? "GET" : "POST",
+			headers: { "content-type": "application/json" },
+			...body === void 0 ? {} : { body: JSON.stringify(body) },
+			signal: AbortSignal.timeout(deadlineMs)
+		});
+		const text = await response.text();
+		if (!response.ok) throw new Error(refusalOf(response.status, text));
+		return schema.parse(JSON.parse(text));
+	};
+	const base = (device) => `/system/devices/${segment(device)}/stacks`;
+	return {
+		stacks: (device) => call(base(device), DeviceStacksSchema, READ_DEADLINE_MS),
+		op: async (device, stack, op) => (await call(`${base(device)}/${segment(stack)}/ops/${op}`, OpAnswerSchema, OP_DEADLINE_MS, {})).output,
+		logs: async (device, stack, tail) => (await call(`${base(device)}/${segment(stack)}/logs?tail=${tail}`, LogsAnswerSchema, READ_DEADLINE_MS)).text,
+		deploy: (device, stack, repo) => call(`${base(device)}/${segment(stack)}/deploy`, DeployAnswerSchema, DEPLOY_DEADLINE_MS, { repo })
+	};
+};
+//#endregion
+//#region src/server/device-operations.ts
+var KEPT = 20;
+var OperationBusy = class extends Error {};
+var deviceOperations = (now = Date.now) => {
+	const byConnection = /* @__PURE__ */ new Map();
+	const replace = (connection, before, after) => {
+		byConnection.set(connection, (byConnection.get(connection) ?? []).map((entry) => entry === before ? after : entry));
+	};
+	const running = (connection, stack) => (byConnection.get(connection) ?? []).some((entry) => entry.stack === stack && entry.finishedAt === void 0);
+	return {
+		list: (connection) => byConnection.get(connection) ?? [],
+		running,
+		start: (connection, { stack, action, repo }, work) => {
+			if (running(connection, stack)) throw new OperationBusy(`${stack} is still busy with what was started before; try again once it finishes`);
+			const started = {
+				stack,
+				action,
+				...repo === void 0 ? {} : { repo },
+				startedAt: now()
+			};
+			byConnection.set(connection, [started, ...byConnection.get(connection) ?? []].slice(0, KEPT));
+			return {
+				started,
+				settled: work().then((answer) => {
+					const commit = answer === void 0 ? void 0 : answer.commit;
+					const ended = {
+						...started,
+						finishedAt: now(),
+						...commit === void 0 ? {} : { commit }
+					};
+					replace(connection, started, ended);
+					return ended;
+				}, (error) => {
+					const ended = {
+						...started,
+						finishedAt: now(),
+						error: errorMessage(error)
+					};
+					replace(connection, started, ended);
+					return ended;
+				})
+			};
+		}
+	};
 };
 //#endregion
 //#region src/server/discover.ts
@@ -22033,7 +22567,7 @@ var LEVEL = {
 	WARNING: "warning",
 	CRITICAL: "critical"
 };
-var text = (data, key) => {
+var text$1 = (data, key) => {
 	const value = data?.[key];
 	return typeof value === "string" && value !== "" ? value : void 0;
 };
@@ -22044,10 +22578,10 @@ var alertId = (raw, index) => {
 };
 var deployAlert = (raw, index) => {
 	const data = raw.data?.data;
-	const resource = text(data, "name");
-	const server = text(data, "server_name");
-	const from = text(data, "from");
-	const to = text(data, "to");
+	const resource = text$1(data, "name");
+	const server = text$1(data, "server_name");
+	const from = text$1(data, "from");
+	const to = text$1(data, "to");
 	return {
 		id: alertId(raw, index),
 		type: raw.data?.type ?? "Unknown",
@@ -22061,63 +22595,6 @@ var deployAlert = (raw, index) => {
 	};
 };
 var deployAlerts = (raw) => raw.map((alert, index) => deployAlert(alert, index)).toSorted((a, b) => b.ts - a.ts);
-//#endregion
-//#region src/server/komodo-repos.ts
-var COMPOSE_NAMES = [
-	"compose.yaml",
-	"compose.yml",
-	"docker-compose.yaml",
-	"docker-compose.yml"
-];
-var composeProjectName = (contents) => {
-	const matched = /^name:[ \t]*(?:"([^"]+)"|'([^']+)'|([^\s#]+))/m.exec(contents);
-	if (matched === null) return;
-	const value = matched[1] ?? matched[2] ?? matched[3];
-	return value === void 0 || value === "" ? void 0 : value;
-};
-var normalize = (name) => name.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
-var rankStacks = (projectName, stacks) => {
-	const target = normalize(projectName);
-	if (target === "") return [];
-	const tier = (stack) => {
-		const candidate = normalize(stack);
-		if (candidate === target) return 0;
-		if (candidate.startsWith(target)) return 1;
-		return candidate.includes(target) || target.includes(candidate) ? 2 : 3;
-	};
-	return stacks.map((stack) => ({
-		stack,
-		rank: tier(stack)
-	})).filter((entry) => entry.rank < 3).toSorted((a, b) => a.rank - b.rank || a.stack.localeCompare(b.stack)).map((entry) => entry.stack);
-};
-var repoComposeName = async (deps, repoDir) => {
-	for (const name of COMPOSE_NAMES) {
-		const path = join(repoDir, name);
-		const contents = await deps.read(path);
-		if (contents === void 0) continue;
-		return {
-			projectName: composeProjectName(contents) ?? basename(repoDir),
-			composePath: relative(deps.root, path) || name
-		};
-	}
-};
-var repoLinks = async (deps, repoDirs, stacks, links) => {
-	const found = [];
-	for (const dir of repoDirs) {
-		const compose = await repoComposeName(deps, dir);
-		if (compose === void 0) continue;
-		const repo = relative(deps.root, dir) || basename(dir);
-		const linkedStack = links[repo];
-		found.push({
-			repo,
-			projectName: compose.projectName,
-			composePath: compose.composePath,
-			...linkedStack !== void 0 && stacks.includes(linkedStack) ? { linkedStack } : {},
-			suggestions: rankStacks(compose.projectName, stacks)
-		});
-	}
-	return found;
-};
 //#endregion
 //#region src/server/komodo-store.ts
 var KomodoStateSchema = object({
@@ -22159,6 +22636,7 @@ var fileKomodoStore = (path) => {
 			}
 		})),
 		links: async (capability) => (await read()).links[capability] ?? {},
+		allLinks: async () => (await read()).links,
 		link: (capability, repo, stack) => update((state) => {
 			const forCapability = { ...state.links[capability] };
 			if (stack === "") delete forCapability[repo];
@@ -22174,17 +22652,165 @@ var fileKomodoStore = (path) => {
 	};
 };
 //#endregion
-//#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/plain-text.js
-var ANSI = /\x1b(?:\[[0-9;?]*[ -/]*[@-~]|\][^\x07\x1b]*(?:\x07|\x1b\\)|[@-Z\\-_])/g;
-var CONTROL = /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g;
-var lastFrame = (line) => line.split("\r").findLast((frame) => frame !== "") ?? "";
-var plainText = (output) => output.replace(ANSI, "").split("\n").map(lastFrame).join("\n").replace(CONTROL, "");
+//#region src/server/native-store.ts
+var MemorySchema = object({
+	states: record(string(), DeployStateSchema),
+	alerts: array(DeployAlertSchema)
+});
+var NativeStateSchema = object({ memory: record(string(), MemorySchema) });
+var nativeStorePath = (workspaceRoot) => join(workspaceRoot, extensionRuntimeDir("deployments"), "native.json");
+var fileNativeStore = (path) => {
+	const read = async () => {
+		try {
+			return NativeStateSchema.safeParse(JSON.parse(await readFile(path, "utf8"))).data ?? { memory: {} };
+		} catch {
+			return { memory: {} };
+		}
+	};
+	let queue = Promise.resolve();
+	return {
+		memory: async (connection) => (await read()).memory[connection] ?? EMPTY_MEMORY,
+		remember: (connection, memory) => {
+			const next = queue.then(async () => {
+				const written = { memory: {
+					...(await read()).memory,
+					[connection]: {
+						states: { ...memory.states },
+						alerts: [...memory.alerts]
+					}
+				} };
+				await mkdir(dirname(path), { recursive: true });
+				const staging = `${path}.tmp`;
+				await writeFile(staging, `${JSON.stringify(written, void 0, 4)}\n`);
+				await rename(staging, path);
+			});
+			queue = next.catch(() => {});
+			return next;
+		}
+	};
+};
+//#endregion
+//#region src/server/tools.ts
+var text = (body, isError = false) => ({
+	content: [{
+		type: "text",
+		text: body
+	}],
+	...isError ? { isError: true } : {}
+});
+var stringArg = (args, key) => {
+	const value = args[key];
+	return typeof value === "string" && value.trim() !== "" ? value.trim() : void 0;
+};
+var deploymentTools = (deps) => [
+	{
+		name: "deploy_targets",
+		description: "Which workspace repositories deploy to which Docker compose stack on which of the owner's connected computers, as the Deployments board links them (a deploy links its repo to its stack). Also lists the workspace repositories with a compose file that are not deployed anywhere yet. Read this before deploy_to_device to know the device and stack a repo goes to.",
+		effect: "read",
+		inputSchema: {
+			type: "object",
+			properties: {},
+			additionalProperties: false
+		},
+		call: async () => {
+			const links = await deps.store.allLinks();
+			const deployed = Object.entries(links).filter(([connection]) => connection.startsWith(DEVICE_CONNECTION_PREFIX)).flatMap(([connection, repos]) => Object.entries(repos).map(([repo, stack]) => ({
+				repo,
+				device: deviceOf(connection),
+				stack
+			})));
+			const deployable = (await repoLinks(deps.scan, await deps.repoDirs(), [], {})).map((entry) => ({
+				repo: entry.repo,
+				composeFile: entry.composePath,
+				suggestedStack: stackNameFor(entry.projectName)
+			}));
+			return text(JSON.stringify({
+				deployed,
+				deployable
+			}, void 0, 2));
+		}
+	},
+	{
+		name: "device_stacks",
+		description: "The Docker compose stacks running on one of the owner's connected computers: each stack's state (running, unhealthy, stopped), compose's status and its services. Needs that computer's \"Run commands\" switch; a refusal names the switch.",
+		effect: "read",
+		inputSchema: {
+			type: "object",
+			properties: { device: {
+				type: "string",
+				description: "The computer, by its card id (as the devices tools name it)."
+			} },
+			required: ["device"],
+			additionalProperties: false
+		},
+		call: async (args) => {
+			const device = stringArg(args, "device");
+			if (device === void 0) return text("name the device", true);
+			try {
+				const listed = await deps.daemon.stacks(device);
+				const stacks = listed.stacks.filter((stack) => !stack.sandbox).map((stack) => ({
+					name: stack.name,
+					state: stackState(stack),
+					status: stack.status,
+					workingDir: stack.workingDir,
+					services: stack.services.map((service) => `${service.service}: ${service.status}`)
+				}));
+				return text(JSON.stringify({
+					root: listed.root,
+					stacks
+				}, void 0, 2));
+			} catch (error) {
+				return text(errorMessage(error), true);
+			}
+		}
+	},
+	{
+		name: "deploy_to_device",
+		description: "Deploy a workspace repository to one of the owner's connected computers as a Docker compose stack, and wait for it to come up (up to ten minutes). Deploys the repository's COMMITTED HEAD as this sandbox's workspace has it, never uncommitted changes: commit first. The computer builds the images itself (`docker compose up -d --build`). A `.env` already beside the stack there is kept, never overwritten. Needs that computer's \"Run commands\" and \"Run programs this sandbox sends\" switches; a refusal names the one that is off. Answers the commit that went and the state the stack is in after it; a failed deploy answers compose's own words.",
+		effect: "write",
+		inputSchema: {
+			type: "object",
+			properties: {
+				device: {
+					type: "string",
+					description: "The computer, by its card id (as the devices tools name it)."
+				},
+				repo: {
+					type: "string",
+					description: "The workspace repository directory, relative to the workspace root, as deploy_targets names it."
+				},
+				stack: {
+					type: "string",
+					description: "The stack's name there (lowercase letters, digits, dash, underscore). Omit to use the stack this repo is linked to on that device, else one named after its compose project."
+				}
+			},
+			required: ["device", "repo"],
+			additionalProperties: false
+		},
+		call: async (args) => {
+			const device = stringArg(args, "device");
+			const repo = stringArg(args, "repo");
+			if (device === void 0 || repo === void 0) return text("name the device and the repo", true);
+			try {
+				const linked = (await deps.store.links(deviceConnection(device)))[repo];
+				const project = (await repoLinks(deps.scan, await deps.repoDirs(), [], {})).find((entry) => entry.repo === repo)?.projectName;
+				const stack = stringArg(args, "stack") ?? linked ?? (project === void 0 ? void 0 : stackNameFor(project));
+				if (stack === void 0 || !StackNameSchema.safeParse(stack).success) return text(`"${repo}" is not a workspace repository with a compose file at its root, or "${stack ?? ""}" is not a stack name`, true);
+				const { settled } = await deps.board.startDeploy(device, repo, stack);
+				const ended = await settled;
+				if (ended.error !== void 0) return text(`The deploy of ${repo} to ${stack} on ${device} failed: ${ended.error}`, true);
+				const now = (await deps.daemon.stacks(device).catch(() => void 0))?.stacks.find((entry) => entry.name === stack);
+				const state = now === void 0 ? "not listed yet" : `${stackState(now)} (${now.status})`;
+				return text(`Deployed ${repo} at ${ended.commit ?? "its HEAD"} to the stack "${stack}" on ${device}; it is ${state}.`);
+			} catch (error) {
+				return text(errorMessage(error), true);
+			}
+		}
+	}
+];
 //#endregion
 //#region src/server/server.ts
 var LOG_TAIL = 200;
-var TITLE_MAX = 80;
-var fixSeq = 0;
-var mintFixConversationId = (name, now) => `deploy-fix-${name.replaceAll(/[^a-zA-Z0-9-]/g, "-").slice(0, 32)}-${now.toString(36)}${(fixSeq++).toString(36)}`;
 var upstream = async (action) => {
 	try {
 		return await action;
@@ -22209,8 +22835,24 @@ var OPERATIONS = {
 	}
 };
 var activateServer = (api, _context, fetchFn = fetch) => {
-	const i = implement(komodoContract);
+	const i = implement(deploymentsContract);
 	const store = fileKomodoStore(komodoStorePath(api.workspaceRoot));
+	const scan = {
+		root: api.workspaceRoot,
+		read: readFileOrUndefined
+	};
+	const repoDirs = () => discoverRepoDirs(api.workspaceRoot);
+	const devices = daemonDevices(api);
+	const board = deviceBoard({
+		daemon: devices,
+		store,
+		memory: fileNativeStore(nativeStorePath(api.workspaceRoot)),
+		operations: deviceOperations(),
+		scan,
+		repoDirs,
+		startAgent: (request) => startAgentTurn(api, request),
+		log: api.log
+	});
 	const connect = async (capability) => {
 		let refusal;
 		const connection = await api.daemon.json(`/capabilities/${encodeURIComponent(capability)}/connection`).catch((error) => {
@@ -22232,18 +22874,14 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 		if (resource === void 0) throw new ORPCError$1("NOT_FOUND", { message: `Komodo has no ${kind} "${id}" any more` });
 		return [connection, resource];
 	};
-	const handler = new OpenAPIHandler(i.router({
+	const router = i.router({
 		overview: i.overview.handler(async ({ input }) => {
 			const connection = await connect(input.capability);
 			const client = komodoClient(connection, fetchFn);
 			const seenAt = await store.seenAt(input.capability);
 			const seen = seenAt === void 0 ? {} : { seenAt };
-			const scan = {
-				root: api.workspaceRoot,
-				read: readFileOrUndefined
-			};
 			const links = await store.links(input.capability);
-			const repoDirs = await discoverRepoDirs(api.workspaceRoot);
+			const dirs = await repoDirs();
 			try {
 				const [viewer, deployments, stacks, servers, alerts] = await Promise.all([
 					client.whoami(),
@@ -22256,7 +22894,7 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 					komodoUrl: connection.baseUrl,
 					reachable: true,
 					viewer,
-					repos: await repoLinks(scan, repoDirs, stacks.map((item) => item.name), links),
+					repos: await repoLinks(scan, dirs, stacks.map((item) => item.name), links),
 					resources: [...stacks.map((item) => stackResource(connection.baseUrl, item)), ...deployments.map((item) => deploymentResource(connection.baseUrl, item))],
 					servers: servers.map((item) => serverEntry(connection.baseUrl, item)),
 					alerts: deployAlerts(alerts),
@@ -22269,7 +22907,7 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 					komodoUrl: connection.baseUrl,
 					reachable: false,
 					unreachableReason: reason,
-					repos: await repoLinks(scan, repoDirs, [], links),
+					repos: await repoLinks(scan, dirs, [], links),
 					resources: [],
 					servers: [],
 					alerts: [],
@@ -22324,24 +22962,38 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 				`Find the cause in this workspace's source where it is a code or config problem, fix it there, and say plainly when the cause is outside the workspace (a bad env var, a full disk, an unreachable dependency) rather than inventing a code change. You are in an isolated worktree: commit your fix and it goes through review.`,
 				...tail !== "" ? [`--- container log tail ---\n${tail}`] : []
 			].join("\n\n");
-			const conversationId = mintFixConversationId(resource.name, Date.now());
-			await api.daemon.json(`/agent`, {
-				method: "POST",
-				body: JSON.stringify({
-					prompt,
-					conversationId,
-					isolated: true,
-					unattended: true,
-					runRole: `deployment-fix`,
-					...input.pick,
-					title: `Fix deployment: ${resource.name}`.slice(0, TITLE_MAX)
-				})
-			}).catch((error) => {
-				throw new ORPCError$1("CONFLICT", { message: errorMessage(error) });
+			return startAgentTurn(api, {
+				kind: "deploy-fix",
+				name: resource.name,
+				title: `Fix deployment: ${resource.name}`,
+				prompt,
+				...input.pick === void 0 ? {} : { pick: input.pick }
 			});
-			return { conversationId };
-		})
+		}),
+		deviceOverview: i.deviceOverview.handler(({ input }) => board.overview(input.device)),
+		deviceAction: i.deviceAction.handler(({ input }) => board.action(input.device, input.id, input.action)),
+		deviceLink: i.deviceLink.handler(async ({ input }) => {
+			await store.link(deviceConnection(input.device), input.repo, input.stack);
+			return { ok: true };
+		}),
+		deviceLogs: i.deviceLogs.handler(({ input }) => board.logs(input.device, input.id)),
+		deviceFix: i.deviceFix.handler(({ input }) => board.fix(input.device, input.id, input.pick)),
+		deviceSeen: i.deviceSeen.handler(async ({ input }) => {
+			const at = Date.now();
+			await store.markSeen(deviceConnection(input.device), at);
+			return { seenAt: at };
+		}),
+		deviceDeploy: i.deviceDeploy.handler(({ input }) => board.deploy(input.device, input.repo, input.stack)),
+		deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick))
+	});
+	api.tools.serve(() => deploymentTools({
+		board,
+		daemon: devices,
+		store,
+		scan,
+		repoDirs
 	}));
+	const handler = new OpenAPIHandler(router);
 	api.routes.mount(async (request) => {
 		const { matched, response } = await handler.handle(request, { prefix: "/" });
 		return matched ? response : void 0;

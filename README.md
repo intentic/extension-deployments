@@ -5,7 +5,8 @@ first-party intentic extension that is LISTED rather than baked into the sandbox
 so it arrives only where someone reaches for it. Moved out of the monorepo at `intentic/intentic@41f72ba4aae6`
 (`_extensions/deployments` there; this repository is where it lives now).
 
-What is actually running on the servers you own, read from a Komodo you already operate.
+What is actually running on the servers you own: read from a Komodo you already operate, or straight from a computer
+you paired with Intentic, with no Komodo at all.
 
 ## Responsibilities
 
@@ -17,6 +18,12 @@ What is actually running on the servers you own, read from a Komodo you already 
   `ic sandbox compose <slug> --out <dir>` writes there), with `files_on_host` and `run_directory`, created by
   name (default `intentic-<slug>`), then deployed. Running the same folder again redeploys its stack; a name another
   stack already uses (git-backed, defined in Komodo, or another folder's) is refused rather than repointed.
+- Read and drive the compose stacks on a paired computer (a device card) through the daemon's device-stack routes, and
+  deploy a workspace repository there: its committed HEAD is packed in the sandbox, carried over the device link and
+  started with `docker compose up -d --build`. A `.env` beside the stack on the computer is never sent or overwritten;
+  "Set up its .env with the agent" starts a turn that fills it from stored secrets, through the secret gates a turn has.
+- Give the agent a `deployments` tool server (`deploy_targets`, `device_stacks`, `deploy_to_device`), so a fix turn can
+  redeploy its own fix and the "Redeploy when CI passes" automation can ship what passed.
 - Talk to Komodo itself: the extension ships its own backend, and the daemon core carries no Komodo feature.
 - Own the Komodo connection: the `komodo` card on the Capabilities page, its agent skill and the deployment-alert
   automation template all come from this manifest, so connecting Komodo and getting this view are one install.
@@ -35,7 +42,17 @@ What is actually running on the servers you own, read from a Komodo you already 
   stack it writes and the create-or-update-then-deploy order; [src/HostStackDialog.vue](src/HostStackDialog.vue) asks for it.
 - [src/server/komodo-overview.ts](src/server/komodo-overview.ts): Komodo's vocabulary → the view's, pure and tested.
 - [src/server/komodo-repos.ts](src/server/komodo-repos.ts): which workspace repo belongs to which stack.
-- [src/server/komodo-store.ts](src/server/komodo-store.ts): seen-timestamps and repo→stack links (its runtime home, `.intentic/local/runtime/extensions/deployments/komodo.json`).
+- [src/server/komodo-store.ts](src/server/komodo-store.ts): seen-timestamps and repo→stack links for both kinds of board,
+  keyed by connection (its runtime home, `.intentic/local/runtime/extensions/deployments/komodo.json`).
+- [src/server/device-board.ts](src/server/device-board.ts): the device board's backend, answering in the Komodo board's
+  shapes; [src/server/device-daemon.ts](src/server/device-daemon.ts) is its client for the daemon's
+  `/system/devices/{id}/stacks…` routes.
+- [src/server/native-overview.ts](src/server/native-overview.ts): compose stacks → the board's rows, and the alert log a
+  computer doesn't keep, built from the state moves the backend sees; pure and tested. Its memory is
+  [src/server/native-store.ts](src/server/native-store.ts) (`native.json` beside `komodo.json`).
+- [src/server/device-operations.ts](src/server/device-operations.ts): what a device board started and how it ended.
+- [src/server/tools.ts](src/server/tools.ts): the agent's `deployments` tools.
+- [src/DeployDialog.vue](src/DeployDialog.vue) and [src/DeviceRepoRow.vue](src/DeviceRepoRow.vue): deploying a repo to a computer.
 - [src/useDeploymentBoard.ts](src/useDeploymentBoard.ts), the board's data: what is running, where, and how it is doing.
 - [src/incidents.ts](src/incidents.ts): what counts as an incident rather than as noise.
 - [src/stateVisual.ts](src/stateVisual.ts): one mapping from a state to how it reads, so nothing invents its own colour.
@@ -46,6 +63,24 @@ What is actually running on the servers you own, read from a Komodo you already 
 
 Capability-driven, not repo-driven: the same shape as `ext-pipelines`, for the same reason. Gating on the
 intent and desired-state repos would mean someone who simply connects a Komodo they already run gets nothing.
+
+**Two kinds of connection, one board.** A connection is a Komodo capability (`komodo/<id>/…` on the wire) or a paired
+computer, `device:<card id>` in the picker and `device/<card id>/…` on the wire (`connectionRoutes` in
+[src/contract.ts](src/contract.ts)). Both answer `DeployOverviewResponse`, with `source` saying which; the view hides
+what only a Komodo has (its links, host-folder stacks) and shows what only a computer has (deploy, `.env`).
+
+A computer keeps no alert log, so the device board makes one: the backend remembers each stack's last state and turns a
+move into `unhealthy`, or a running stack going down, into an alert, resolved when it is back up. A stack the board
+itself stopped going down is not news. A stack that is merely down is a level, never a breakage: `docker stop` leaves
+exit codes 137 and 143 as often as 0. Intentic sandboxes' own compose projects never appear; the Devices view drives them.
+
+Every press on a device board answers at once and runs on in the backend (`operations` in the overview), since a pull
+or a build outlasts the backend proxy's 20 second wait for headers. The agent's `deploy_to_device` waits for its
+deploy instead, inside the host's ten-minute tool deadline.
+
+The computer checks its own switches: reading and driving stacks needs "Run commands", deploying also needs "Run
+programs this sandbox sends". A refusal reaches the board in the computer's words, and a device whose agent predates
+stacks (no `stacks` feature) says to update it.
 
 **One tile, a switcher for connections.** Several Komodos share the one Deployments tile, the way Documentation
 serves every repository from one: the header's picker chooses the connection (`?connection=`, remembered per
@@ -58,10 +93,13 @@ shared `ProjectChip`. Stacks, servers and incidents are the estate's and stay wh
 
 ## Conventions & gotchas
 
-- This reads an estate and acts on what is in it; the one thing it writes to Komodo is the host-folder stack, whose
-  folder the owner put on the server. It never writes into that folder, and it leaves the stack's `environment`
-  empty so Komodo writes no `.env` over the folder's own. The bundled deployment engine (`intentic deploy`) is a separate
-  tool with its own repo layout, and nothing here depends on it.
+- On a Komodo, this reads an estate and acts on what is in it; the one thing it writes to Komodo is the host-folder
+  stack, whose folder the owner put on the server. It never writes into that folder, and it leaves the stack's
+  `environment` empty so Komodo writes no `.env` over the folder's own.
+- On a computer, nothing here removes a stack or a volume: the verbs are up, pull, restart, start and stop. A deploy
+  copies files over the stack's folder and never deletes one, so data bind-mounted inside it survives a redeploy.
+- The device routes ship with a sandbox newer than `engines` says; an older one answers 404, which the board reads as
+  "update this sandbox" rather than as a computer that is down.
 
 ## Building and publishing
 

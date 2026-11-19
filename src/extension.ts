@@ -1,10 +1,11 @@
 import type { ExtensionContext, IntenticApi } from "@intentic/extension-api";
 import { bindHost } from "./host";
 import { deploymentsBadge, startDeployAttention, watchConnections } from "./attention";
+import { deviceConnection } from "./contract";
 
 // Binds the host, starts the badge poll, then registers the Deployments rail view. Capability-driven, not repo-driven
-// (mirrors ext-pipelines): an owner who only connects Komodo, with no intent or desired-state repo, still gets a tile.
-// One tile however many Komodos are connected, the way one Documentation tile serves every repository: the view switches
+// (mirrors ext-pipelines): an owner who only connects Komodo, or only pairs a server, still gets a tile.
+// One tile however many Komodos and computers are connected, the way one Documentation tile serves every repository: the view switches
 // between connections in its header, and the badge sums what each one still owes, so reading staging never silences
 // production (each connection keeps its own seen mark).
 export const activate = (api: IntenticApi, context: ExtensionContext): void => {
@@ -17,9 +18,12 @@ export const activate = (api: IntenticApi, context: ExtensionContext): void => {
             label: `Deployments`,
             surface: `rail`,
             detect: (_repos, capabilities) => {
-                const connections = capabilities
-                    .filter((capability) => capability.kind === `cli` && capability.config[`provider`] === `komodo`)
-                    .map((capability) => capability.id);
+                // Every connected Komodo, then every computer the owner paired: a server they own is somewhere to deploy
+                // to with no Komodo at all (device-board.ts), read through the agent already running there.
+                const connections = [
+                    ...capabilities.filter((capability) => capability.kind === `cli` && capability.config[`provider`] === `komodo`).map((capability) => capability.id),
+                    ...capabilities.filter((capability) => capability.kind === `device`).map((capability) => deviceConnection(capability.id)),
+                ];
                 // detect() runs every facts poll, the only place that knows which Komodos are connected right now.
                 watchConnections(connections);
                 // Key equals the view id: a singleton, so the address is /ext/deployments with the connection in `?connection=`.

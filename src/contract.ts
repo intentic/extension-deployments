@@ -108,7 +108,13 @@ export const DeployLinkParamSchema = z.object({
 // Fields added after this route shipped are optional or defaulted, never required, since browser and daemon can be on
 // different commits. Default when the view renders fine without it; optional when absence itself is meaningful.
 export const DeployOverviewResponseSchema = z.object({
+    // Which kind of estate this board reads: a Komodo the owner runs, or one of their own connected computers, whose
+    // compose stacks the daemon relays (no Komodo between). Defaulted, so an answer from before devices reads as Komodo's.
+    source: z.enum(["komodo", "device"]).default("komodo"),
+    // Komodo's address; empty on a device board, which has no UI of its own to link to.
     komodoUrl: z.string(),
+    // Device boards only: where a stack deployed from here lands on that computer (`<deviceRoot>/<stack>`).
+    deviceRoot: z.string().optional(),
     // False means Komodo didn't answer; not seeing it isn't the same as it being broken, so never `danger`.
     reachable: z.boolean(),
     // Why it didn't answer, in Komodo's own words; shown instead of a bare "unavailable".
@@ -123,6 +129,10 @@ export const DeployOverviewResponseSchema = z.object({
     alerts: z.array(DeployAlertSchema),
     // Last time the owner opened this connection's view, so the rail needs no second call; absent = never opened.
     seenAt: z.number().optional(),
+    // Device boards only: what this board started on that computer and how each ended, newest first. An action there
+    // can take minutes (a pull, a build), longer than any request may stay open, so it runs on in the backend and the
+    // board reads its outcome here instead of from the press that started it.
+    operations: z.array(z.lazy(() => DeployOperationSchema)).default([]),
 });
 export type DeployOverviewResponse = z.infer<typeof DeployOverviewResponseSchema>;
 
@@ -155,11 +165,86 @@ export const DeployFixParamSchema = DeployLogsParamSchema.extend({ pick: AgentRu
 export const DeployLogsResponseSchema = z.object({ stdout: z.string(), stderr: z.string() });
 export type DeployLogsResponse = z.infer<typeof DeployLogsResponseSchema>;
 
+// The device board's action, log and fix inputs: the Komodo ones with the device in place of the capability. A device
+// board shows stacks only, so `kind` is always `stack` there; it stays in the shape so the view sends one body.
+export const DeviceActionParamSchema = DeployActionParamSchema.omit({ capability: true }).extend({ device: z.string().min(1) });
+export const DeviceLogsParamSchema = DeployLogsParamSchema.omit({ capability: true }).extend({ device: z.string().min(1) });
+export const DeviceFixParamSchema = DeployFixParamSchema.omit({ capability: true }).extend({ device: z.string().min(1) });
+export const DeviceLinkParamSchema = DeployLinkParamSchema.omit({ capability: true }).extend({ device: z.string().min(1) });
+
 // Opens an isolated conversation seeded with the resource, state, and log tail; Komodo's UI can't do this.
 export const DeployFixResponseSchema = z.object({ conversationId: z.string() });
 export type DeployFixResponse = z.infer<typeof DeployFixResponseSchema>;
 
 export const DeploySeenResponseSchema = z.object({ seenAt: z.number() });
+
+// One action a device board started: a deploy of a repo, or an op on a stack. `finishedAt` absent is still running.
+export const DeployOperationSchema = z.object({
+    stack: z.string(),
+    // `deploy`, or the stack op it ran (`up`, `pull`, `restart`, `start`, `stop`).
+    action: z.string(),
+    // The workspace repo a deploy packed.
+    repo: z.string().optional(),
+    startedAt: z.number(),
+    finishedAt: z.number().optional(),
+    // What the computer refused or failed with, in its own words; absent on success.
+    error: z.string().optional(),
+    // The commit a deploy carried, once it went.
+    commit: z.string().optional(),
+});
+export type DeployOperation = z.infer<typeof DeployOperationSchema>;
+
+// THE DEVICE BOARD'S OWN ROUTES. A connection is `device:<card id>` in the view's picker and `device/<card id>/…` on the
+// wire; everything the Komodo board shows is drawn from the same shapes above, so one view serves both.
+export const DEVICE_CONNECTION_PREFIX = "device:";
+export const isDeviceConnection = (connection: string): boolean => connection.startsWith(DEVICE_CONNECTION_PREFIX);
+export const deviceOf = (connection: string): string => connection.slice(DEVICE_CONNECTION_PREFIX.length);
+export const deviceConnection = (device: string): string => `${DEVICE_CONNECTION_PREFIX}${device}`;
+// Where one connection's routes live in this extension's namespace: `komodo/<capability>` or `device/<card id>`.
+export const connectionRoutes = (connection: string): string =>
+    isDeviceConnection(connection) ? `device/${encodeURIComponent(deviceOf(connection))}` : `komodo/${encodeURIComponent(connection)}`;
+
+// A compose project name as Docker accepts one, which is also the folder the stack lives in on the computer.
+export const StackNameSchema = z
+    .string()
+    .regex(/^[a-z0-9][a-z0-9_-]{0,62}$/, "lowercase letters, digits, dash and underscore, starting with a letter or digit");
+
+// A repo's compose project name made into one: what the deploy dialog offers before the owner types anything.
+export const stackNameFor = (projectName: string): string => {
+    const slug = projectName
+        .toLowerCase()
+        .replaceAll(/[^a-z0-9_-]+/gu, "-")
+        .replaceAll(/^[-_]+|-+$/gu, "")
+        .slice(0, 63);
+    return slug === "" ? "app" : slug;
+};
+
+export const DeviceParamSchema = z.object({ device: z.string().min(1) });
+
+// Deploys a workspace repo's COMMITTED tree to the device as a stack of this name (created, or replaced in place).
+export const DeviceDeployParamSchema = z.object({
+    device: z.string().min(1),
+    repo: z.string().min(1),
+    stack: StackNameSchema,
+});
+export type DeviceDeployParam = z.infer<typeof DeviceDeployParamSchema>;
+
+export const DeviceDeployResponseSchema = z.object({
+    stack: z.string(),
+    // The folder it runs from on the computer, and the commit that went.
+    path: z.string(),
+    commit: z.string(),
+});
+export type DeviceDeployResponse = z.infer<typeof DeviceDeployResponseSchema>;
+
+// Puts an agent on a stack's environment: which variables its compose file reads, filled from the sandbox's stored
+// secrets into the `.env` beside it on the computer, through the secret gates an agent turn has and a button press does not.
+export const DeviceEnvironmentParamSchema = z.object({
+    device: z.string().min(1),
+    stack: StackNameSchema,
+    repo: z.string().min(1).optional(),
+    pick: AgentRunPickSchema,
+});
 
 // The name a host-folder stack gets when the owner leaves it blank, shared so the dialog's placeholder and the server
 // agree. `~/.intentic/compose/acme/` → `intentic-acme`; a segment already carrying the prefix keeps it once. Lowercased

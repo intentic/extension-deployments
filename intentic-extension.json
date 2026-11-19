@@ -12,7 +12,14 @@
   "server": "dist/server.js",
   "permissions": {
     "sandbox": ["GET /settings"],
-    "daemon": ["GET /capabilities/*/connection", "POST /agent"]
+    "daemon": [
+      "GET /capabilities/*/connection",
+      "POST /agent",
+      "GET /system/devices/*/stacks",
+      "POST /system/devices/*/stacks/*/ops/*",
+      "GET /system/devices/*/stacks/*/logs",
+      "POST /system/devices/*/stacks/*/deploy"
+    ]
   },
   "contributes": {
     "capabilities": [
@@ -94,8 +101,24 @@
         },
         "prompt": "Komodo just fired an alert, the payload is in $AUTOMATION_PAYLOAD: `level` is the severity, `target` names the resource ({type, id}), `data` carries the specifics, and `resolved` is true when this is the all-clear for an earlier alert. Use your Komodo capability to look up that resource and its recent container logs, then say what broke and what would fix it. Do not deploy, restart or stop anything unless the user asks.",
         "setup": "In Komodo: Alerters → New Alerter → endpoint type Custom → paste this URL. Narrow it with the alerter's alert-type and resource filters."
+      },
+      {
+        "id": "redeploy-on-green",
+        "title": "Redeploy when CI passes",
+        "icon": "box",
+        "requires": ["github", "gitlab"],
+        "trigger": {
+          "kind": "listener",
+          "provider": "ci",
+          "eventType": "pipeline_succeeded"
+        },
+        "offer": "configure",
+        "prompt": "A CI pipeline just passed. Each line of the event payload is one JSON event: `channelId` is the workspace repository directory, `branch` the ref it ran on, and `extra.sha` the commit that passed. For each event: call the deployments server's deploy_targets tool and find the device and stack that repository is deployed to; if it is deployed nowhere, say so and stop. Make sure the workspace repository's checked-out HEAD is exactly `extra.sha` (fetch, then compare `git rev-parse HEAD`): deploy_to_device packs HEAD, so if HEAD is anything else, do not deploy, and say which commit passed and which one is checked out. When they match, call deploy_to_device with that device, repo and stack, then report the commit that went and the state the stack is in. Never change code or commit anything in this turn.",
+        "setup": "Name the repository and its default branch in the trigger, so only the branch that ships wakes this. Deploy that repository to a computer once from the Deployments board first: that is what tells this automation where it goes.",
+        "description": "Deploys a repository to the computer it is deployed to whenever its CI passes on the branch you name, after checking the commit that passed is the one checked out here."
       }
     ],
+    "tools": {},
     "views": [
       {
         "id": "deployments",

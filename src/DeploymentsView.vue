@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { errorMessage } from "@intentic/base/errors";
-import type { DeployAction, DeployResource, DeployServer } from "./contract";
+import { type DeployAction, type DeployOperation, type DeployRepoLink, type DeployResource, type DeployServer, deviceOf, isDeviceConnection } from "./contract";
 import { host } from "./host.js";
 import {
     Await,
@@ -24,6 +24,8 @@ import {
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { deployBadge, markDeploymentsSeen } from "./attention";
 import { incidents, topTier } from "./incidents";
+import DeployDialog from "./DeployDialog.vue";
+import DeviceRepoRow from "./DeviceRepoRow.vue";
 import HostStackDialog from "./HostStackDialog.vue";
 import IncidentRow from "./IncidentRow.vue";
 import KomodoLink from "./KomodoLink.vue";
@@ -33,13 +35,14 @@ import ServerMeta from "./ServerMeta.vue";
 import { useDeploymentBoard } from "./useDeploymentBoard";
 
 // Is what's running healthy, and what changed: a different question from Live status's drift-against-declared-state;
-// gated on the Komodo connection rather than a repo. Reading order is worst-first:
+// gated on a Komodo connection or a paired computer rather than a repo. Reading order is worst-first:
 // 1. what needs you, as its own group headed in its state's ink
 // 2. one tally on the title row
 // 3. resources grouped by host
-// 4. the repo → stack links (setup, not operations)
+// 4. the repo → stack links (setup, not operations); on a computer's board, the repos to deploy there
 
-// Every connected Komodo, handed over by detect(); one view switches between them rather than one tile each.
+// Every connected Komodo and every paired computer (`device:<id>`), handed over by detect(); one view switches between
+// them rather than one tile each.
 const props = defineProps<{ connections?: readonly string[] }>();
 const api = host();
 // A directly-mounted view with none falls back to the default id.
@@ -66,10 +69,22 @@ const capability = computed(() => {
 const connectionOptions = computed<PickerOption[]>(() =>
     connections.value.map((name) => {
         const count = deployBadge(name)?.count;
-        return { value: name, label: name, icon: `box`, mono: true, ...(count === undefined ? {} : { description: `${count} new` }) };
+        const device = isDeviceConnection(name);
+        return {
+            value: name,
+            label: device ? deviceOf(name) : name,
+            icon: device ? `server` : `box`,
+            mono: true,
+            ...(count === undefined ? {} : { description: `${count} new` }),
+        };
     }),
 );
-const { loaded, board, act, link, fix, hostStack, refetch } = useDeploymentBoard(capability);
+const { loaded, board, act, link, fix, hostStack, deploy, environment, refetch } = useDeploymentBoard(capability);
+
+// A computer the owner paired rather than a Komodo: no Komodo pages to link to, no host-folder stacks, and its repo rows
+// deploy instead of linking.
+const isDevice = computed(() => isDeviceConnection(capability.value));
+const deviceName = computed(() => deviceOf(capability.value));
 
 // Opening a connection counts as reading it; only when it opens, or a background poll would swallow a new breakage.
 watch(capability, (name) => void markDeploymentsSeen(name), { immediate: true });
@@ -105,6 +120,14 @@ const stacksUrl = computed(() => (board.value === undefined ? undefined : `${boa
 const emptyReason = computed<{ readonly notice?: NoticeModel; readonly empty?: string } | undefined>(() => {
     if (resources.value.length > 0 || board.value === undefined || !board.value.reachable) {
         return undefined;
+    }
+    if (isDevice.value) {
+        return {
+            empty:
+                repos.value.length > 0
+                    ? `No compose stacks run on ${deviceName.value} yet. Deploy a repository below.`
+                    : `No compose stacks run on ${deviceName.value} yet. A workspace repository with a compose file at its root can be deployed here.`,
+        };
     }
     const viewer = board.value.viewer;
     if (viewer === undefined) {
@@ -188,7 +211,14 @@ const strips = computed<NoticeModel[]>(() => {
     if (loaded.value.state === `ready` && loaded.value.refreshError !== undefined) {
         notices.push(noticeOf(loaded.value.refreshError));
     }
-    if (board.value !== undefined && !board.value.reachable) {
+    if (board.value !== undefined && !board.value.reachable && isDevice.value) {
+        notices.push({
+            tone: `warning`,
+            title: `Can't read the stacks on ${deviceName.value}`,
+            detail: board.value.unreachableReason ?? `Nothing here is current. This is not a report that anything there is down, only that we couldn't ask.`,
+            action: { label: `Try again`, run: () => void refetch() },
+        });
+    } else if (board.value !== undefined && !board.value.reachable) {
         notices.push({
             tone: `warning`,
             title: `Can't reach Komodo at ${board.value.komodoUrl}`,
@@ -213,6 +243,16 @@ const clearFailure = (key: string): void => {
 const recordFailure = (key: string, cause: unknown): void => {
     failures.value = new Map(failures.value).set(key, errorMessage(cause));
 };
+
+// What this board started on a computer, newest first per stack and per repo: the row that asked shows how it ended,
+// since the press itself only says it started (an action there can outlast any request).
+const operations = computed<readonly DeployOperation[]>(() => board.value?.operations ?? []);
+const latestFor = (match: (operation: DeployOperation) => boolean): DeployOperation | undefined => operations.value.find(match);
+const operationFailure = (stack: string): string | undefined => {
+    const latest = latestFor((operation) => operation.stack === stack);
+    return latest?.error === undefined ? undefined : `${latest.action === `deploy` ? `The deploy` : `The ${latest.action}`} failed: ${latest.error}`;
+};
+const rowError = (resource: DeployResource): string | undefined => failures.value.get(resource.id) ?? (isDevice.value ? operationFailure(resource.name) : undefined);
 
 const runAction = async (resource: DeployResource, action: DeployAction): Promise<void> => {
     busyId.value = resource.id;
@@ -253,6 +293,36 @@ const askAgent = async (resource: DeployResource, key: string, pick?: AgentRunCh
 const resourceFor = (name: string | undefined): DeployResource | undefined =>
     name === undefined ? undefined : resources.value.find((resource) => resource.name === name);
 
+// The repo the deploy dialog is open for, on a device board.
+const deploying = ref<DeployRepoLink | undefined>(undefined);
+const deployOpen = computed<boolean>({
+    get: () => deploying.value !== undefined,
+    set: (value) => {
+        if (!value) {
+            deploying.value = undefined;
+        }
+    },
+});
+const runDeploy = (input: { repo: string; stack: string }) => deploy.mutateAsync(input);
+// A turn on a stack's environment lands the board on its card, as a fix does.
+const setUpEnvironment = async (input: { stack: string; repo?: string | undefined }): Promise<void> => {
+    const { conversationId } = await environment.mutateAsync(input);
+    if (!left) {
+        api.navigate(`/agents?focus=${encodeURIComponent(conversationId)}`);
+    }
+};
+const environmentFor = async (resource: DeployResource): Promise<void> => {
+    busyId.value = resource.id;
+    clearFailure(resource.id);
+    try {
+        await setUpEnvironment({ stack: resource.name });
+    } catch (cause) {
+        recordFailure(resource.id, cause);
+    } finally {
+        busyId.value = undefined;
+    }
+};
+
 const linking = ref<string | undefined>(undefined);
 const setLink = async (repo: string, stack: string): Promise<void> => {
     linking.value = repo;
@@ -288,12 +358,12 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                 :model-value="capability"
                 :options="connectionOptions"
                 variant="ghost"
-                aria-label="Komodo connection"
-                placeholder="Komodo connection"
+                aria-label="Komodo or computer"
+                placeholder="Komodo or computer"
                 @update:model-value="choose"
             />
-            <PageAction v-if="board?.reachable && servers.length > 0" icon="folder" label="Run a sandbox from a host folder" @click="hostStackOpen = true" />
-            <PageAction v-if="stacksUrl !== undefined" icon="box" label="Open Komodo stacks" :href="stacksUrl" />
+            <PageAction v-if="!isDevice && board?.reachable && servers.length > 0" icon="folder" label="Run a sandbox from a host folder" @click="hostStackOpen = true" />
+            <PageAction v-if="!isDevice && stacksUrl !== undefined" icon="box" label="Open Komodo stacks" :href="stacksUrl" />
         </template>
 
         <template v-if="strips.length > 0" #strips>
@@ -303,7 +373,7 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
         <template #detail>
             <!-- Also covers the window before the sandbox handshake unblocks the read; a read that failed outright says so
                  here in the kit's words, with its retry. -->
-            <Await :of="loaded" imprint="deployments.board" label="Reading this Komodo">
+            <Await :of="loaded" imprint="deployments.board" :label="isDevice ? `Reading the stacks on ${deviceName}` : `Reading this Komodo`">
                 <template #fallback>
                     <RowGroup role="status" aria-busy="true">
                         <template #label><span class="skeleton block h-2.5 w-28" aria-hidden="true" /></template>
@@ -343,9 +413,11 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                             :capability="capability"
                             :resource="resource"
                             :busy="busyId === resource.id"
-                            :error="failures.get(resource.id)"
+                            :error="rowError(resource)"
+                            :device="isDevice"
                             @act="runAction"
                             @fix="(resource, pick) => askAgent(resource, resource.id, pick)"
+                            @environment="environmentFor"
                         />
                     </RowGroup>
 
@@ -362,7 +434,18 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                     </RowGroup>
 
                     <!-- 4. Setup, not operations; still drawn with no resources, since that's when linking matters most. -->
-                    <RowGroup v-if="repos.length > 0" label="Repositories">
+                    <RowGroup v-if="isDevice && repos.length > 0" label="Repositories">
+                        <DeviceRepoRow
+                            v-for="repoLink in repos"
+                            :key="repoLink.repo"
+                            :link="repoLink"
+                            :operation="latestFor((operation) => operation.repo === repoLink.repo)"
+                            :busy="deploy.isPending.value && deploying?.repo === repoLink.repo"
+                            :error="failures.get(repoLink.repo)"
+                            @deploy="(chosen) => (deploying = chosen)"
+                        />
+                    </RowGroup>
+                    <RowGroup v-else-if="repos.length > 0" label="Repositories">
                         <RepoLinkRow
                             v-for="repoLink in repos"
                             :key="repoLink.repo"
@@ -378,4 +461,12 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
         </template>
     </SplitView>
     <HostStackDialog v-model="hostStackOpen" :connection="capability" :servers="servers" :run="runHostStack" />
+    <DeployDialog
+        v-model="deployOpen"
+        :device="deviceName"
+        :root="board?.deviceRoot"
+        :link="deploying"
+        :run="runDeploy"
+        :environment="setUpEnvironment"
+    />
 </template>

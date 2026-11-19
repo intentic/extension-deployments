@@ -1,6 +1,7 @@
 import type { AgentRunChoice } from "@intentic/extension-ui";
 import { runPickOf } from "@intentic/sandbox-contract";
 import {
+    connectionRoutes,
     type DeployAction,
     type DeployFixResponse,
     DeployFixResponseSchema,
@@ -16,8 +17,8 @@ import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { computed, type Ref } from "vue";
 import { host } from "./host";
 
-// One Komodo connection's board, via the extension's own /komodo routes: the browser never holds the API key, which is
-// why these routes exist instead of calling Komodo directly. Read through `api.sandbox.query`, so the view draws its wait,
+// One connection's board, a Komodo's or a computer's, via the extension's own routes (`komodo/…` or `device/…`): the
+// browser never holds the Komodo API key or reaches a computer itself, which is why these routes exist. Read through `api.sandbox.query`, so the view draws its wait,
 // its answer and its failure with the kit's <Await> rather than from raw flags. Polls faster than the rail's own badge,
 // for someone actually watching a deploy land.
 const POLL_MS = 10_000;
@@ -38,7 +39,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
     const { query, loaded } = api.sandbox.query({
         queryKey,
         queryFn: async (): Promise<DeployOverviewResponse> =>
-            DeployOverviewResponseSchema.parse(await api.backend.json(`komodo/${capability.value}/overview`)),
+            DeployOverviewResponseSchema.parse(await api.backend.json(`${connectionRoutes(capability.value)}/overview`)),
         refetchInterval: POLL_MS,
     });
     const invalidate = (): Promise<void> => queryClient.invalidateQueries({ queryKey: queryKey.value });
@@ -46,7 +47,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
     const act = useMutation({
         mutationFn: (input: { resource: DeployResource; action: DeployAction }) =>
             api.backend.json(
-                `komodo/${capability.value}/action`,
+                `${connectionRoutes(capability.value)}/action`,
                 post({ kind: input.resource.kind, id: input.resource.id, action: input.action }),
             ),
         // Execute returns as soon as accepted; the refetch may briefly show stale state until the next poll.
@@ -55,7 +56,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
 
     // Binds a repo to a stack (empty `stack` unlinks); invalidates since the overview carries the link back.
     const link = useMutation({
-        mutationFn: (input: { repo: string; stack: string }) => api.backend.json(`komodo/${capability.value}/link`, post(input)),
+        mutationFn: (input: { repo: string; stack: string }) => api.backend.json(`${connectionRoutes(capability.value)}/link`, post(input)),
         onSuccess: invalidate,
     });
 
@@ -64,7 +65,7 @@ export function useDeploymentBoard(capability: Ref<string>) {
         mutationFn: async ({ resource, pick }: { resource: DeployResource; pick?: AgentRunChoice | undefined }): Promise<DeployFixResponse> =>
             DeployFixResponseSchema.parse(
                 await api.backend.json(
-                    `komodo/${capability.value}/fix`,
+                    `${connectionRoutes(capability.value)}/fix`,
                     post({
                         kind: resource.kind,
                         id: resource.id,
@@ -83,7 +84,27 @@ export function useDeploymentBoard(capability: Ref<string>) {
         onSuccess: invalidate,
     });
 
+    // Device boards: packs the repo's committed tree and runs it there as `stack`. Answers once started; the overview's
+    // `operations` says how it went, so it refetches at once to show it running.
+    const deploy = useMutation({
+        mutationFn: (input: { repo: string; stack: string }) => api.backend.json(`${connectionRoutes(capability.value)}/deploy`, post(input)),
+        onSuccess: invalidate,
+    });
+
+    // Device boards: an agent turn that fills a stack's `.env` from stored secrets; resolves to its conversation id.
+    const environment = useMutation({
+        mutationFn: async (input: { stack: string; repo?: string | undefined; pick?: AgentRunChoice | undefined }): Promise<DeployFixResponse> =>
+            DeployFixResponseSchema.parse(
+                await api.backend.json(
+                    `${connectionRoutes(capability.value)}/environment`,
+                    post({ stack: input.stack, ...(input.repo === undefined ? {} : { repo: input.repo }), ...(input.pick === undefined ? {} : { pick: runPickOf(input.pick) }) }),
+                ),
+            ),
+    });
+
     return {
+        deploy,
+        environment,
         // What the view has of the board, for <Await :of>: waiting (including while the sandbox wakes), ready, or failed.
         loaded,
         // The last answer, for what sits outside the awaited region (the title row's link, the strips).
@@ -103,7 +124,7 @@ export function useResourceLogs(capability: () => string, resource: () => Deploy
         queryKey: computed(() => api.sandbox.key(`komodo-logs`, capability(), resource().kind, resource().id)),
         queryFn: async (): Promise<DeployLogsResponse> =>
             DeployLogsResponseSchema.parse(
-                await api.backend.json(`komodo/${capability()}/logs`, post({ kind: resource().kind, id: resource().id })),
+                await api.backend.json(`${connectionRoutes(capability())}/logs`, post({ kind: resource().kind, id: resource().id })),
             ),
         enabled: open,
         refetchInterval: LOG_POLL_MS,

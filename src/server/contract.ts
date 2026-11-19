@@ -1,6 +1,13 @@
 import { oc } from "@orpc/contract";
 import { z } from "zod";
 import {
+    DeviceActionParamSchema,
+    DeviceDeployParamSchema,
+    DeviceEnvironmentParamSchema,
+    DeviceFixParamSchema,
+    DeviceLinkParamSchema,
+    DeviceLogsParamSchema,
+    DeviceParamSchema,
     DeployActionParamSchema,
     DeployCapabilityParamSchema,
     DeployFixParamSchema,
@@ -38,3 +45,24 @@ export const komodoContract = {
     // Marks this connection read, per capability; backend's own clock, so a skewed browser can't fake it.
     seen: oc.route({ method: "POST", path: "/komodo/{capability}/seen" }).input(DeployCapabilityParamSchema).output(DeploySeenResponseSchema),
 };
+
+// The device board's routes: one of the owner's own computers, keyed by its card id, through the daemon's device-stack
+// routes. Same answers as the Komodo routes above, so one view draws both. Every press answers at once; what it started
+// shows in the overview's `operations`, since a pull or a build outlasts any request.
+export const deviceContract = {
+    deviceOverview: oc.route({ method: "GET", path: "/device/{device}/overview" }).input(DeviceParamSchema).output(DeployOverviewResponseSchema),
+    deviceAction: oc.route({ method: "POST", path: "/device/{device}/action" }).input(DeviceActionParamSchema).output(OkSchema),
+    deviceLink: oc.route({ method: "POST", path: "/device/{device}/link" }).input(DeviceLinkParamSchema).output(OkSchema),
+    deviceLogs: oc.route({ method: "POST", path: "/device/{device}/logs" }).input(DeviceLogsParamSchema).output(DeployLogsResponseSchema),
+    deviceFix: oc.route({ method: "POST", path: "/device/{device}/fix" }).input(DeviceFixParamSchema).output(DeployFixResponseSchema),
+    deviceSeen: oc.route({ method: "POST", path: "/device/{device}/seen" }).input(DeviceParamSchema).output(DeploySeenResponseSchema),
+    // Packs the repo's committed tree and runs it on the computer as this stack; links the repo to the stack once it went.
+    deviceDeploy: oc.route({ method: "POST", path: "/device/{device}/deploy" }).input(DeviceDeployParamSchema).output(OkSchema),
+    // Starts an agent turn that fills the stack's `.env` from stored secrets; answers its conversation id.
+    deviceEnvironment: oc
+        .route({ method: "POST", path: "/device/{device}/environment" })
+        .input(DeviceEnvironmentParamSchema)
+        .output(DeployFixResponseSchema),
+};
+
+export const deploymentsContract = { ...komodoContract, ...deviceContract };

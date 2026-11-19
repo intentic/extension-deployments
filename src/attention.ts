@@ -1,4 +1,4 @@
-import { type DeployOverviewResponse, DeployOverviewResponseSchema, DeploySeenResponseSchema } from "./contract";
+import { connectionRoutes, type DeployOverviewResponse, DeployOverviewResponseSchema, DeploySeenResponseSchema, deviceOf, isDeviceConnection } from "./contract";
 import type { ViewBadge } from "@intentic/extension-api";
 import { sandboxPoll, sandboxValue } from "@intentic/extension-api";
 import { type Incident, incidents, incidentTooltip, topTier, unseenIncidents } from "./incidents";
@@ -25,7 +25,7 @@ const {
         const next = new Map(previous);
         for (const capability of watched.value) {
             try {
-                next.set(capability, DeployOverviewResponseSchema.parse(await api.backend.json(`komodo/${capability}/overview`)));
+                next.set(capability, DeployOverviewResponseSchema.parse(await api.backend.json(`${connectionRoutes(capability)}/overview`)));
             } catch {
                 // Failed fetch: this connection keeps its last known board.
             }
@@ -47,6 +47,14 @@ export const watchConnections = (capabilities: readonly string[]): void => {
     }
 };
 
+// What a badge calls a connection it can't reach: Komodo by name only when there are several, a computer by its own.
+const unreachableName = (connection: string): string => {
+    if (isDeviceConnection(connection)) {
+        return deviceOf(connection);
+    }
+    return watched.value.filter((watchedConnection) => !isDeviceConnection(watchedConnection)).length > 1 ? `Komodo ${connection}` : `Komodo`;
+};
+
 // A deploy actually in progress, which is `deploying` alone: Komodo's `running` is a container that is UP, the resting
 // state of a healthy board, and a mark lit by that would never go out. Not seen-gated like the incident count below —
 // there is nothing to acknowledge, it clears itself when the deploy lands — and never suppressed by an incident, since
@@ -65,7 +73,7 @@ export const deployBadge = (capability: string): ViewBadge | undefined => {
     }
     if (!board.reachable) {
         // No running mark on this path: the last known board is a memory, and a deploy it remembers may well be over.
-        return board.seenAt === undefined ? { mark: `exclamation-circle`, tone: `warning`, tooltip: `can't reach Komodo` } : undefined;
+        return board.seenAt === undefined ? { mark: `exclamation-circle`, tone: `warning`, tooltip: `can't reach ${unreachableName(capability)}` } : undefined;
     }
     const running = deployingNote(board);
     const unseen = topTier(unseenIncidents(incidents(board.alerts), board.seenAt));
@@ -111,7 +119,7 @@ export const deploymentsBadge = (): ViewBadge | undefined => {
     const shown = unseen.filter((entry) => top.has(entry.incident));
     if (shown.length === 0) {
         if (unreachable.length > 0) {
-            return { mark: `exclamation-circle`, tone: `warning`, tooltip: several ? `can't reach Komodo ${unreachable.join(`, `)}` : `can't reach Komodo` };
+            return { mark: `exclamation-circle`, tone: `warning`, tooltip: `can't reach ${unreachable.map(unreachableName).join(`, `)}` };
         }
         return running === undefined ? undefined : { running };
     }
@@ -135,7 +143,7 @@ export const markDeploymentsSeen = async (capability: string): Promise<void> => 
             return;
         }
         const { seenAt } = DeploySeenResponseSchema.parse(
-            await api.backend.json(`komodo/${capability}/seen`, { method: `POST` }),
+            await api.backend.json(`${connectionRoutes(capability)}/seen`, { method: `POST` }),
         );
         const board = boards.value.get(capability);
         if (board !== undefined) {
