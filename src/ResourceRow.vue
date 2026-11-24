@@ -199,10 +199,11 @@ const stop = (): void => {
                     </div>
                 </Section>
 
-                <Await :of="logs" label="Reading the log">
+                <!-- Remembered per resource, so a log opened before redraws at its own length while its tail is read again. -->
+                <Await :of="logs" :imprint="`deployments.log:${resource.id}`" label="Reading the log">
                     <template #fallback>
                         <!-- Shaped like the log block it stands in for, so nothing below jumps when the tail lands. -->
-                        <div class="flex flex-col gap-1.5 rounded-md border border-line bg-canvas px-3 py-2.5" role="status" aria-busy="true">
+                        <div class="flex flex-col gap-1.5 rounded-md border border-line bg-canvas px-3 py-2.5" role="status" aria-busy="true" aria-label="Reading the log">
                             <span v-for="width in [`w-11/12`, `w-3/5`, `w-3/4`, `w-2/5`, `w-5/6`]" :key="width" class="skeleton h-2.5" :class="width"></span>
                         </div>
                     </template>
