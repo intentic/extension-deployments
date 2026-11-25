@@ -97,17 +97,17 @@ const start = async (): Promise<void> => {
             </p>
 
             <label class="flex flex-col gap-1.5 text-sm">
-                <span>Server</span>
+                Server
                 <Picker v-model="server" :options="serverOptions" aria-label="Server" placeholder="Choose a server" />
             </label>
 
             <label class="flex flex-col gap-1.5 text-sm">
-                <span>Folder on that server</span>
+                Folder on that server
                 <input v-model="folder" type="text" :placeholder="EXAMPLE" autocomplete="off" spellcheck="false" :class="ui.input(`w-full font-mono`)" />
             </label>
 
             <label class="flex flex-col gap-1.5 text-sm">
-                <span>Stack name</span>
+                Stack name
                 <input v-model="name" type="text" :placeholder="derived" autocomplete="off" spellcheck="false" :class="ui.input(`w-full font-mono`)" />
             </label>
 

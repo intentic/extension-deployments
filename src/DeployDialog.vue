@@ -72,7 +72,7 @@ const setUpEnvironment = async (): Promise<void> => {
             </p>
 
             <label class="flex flex-col gap-1.5 text-sm">
-                <span>Stack name on {{ device }}</span>
+                Stack name on {{ device }}
                 <input v-model="stack" type="text" autocomplete="off" spellcheck="false" :class="ui.input(`w-full font-mono`)" />
                 <span v-if="!valid && stack.trim() !== ``" class="text-2xs" :class="toneInk(`danger`)">Lowercase letters, digits, dash and underscore, starting with a letter or digit.</span>
                 <span v-else-if="where" class="text-2xs text-muted">Runs from <code>{{ where }}</code>; deploying again replaces its files, never its data.</span>
