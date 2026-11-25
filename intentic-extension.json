@@ -11,14 +11,25 @@
   "entry": "dist/extension.js",
   "server": "dist/server.js",
   "permissions": {
-    "sandbox": ["GET /settings"],
+    "sandbox": [
+      "GET /settings",
+      "POST /deploys/deploy",
+      "POST /deploys/rollback",
+      "POST /deploys/promote",
+      "POST /deploys/grants/grant"
+    ],
     "daemon": [
       "GET /capabilities/*/connection",
       "POST /agent",
       "GET /system/devices/*/stacks",
       "POST /system/devices/*/stacks/*/ops/*",
       "GET /system/devices/*/stacks/*/logs",
-      "POST /system/devices/*/stacks/*/deploy"
+      "POST /system/devices/*/stacks/*/deploy",
+      "GET /deploys/environments",
+      "GET /deploys/history",
+      "POST /deploys/deploy",
+      "POST /deploys/rollback",
+      "POST /deploys/promote"
     ]
   },
   "contributes": {
@@ -103,19 +114,31 @@
         "setup": "In Komodo: Alerters → New Alerter → endpoint type Custom → paste this URL. Narrow it with the alerter's alert-type and resource filters."
       },
       {
-        "id": "redeploy-on-green",
-        "title": "Redeploy when CI passes",
+        "id": "deploy-trouble",
+        "title": "Investigate a failed deploy or an unhealthy stack",
         "icon": "box",
-        "requires": ["github", "gitlab"],
         "trigger": {
           "kind": "listener",
-          "provider": "ci",
-          "eventType": "pipeline_succeeded"
+          "provider": "deploys"
         },
-        "offer": "configure",
-        "prompt": "A CI pipeline just passed. Each line of the event payload is one JSON event: `channelId` is the workspace repository directory, `branch` the ref it ran on, and `extra.sha` the commit that passed. For each event: call the deployments server's deploy_targets tool and find the device and stack that repository is deployed to; if it is deployed nowhere, say so and stop. Make sure the workspace repository's checked-out HEAD is exactly `extra.sha` (fetch, then compare `git rev-parse HEAD`): deploy_to_device packs HEAD, so if HEAD is anything else, do not deploy, and say which commit passed and which one is checked out. When they match, call deploy_to_device with that device, repo and stack, then report the commit that went and the state the stack is in. Never change code or commit anything in this turn.",
-        "setup": "Name the repository and its default branch in the trigger, so only the branch that ships wakes this. Deploy that repository to a computer once from the Deployments board first: that is what tells this automation where it goes.",
-        "description": "Deploys a repository to the computer it is deployed to whenever its CI passes on the branch you name, after checking the commit that passed is the one checked out here."
+        "guard": "printf '%s' \"$AUTOMATION_PAYLOAD\" | grep -Eq '\"type\":\"(deploy_failed|deploy_rolled_back|stack_unhealthy)\"'",
+        "offer": "create",
+        "note": "only failed deploys, rollbacks and unhealthy stacks wake it",
+        "prompt": "A managed deploy failed or was rolled back, or a managed stack turned unhealthy on its computer. Each line of the event payload is one JSON event: `type` is `deploy_failed`, `deploy_rolled_back` or `stack_unhealthy` (any other line is another deploy event: leave it), `channelId` is `<repo>:<stack>`, and `extra` carries the record id, repo, stack, commit, device, outcome and error. For each of those events: read the stack with the deployments server's `environments` tool and its deploys with `environment_history` (the error, and the end of compose's output for a failed one), and read the containers' own logs on that computer with the devices tools (`run_command` there: `docker compose -p <stack> ps` and `docker compose -p <stack> logs --tail 200`). Then say what broke and what would fix it: a change in that repository at that commit (name the file and the cause), a secret or a grant the owner has to give, or something on the computer itself (a full disk, a port taken, a dependency down). Do not deploy, roll back, promote, restart or stop anything unless the user asks: a deploy that was rolled back already runs its last good version, and a fix goes through review before it ships.",
+        "description": "When a deploy of a stack your repositories declare fails or is rolled back, or the stack turns unhealthy, an agent reads its record and its logs and tells you what broke and what would fix it. It changes nothing by itself."
+      },
+      {
+        "id": "server-low-resources",
+        "title": "Low disk or memory on a server",
+        "icon": "server",
+        "trigger": {
+          "kind": "listener",
+          "provider": "deploys"
+        },
+        "guard": "printf '%s' \"$AUTOMATION_PAYLOAD\" | grep -Eq '\"type\":\"(host_low_disk|host_low_memory)\"'",
+        "note": "only when a server runs short",
+        "prompt": "A computer this sandbox deploys stacks to is running short of disk or memory. Each line of the event payload is one JSON event: `type` is `host_low_disk` or `host_low_memory` (any other line is another deploy event: leave it), and `content` and `extra` say which computer and how much is left. Tell the owner in two or three lines: which computer, what is short, and by how much. If the devices tools reach that computer, add what is taking it, read-only (`docker system df`, `docker stats --no-stream`, `df -h`). Never prune, delete, stop or restart anything: what to free is the owner's call.",
+        "description": "Tells you when a computer your managed stacks run on runs short of disk or memory, and what is taking it. It changes nothing."
       }
     ],
     "tools": {},

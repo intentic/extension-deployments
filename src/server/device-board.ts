@@ -171,10 +171,12 @@ export const deviceBoard = (deps: DeviceBoardDeps) => {
     const repoOf = async (device: string, stack: string): Promise<string | undefined> =>
         Object.entries(await deps.store.links(deviceConnection(device))).find(([, linked]) => linked === stack)?.[0];
 
-    const fix = async (device: string, stack: string, pick: AgentRunPick | undefined): Promise<{ conversationId: string }> => {
+    // `managed` names the repository when the stack is a managed environment (deploys-daemon.ts): its fix ships through
+    // the daemon's deploy, and its `.env` is the daemon's to render, never a hand edit.
+    const fix = async (device: string, stack: string, pick: AgentRunPick | undefined, managed?: string): Promise<{ conversationId: string }> => {
         const found = await findStack(device, stack);
         const [resource] = deviceResources(device, [found]);
-        const repo = await repoOf(device, stack);
+        const repo = managed ?? (await repoOf(device, stack));
         // Best-effort: the broken stack is often the one whose log can't be read; still worth starting the turn.
         const log = await deps.daemon.logs(device, stack, LOG_TAIL).catch(() => "");
         const tail = plainText(log).trim().slice(-FIX_LOG_BYTES);
@@ -182,10 +184,14 @@ export const deviceBoard = (deps: DeviceBoardDeps) => {
         const prompt = [
             `The Docker compose stack "${stack}" on the computer "${device}" is ${resource?.state ?? "unknown"}${resource?.status === undefined ? "" : ` (${resource.status})`}. Investigate and fix it.`,
             `It runs from ${found.workingDir ?? "a folder compose did not record"} on ${device}; ${files}. Reach ${device} with the devices tools: run_command there with \`docker compose -p ${stack} ps\`, \`logs\` and the like.`,
-            repo === undefined
-                ? `It was not deployed from this workspace, so a fix is made on ${device} itself (its files, its .env) or said plainly when it is outside your reach.`
-                : `It was deployed from the workspace repository "${repo}" (its committed HEAD). Find the cause there when it is a code or config problem, fix it and commit it, then redeploy with the deployments server's deploy_to_device tool (device "${device}", repo "${repo}", stack "${stack}"). Say plainly when the cause is outside the workspace (a missing variable in its .env, a full disk, an unreachable dependency) rather than inventing a code change.`,
-            `Never put a secret's value into the conversation: a variable it is missing goes into the .env beside its compose file on ${device}, written from the sandbox's stored secrets (a \`{{secret:NAME}}\` reference in the Bash tool, then \`devices copy\` to ${device}).`,
+            managed !== undefined
+                ? `It is a managed environment the workspace repository "${managed}" declares in .intentic/stacks.json. Read its deploys with the deployments server's environment_history tool (repo "${managed}", stack "${stack}"). Find the cause in that repository when it is a code or config problem, fix it and commit it, then redeploy with deploy_environment (repo "${managed}", stack "${stack}"). Say plainly when the cause is outside the workspace (a full disk, an unreachable dependency) rather than inventing a code change.`
+                : repo === undefined
+                  ? `It was not deployed from this workspace, so a fix is made on ${device} itself (its files, its .env) or said plainly when it is outside your reach.`
+                  : `It was deployed from the workspace repository "${repo}" (its committed HEAD). Find the cause there when it is a code or config problem, fix it and commit it, then redeploy with the deployments server's deploy_to_device tool (device "${device}", repo "${repo}", stack "${stack}"). Say plainly when the cause is outside the workspace (a missing variable in its .env, a full disk, an unreachable dependency) rather than inventing a code change.`,
+            managed !== undefined
+                ? `Never edit its .env on ${device}: the daemon renders it at each deploy from the secrets the owner granted the stack, and refuses to overwrite one changed by hand. A variable it lacks goes into the manifest's \`env\` (as \`{{secret:NAME}}\` for a secret), and a secret nobody stored is asked of the owner with \`secrets ask NAME --why "…"\`.`
+                : `Never put a secret's value into the conversation: a variable it is missing goes into the .env beside its compose file on ${device}, written from the sandbox's stored secrets (a \`{{secret:NAME}}\` reference in the Bash tool, then \`devices copy\` to ${device}).`,
             ...(tail === "" ? [] : [`--- stack log tail ---\n${tail}`]),
         ].join("\n\n");
         return deps.startAgent({ kind: "deploy-fix", name: stack, title: `Fix ${stack} on ${device}`, prompt, ...(pick === undefined ? {} : { pick }) });

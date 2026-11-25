@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { errorMessage } from "@intentic/base/errors";
-import { type DeployAction, type DeployOperation, type DeployRepoLink, type DeployResource, type DeployServer, deviceOf, isDeviceConnection } from "./contract";
+import {
+    type DeployAction,
+    type DeployOperation,
+    type DeployRepoLink,
+    type DeployResource,
+    type DeployServer,
+    deviceConnection,
+    deviceOf,
+    isDeviceConnection,
+} from "./contract";
+import type { DeployEnvironmentWire, StackRefWire } from "./deploysWire";
 import { host } from "./host.js";
 import {
     Await,
@@ -25,6 +35,8 @@ import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { deployBadge, markDeploymentsSeen } from "./attention";
 import { incidents, topTier } from "./incidents";
 import DeployDialog from "./DeployDialog.vue";
+import EnvironmentRow from "./EnvironmentRow.vue";
+import { environmentsOnBoard, environmentState, promotionTargets } from "./environments";
 import DeviceRepoRow from "./DeviceRepoRow.vue";
 import HostStackDialog from "./HostStackDialog.vue";
 import IncidentRow from "./IncidentRow.vue";
@@ -33,13 +45,15 @@ import RepoLinkRow from "./RepoLinkRow.vue";
 import ResourceRow from "./ResourceRow.vue";
 import ServerMeta from "./ServerMeta.vue";
 import { useDeploymentBoard } from "./useDeploymentBoard";
+import { useEnvironments } from "./useEnvironments";
 
 // Is what's running healthy, and what changed: a different question from Live status's drift-against-declared-state;
 // gated on a Komodo connection or a paired computer rather than a repo. Reading order is worst-first:
 // 1. what needs you, as its own group headed in its state's ink
 // 2. one tally on the title row
-// 3. resources grouped by host
-// 4. the repo → stack links (setup, not operations); on a computer's board, the repos to deploy there
+// 3. on a computer's board, the managed environments it runs (the stacks repositories declare in .intentic/stacks.json)
+// 4. resources grouped by host
+// 5. the repo → stack links (setup, not operations); on a computer's board, the repos to deploy there
 
 // Every connected Komodo and every paired computer (`device:<id>`), handed over by detect(); one view switches between
 // them rather than one tile each.
@@ -86,6 +100,34 @@ const { loaded, board, act, link, fix, hostStack, deploy, environment, refetch }
 const isDevice = computed(() => isDeviceConnection(capability.value));
 const deviceName = computed(() => deviceOf(capability.value));
 
+// A link that names an environment (`?repo=&stack=`, what a forge's deployment links back to): the board switches to the
+// computer it runs on, once, and opens its row.
+const linked = computed<StackRefWire | undefined>(() => {
+    const query = api.route.query();
+    const repo = query[`repo`];
+    const stack = query[`stack`];
+    return repo === undefined || stack === undefined || repo === `` || stack === `` ? undefined : { repo, stack };
+});
+const followed = ref(false);
+// Read on a computer's board, and once for a link that has to find its computer first.
+const environments = useEnvironments(() => isDevice.value || (linked.value !== undefined && !followed.value));
+const environmentsRead = computed(() => environments.overview.value);
+watch(
+    [environmentsRead, linked],
+    ([overview, target]) => {
+        if (followed.value || overview === undefined || target === undefined) {
+            return;
+        }
+        followed.value = true;
+        const found = overview.environments.find((environment) => environment.repo === target.repo && environment.stack === target.stack);
+        const connection = found?.deviceId === undefined ? undefined : deviceConnection(found.deviceId);
+        if (connection !== undefined && connections.value.includes(connection) && connection !== capability.value) {
+            choose(connection);
+        }
+    },
+    { immediate: true },
+);
+
 // Opening a connection counts as reading it; only when it opens, or a background poll would swallow a new breakage.
 watch(capability, (name) => void markDeploymentsSeen(name), { immediate: true });
 
@@ -98,13 +140,52 @@ const openTone = computed(() => (worst.value === `danger` || worst.value === `wa
 // The fix is the step asked of the reader on a lone breakage; repeated down a list of them it is quiet.
 const fixTier = computed(() => (worst.value === `danger` && open.value.length === 1 ? `accent` : `quiet`));
 
-const resources = computed(() => board.value?.resources ?? []);
+const allResources = computed(() => board.value?.resources ?? []);
 const servers = computed(() => board.value?.servers ?? []);
+const allRepos = computed(() => board.value?.repos ?? []);
+// A computer's board with the workspace's managed environments joined in (environments.ts): those this computer runs,
+// in the open project; its raw stack rows less the ones an environment manages; its repo rows less the repositories that
+// declare stacks, which deploy as environments. Nothing changes on a Komodo board, or where no repository declares any.
+const onBoard = computed(() => {
+    const overview = environmentsRead.value;
+    if (!isDevice.value) {
+        return undefined;
+    }
+    return environmentsOnBoard({
+        device: deviceName.value,
+        resources: allResources.value,
+        repos: allRepos.value,
+        environments: overview?.available === true ? overview.environments : [],
+        manifestErrors: overview?.available === true ? overview.manifestErrors : [],
+        inProject: (repo) => api.workspace.inProject(repo),
+    });
+});
+const resources = computed(() => onBoard.value?.resources ?? allResources.value);
+const boardEnvironments = computed<readonly DeployEnvironmentWire[]>(() => onBoard.value?.environments ?? []);
+const manifestErrors = computed(() => onBoard.value?.manifestErrors ?? []);
+const allEnvironments = computed<readonly DeployEnvironmentWire[]>(() => (environmentsRead.value?.available === true ? environmentsRead.value.environments : []));
+// A sandbox from before managed environments, in a workspace whose repositories declare stacks all the same: worth one
+// line saying to update it. With no repository declaring any, it says nothing.
+const predating = computed<readonly string[]>(() => {
+    const overview = environmentsRead.value;
+    return isDevice.value && overview?.available === false ? overview.declaring.filter((repo) => api.workspace.inProject(repo)) : [];
+});
+const predatingNotice = computed<NoticeModel | undefined>(() => {
+    const declaring = predating.value;
+    if (declaring.length === 0) {
+        return undefined;
+    }
+    return {
+        tone: `warning`,
+        title: `This sandbox predates managed environments: update it`,
+        detail: `${declaring.join(`, `)} ${declaring.length === 1 ? `declares` : `declare`} stacks in .intentic/stacks.json, which this sandbox deploys once it is updated.`,
+    };
+});
 // The open project's repositories only (api.workspace.inProject): the board comes from the Komodo routes, not from
 // repos(), so the view narrows its repo rows itself and says on its chip how many it put out of sight.
-const allRepos = computed(() => board.value?.repos ?? []);
-const repos = computed(() => allRepos.value.filter((entry) => api.workspace.inProject(entry.repo)));
-const projectHidden = computed(() => allRepos.value.length - repos.value.length);
+const shownRepos = computed(() => onBoard.value?.repos ?? allRepos.value);
+const repos = computed(() => shownRepos.value.filter((entry) => api.workspace.inProject(entry.repo)));
+const projectHidden = computed(() => shownRepos.value.length - repos.value.length + (onBoard.value?.hidden ?? 0));
 const stackNames = computed(() => resources.value.filter((resource) => resource.kind === `stack`).map((resource) => resource.name));
 
 // "Run a sandbox from a host folder": offered once Komodo has a server to put it on.
@@ -118,7 +199,8 @@ const stacksUrl = computed(() => (board.value === undefined ? undefined : `${boa
 // absent might just mean an older daemon, so that gets its own case rather than assuming emptiness. The two that are a
 // key's problem are a notice with what to change; a Komodo that really is empty is the list's own empty state.
 const emptyReason = computed<{ readonly notice?: NoticeModel; readonly empty?: string } | undefined>(() => {
-    if (resources.value.length > 0 || board.value === undefined || !board.value.reachable) {
+    // Raw rows before an environment took their place: a computer whose stacks are all managed is not an empty one.
+    if (allResources.value.length > 0 || boardEnvironments.value.length > 0 || board.value === undefined || !board.value.reachable) {
         return undefined;
     }
     if (isDevice.value) {
@@ -169,6 +251,17 @@ const counts = computed<TallyItem[]>(() => {
         }
         if (resource.updateAvailable) {
             tally.updates++;
+        }
+    }
+    // A managed environment is a stack on the computer too; its row replaced the raw one, so it counts here instead.
+    for (const environment of boardEnvironments.value) {
+        const state = environmentState(environment);
+        if (state === `running`) {
+            tally.running++;
+        } else if (state === `unhealthy`) {
+            tally.unhealthy++;
+        } else if (state === `stopped`) {
+            tally.stopped++;
         }
     }
     return [
@@ -224,6 +317,17 @@ const strips = computed<NoticeModel[]>(() => {
             title: `Can't reach Komodo at ${board.value.komodoUrl}`,
             detail: board.value.unreachableReason ?? `Nothing here is current. This is not a report that your deployments are down, only that we couldn't ask.`,
             action: { label: `Try again`, run: () => void refetch() },
+        });
+    }
+    // The environments come from the daemon rather than the computer: a failure to read them is its own line, and the
+    // board's own stacks still show.
+    const environmentsLoaded = environments.loaded.value;
+    if (isDevice.value && environmentsLoaded.state === `failed`) {
+        notices.push({
+            tone: `warning`,
+            title: `Can't read the managed environments`,
+            detail: environmentsLoaded.error,
+            action: { label: `Try again`, run: () => void environments.refetch() },
         });
     }
     return notices;
@@ -289,9 +393,38 @@ const askAgent = async (resource: DeployResource, key: string, pick?: AgentRunCh
     }
 };
 
-// Resolves the alert's named resource, when it's on the board, for the incident's fix button.
+// Resolves the alert's named resource, when it's on the board, for the incident's fix button. Every stack the computer
+// lists, a managed one included, though its row is the environment's.
 const resourceFor = (name: string | undefined): DeployResource | undefined =>
-    name === undefined ? undefined : resources.value.find((resource) => resource.name === name);
+    name === undefined ? undefined : allResources.value.find((resource) => resource.name === name);
+
+// A managed environment's presses, keyed by repo and stack: each goes to the daemon as the person pressing
+// (useEnvironments.ts), and its refusal lands at its row like any other.
+const environmentKey = (ref: StackRefWire): string => `environment:${ref.repo}:${ref.stack}`;
+const focusedKey = computed(() => (linked.value === undefined ? undefined : environmentKey(linked.value)));
+// Granting a stack secrets is the owner's, or Full access's: anyone else is shown what waits on them.
+const canGrant = computed(() => {
+    const role = api.sandbox.role();
+    return role === `owner` || role === `maintainer`;
+});
+const pressEnvironment = async (environment: DeployEnvironmentWire, press: () => Promise<unknown>): Promise<void> => {
+    const key = environmentKey(environment);
+    busyId.value = key;
+    clearFailure(key);
+    try {
+        await press();
+    } catch (cause) {
+        recordFailure(key, cause);
+    } finally {
+        busyId.value = undefined;
+    }
+};
+const deployEnvironment = (environment: DeployEnvironmentWire) => pressEnvironment(environment, () => environments.deploy.mutateAsync(environment));
+const rollbackEnvironment = (environment: DeployEnvironmentWire, to: string | undefined) =>
+    pressEnvironment(environment, () => environments.rollback.mutateAsync({ repo: environment.repo, stack: environment.stack, to }));
+const promoteEnvironment = (environment: DeployEnvironmentWire, to: string) =>
+    pressEnvironment(environment, () => environments.promote.mutateAsync({ repo: environment.repo, from: environment.stack, to }));
+const grantEnvironment = (environment: DeployEnvironmentWire) => pressEnvironment(environment, () => environments.grant.mutateAsync(environment));
 
 // The repo the deploy dialog is open for, on a device board.
 const deploying = ref<DeployRepoLink | undefined>(undefined);
@@ -344,7 +477,7 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
             <!-- Not drawn from guesses while the first read is in flight: "0 running" would be a claim the list is about to
                  contradict. Absent for a board that never answered, which its body says. -->
             <Await v-if="loaded.state !== `failed`" :of="loaded" imprint="deployments.tally">
-                <StatusTally v-if="board?.reachable && resources.length > 0" :items="counts" class="ml-2" />
+                <StatusTally v-if="(board?.reachable && resources.length > 0) || boardEnvironments.length > 0" :items="counts" class="ml-2" />
                 <template #fallback><StatusTally :skeleton="2" class="ml-2" /></template>
             </Await>
         </template>
@@ -395,10 +528,37 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                         />
                     </RowGroup>
 
+                    <!-- 3. The stacks the daemon manages on this computer, before its raw ones: what a repository declares. -->
+                    <Notice v-if="predatingNotice" :of="predatingNotice" />
+                    <RowGroup v-if="boardEnvironments.length > 0 || manifestErrors.length > 0" label="Environments">
+                        <Row
+                            v-for="manifestError in manifestErrors"
+                            :key="`manifest:${manifestError.repo}`"
+                            icon="exclamation-triangle"
+                            tone="warning"
+                            :title="`${manifestError.repo}: .intentic/stacks.json does not parse`"
+                            :description="manifestError.error"
+                        />
+                        <EnvironmentRow
+                            v-for="environment in boardEnvironments"
+                            :key="environmentKey(environment)"
+                            :environment="environment"
+                            :siblings="promotionTargets(environment, allEnvironments)"
+                            :busy="busyId === environmentKey(environment)"
+                            :error="failures.get(environmentKey(environment))"
+                            :can-grant="canGrant"
+                            :focused="focusedKey === environmentKey(environment)"
+                            @deploy="deployEnvironment"
+                            @rollback="rollbackEnvironment"
+                            @promote="promoteEnvironment"
+                            @grant="grantEnvironment"
+                        />
+                    </RowGroup>
+
                     <Notice v-if="emptyReason?.notice" :of="emptyReason.notice" />
                     <p v-else-if="emptyReason?.empty" :class="ui.emptyState(`py-6`)">{{ emptyReason.empty }}</p>
 
-                    <!-- 3. Grouped by host, each headed by its name and its figures. -->
+                    <!-- 4. Grouped by host, each headed by its name and its figures. -->
                     <RowGroup v-for="group in carrying" :key="group.label" :label="group.label">
                         <template v-if="group.server" #info>
                             <ServerMeta :server="group.server" />
@@ -433,7 +593,7 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                         </Row>
                     </RowGroup>
 
-                    <!-- 4. Setup, not operations; still drawn with no resources, since that's when linking matters most. -->
+                    <!-- 5. Setup, not operations; still drawn with no resources, since that's when linking matters most. -->
                     <RowGroup v-if="isDevice && repos.length > 0" label="Repositories">
                         <DeviceRepoRow
                             v-for="repoLink in repos"

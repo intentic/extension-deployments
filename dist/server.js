@@ -21363,7 +21363,7 @@ var fold = (describe, shape) => ({
 	convert: shape.convert
 });
 var dropAll = (keys) => keys.map((key) => drop(key));
-var at = (path, inner) => ({
+var at$1 = (path, inner) => ({
 	kind: "at",
 	describe: `${inner.describe} under ${path}`,
 	path,
@@ -21442,8 +21442,8 @@ fold("folds keepWarm, keepWarmHours, keepWarmMinTokens and keepWarmReserve into 
 		auto: true
 	}),
 	retype("rules", holdsInertRule, (rules) => rules.filter((rule) => !isInertRule(rule)), "drops rules at the retired turn.ending moment (and the verify-ui-edits built-in), which run nothing"),
-	at("offload", drop("landCheck")),
-	at("modelRoles", drop("pre-push-fix"))
+	at$1("offload", drop("landCheck")),
+	at$1("modelRoles", drop("pre-push-fix"))
 ];
 //#endregion
 //#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/state/arrival.js
@@ -21632,6 +21632,134 @@ contractRoutes({
 	workflows: workflowsContract
 }).map((route) => route.name);
 //#endregion
+//#region src/deploysWire.ts
+var DeployOutcomeWireSchema = _enum([
+	"queued",
+	"running",
+	"succeeded",
+	"failed",
+	"rolled-back",
+	"superseded",
+	"refused",
+	"unknown"
+]).catch("unknown");
+var isLiveOutcome = (outcome) => outcome === "queued" || outcome === "running";
+var StackHealthWireSchema = _enum([
+	"running",
+	"unhealthy",
+	"restarting",
+	"stopped",
+	"missing",
+	"unreachable",
+	"unknown"
+]).catch("unknown");
+var DeployTriggerWireSchema = looseObject({
+	ci: looseObject({
+		branch: string(),
+		workflow: string().optional(),
+		job: string().optional()
+	}).optional(),
+	registry: looseObject({ every: string() }).optional(),
+	after: looseObject({ stack: string() }).optional()
+});
+var DeployRecordWireSchema = looseObject({
+	id: string(),
+	repo: string(),
+	stack: string(),
+	device: string(),
+	commit: string(),
+	ref: string().optional(),
+	trigger: looseObject({
+		kind: string(),
+		detail: string().optional(),
+		url: string().optional()
+	}),
+	outcome: DeployOutcomeWireSchema,
+	queuedAt: string(),
+	startedAt: string().optional(),
+	endedAt: string().optional(),
+	digests: record(string(), string()).optional(),
+	secretNames: array(string()).default([]),
+	healthySeconds: number$1().optional(),
+	rolledBackTo: string().optional(),
+	error: string().optional(),
+	outputTail: string().optional(),
+	forgeUrl: string().optional()
+});
+var DeployEnvironmentWireSchema = looseObject({
+	repo: string(),
+	stack: string(),
+	device: string(),
+	deviceId: string().optional(),
+	mode: string().default("images"),
+	description: string().optional(),
+	triggers: array(DeployTriggerWireSchema).default([]),
+	secrets: array(string()).default([]),
+	ungranted: array(string()).default([]),
+	secretsChanged: array(string()).default([]),
+	current: DeployRecordWireSchema.optional(),
+	active: DeployRecordWireSchema.optional(),
+	latest: DeployRecordWireSchema.optional(),
+	state: StackHealthWireSchema,
+	stateSince: string().optional(),
+	ownedElsewhere: boolean().default(false),
+	problems: array(string()).default([])
+});
+var ManifestErrorWireSchema = looseObject({
+	repo: string(),
+	error: string()
+});
+var DeployEnvironmentsWireSchema = looseObject({
+	environments: array(DeployEnvironmentWireSchema),
+	manifestErrors: array(ManifestErrorWireSchema).default([])
+});
+var DeployHistoryWireSchema = looseObject({ records: array(DeployRecordWireSchema) });
+var DeployAnswerWireSchema = looseObject({ record: DeployRecordWireSchema });
+looseObject({ grants: array(looseObject({
+	repo: string(),
+	stack: string()
+})) });
+var CommitWireSchema = string().regex(/^[0-9a-f]{7,64}$/u, "a commit: 7 to 64 lowercase hex characters");
+var DEPLOYS_PATHS = {
+	environments: "/deploys/environments",
+	history: "/deploys/history",
+	deploy: "/deploys/deploy",
+	rollback: "/deploys/rollback",
+	promote: "/deploys/promote",
+	grant: "/deploys/grants/grant"
+};
+var historyPath = (ref, limit) => {
+	const query = new URLSearchParams({
+		repo: ref.repo,
+		stack: ref.stack,
+		...limit === void 0 ? {} : { limit: String(limit) }
+	});
+	return `${DEPLOYS_PATHS.history}?${query.toString()}`;
+};
+var DEPLOYS_PREDATED = "This sandbox predates managed environments: update it, and the stacks your repositories declare in .intentic/stacks.json appear here.";
+var DeploysUnavailableError = class extends Error {
+	constructor() {
+		super(DEPLOYS_PREDATED);
+		this.name = "DeploysUnavailableError";
+	}
+};
+var deploysRefusal = (status, body) => {
+	let message;
+	try {
+		const parsed = JSON.parse(body);
+		message = typeof parsed.message === "string" && parsed.message !== "" ? parsed.message : void 0;
+	} catch {}
+	if (status === 404 && message === void 0) return new DeploysUnavailableError();
+	if (message !== void 0) return new Error(message);
+	const line = body.trim().split("\n")[0] ?? "";
+	return new Error(line === "" ? `the sandbox answered ${status}` : line.slice(0, 500));
+};
+var readDeploys = async (response, schema) => {
+	const text = await response.text();
+	if (!response.ok) throw deploysRefusal(response.status, text);
+	return schema.parse(JSON.parse(text));
+};
+//#endregion
 //#region src/contract.ts
 var DeployStateSchema = _enum([
 	"running",
@@ -21797,6 +21925,18 @@ var DeployHostStackResponseSchema = object({
 	stack: string(),
 	created: boolean()
 });
+var EnvironmentsOverviewSchema = object({
+	available: boolean(),
+	environments: array(DeployEnvironmentWireSchema).default([]),
+	manifestErrors: array(ManifestErrorWireSchema).default([]),
+	declaring: array(string()).default([])
+});
+var EnvironmentHistoryParamSchema = object({
+	repo: string().min(1),
+	stack: string().min(1),
+	limit: number().int().positive().max(200).optional()
+});
+var EnvironmentHistoryResponseSchema = object({ records: array(DeployRecordWireSchema) });
 //#endregion
 //#region src/server/agent-turn.ts
 var TITLE_MAX = 80;
@@ -21887,9 +22027,20 @@ var deviceContract = {
 		path: "/device/{device}/environment"
 	}).input(DeviceEnvironmentParamSchema).output(DeployFixResponseSchema)
 };
+var environmentsContract = {
+	environments: oc$1.route({
+		method: "GET",
+		path: "/environments"
+	}).output(EnvironmentsOverviewSchema),
+	environmentHistory: oc$1.route({
+		method: "GET",
+		path: "/environments/history"
+	}).input(EnvironmentHistoryParamSchema).output(EnvironmentHistoryResponseSchema)
+};
 var deploymentsContract = {
 	...komodoContract,
-	...deviceContract
+	...deviceContract,
+	...environmentsContract
 };
 //#endregion
 //#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/plain-text.js
@@ -22184,17 +22335,17 @@ var deviceBoard = (deps) => {
 		return { ok: true };
 	};
 	const repoOf = async (device, stack) => Object.entries(await deps.store.links(deviceConnection(device))).find(([, linked]) => linked === stack)?.[0];
-	const fix = async (device, stack, pick) => {
+	const fix = async (device, stack, pick, managed) => {
 		const found = await findStack(device, stack);
 		const [resource] = deviceResources(device, [found]);
-		const repo = await repoOf(device, stack);
+		const repo = managed ?? await repoOf(device, stack);
 		const tail = plainText(await deps.daemon.logs(device, stack, LOG_TAIL$1).catch(() => "")).trim().slice(-24e3);
 		const files = found.configFiles.length === 0 ? "compose no longer knows its files" : `its compose files are ${found.configFiles.join(", ")}`;
 		const prompt = [
 			`The Docker compose stack "${stack}" on the computer "${device}" is ${resource?.state ?? "unknown"}${resource?.status === void 0 ? "" : ` (${resource.status})`}. Investigate and fix it.`,
 			`It runs from ${found.workingDir ?? "a folder compose did not record"} on ${device}; ${files}. Reach ${device} with the devices tools: run_command there with \`docker compose -p ${stack} ps\`, \`logs\` and the like.`,
-			repo === void 0 ? `It was not deployed from this workspace, so a fix is made on ${device} itself (its files, its .env) or said plainly when it is outside your reach.` : `It was deployed from the workspace repository "${repo}" (its committed HEAD). Find the cause there when it is a code or config problem, fix it and commit it, then redeploy with the deployments server's deploy_to_device tool (device "${device}", repo "${repo}", stack "${stack}"). Say plainly when the cause is outside the workspace (a missing variable in its .env, a full disk, an unreachable dependency) rather than inventing a code change.`,
-			`Never put a secret's value into the conversation: a variable it is missing goes into the .env beside its compose file on ${device}, written from the sandbox's stored secrets (a \`{{secret:NAME}}\` reference in the Bash tool, then \`devices copy\` to ${device}).`,
+			managed !== void 0 ? `It is a managed environment the workspace repository "${managed}" declares in .intentic/stacks.json. Read its deploys with the deployments server's environment_history tool (repo "${managed}", stack "${stack}"). Find the cause in that repository when it is a code or config problem, fix it and commit it, then redeploy with deploy_environment (repo "${managed}", stack "${stack}"). Say plainly when the cause is outside the workspace (a full disk, an unreachable dependency) rather than inventing a code change.` : repo === void 0 ? `It was not deployed from this workspace, so a fix is made on ${device} itself (its files, its .env) or said plainly when it is outside your reach.` : `It was deployed from the workspace repository "${repo}" (its committed HEAD). Find the cause there when it is a code or config problem, fix it and commit it, then redeploy with the deployments server's deploy_to_device tool (device "${device}", repo "${repo}", stack "${stack}"). Say plainly when the cause is outside the workspace (a missing variable in its .env, a full disk, an unreachable dependency) rather than inventing a code change.`,
+			managed !== void 0 ? `Never edit its .env on ${device}: the daemon renders it at each deploy from the secrets the owner granted the stack, and refuses to overwrite one changed by hand. A variable it lacks goes into the manifest's \`env\` (as \`{{secret:NAME}}\` for a secret), and a secret nobody stored is asked of the owner with \`secrets ask NAME --why "…"\`.` : `Never put a secret's value into the conversation: a variable it is missing goes into the .env beside its compose file on ${device}, written from the sandbox's stored secrets (a \`{{secret:NAME}}\` reference in the Bash tool, then \`devices copy\` to ${device}).`,
 			...tail === "" ? [] : [`--- stack log tail ---\n${tail}`]
 		].join("\n\n");
 		return deps.startAgent({
@@ -22236,7 +22387,7 @@ var deviceBoard = (deps) => {
 };
 //#endregion
 //#region src/server/device-daemon.ts
-var READ_DEADLINE_MS = 6e4;
+var READ_DEADLINE_MS$1 = 6e4;
 var OP_DEADLINE_MS = 6e5;
 var DEPLOY_DEADLINE_MS = 12e5;
 var OpAnswerSchema = object({ output: string() });
@@ -22271,9 +22422,9 @@ var daemonDevices = (api) => {
 	};
 	const base = (device) => `/system/devices/${segment(device)}/stacks`;
 	return {
-		stacks: (device) => call(base(device), DeviceStacksSchema, READ_DEADLINE_MS),
+		stacks: (device) => call(base(device), DeviceStacksSchema, READ_DEADLINE_MS$1),
 		op: async (device, stack, op) => (await call(`${base(device)}/${segment(stack)}/ops/${op}`, OpAnswerSchema, OP_DEADLINE_MS, {})).output,
-		logs: async (device, stack, tail) => (await call(`${base(device)}/${segment(stack)}/logs?tail=${tail}`, LogsAnswerSchema, READ_DEADLINE_MS)).text,
+		logs: async (device, stack, tail) => (await call(`${base(device)}/${segment(stack)}/logs?tail=${tail}`, LogsAnswerSchema, READ_DEADLINE_MS$1)).text,
 		deploy: (device, stack, repo) => call(`${base(device)}/${segment(stack)}/deploy`, DeployAnswerSchema, DEPLOY_DEADLINE_MS, { repo })
 	};
 };
@@ -22322,6 +22473,146 @@ var deviceOperations = (now = Date.now) => {
 			};
 		}
 	};
+};
+//#endregion
+//#region src/environments.ts
+var triggerWords = (trigger) => {
+	if (trigger.ci !== void 0) {
+		const { branch, workflow, job } = trigger.ci;
+		if (job !== void 0 && workflow !== void 0) return `on CI job ${job} of ${workflow} passing on ${branch}`;
+		if (job !== void 0) return `on CI job ${job} passing on ${branch}`;
+		return workflow === void 0 ? `on CI passing on ${branch}` : `on CI workflow ${workflow} passing on ${branch}`;
+	}
+	if (trigger.registry !== void 0) return `pulls newer images every ${trigger.registry.every}`;
+	if (trigger.after !== void 0) return `after ${trigger.after.stack}`;
+	return `on a trigger this version does not describe`;
+};
+var triggersSummary = (triggers) => triggers.length === 0 ? `deploys when asked` : triggers.map(triggerWords).join(`, `);
+var TRIGGER_KIND_WORDS = {
+	manual: `by hand`,
+	ci: `CI`,
+	registry: `newer images`,
+	after: `after another stack`,
+	rollback: `rollback`,
+	promote: `promotion`,
+	"secret-change": `a secret changed`
+};
+var recordOrigin = (record) => {
+	const kind = TRIGGER_KIND_WORDS[record.trigger.kind] ?? record.trigger.kind;
+	return record.trigger.detail === void 0 || record.trigger.detail === `` ? kind : `${kind} · ${record.trigger.detail}`;
+};
+var OUTCOME_WORDS = {
+	queued: `queued`,
+	running: `deploying`,
+	succeeded: `succeeded`,
+	failed: `failed`,
+	"rolled-back": `rolled back`,
+	superseded: `superseded`,
+	refused: `refused`,
+	unknown: `unknown`
+};
+var at = (iso) => {
+	if (iso === void 0) return;
+	const parsed = Date.parse(iso);
+	return Number.isNaN(parsed) ? void 0 : parsed;
+};
+var recordSeconds = (record) => {
+	const start = at(record.startedAt);
+	const end = at(record.endedAt);
+	return start === void 0 || end === void 0 || end < start ? void 0 : Math.round((end - start) / 1e3);
+};
+var shortCommit = (commit) => commit.slice(0, 8);
+var settledRecord = (id, records) => {
+	const record = records.find((entry) => entry.id === id);
+	if (record === void 0 || isLiveOutcome(record.outcome)) return;
+	if (record.outcome === `failed`) {
+		const since = at(record.queuedAt) ?? 0;
+		if (records.some((entry) => entry.trigger.kind === `rollback` && isLiveOutcome(entry.outcome) && (at(entry.queuedAt) ?? 0) >= since)) return;
+	}
+	return record;
+};
+var HEALTH_WORDS = {
+	running: `running`,
+	unhealthy: `unhealthy`,
+	restarting: `restarting`,
+	stopped: `stopped`,
+	missing: `not on the computer`,
+	unreachable: `computer unreachable`,
+	unknown: `not read yet`
+};
+//#endregion
+//#region src/server/deploys-daemon.ts
+var READ_DEADLINE_MS = 6e4;
+var ENQUEUE_DEADLINE_MS = 12e4;
+var deadline = (ms, signal) => signal === void 0 ? AbortSignal.timeout(ms) : AbortSignal.any([AbortSignal.timeout(ms), signal]);
+var defined = (body) => Object.fromEntries(Object.entries(body).filter(([, value]) => value !== void 0));
+var daemonDeploys = (api) => {
+	const call = async (path, schema, ms, body, signal) => readDeploys(await api.daemon.request(path, {
+		method: body === void 0 ? "GET" : "POST",
+		headers: { "content-type": "application/json" },
+		...body === void 0 ? {} : { body: JSON.stringify(defined(body)) },
+		signal: deadline(ms, signal)
+	}), schema);
+	return {
+		environments: (signal) => call(DEPLOYS_PATHS.environments, DeployEnvironmentsWireSchema, READ_DEADLINE_MS, void 0, signal),
+		history: async (ref, limit, signal) => (await call(historyPath(ref, limit), DeployHistoryWireSchema, READ_DEADLINE_MS, void 0, signal)).records,
+		deploy: async (request) => (await call(DEPLOYS_PATHS.deploy, DeployAnswerWireSchema, ENQUEUE_DEADLINE_MS, {
+			repo: request.repo,
+			stack: request.stack,
+			commit: request.commit,
+			reason: request.reason?.slice(0, 300)
+		})).record,
+		rollback: async (request) => (await call(DEPLOYS_PATHS.rollback, DeployAnswerWireSchema, ENQUEUE_DEADLINE_MS, {
+			repo: request.repo,
+			stack: request.stack,
+			to: request.to
+		})).record,
+		promote: async (request) => (await call(DEPLOYS_PATHS.promote, DeployAnswerWireSchema, ENQUEUE_DEADLINE_MS, {
+			repo: request.repo,
+			from: request.from,
+			to: request.to
+		})).record
+	};
+};
+var pause = (ms, signal) => new Promise((resolve) => {
+	if (signal?.aborted === true) {
+		resolve();
+		return;
+	}
+	const done = () => {
+		clearTimeout(timer);
+		signal?.removeEventListener("abort", done);
+		resolve();
+	};
+	const timer = setTimeout(done, ms);
+	signal?.addEventListener("abort", done, { once: true });
+});
+var awaitRecord = async (deploys, queued, options) => {
+	const now = options.now ?? Date.now;
+	const sleep = options.sleep ?? pause;
+	const until = now() + options.deadlineMs;
+	let last = queued;
+	while (options.signal?.aborted !== true && now() < until) {
+		await sleep(Math.min(options.pollMs, Math.max(until - now(), 0)), options.signal);
+		const records = await deploys.history({
+			repo: queued.repo,
+			stack: queued.stack
+		}, 20, options.signal).catch(() => void 0);
+		if (records === void 0) continue;
+		last = records.find((record) => record.id === queued.id) ?? last;
+		const ended = settledRecord(queued.id, records);
+		if (ended !== void 0) return {
+			record: ended,
+			settled: true
+		};
+	}
+	return {
+		record: last,
+		settled: false
+	};
+};
+var declaringRepos = async (root, dirs, read) => {
+	return (await Promise.all(dirs.map(async (dir) => await read(join(dir, ".intentic", "stacks.json")) === void 0 ? void 0 : relative(root, dir)))).filter((repo) => repo !== void 0);
 };
 //#endregion
 //#region src/server/discover.ts
@@ -22596,6 +22887,16 @@ var deployAlert = (raw, index) => {
 };
 var deployAlerts = (raw) => raw.map((alert, index) => deployAlert(alert, index)).toSorted((a, b) => b.ts - a.ts);
 //#endregion
+//#region src/server/state-file.ts
+var readStateFile = async (path, legacy) => {
+	try {
+		return await readFile(path, "utf8");
+	} catch (error) {
+		if (legacy === void 0 || error.code !== "ENOENT") return;
+	}
+	return readFile(legacy, "utf8").catch(() => void 0);
+};
+//#endregion
 //#region src/server/komodo-store.ts
 var KomodoStateSchema = object({
 	seenAt: record(string(), number$1()),
@@ -22605,11 +22906,13 @@ var EMPTY = {
 	seenAt: {},
 	links: {}
 };
-var komodoStorePath = (workspaceRoot) => join(workspaceRoot, extensionRuntimeDir("deployments"), "komodo.json");
-var fileKomodoStore = (path) => {
+var komodoStorePath = (stateDir) => join(stateDir, "komodo.json");
+var legacyKomodoStorePath = (workspaceRoot) => join(workspaceRoot, extensionRuntimeDir("deployments"), "komodo.json");
+var fileKomodoStore = (path, legacy) => {
 	const read = async () => {
 		try {
-			return KomodoStateSchema.safeParse(JSON.parse(await readFile(path, "utf8"))).data ?? EMPTY;
+			const text = await readStateFile(path, legacy);
+			return text === void 0 ? EMPTY : KomodoStateSchema.safeParse(JSON.parse(text)).data ?? EMPTY;
 		} catch {
 			return EMPTY;
 		}
@@ -22658,11 +22961,13 @@ var MemorySchema = object({
 	alerts: array(DeployAlertSchema)
 });
 var NativeStateSchema = object({ memory: record(string(), MemorySchema) });
-var nativeStorePath = (workspaceRoot) => join(workspaceRoot, extensionRuntimeDir("deployments"), "native.json");
-var fileNativeStore = (path) => {
+var nativeStorePath = (stateDir) => join(stateDir, "native.json");
+var legacyNativeStorePath = (workspaceRoot) => join(workspaceRoot, extensionRuntimeDir("deployments"), "native.json");
+var fileNativeStore = (path, legacy) => {
 	const read = async () => {
 		try {
-			return NativeStateSchema.safeParse(JSON.parse(await readFile(path, "utf8"))).data ?? { memory: {} };
+			const text = await readStateFile(path, legacy);
+			return text === void 0 ? { memory: {} } : NativeStateSchema.safeParse(JSON.parse(text)).data ?? { memory: {} };
 		} catch {
 			return { memory: {} };
 		}
@@ -22691,6 +22996,8 @@ var fileNativeStore = (path) => {
 };
 //#endregion
 //#region src/server/tools.ts
+var WAIT_DEADLINE_MS = 54e4;
+var WAIT_POLL_MS = 3e3;
 var text = (body, isError = false) => ({
 	content: [{
 		type: "text",
@@ -22702,10 +23009,281 @@ var stringArg = (args, key) => {
 	const value = args[key];
 	return typeof value === "string" && value.trim() !== "" ? value.trim() : void 0;
 };
-var deploymentTools = (deps) => [
+var waitArg = (args) => args["wait"] !== false;
+var WAIT_PROPERTY = {
+	type: "boolean",
+	description: "Wait for it to end (up to about nine minutes) and answer how it went. Default true. False answers once it is queued."
+};
+var askedBy = (reason, context) => {
+	const turn = context?.conversationId === void 0 ? "by the agent" : `by the agent in conversation ${context.conversationId}`;
+	return reason === void 0 ? turn : `${reason} (${turn})`;
+};
+var what = (record) => `${record.repo} ${record.stack} at ${shortCommit(record.commit)} on ${record.device}`;
+var tailOf = (record) => record.outputTail === void 0 || record.outputTail.trim() === "" ? "" : `\n\n--- output tail ---\n${record.outputTail.slice(-4e3)}`;
+var recordAnswer = (record, settled, waited) => {
+	const id = `record ${record.id}`;
+	if (!waited) return text(`Queued: ${what(record)} (${id}). It runs on its own; environment_history shows how it ends.`);
+	if (!settled) return text(`Still ${OUTCOME_WORDS[record.outcome]}: ${what(record)} (${id}). It carries on without this call; read environment_history for how it ends.`);
+	switch (record.outcome) {
+		case "succeeded": {
+			const healthy = record.healthySeconds === void 0 ? "" : `, healthy after ${Math.round(record.healthySeconds)}s`;
+			const took = recordSeconds(record);
+			return text(`Deployed ${what(record)} (${id})${healthy}${took === void 0 ? "" : `; it took ${took}s`}.`);
+		}
+		case "rolled-back": return text(`The deploy of ${what(record)} failed and the stack was put back on ${record.rolledBackTo ?? "its previous deploy"} (${id}): ${record.error ?? "no reason given"}${tailOf(record)}`, true);
+		case "refused": return text(`The deploy of ${what(record)} was refused (${id}): ${record.error ?? "no reason given"}`, true);
+		case "superseded": return text(`The deploy of ${what(record)} never ran: ${record.error ?? "a newer one replaced it while it waited"} (${id}).`);
+		default: return text(`The deploy of ${what(record)} ${OUTCOME_WORDS[record.outcome]} (${id}): ${record.error ?? "no reason given"}${tailOf(record)}`, true);
+	}
+};
+var environmentFacts = (environment) => ({
+	repo: environment.repo,
+	stack: environment.stack,
+	device: environment.deviceId ?? environment.device,
+	state: HEALTH_WORDS[environment.state],
+	...environment.current === void 0 ? { runs: "nothing deployed from here yet" } : { runs: {
+		commit: environment.current.commit,
+		record: environment.current.id,
+		since: environment.current.endedAt ?? environment.current.queuedAt
+	} },
+	...environment.active === void 0 ? {} : { deploying: {
+		commit: environment.active.commit,
+		record: environment.active.id,
+		outcome: environment.active.outcome,
+		origin: recordOrigin(environment.active)
+	} },
+	...environment.latest === void 0 || environment.latest.id === environment.current?.id || environment.latest.id === environment.active?.id ? {} : { latest: {
+		commit: environment.latest.commit,
+		record: environment.latest.id,
+		outcome: environment.latest.outcome,
+		...environment.latest.error === void 0 ? {} : { error: environment.latest.error }
+	} },
+	triggers: triggersSummary(environment.triggers),
+	...environment.ungranted.length === 0 ? {} : { ungrantedSecrets: environment.ungranted },
+	...environment.secretsChanged.length === 0 ? {} : { secretsChangedSinceDeploy: environment.secretsChanged },
+	...environment.ownedElsewhere ? { ownedElsewhere: true } : {},
+	...environment.problems.length === 0 ? {} : { problems: environment.problems }
+});
+var STACK_REF_PROPERTIES = {
+	repo: {
+		type: "string",
+		description: "The repository that declares the stack, workspace-relative, as `environments` names it."
+	},
+	stack: {
+		type: "string",
+		description: "The stack's name in that repository's .intentic/stacks.json."
+	}
+};
+var deploymentTools = (deps) => {
+	const waiting = {
+		deadlineMs: WAIT_DEADLINE_MS,
+		pollMs: WAIT_POLL_MS,
+		sleep: pause,
+		...deps.wait
+	};
+	const run = async (enqueue, wait, context) => {
+		try {
+			const queued = await enqueue();
+			if (!wait) return recordAnswer(queued, false, false);
+			const signals = [context?.signal, deps.lifetime].filter((signal) => signal !== void 0);
+			const { record, settled } = await awaitRecord(deps.deploys, queued, {
+				deadlineMs: waiting.deadlineMs,
+				pollMs: waiting.pollMs,
+				sleep: waiting.sleep,
+				...signals.length === 0 ? {} : { signal: AbortSignal.any(signals) }
+			});
+			return recordAnswer(record, settled, true);
+		} catch (error) {
+			return text(errorMessage(error), true);
+		}
+	};
+	return [...environmentTools(deps, run), ...composeTools(deps)];
+};
+var environmentTools = (deps, run) => [
+	{
+		name: "environments",
+		description: "The managed environments: every Docker compose stack the workspace's repositories declare in their .intentic/stacks.json, which this sandbox deploys to the owner's computers itself, with secrets rendered from its store. Per stack: the computer, its state there, the commit it runs and since when, a deploy running or queued, the latest attempt's outcome and error, its triggers in words, secrets the owner has not granted it yet, secrets changed since it last deployed, and problems that stop it deploying. Also every stacks manifest that does not parse. Read this before deploy_environment.",
+		effect: "read",
+		inputSchema: {
+			type: "object",
+			properties: { repo: {
+				type: "string",
+				description: "Only this repository's stacks (workspace-relative). Omit for all."
+			} },
+			additionalProperties: false
+		},
+		call: async (args, context) => {
+			const repo = stringArg(args, "repo");
+			try {
+				const read = await deps.deploys.environments(context?.signal);
+				const environments = read.environments.filter((environment) => repo === void 0 || environment.repo === repo).map(environmentFacts);
+				const manifestErrors = read.manifestErrors.filter((error) => repo === void 0 || error.repo === repo);
+				if (environments.length === 0 && manifestErrors.length === 0) return text(repo === void 0 ? "No repository in this workspace declares stacks (.intentic/stacks.json). A repository without one deploys as a plain compose stack: deploy_targets and deploy_to_device." : `"${repo}" declares no stacks (.intentic/stacks.json).`);
+				return text(JSON.stringify({
+					environments,
+					...manifestErrors.length === 0 ? {} : { manifestErrors }
+				}, void 0, 2));
+			} catch (error) {
+				return text(errorMessage(error), true);
+			}
+		}
+	},
+	{
+		name: "deploy_environment",
+		description: "Deploy a managed environment (a stack its repository declares in .intentic/stacks.json) at a commit: the repository's COMMITTED HEAD as this workspace has it when none is named, so commit first. The daemon renders the stack's secrets under the owner's grant, runs it on its computer, checks it comes up healthy and rolls it back by itself when the manifest says so. One deploy runs per stack; a newer one queued behind it replaces an older one still waiting. Refused, with the reason, when a secret it reads is not granted yet (the owner gets a card for it) or its computer cannot take it. Waits for the end by default and answers how it went, with compose's output on a failure.",
+		effect: "write",
+		inputSchema: {
+			type: "object",
+			properties: {
+				...STACK_REF_PROPERTIES,
+				commit: {
+					type: "string",
+					description: "A full or abbreviated commit of the repository (lowercase hex). Omit for its committed HEAD."
+				},
+				reason: {
+					type: "string",
+					description: "One line on why, kept on the deploy's record."
+				},
+				wait: WAIT_PROPERTY
+			},
+			required: ["repo", "stack"],
+			additionalProperties: false
+		},
+		call: (args, context) => {
+			const repo = stringArg(args, "repo");
+			const stack = stringArg(args, "stack");
+			const commit = stringArg(args, "commit");
+			if (repo === void 0 || stack === void 0) return text("name the repo and the stack", true);
+			if (commit !== void 0 && !CommitWireSchema.safeParse(commit).success) return text(`"${commit}" is not a commit: 7 to 64 lowercase hex characters`, true);
+			return run(() => deps.deploys.deploy({
+				repo,
+				stack,
+				commit,
+				reason: askedBy(stringArg(args, "reason"), context)
+			}), waitArg(args), context);
+		}
+	},
+	{
+		name: "rollback_environment",
+		description: "Put a managed environment back on an earlier successful deploy: that deploy's commit, with its images pinned to the digests it ran. The successful deploy before the current one when no record is named; environment_history lists the records. Waits for the end by default.",
+		effect: "write",
+		inputSchema: {
+			type: "object",
+			properties: {
+				...STACK_REF_PROPERTIES,
+				to: {
+					type: "string",
+					description: "The record id of a successful deploy to go back to. Omit for the one before the current one."
+				},
+				wait: WAIT_PROPERTY
+			},
+			required: ["repo", "stack"],
+			additionalProperties: false
+		},
+		call: (args, context) => {
+			const repo = stringArg(args, "repo");
+			const stack = stringArg(args, "stack");
+			if (repo === void 0 || stack === void 0) return text("name the repo and the stack", true);
+			return run(() => deps.deploys.rollback({
+				repo,
+				stack,
+				to: stringArg(args, "to")
+			}), waitArg(args), context);
+		}
+	},
+	{
+		name: "promote_environment",
+		description: "Deploy one managed environment at exactly what another stack of the same repository runs now: its commit and its images by digest (staging, then production). Waits for the end by default.",
+		effect: "write",
+		inputSchema: {
+			type: "object",
+			properties: {
+				repo: STACK_REF_PROPERTIES.repo,
+				from: {
+					type: "string",
+					description: "The stack whose current deploy is promoted."
+				},
+				to: {
+					type: "string",
+					description: "The stack deployed at it."
+				},
+				wait: WAIT_PROPERTY
+			},
+			required: [
+				"repo",
+				"from",
+				"to"
+			],
+			additionalProperties: false
+		},
+		call: (args, context) => {
+			const repo = stringArg(args, "repo");
+			const from = stringArg(args, "from");
+			const to = stringArg(args, "to");
+			if (repo === void 0 || from === void 0 || to === void 0) return text("name the repo, the stack to promote from and the stack to promote to", true);
+			return run(() => deps.deploys.promote({
+				repo,
+				from,
+				to
+			}), waitArg(args), context);
+		}
+	},
+	{
+		name: "environment_history",
+		description: "One managed environment's deploys, newest first: each record's id, commit, what started it, outcome, how long it took, its error, the end of compose's output for one that failed, and where the forge shows it. Read it to see why a deploy failed, or to pick a record to roll back to.",
+		effect: "read",
+		inputSchema: {
+			type: "object",
+			properties: {
+				...STACK_REF_PROPERTIES,
+				limit: {
+					type: "number",
+					description: "How many records, newest first. Default 10, at most 200."
+				}
+			},
+			required: ["repo", "stack"],
+			additionalProperties: false
+		},
+		call: async (args, context) => {
+			const repo = stringArg(args, "repo");
+			const stack = stringArg(args, "stack");
+			if (repo === void 0 || stack === void 0) return text("name the repo and the stack", true);
+			const asked = typeof args["limit"] === "number" && Number.isFinite(args["limit"]) ? Math.trunc(args["limit"]) : 10;
+			try {
+				const records = await deps.deploys.history({
+					repo,
+					stack
+				}, Math.min(Math.max(asked, 1), 200), context?.signal);
+				if (records.length === 0) return text(`${repo} ${stack} has not been deployed from this sandbox yet.`);
+				const listed = records.map((record) => {
+					const seconds = recordSeconds(record);
+					const failed = record.outcome === "failed" || record.outcome === "rolled-back" || record.outcome === "refused";
+					return {
+						id: record.id,
+						commit: record.commit,
+						...record.ref === void 0 ? {} : { ref: record.ref },
+						outcome: record.outcome,
+						origin: recordOrigin(record),
+						queuedAt: record.queuedAt,
+						...seconds === void 0 ? {} : { seconds },
+						...record.rolledBackTo === void 0 ? {} : { rolledBackTo: record.rolledBackTo },
+						...record.error === void 0 ? {} : { error: record.error },
+						...failed && record.outputTail !== void 0 ? { outputTail: record.outputTail.slice(-4e3) } : {},
+						...record.trigger.url === void 0 ? {} : { triggerUrl: record.trigger.url },
+						...record.forgeUrl === void 0 ? {} : { forgeUrl: record.forgeUrl }
+					};
+				});
+				return text(JSON.stringify(listed, void 0, 2));
+			} catch (error) {
+				return text(errorMessage(error), true);
+			}
+		}
+	}
+];
+var composeTools = (deps) => [
 	{
 		name: "deploy_targets",
-		description: "Which workspace repositories deploy to which Docker compose stack on which of the owner's connected computers, as the Deployments board links them (a deploy links its repo to its stack). Also lists the workspace repositories with a compose file that are not deployed anywhere yet. Read this before deploy_to_device to know the device and stack a repo goes to.",
+		description: "Which workspace repositories deploy as plain Docker compose stacks to which of the owner's connected computers, as the Deployments board links them (a deploy links its repo to its stack). Also lists the workspace repositories with a compose file that are not deployed anywhere yet. Read this before deploy_to_device to know the device and stack a repo goes to. A repository with .intentic/stacks.json is a managed environment instead: read `environments`.",
 		effect: "read",
 		inputSchema: {
 			type: "object",
@@ -22766,7 +23344,7 @@ var deploymentTools = (deps) => [
 	},
 	{
 		name: "deploy_to_device",
-		description: "Deploy a workspace repository to one of the owner's connected computers as a Docker compose stack, and wait for it to come up (up to ten minutes). Deploys the repository's COMMITTED HEAD as this sandbox's workspace has it, never uncommitted changes: commit first. The computer builds the images itself (`docker compose up -d --build`). A `.env` already beside the stack there is kept, never overwritten. Needs that computer's \"Run commands\" and \"Run programs this sandbox sends\" switches; a refusal names the one that is off. Answers the commit that went and the state the stack is in after it; a failed deploy answers compose's own words.",
+		description: "Deploy a workspace repository WITHOUT a stacks manifest to one of the owner's connected computers as a plain Docker compose stack, and wait for it to come up (up to ten minutes). A repository with .intentic/stacks.json deploys through deploy_environment instead, which renders its secrets, keeps its history and rolls it back. Deploys the repository's COMMITTED HEAD as this sandbox's workspace has it, never uncommitted changes: commit first. The computer builds the images itself (`docker compose up -d --build`). A `.env` already beside the stack there is kept, never overwritten. Needs that computer's \"Run commands\" and \"Run programs this sandbox sends\" switches; a refusal names the one that is off. Answers the commit that went and the state the stack is in after it; a failed deploy answers compose's own words.",
 		effect: "write",
 		inputSchema: {
 			type: "object",
@@ -22836,17 +23414,19 @@ var OPERATIONS = {
 };
 var activateServer = (api, _context, fetchFn = fetch) => {
 	const i = implement(deploymentsContract);
-	const store = fileKomodoStore(komodoStorePath(api.workspaceRoot));
+	const lifetime = new AbortController();
+	const store = fileKomodoStore(komodoStorePath(api.stateDir), legacyKomodoStorePath(api.workspaceRoot));
 	const scan = {
 		root: api.workspaceRoot,
 		read: readFileOrUndefined
 	};
 	const repoDirs = () => discoverRepoDirs(api.workspaceRoot);
 	const devices = daemonDevices(api);
+	const deploys = daemonDeploys(api);
 	const board = deviceBoard({
 		daemon: devices,
 		store,
-		memory: fileNativeStore(nativeStorePath(api.workspaceRoot)),
+		memory: fileNativeStore(nativeStorePath(api.stateDir), legacyNativeStorePath(api.workspaceRoot)),
 		operations: deviceOperations(),
 		scan,
 		repoDirs,
@@ -22977,27 +23557,58 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 			return { ok: true };
 		}),
 		deviceLogs: i.deviceLogs.handler(({ input }) => board.logs(input.device, input.id)),
-		deviceFix: i.deviceFix.handler(({ input }) => board.fix(input.device, input.id, input.pick)),
+		deviceFix: i.deviceFix.handler(async ({ input }) => {
+			const managed = await deploys.environments().then((read) => read.environments.find((environment) => environment.deviceId === input.device && environment.stack === input.id)?.repo).catch(() => void 0);
+			return board.fix(input.device, input.id, input.pick, managed);
+		}),
 		deviceSeen: i.deviceSeen.handler(async ({ input }) => {
 			const at = Date.now();
 			await store.markSeen(deviceConnection(input.device), at);
 			return { seenAt: at };
 		}),
 		deviceDeploy: i.deviceDeploy.handler(({ input }) => board.deploy(input.device, input.repo, input.stack)),
-		deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick))
+		deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick)),
+		environments: i.environments.handler(async ({ signal }) => {
+			try {
+				const read = await deploys.environments(signal);
+				return {
+					available: true,
+					environments: read.environments,
+					manifestErrors: read.manifestErrors,
+					declaring: []
+				};
+			} catch (error) {
+				if (error instanceof DeploysUnavailableError) return {
+					available: false,
+					environments: [],
+					manifestErrors: [],
+					declaring: await declaringRepos(api.workspaceRoot, await repoDirs(), scan.read)
+				};
+				throw new ORPCError$1("BAD_GATEWAY", { message: errorMessage(error) });
+			}
+		}),
+		environmentHistory: i.environmentHistory.handler(async ({ input, signal }) => ({ records: await upstream(deploys.history({
+			repo: input.repo,
+			stack: input.stack
+		}, input.limit, signal)) }))
 	});
 	api.tools.serve(() => deploymentTools({
 		board,
 		daemon: devices,
+		deploys,
 		store,
 		scan,
-		repoDirs
+		repoDirs,
+		lifetime: lifetime.signal
 	}));
 	const handler = new OpenAPIHandler(router);
 	api.routes.mount(async (request) => {
 		const { matched, response } = await handler.handle(request, { prefix: "/" });
 		return matched ? response : void 0;
 	});
+	return { deactivate: () => {
+		lifetime.abort();
+	} };
 };
 //#endregion
 export { activateServer };

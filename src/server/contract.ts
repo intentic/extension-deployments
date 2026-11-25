@@ -19,6 +19,9 @@ import {
     DeployLogsResponseSchema,
     DeployOverviewResponseSchema,
     DeploySeenResponseSchema,
+    EnvironmentHistoryParamSchema,
+    EnvironmentHistoryResponseSchema,
+    EnvironmentsOverviewSchema,
 } from "../contract.js";
 
 const OkSchema = z.object({ ok: z.literal(true) });
@@ -65,4 +68,15 @@ export const deviceContract = {
         .output(DeployFixResponseSchema),
 };
 
-export const deploymentsContract = { ...komodoContract, ...deviceContract };
+// The managed environments (the daemon's `/deploys/*`), read for the board. Workspace-wide rather than per connection:
+// each device board shows the ones its computer runs. Presses go from the browser to the daemon directly, as the person.
+export const environmentsContract = {
+    // A sandbox from before managed environments answers `available: false` rather than an error.
+    environments: oc.route({ method: "GET", path: "/environments" }).output(EnvironmentsOverviewSchema),
+    environmentHistory: oc
+        .route({ method: "GET", path: "/environments/history" })
+        .input(EnvironmentHistoryParamSchema)
+        .output(EnvironmentHistoryResponseSchema),
+};
+
+export const deploymentsContract = { ...komodoContract, ...deviceContract, ...environmentsContract };

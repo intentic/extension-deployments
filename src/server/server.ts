@@ -1,5 +1,5 @@
 import { errorMessage } from "@intentic/base/errors";
-import type { ExtensionServerApi, ExtensionServerContext } from "@intentic/extension-api";
+import type { ExtensionServerApi, ExtensionServerContext, ServerActivation } from "@intentic/extension-api";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { implement, ORPCError } from "@orpc/server";
 import { type DeployResource, deviceConnection } from "../contract.js";
@@ -8,13 +8,15 @@ import { deploymentsContract } from "./contract.js";
 import { deviceBoard } from "./device-board.js";
 import { daemonDevices } from "./device-daemon.js";
 import { deviceOperations } from "./device-operations.js";
+import { DeploysUnavailableError } from "../deploysWire.js";
+import { daemonDeploys, declaringRepos } from "./deploys-daemon.js";
 import { discoverRepoDirs, readFileOrUndefined } from "./discover.js";
 import { type FetchFn, komodoClient, type KomodoConnection } from "./komodo-client.js";
 import { HostStackConflict, planHostStack, runFromHostFolder } from "./komodo-host-stack.js";
 import { deployAlerts, deploymentResource, serverEntry, stackResource } from "./komodo-overview.js";
 import { repoLinks } from "./komodo-repos.js";
-import { fileKomodoStore, komodoStorePath } from "./komodo-store.js";
-import { fileNativeStore, nativeStorePath } from "./native-store.js";
+import { fileKomodoStore, komodoStorePath, legacyKomodoStorePath } from "./komodo-store.js";
+import { fileNativeStore, legacyNativeStorePath, nativeStorePath } from "./native-store.js";
 import { deploymentTools } from "./tools.js";
 import { plainText } from "@intentic/base/plain-text";
 
@@ -55,16 +57,19 @@ const OPERATIONS = {
     },
 } as const;
 
-export const activateServer = (api: ExtensionServerApi, _context: ExtensionServerContext, fetchFn: FetchFn = fetch): void => {
+export const activateServer = (api: ExtensionServerApi, _context: ExtensionServerContext, fetchFn: FetchFn = fetch): ServerActivation => {
     const i = implement(deploymentsContract);
-    const store = fileKomodoStore(komodoStorePath(api.workspaceRoot));
+    // Ended by `deactivate`: every wait a tool holds on a deploy stops with it, and its timer with it.
+    const lifetime = new AbortController();
+    const store = fileKomodoStore(komodoStorePath(api.stateDir), legacyKomodoStorePath(api.workspaceRoot));
     const scan = { root: api.workspaceRoot, read: readFileOrUndefined };
     const repoDirs = () => discoverRepoDirs(api.workspaceRoot);
     const devices = daemonDevices(api);
+    const deploys = daemonDeploys(api);
     const board = deviceBoard({
         daemon: devices,
         store,
-        memory: fileNativeStore(nativeStorePath(api.workspaceRoot)),
+        memory: fileNativeStore(nativeStorePath(api.stateDir), legacyNativeStorePath(api.workspaceRoot)),
         operations: deviceOperations(),
         scan,
         repoDirs,
@@ -236,7 +241,15 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
             return { ok: true as const };
         }),
         deviceLogs: i.deviceLogs.handler(({ input }) => board.logs(input.device, input.id)),
-        deviceFix: i.deviceFix.handler(({ input }) => board.fix(input.device, input.id, input.pick)),
+        // A managed environment's stack is fixed and shipped through its repository's manifest, not as a plain stack.
+        deviceFix: i.deviceFix.handler(async ({ input }) => {
+            const managed = await deploys
+                .environments()
+                .then((read) => read.environments.find((environment) => environment.deviceId === input.device && environment.stack === input.id)?.repo)
+                // allow(silent-catch): an older sandbox, or one that cannot read them now, has no managed stack to point the fix at
+                .catch(() => undefined);
+            return board.fix(input.device, input.id, input.pick, managed);
+        }),
         deviceSeen: i.deviceSeen.handler(async ({ input }) => {
             const at = Date.now();
             await store.markSeen(deviceConnection(input.device), at);
@@ -244,14 +257,37 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
         }),
         deviceDeploy: i.deviceDeploy.handler(({ input }) => board.deploy(input.device, input.repo, input.stack)),
         deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick)),
+        // The managed environments (deploys-daemon.ts). A sandbox from before them is a state the board draws, not an
+        // error: it says "update this sandbox" only when a repository here declares stacks it would run.
+        environments: i.environments.handler(async ({ signal }) => {
+            try {
+                const read = await deploys.environments(signal);
+                return { available: true, environments: read.environments, manifestErrors: read.manifestErrors, declaring: [] };
+            } catch (error) {
+                if (error instanceof DeploysUnavailableError) {
+                    return { available: false, environments: [], manifestErrors: [], declaring: await declaringRepos(api.workspaceRoot, await repoDirs(), scan.read) };
+                }
+                throw new ORPCError("BAD_GATEWAY", { message: errorMessage(error) });
+            }
+        }),
+        environmentHistory: i.environmentHistory.handler(async ({ input, signal }) => ({
+            records: await upstream(deploys.history({ repo: input.repo, stack: input.stack }, input.limit, signal)),
+        })),
     });
 
-    // The agent's `deployments` server (tools.ts): what lets a fix turn, or the CI automation, deploy.
-    api.tools.serve(() => deploymentTools({ board, daemon: devices, store, scan, repoDirs }));
+    // The agent's `deployments` server (tools.ts): what lets a fix turn deploy its fix.
+    api.tools.serve(() => deploymentTools({ board, daemon: devices, deploys, store, scan, repoDirs, lifetime: lifetime.signal }));
 
     const handler = new OpenAPIHandler(router);
     api.routes.mount(async (request) => {
         const { matched, response } = await handler.handle(request, { prefix: "/" });
         return matched ? response : undefined;
     });
+
+    // Lets the host reload this extension alone (a rebuild, an update, a toggle) rather than restarting every backend.
+    return {
+        deactivate: () => {
+            lifetime.abort();
+        },
+    };
 };

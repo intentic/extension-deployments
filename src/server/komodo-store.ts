@@ -1,7 +1,8 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { mkdir, rename, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { extensionRuntimeDir } from "@intentic/sandbox-contract";
 import { z } from "zod";
+import { readStateFile } from "./state-file.js";
 
 // Persisted seenAt and repo→stack links per Komodo connection, backend-side since seen state is a fact about the work.
 // Keyed by capability id: two connections are two separate acts of reading, so staging must not silence production.
@@ -28,12 +29,17 @@ export interface KomodoStore {
     readonly allLinks: () => Promise<Record<string, Record<string, string>>>;
 }
 
-export const komodoStorePath = (workspaceRoot: string): string => join(workspaceRoot, extensionRuntimeDir("deployments"), "komodo.json");
+// In the extension's own state directory (`api.stateDir`), which the daemon keys by `publisher.name`.
+export const komodoStorePath = (stateDir: string): string => join(stateDir, "komodo.json");
+// Where it lived before that directory existed: a bare-name folder the daemon moves into the state directory. One it has
+// not moved yet is still read, until the first write lands in the new place (state-file.ts).
+export const legacyKomodoStorePath = (workspaceRoot: string): string => join(workspaceRoot, extensionRuntimeDir("deployments"), "komodo.json");
 
-export const fileKomodoStore = (path: string): KomodoStore => {
+export const fileKomodoStore = (path: string, legacy?: string): KomodoStore => {
     const read = async (): Promise<KomodoState> => {
         try {
-            return KomodoStateSchema.safeParse(JSON.parse(await readFile(path, "utf8"))).data ?? EMPTY;
+            const text = await readStateFile(path, legacy);
+            return text === undefined ? EMPTY : (KomodoStateSchema.safeParse(JSON.parse(text)).data ?? EMPTY);
         } catch {
             return EMPTY;
         }

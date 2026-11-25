@@ -150,4 +150,24 @@ describe("deviceBoard", () => {
         expect(agents[0]?.prompt).toContain("/srv/shop");
         expect(agents[0]?.prompt).toContain("{{secret:NAME}}");
     });
+    test("a managed environment's fix ships through its manifest, never a hand-written .env", async () => {
+        fake.setStacks({
+            root: "/srv",
+            stacks: [
+                {
+                    name: "production",
+                    status: "running(1)",
+                    configFiles: ["/srv/production/compose.yaml"],
+                    workingDir: "/srv/production",
+                    managed: true,
+                    sandbox: false,
+                    services: [{ service: "web", container: "production-web-1", image: "web", state: "restarting", status: "Restarting (1)" }],
+                },
+            ],
+        });
+        await board.fix("z440", "production", undefined, "shop");
+        expect(agents[0]?.prompt).toContain(`deploy_environment (repo "shop", stack "production")`);
+        expect(agents[0]?.prompt).toContain("Never edit its .env");
+        expect(agents[0]?.prompt).not.toContain("deploy_to_device");
+    });
 });

@@ -1,5 +1,6 @@
 import { AgentRunPickSchema } from "@intentic/sandbox-contract";
 import { z } from "zod";
+import { DeployEnvironmentWireSchema, DeployRecordWireSchema, ManifestErrorWireSchema } from "./deploysWire";
 
 // The deployments extension's own wire shapes, shared by its UI and server halves, used by nobody else. Zod only lives
 // here: the UI half imports it and must not pull the oRPC contract into the web bundle. Route table for these shapes is
@@ -282,3 +283,26 @@ export const DeployHostStackResponseSchema = z.object({
     created: z.boolean(),
 });
 export type DeployHostStackResponse = z.infer<typeof DeployHostStackResponseSchema>;
+
+// MANAGED ENVIRONMENTS (deploysWire.ts has the daemon's own shapes): the stacks the workspace's repositories declare in
+// `.intentic/stacks.json`, which the daemon deploys, keeps history of and rolls back. The board reads them through its
+// backend; a press (deploy, roll back, promote, grant) goes from the browser to the daemon as the person pressing.
+export const EnvironmentsOverviewSchema = z.object({
+    // False: this sandbox predates managed environments (its `/deploys/*` routes answer 404).
+    available: z.boolean(),
+    environments: z.array(DeployEnvironmentWireSchema).default([]),
+    // Stacks manifests that do not parse, per repository, so a broken file shows instead of its stacks vanishing.
+    manifestErrors: z.array(ManifestErrorWireSchema).default([]),
+    // Only when unavailable: the workspace repositories that declare stacks all the same, which is when "update this
+    // sandbox" is worth saying. Empty means nothing here would use them, and the board says nothing.
+    declaring: z.array(z.string()).default([]),
+});
+export type EnvironmentsOverview = z.infer<typeof EnvironmentsOverviewSchema>;
+
+export const EnvironmentHistoryParamSchema = z.object({
+    repo: z.string().min(1),
+    stack: z.string().min(1),
+    limit: z.coerce.number().int().positive().max(200).optional(),
+});
+export const EnvironmentHistoryResponseSchema = z.object({ records: z.array(DeployRecordWireSchema) });
+export type EnvironmentHistoryResponse = z.infer<typeof EnvironmentHistoryResponseSchema>;

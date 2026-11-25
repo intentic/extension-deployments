@@ -1,5 +1,6 @@
 import { type IconName, type StatusVariant, type Tone, toneInk } from "@intentic/extension-ui";
 import type { DeployServerState, DeployState } from "./contract";
+import type { DeployOutcomeWire } from "./deploysWire";
 import type { IncidentTone } from "./incidents";
 
 // Every state's look, in one table, named by the kit's own tones (toneInk), so a deployment's "danger" is the shell's.
@@ -21,6 +22,19 @@ export const STATE_LOOK: Record<DeployState, StateLook> = {
 };
 
 export const stateInk = (state: DeployState): string => toneInk(STATE_LOOK[state].tone);
+
+// How a managed deploy ended, in the same tones: a rollback is a failure the stack survived (warning), a refusal never
+// started and waits on a person (warning), a superseded one never ran and is nobody's problem (neutral).
+export const OUTCOME_LOOK: Record<DeployOutcomeWire, StateLook> = {
+    queued: { icon: `clock`, spin: false, label: `queued`, tone: `info` },
+    running: STATE_LOOK.deploying,
+    succeeded: { icon: `check-circle`, spin: false, label: `succeeded`, tone: `success` },
+    failed: { icon: `exclamation-circle`, spin: false, label: `failed`, tone: `danger` },
+    "rolled-back": { icon: `undo`, spin: false, label: `rolled back`, tone: `warning` },
+    refused: { icon: `ban`, spin: false, label: `refused`, tone: `warning` },
+    superseded: { icon: `forward`, spin: false, label: `superseded`, tone: `neutral` },
+    unknown: STATE_LOOK.unknown,
+};
 
 // A host that answers is the default and says nothing; only a host that doesn't, or is switched off, wears a badge.
 export const SERVER_BADGE: Record<DeployServerState, { readonly variant: StatusVariant; readonly label: string } | undefined> = {
