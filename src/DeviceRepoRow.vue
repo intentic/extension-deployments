@@ -37,20 +37,19 @@ const landed = computed(() => {
 
 <template>
     <Row icon="folder" :title="link.repo" :description="description">
+        <!-- Straight into the row's control cluster, which already lays these out in a line, centred, a gap-2 apart. -->
         <template #control>
-            <div class="flex shrink-0 items-center gap-2">
-                <StatusBadge v-if="running" variant="info" size="xs" label="deploying" dot />
-                <span v-else-if="landed" class="text-2xs text-muted" v-tooltip.top="formatTimestamp(landed.at)">
-                    <span class="font-mono">{{ landed.sha }}</span> {{ timeAgo(landed.at) }}
-                </span>
-                <Button
-                    :label="link.linkedStack === undefined ? `Deploy` : `Redeploy`"
-                    size="small"
-                    :tier="link.linkedStack === undefined ? `boring` : `quiet`"
-                    :disabled="busy || running"
-                    @click="emit(`deploy`, link)"
-                />
-            </div>
+            <StatusBadge v-if="running" variant="info" size="xs" label="deploying" dot />
+            <span v-else-if="landed" class="text-2xs text-muted" v-tooltip.top="formatTimestamp(landed.at)">
+                <span class="font-mono">{{ landed.sha }}</span> {{ timeAgo(landed.at) }}
+            </span>
+            <Button
+                :label="link.linkedStack === undefined ? `Deploy` : `Redeploy`"
+                size="small"
+                :tier="link.linkedStack === undefined ? `boring` : `quiet`"
+                :disabled="busy || running"
+                @click="emit(`deploy`, link)"
+            />
         </template>
 
         <template v-if="error || failed" #below>

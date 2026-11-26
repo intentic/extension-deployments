@@ -28,9 +28,7 @@ const figures = computed(() =>
 <template>
     <span class="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xs">
         <StatusBadge v-if="badge" :variant="badge.variant" :label="badge.label" size="xs" dot />
-        <span v-for="figure in figures" :key="figure.label" class="inline-flex items-baseline gap-1">
-            <span class="text-subtle">{{ figure.label }}</span>
-            <span class="tabular-nums" :class="figure.ink">{{ figure.value }}</span>
-        </span>
+        <!-- The label is the pair's own text, in its colour; the reading carries an ink of its own, so it never inherits it. -->
+        <span v-for="figure in figures" :key="figure.label" class="inline-flex items-baseline gap-1 text-subtle">{{ figure.label }}<span class="tabular-nums" :class="figure.ink">{{ figure.value }}</span></span>
     </span>
 </template>
