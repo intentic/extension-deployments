@@ -19,7 +19,11 @@ import {
     DeployLogsResponseSchema,
     DeployOverviewResponseSchema,
     DeploySeenResponseSchema,
+    EnvironmentAnswerSchema,
+    EnvironmentDeployParamSchema,
     EnvironmentHistoryParamSchema,
+    EnvironmentPromoteParamSchema,
+    EnvironmentRollbackParamSchema,
     EnvironmentHistoryResponseSchema,
     EnvironmentsOverviewSchema,
 } from "../contract.js";
@@ -68,15 +72,17 @@ export const deviceContract = {
         .output(DeployFixResponseSchema),
 };
 
-// The managed environments (the daemon's `/deploys/*`), read for the board. Workspace-wide rather than per connection:
-// each device board shows the ones its computer runs. Presses go from the browser to the daemon directly, as the person.
+// The managed environments, this backend's own engine (engine/): workspace-wide rather than per connection, since each
+// device board shows the ones its computer runs. A press answers the record it queued at once; the deploy runs on.
 export const environmentsContract = {
-    // A sandbox from before managed environments answers `available: false` rather than an error.
     environments: oc.route({ method: "GET", path: "/environments" }).output(EnvironmentsOverviewSchema),
     environmentHistory: oc
         .route({ method: "GET", path: "/environments/history" })
         .input(EnvironmentHistoryParamSchema)
         .output(EnvironmentHistoryResponseSchema),
+    environmentDeploy: oc.route({ method: "POST", path: "/environments/deploy" }).input(EnvironmentDeployParamSchema).output(EnvironmentAnswerSchema),
+    environmentRollback: oc.route({ method: "POST", path: "/environments/rollback" }).input(EnvironmentRollbackParamSchema).output(EnvironmentAnswerSchema),
+    environmentPromote: oc.route({ method: "POST", path: "/environments/promote" }).input(EnvironmentPromoteParamSchema).output(EnvironmentAnswerSchema),
 };
 
 export const deploymentsContract = { ...komodoContract, ...deviceContract, ...environmentsContract };

@@ -25,7 +25,7 @@ import { environmentState, HEALTH_WORDS, recordOrigin, recordSeconds, recordTime
 import { OUTCOME_LOOK, STATE_LOOK, stateInk } from "./stateVisual";
 import { useEnvironmentHistory } from "./useEnvironments";
 
-// One managed environment: a stack its repository declares in .intentic/stacks.json, which the daemon deploys and keeps.
+// One managed environment: a stack its repository declares in .intentic/stacks.json, which this extension deploys and keeps.
 // The lead glyph is its state on the computer (or that a deploy is going); the line says what it runs and since when;
 // the control is the one step it asks for (grant its secrets, else deploy HEAD); the rest (roll back, promote, its
 // history, what stops it deploying) is in the drawer and the ⋯.
@@ -35,7 +35,7 @@ const props = defineProps<{
     // The other stacks its repository declares: what it can be promoted to.
     siblings: readonly DeployEnvironmentWire[];
     busy: boolean;
-    // The last refusal of a press on this row, in the daemon's words.
+    // The last refusal of a press on this row, in the engine's or the daemon's words.
     error: string | undefined;
     // Whether the person looking may grant secrets: the owner or Full access. Anyone else sees what waits on the owner.
     canGrant: boolean;
@@ -47,6 +47,7 @@ const emit = defineEmits<{
     rollback: [environment: DeployEnvironmentWire, to: string | undefined];
     promote: [environment: DeployEnvironmentWire, to: string];
     grant: [environment: DeployEnvironmentWire];
+    revoke: [environment: DeployEnvironmentWire];
 }>();
 
 const open = ref(props.focused === true);
@@ -147,7 +148,7 @@ const facts = computed(() => {
 });
 
 // The row's one step: the owner's grant while one is missing, else a deploy of HEAD.
-const grantable = computed(() => ungranted.value.length > 0 && props.canGrant && !blocked.value);
+const grantable = computed(() => ungranted.value.length > 0 && props.canGrant && !blocked.value && props.environment.deviceId !== undefined);
 
 // ⋯: going back, and forward to the next stack.
 const actions = computed<ActionItem[]>(() => {
@@ -169,11 +170,15 @@ const actions = computed<ActionItem[]>(() => {
         }
     }
     items.push({ id: `history`, label: open.value ? `Hide history` : `History`, icon: `history`, run: () => (open.value = !open.value) });
+    // The owner's grant, taken back: only where one covers something.
+    if (props.canGrant && props.environment.deviceId !== undefined && ungranted.value.length < props.environment.secrets.length) {
+        items.push({ id: `revoke`, label: `Revoke its secrets`, icon: `key`, run: () => ask({ kind: `revoke` }) });
+    }
     return items;
 });
 
 // One question at a time, asked before anything that changes what runs other than a plain deploy.
-type Pending = { kind: `rollback`; to: DeployRecordWire | undefined } | { kind: `promote`; to: DeployEnvironmentWire } | { kind: `grant` };
+type Pending = { kind: `rollback`; to: DeployRecordWire | undefined } | { kind: `promote`; to: DeployEnvironmentWire } | { kind: `grant` } | { kind: `revoke` };
 const pending = ref<Pending | undefined>(undefined);
 const ask = (next: Pending): void => {
     pending.value = next;
@@ -186,9 +191,18 @@ const question = computed(() => {
     }
     if (next.kind === `grant`) {
         return {
-            header: `Grant ${environment.stack} its secrets?`,
-            description: `${environment.repo}'s ${environment.stack}, on ${environment.deviceId ?? environment.device}, will receive ${environment.secrets.join(`, `)} at each deploy, rendered into its .env there. Nothing else, and nowhere else.`,
+            header: `Grant ${environment.stack} ${secretsWord(ungranted.value.length)}?`,
+            description: `${environment.repo}'s ${environment.stack}, on ${environment.deviceId ?? environment.device}, will receive ${ungranted.value.join(`, `)} at each deploy, filled into its .env there by this sandbox. Nothing else, and nowhere else.`,
             confirm: `Grant`,
+            icon: `key` as const,
+        };
+    }
+    if (next.kind === `revoke`) {
+        const granted = environment.secrets.filter((name) => !ungranted.value.includes(name));
+        return {
+            header: `Stop ${environment.stack} receiving its secrets?`,
+            description: `${environment.repo}'s ${environment.stack}, on ${environment.deviceId ?? environment.device}, no longer receives ${granted.join(`, `)}: its next deploy is refused until they are granted again. What runs there now keeps its .env.`,
+            confirm: `Revoke`,
             icon: `key` as const,
         };
     }
@@ -216,6 +230,8 @@ const confirm = (): void => {
     pending.value = undefined;
     if (next?.kind === `grant`) {
         emit(`grant`, props.environment);
+    } else if (next?.kind === `revoke`) {
+        emit(`revoke`, props.environment);
     } else if (next?.kind === `promote`) {
         emit(`promote`, props.environment, next.to.stack);
     } else if (next?.kind === `rollback`) {

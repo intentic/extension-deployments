@@ -6,8 +6,8 @@ so it arrives only where someone reaches for it. Moved out of the monorepo at `i
 (`_extensions/deployments` there; this repository is where it lives now).
 
 What is actually running on the servers you own: read from a Komodo you already operate, or straight from a computer
-you paired with Intentic, with no Komodo at all; and the managed environments the sandbox itself deploys there, the
-stacks your repositories declare in `.intentic/stacks.json`.
+you paired with Intentic, with no Komodo at all; and the managed environments this extension deploys there, the stacks
+your repositories declare in `.intentic/stacks.json`.
 
 ## Responsibilities
 
@@ -23,17 +23,26 @@ stacks your repositories declare in `.intentic/stacks.json`.
   deploy a workspace repository there: its committed HEAD is packed in the sandbox, carried over the device link and
   started with `docker compose up -d --build`. A `.env` beside the stack on the computer is never sent or overwritten;
   "Set up its .env with the agent" starts a turn that fills it from stored secrets, through the secret gates a turn has.
-- Show and drive the managed environments: the compose stacks a repository declares in `.intentic/stacks.json`, which
-  the daemon's deploys engine renders secrets for, deploys to a paired computer, keeps history of, rolls back and deploys
-  by itself on CI. On a computer's board, each stack it runs: its state, the commit it runs and since when, a deploy
-  under way, the last outcome and its error, its triggers in words, secrets not granted yet (the owner grants them here),
-  secrets changed since it deployed, and what stops it deploying; Deploy, Roll back, Promote and its history.
+- Own the managed environments, policy and all: the compose stacks a repository declares in `.intentic/stacks.json`
+  (this extension owns that format). Its backend's DEPLOYS ENGINE reads the manifests with git, queues one deploy per
+  stack at a time (a newer one replaces the one waiting), keeps the records and their history (50 per stack) in its
+  state directory, recovers them on a restart, rolls a failed deploy back to the last good one with its images pinned,
+  rolls back and promotes on request, and deploys by itself: on a CI job or run passing (the daemon's CI feed), on newer
+  images behind a stack's tags, after another stack (`after`), and when a secret it runs with changed. A monitor reads
+  each stack's state every minute and its server's disk and memory every five. Each deploy is reported to its forge.
+- Show and drive them on a computer's board: each stack it runs, its state, the commit it runs and since when, a deploy
+  under way, the last outcome and its error, its triggers in words, secrets not granted yet (the owner grants, and
+  revokes, them here), secrets changed since it deployed, and what stops it deploying; Deploy, Roll back, Promote and
+  its history.
+- Supply the `deploys` listener events (`contributes.listener`): `deploy_succeeded`, `deploy_failed`,
+  `deploy_rolled_back`, `deploy_refused`, `stack_unhealthy`, `stack_recovered`, `secrets_changed`, `host_low_disk` and
+  `host_low_memory`, dispatched from the backend, so the owner's automations hear deploys as they hear CI.
 - Give the agent a `deployments` tool server: `environments`, `deploy_environment`, `rollback_environment`,
   `promote_environment` and `environment_history` for managed environments, and `deploy_targets`, `device_stacks` and
   `deploy_to_device` for a repository without a stacks manifest, so a fix turn can redeploy its own fix.
-- Offer two automations on the daemon's `deploys` events, neither of which deploys: "Investigate a failed deploy or an
+- Offer two automations on those `deploys` events, neither of which deploys: "Investigate a failed deploy or an
   unhealthy stack" and "Low disk or memory on a server". CI deploys by itself through a manifest's `ci` trigger, with no
-  model, so there is no "redeploy on green" template any more.
+  model, so there is no "redeploy on green" template.
 - Talk to Komodo itself: the extension ships its own backend, and the daemon core carries no Komodo feature.
 - Own the Komodo connection: the `komodo` card on the Capabilities page, its agent skill and the deployment-alert
   automation template all come from this manifest, so connecting Komodo and getting this view are one install.
@@ -42,19 +51,34 @@ stacks your repositories declare in `.intentic/stacks.json`.
 
 - [src/contract.ts](src/contract.ts): the extension's OWN wire shapes, imported by both halves so their wire
   cannot drift; zod only, so the web bundle never pulls the route table in.
-- [src/deploysWire.ts](src/deploysWire.ts): the daemon's `/deploys/*` shapes as this extension reads them (the published
-  sandbox contract predates them), loose so a newer daemon's fields never drop the board, and how a refusal reads: a bare
-  404 is a sandbox from before managed environments.
+- [src/deploysWire.ts](src/deploysWire.ts): the managed-environment wire: the board's records and environments, and the
+  daemon's primitives the engine stands on (managed deploy, host stats, stack grants, the CI feed and runs, forge
+  reports, secret marks, listener dispatch), mirrored because the published sandbox contract predates them, loose so a
+  newer daemon's fields never drop a read; and how a refusal reads: a bare 404 is a sandbox from before managed deploys.
+- [src/server/engine/](src/server/engine/): the deploys engine.
+  [manifest.ts](src/server/engine/manifest.ts) the stacks manifest's schema and the `{{deploy:…}}` facts filled here;
+  [git.ts](src/server/engine/git.ts) manifests off a commit, HEAD, a missing commit fetched, ancestry;
+  [records.ts](src/server/engine/records.ts) the durable records; [engine.ts](src/server/engine/engine.ts) and
+  [lanes.ts](src/server/engine/lanes.ts) the queue, the lanes, rollback, promotion and restart recovery;
+  [run.ts](src/server/engine/run.ts) one attempt (device, grant, owner, then `deploy-managed`);
+  [daemon.ts](src/server/engine/daemon.ts) the client for the primitives and how `deploy-managed`'s status reads;
+  [environments.ts](src/server/engine/environments.ts) the board's read; [watch.ts](src/server/engine/watch.ts) the
+  minute's pass over [triggers.ts](src/server/engine/triggers.ts), [ci-feed.ts](src/server/engine/ci-feed.ts),
+  [registry.ts](src/server/engine/registry.ts), [monitor.ts](src/server/engine/monitor.ts),
+  [rotation.ts](src/server/engine/rotation.ts) and [forge.ts](src/server/engine/forge.ts);
+  [events.ts](src/server/engine/events.ts) the `deploys` events; [index.ts](src/server/engine/index.ts) how the
+  backend composes it. [engine.testing.ts](src/server/engine/engine.testing.ts) is a fake of the daemon's routes the
+  suites run it against.
 - [src/environments.ts](src/environments.ts): managed environments in the board's words, pure and tested: triggers in
   words, a record's origin and end, the row's state, and how a computer's board gives way to the environments on it.
 - [src/useEnvironments.ts](src/useEnvironments.ts) and [src/EnvironmentRow.vue](src/EnvironmentRow.vue): the board's
-  Environments group, its presses and one stack's history.
-- [src/server/deploys-daemon.ts](src/server/deploys-daemon.ts): the backend's client for `/deploys/*`, and the wait on a
-  queued record that the agent's tools hold.
+  Environments group, its presses (to the backend; a grant or revoke to the daemon as the person) and one stack's
+  history.
 - [src/server/server.ts](src/server/server.ts): the backend half (`activateServer`), built to `dist/server.js`
   (`pnpm build`) and run by the daemon's backend host. Reads the Komodo credential through the daemon's
-  connection route and starts fix turns through `POST /agent`: both declared in `permissions.daemon`. The daemon
-  serves a connection only to the extension that contributes its card, which is why the card lives here.
+  connection route, starts fix turns through `POST /agent` and runs the deploys engine: every daemon route it calls is
+  declared in `permissions.daemon`. The daemon serves a connection only to the extension that contributes its card,
+  which is why the card lives here.
 - [skills/komodo/SKILL.md](skills/komodo/SKILL.md): the agent's Komodo skill, mounted with the `komodo` card.
 - [src/server/komodo-client.ts](src/server/komodo-client.ts): the Komodo Core API behind one client shape.
 - [src/server/komodo-host-stack.ts](src/server/komodo-host-stack.ts): "Run a sandbox from a host folder", the
@@ -99,25 +123,48 @@ Every press on a device board answers at once and runs on in the backend (`opera
 or a build outlasts the backend proxy's 20 second wait for headers. The agent's `deploy_to_device` waits for its
 deploy instead, inside the host's ten-minute tool deadline.
 
-**Managed environments on a computer's board.** The stacks a repository declares in `.intentic/stacks.json` are the
-daemon's (`/deploys/*`, sandbox-contract `deploys.contract.ts`): it reads the manifests, renders secrets under the
-owner's grant, runs one deploy per stack at a time and keeps the records. A computer's board shows an "Environments"
-group of those it runs (and of any whose computer does not resolve, so its problem is seen somewhere), narrowed to the
-open project; a raw stack row of the same name on that computer gives way to it, and a repository with a manifest is no
-longer offered as a plain compose deploy. A workspace whose repositories declare nothing sees no change at all.
+**The engine lives here; the core keeps only what an extension may not hold.** Deploy POLICY is this extension's: the
+manifest format, the queue, the records, the triggers, rollback, promotion, the monitor and the events. The daemon
+keeps the primitives (sandbox-contract `device-stacks`, `stack-grants`, `ci`, `secrets`): it FILLS secret values into a
+managed deploy under the owner's grant for that stack on that computer, packs the repository at the commit, relays the
+deploy to the machine and waits for its health (`POST /system/devices/{id}/stacks/{name}/deploy-managed`); it relays the
+stack list, `pull` and the server's fill; it FEEDS CI events (`GET /ci/feed`, `GET /ci/runs`); it REPORTS to the forge
+through the CI connection (`POST /ci/deployments`); and it answers keyed MARKS of secret values (`POST /secrets/marks`).
+The engine sends `{{secret:NAME}}` references with its own `{{deploy:sha|sha8|ref|stack}}` facts filled in, and never
+sees a value: a deploy answers the names it filled and a mark of each, and a later mark that differs is a secret that
+changed under a running stack.
 
-The board READS them through its backend (`/environments`, `/environments/history`), which also serves the agent's
-tools. A PRESS (deploy HEAD, roll back, promote, grant) goes from the browser straight to the daemon as the person
-pressing (`permissions.sandbox`): the record names them, and the daemon holds them to their own role. A grant above all:
-`/deploys/grants/grant` is closed to every machine credential, an extension's included, so "Grant 3 secrets" is offered
-to the owner and Full access only, and anyone else sees what waits on them. An agent asks for a grant on a card of its
-own; a deploy refused for one raises that card by itself.
+`deploy-managed`'s status says where a deploy ended: 400, 403 (a grant not covering a name, a switch off, another
+sandbox's stack), 409 (a computer offline, an agent too old) and 412 (a secret it cannot fill) never reached the stack
+and end `refused`; 422 is the machine's own word that the deploy failed there, the one case rolled back; 502 and anything
+else leave it unknown, `failed` with no rollback. Before calling it the engine reads the grants (`GET /stack-grants`)
+and refuses an ungranted name itself, naming every name missing.
 
-The agent's environment tools queue a deploy and then follow its record through the stack's history, about nine
-minutes at most, under the host's ten-minute deadline: one that outlasts that answers that it is still running, with its
-record id, since it carries on regardless. A failed deploy the engine rolls back reads as settled only once the rollback
-after it has ended. A link `/ext/deployments?repo=<repo>&stack=<stack>` (what a forge's deployment points back to)
-switches the board to the computer that stack runs on and opens its row.
+The engine's records (`deploys.json`) and its watch's memory (`deploy-watch.json`) live in the extension's state
+directory. A restart ends a deploy left running `failed` ("the sandbox restarted during this deploy") and runs the
+newest one waiting per stack. One pass a minute reads every manifest at HEAD first, so a workspace whose repositories
+declare nothing makes no daemon call at all, and the CI feed is open only while some stack has a `ci` trigger. A run
+that passed while the feed was down is caught up from `/ci/runs` when it opens again; CI deploys a commit to a stack at
+most once, and never one older than what the stack runs or waits on (ancestry read with git after a fetch).
+
+**Managed environments on a computer's board.** A computer's board shows an "Environments" group of those it runs (and
+of any whose computer does not resolve, so its problem is seen somewhere), narrowed to the open project; a raw stack row
+of the same name on that computer gives way to it, and a repository with a manifest is no longer offered as a plain
+compose deploy. A workspace whose repositories declare nothing sees no change at all.
+
+The board reads them and presses deploy HEAD, roll back and promote through its backend (`/environments`,
+`/environments/history`, `/environments/deploy|rollback|promote`), which also serves the agent's tools; a press the
+backend queues is recorded as "from the Deployments board", since the backend sees its own token, not the person. A
+GRANT is different: `POST /stack-grants/grant` (and `revoke`) is closed to every machine credential, an extension's
+included, so the browser sends it as the person pressing (`permissions.sandbox`), behind a confirm listing exactly the
+names it grants, on the stack's device card. It is offered to the owner and Full access only; anyone else sees what
+waits on them. An agent asks for a grant on a card of its own (`secrets grant-stack <repo> <stack> <device> NAME...`).
+
+The agent's environment tools queue a deploy and then wait for the engine to be done with it, about nine minutes at
+most, under the host's ten-minute deadline: one that outlasts that answers that it is still running, with its record
+id, since it carries on regardless. A failed deploy the engine rolls back is settled only once the rollback after it
+has ended. A link `/ext/deployments?repo=<repo>&stack=<stack>` (what a forge's deployment points back to, built on the
+address the board was last opened at) switches the board to the computer that stack runs on and opens its row.
 
 The computer checks its own switches: reading and driving stacks needs "Run commands", deploying also needs "Run
 programs this sandbox sends". A refusal reaches the board in the computer's words, and a device whose agent predates
@@ -140,11 +187,15 @@ shared `ProjectChip`. Stacks, servers and incidents are the estate's and stay wh
 - On a computer, nothing here removes a stack or a volume: the verbs are up, pull, restart, start and stop. A deploy
   copies files over the stack's folder and never deletes one, so data bind-mounted inside it survives a redeploy.
 - The device routes ship with a sandbox newer than `engines` says; an older one answers 404, which the board reads as
-  "update this sandbox" rather than as a computer that is down. The same goes for `/deploys/*`: a bare 404 (no oRPC
-  `message`) is a sandbox from before managed environments, said on the board only when a repository here declares
-  stacks; a 404 WITH a message is the daemon's own refusal (a stack the manifest does not declare) and is shown as one.
-- `activateServer` hands back a `deactivate` (ending any wait a tool holds on a deploy), so the host reloads this
-  backend alone on a rebuild, an update or a toggle.
+  "update this sandbox" rather than as a computer that is down. The same goes for the managed-deploy primitives: a bare
+  404 (no oRPC `message`) from `deploy-managed` or `/stack-grants` is a sandbox from before managed deploys, said on the
+  refused record and as a problem on each environment; a 404 WITH a message is the daemon's own refusal and is shown as
+  one.
+- No secret value ever reaches this extension: manifests hold references, deploys answer names and keyed marks, and
+  what the machine printed comes back masked by the daemon.
+- `activateServer` hands back a `deactivate` that ends any wait a tool holds, stops the watch's passes and the CI feed,
+  and waits for the engine's lanes (a deploy cut by it is left `running`, for the next start to end as unknown), so the
+  host reloads this backend alone on a rebuild, an update or a toggle.
 
 ## Building and publishing
 
@@ -166,7 +217,7 @@ installer: **bumping `engines` means opening the listing pull request in the sam
 
 The bundle inlines `@intentic/sandbox-contract` and `@intentic/extension-manifest` (and zod with them), since the host
 publishes only `vue`, `@tanstack/vue-query`, `@intentic/extension-api` and `@intentic/extension-ui` to an installed
-bundle. The `/deploys/*` routes are already read through a wire file of this extension's own
+bundle. The managed-deploy primitives are already read through a wire file of this extension's own
 ([src/deploysWire.ts](src/deploysWire.ts)), since the published contract predates them; narrowing the rest of what this
 extension reads the same way, as `intentic/extension-logs` did, is the follow-up that makes it a version boundary
 rather than a coincidence.

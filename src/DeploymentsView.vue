@@ -155,32 +155,16 @@ const onBoard = computed(() => {
         device: deviceName.value,
         resources: allResources.value,
         repos: allRepos.value,
-        environments: overview?.available === true ? overview.environments : [],
-        manifestErrors: overview?.available === true ? overview.manifestErrors : [],
+        environments: overview?.environments ?? [],
+        manifestErrors: overview?.manifestErrors ?? [],
         inProject: (repo) => api.workspace.inProject(repo),
     });
 });
 const resources = computed(() => onBoard.value?.resources ?? allResources.value);
 const boardEnvironments = computed<readonly DeployEnvironmentWire[]>(() => onBoard.value?.environments ?? []);
 const manifestErrors = computed(() => onBoard.value?.manifestErrors ?? []);
-const allEnvironments = computed<readonly DeployEnvironmentWire[]>(() => (environmentsRead.value?.available === true ? environmentsRead.value.environments : []));
-// A sandbox from before managed environments, in a workspace whose repositories declare stacks all the same: worth one
-// line saying to update it. With no repository declaring any, it says nothing.
-const predating = computed<readonly string[]>(() => {
-    const overview = environmentsRead.value;
-    return isDevice.value && overview?.available === false ? overview.declaring.filter((repo) => api.workspace.inProject(repo)) : [];
-});
-const predatingNotice = computed<NoticeModel | undefined>(() => {
-    const declaring = predating.value;
-    if (declaring.length === 0) {
-        return undefined;
-    }
-    return {
-        tone: `warning`,
-        title: `This sandbox predates managed environments: update it`,
-        detail: `${declaring.join(`, `)} ${declaring.length === 1 ? `declares` : `declare`} stacks in .intentic/stacks.json, which this sandbox deploys once it is updated.`,
-    };
-});
+// A sandbox from before managed deploys says so on each environment's own row (its problems, and a deploy's refusal).
+const allEnvironments = computed<readonly DeployEnvironmentWire[]>(() => environmentsRead.value?.environments ?? []);
 // The open project's repositories only (api.workspace.inProject): the board comes from the Komodo routes, not from
 // repos(), so the view narrows its repo rows itself and says on its chip how many it put out of sight.
 const shownRepos = computed(() => onBoard.value?.repos ?? allRepos.value);
@@ -319,7 +303,7 @@ const strips = computed<NoticeModel[]>(() => {
             action: { label: `Try again`, run: () => void refetch() },
         });
     }
-    // The environments come from the daemon rather than the computer: a failure to read them is its own line, and the
+    // The environments come from the engine rather than the computer: a failure to read them is its own line, and the
     // board's own stacks still show.
     const environmentsLoaded = environments.loaded.value;
     if (isDevice.value && environmentsLoaded.state === `failed`) {
@@ -398,8 +382,8 @@ const askAgent = async (resource: DeployResource, key: string, pick?: AgentRunCh
 const resourceFor = (name: string | undefined): DeployResource | undefined =>
     name === undefined ? undefined : allResources.value.find((resource) => resource.name === name);
 
-// A managed environment's presses, keyed by repo and stack: each goes to the daemon as the person pressing
-// (useEnvironments.ts), and its refusal lands at its row like any other.
+// A managed environment's presses, keyed by repo and stack: each goes to the backend's engine, a grant to the daemon as
+// the person pressing (useEnvironments.ts), and its refusal lands at its row like any other.
 const environmentKey = (ref: StackRefWire): string => `environment:${ref.repo}:${ref.stack}`;
 const focusedKey = computed(() => (linked.value === undefined ? undefined : environmentKey(linked.value)));
 // Granting a stack secrets is the owner's, or Full access's: anyone else is shown what waits on them.
@@ -425,6 +409,7 @@ const rollbackEnvironment = (environment: DeployEnvironmentWire, to: string | un
 const promoteEnvironment = (environment: DeployEnvironmentWire, to: string) =>
     pressEnvironment(environment, () => environments.promote.mutateAsync({ repo: environment.repo, from: environment.stack, to }));
 const grantEnvironment = (environment: DeployEnvironmentWire) => pressEnvironment(environment, () => environments.grant.mutateAsync(environment));
+const revokeEnvironment = (environment: DeployEnvironmentWire) => pressEnvironment(environment, () => environments.revoke.mutateAsync(environment));
 
 // The repo the deploy dialog is open for, on a device board.
 const deploying = ref<DeployRepoLink | undefined>(undefined);
@@ -528,8 +513,7 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                         />
                     </RowGroup>
 
-                    <!-- 3. The stacks the daemon manages on this computer, before its raw ones: what a repository declares. -->
-                    <Notice v-if="predatingNotice" :of="predatingNotice" />
+                    <!-- 3. The stacks this extension manages on this computer, before its raw ones: what a repository declares. -->
                     <RowGroup v-if="boardEnvironments.length > 0 || manifestErrors.length > 0" label="Environments">
                         <Row
                             v-for="manifestError in manifestErrors"
@@ -552,6 +536,7 @@ const setLink = async (repo: string, stack: string): Promise<void> => {
                             @rollback="rollbackEnvironment"
                             @promote="promoteEnvironment"
                             @grant="grantEnvironment"
+                            @revoke="revokeEnvironment"
                         />
                     </RowGroup>
 

@@ -13,23 +13,24 @@
   "permissions": {
     "sandbox": [
       "GET /settings",
-      "POST /deploys/deploy",
-      "POST /deploys/rollback",
-      "POST /deploys/promote",
-      "POST /deploys/grants/grant"
+      "POST /stack-grants/grant",
+      "POST /stack-grants/revoke"
     ],
     "daemon": [
       "GET /capabilities/*/connection",
       "POST /agent",
+      "GET /system/devices",
       "GET /system/devices/*/stacks",
       "POST /system/devices/*/stacks/*/ops/*",
       "GET /system/devices/*/stacks/*/logs",
       "POST /system/devices/*/stacks/*/deploy",
-      "GET /deploys/environments",
-      "GET /deploys/history",
-      "POST /deploys/deploy",
-      "POST /deploys/rollback",
-      "POST /deploys/promote"
+      "POST /system/devices/*/stacks/*/deploy-managed",
+      "GET /system/devices/*/host-stats",
+      "GET /stack-grants",
+      "POST /secrets/marks",
+      "GET /ci/feed",
+      "GET /ci/runs",
+      "POST /ci/deployments"
     ]
   },
   "contributes": {
@@ -101,6 +102,34 @@
         }
       }
     ],
+    "listener": {
+      "provider": "deploys",
+      "events": [
+        { "type": "deploy_succeeded", "label": "A deploy succeeded" },
+        { "type": "deploy_failed", "label": "A deploy failed" },
+        { "type": "deploy_rolled_back", "label": "A deploy failed and was rolled back" },
+        { "type": "deploy_refused", "label": "A deploy was refused" },
+        { "type": "stack_unhealthy", "label": "A managed stack turned unhealthy" },
+        { "type": "stack_recovered", "label": "A managed stack recovered" },
+        { "type": "secrets_changed", "label": "A secret a stack runs with changed" },
+        { "type": "host_low_disk", "label": "A server is low on disk" },
+        { "type": "host_low_memory", "label": "A server is low on memory" }
+      ],
+      "automation": {
+        "label": "Deploys",
+        "channel": {
+          "label": "Stack",
+          "placeholder": "shop:production",
+          "hint": "A stack as <repository>:<stack>, or a server as device:<card id>. Empty hears every one."
+        },
+        "branchField": {
+          "label": "Branch",
+          "placeholder": "main",
+          "hint": "The branch a deploy came from. Empty hears every branch, and the events no branch is told of."
+        },
+        "starterPrompt": "A managed environment moved. Each line of the event payload is one JSON event: `type` is what happened (`deploy_succeeded`, `deploy_failed`, `deploy_rolled_back`, `deploy_refused`, `stack_unhealthy`, `stack_recovered`, `secrets_changed`, `host_low_disk`, `host_low_memory`), `channelId` is `<repo>:<stack>` (or `device:<id>` for a server), `content` says it in a sentence and `extra` carries the facts: the deploy record's id, repository, stack, commit, computer, outcome and error. Read the stack with the deployments server's `environments` and `environment_history` tools, say what happened and what, if anything, the owner should do. Do not deploy, roll back or promote anything unless the user asks."
+      }
+    },
     "automationTemplates": [
       {
         "id": "komodo-alert",

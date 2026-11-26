@@ -284,18 +284,14 @@ export const DeployHostStackResponseSchema = z.object({
 });
 export type DeployHostStackResponse = z.infer<typeof DeployHostStackResponseSchema>;
 
-// MANAGED ENVIRONMENTS (deploysWire.ts has the daemon's own shapes): the stacks the workspace's repositories declare in
-// `.intentic/stacks.json`, which the daemon deploys, keeps history of and rolls back. The board reads them through its
-// backend; a press (deploy, roll back, promote, grant) goes from the browser to the daemon as the person pressing.
+// MANAGED ENVIRONMENTS (deploysWire.ts has the shapes): the stacks the workspace's repositories declare in
+// `.intentic/stacks.json`, which this extension's backend deploys (src/server/engine/), keeps history of and rolls
+// back. The board reads them and presses deploy, roll back and promote through the backend; a GRANT goes from the
+// browser straight to the daemon as the person pressing (POST /stack-grants/grant), since no extension token may grant.
 export const EnvironmentsOverviewSchema = z.object({
-    // False: this sandbox predates managed environments (its `/deploys/*` routes answer 404).
-    available: z.boolean(),
     environments: z.array(DeployEnvironmentWireSchema).default([]),
     // Stacks manifests that do not parse, per repository, so a broken file shows instead of its stacks vanishing.
     manifestErrors: z.array(ManifestErrorWireSchema).default([]),
-    // Only when unavailable: the workspace repositories that declare stacks all the same, which is when "update this
-    // sandbox" is worth saying. Empty means nothing here would use them, and the board says nothing.
-    declaring: z.array(z.string()).default([]),
 });
 export type EnvironmentsOverview = z.infer<typeof EnvironmentsOverviewSchema>;
 
@@ -306,3 +302,11 @@ export const EnvironmentHistoryParamSchema = z.object({
 });
 export const EnvironmentHistoryResponseSchema = z.object({ records: z.array(DeployRecordWireSchema) });
 export type EnvironmentHistoryResponse = z.infer<typeof EnvironmentHistoryResponseSchema>;
+
+// The board's presses: deploy the repository's committed HEAD, roll back (to the record named, else the deploy before
+// the current one), promote one stack to another at what it runs. Each answers the record it queued, at once.
+export const EnvironmentDeployParamSchema = z.object({ repo: z.string().min(1).max(500), stack: z.string().min(1).max(63) });
+export const EnvironmentRollbackParamSchema = EnvironmentDeployParamSchema.extend({ to: z.string().min(1).max(100).optional() });
+export const EnvironmentPromoteParamSchema = z.object({ repo: z.string().min(1).max(500), from: z.string().min(1).max(63), to: z.string().min(1).max(63) });
+export const EnvironmentAnswerSchema = z.object({ record: DeployRecordWireSchema });
+export type EnvironmentAnswer = z.infer<typeof EnvironmentAnswerSchema>;

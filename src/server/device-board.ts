@@ -171,8 +171,8 @@ export const deviceBoard = (deps: DeviceBoardDeps) => {
     const repoOf = async (device: string, stack: string): Promise<string | undefined> =>
         Object.entries(await deps.store.links(deviceConnection(device))).find(([, linked]) => linked === stack)?.[0];
 
-    // `managed` names the repository when the stack is a managed environment (deploys-daemon.ts): its fix ships through
-    // the daemon's deploy, and its `.env` is the daemon's to render, never a hand edit.
+    // `managed` names the repository when the stack is a managed environment (engine/): its fix ships through
+    // a managed deploy, and its `.env` is filled by the daemon at each deploy, never a hand edit.
     const fix = async (device: string, stack: string, pick: AgentRunPick | undefined, managed?: string): Promise<{ conversationId: string }> => {
         const found = await findStack(device, stack);
         const [resource] = deviceResources(device, [found]);

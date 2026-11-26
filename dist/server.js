@@ -1,5 +1,7 @@
-import { basename, dirname, join, relative } from "node:path";
-import { access, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
+import { basename, dirname, join, relative, sep } from "node:path";
+import { execFile } from "node:child_process";
+import { access, mkdir, readFile, readdir, realpath, rename, writeFile } from "node:fs/promises";
+import { createHash, randomBytes } from "node:crypto";
 //#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/errors.js
 var errorMessage = (error) => error instanceof Error ? error.message : String(error);
 //#endregion
@@ -13625,9 +13627,9 @@ var PACKAGE_PUBLISH = [
 	/\btwine\s+upload\b/
 ];
 var LOOPBACK_NAMES = String.raw`localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|::1`;
-var LOOPBACK = String.raw`(?:${LOOPBACK_NAMES})(?::\d+)?(?=[/?#\s'"\x60]|$)`;
+var LOOPBACK$1 = String.raw`(?:${LOOPBACK_NAMES})(?::\d+)?(?=[/?#\s'"\x60]|$)`;
 new RegExp(String.raw`^(?:${LOOPBACK_NAMES})$`, "i");
-new RegExp(String.raw`\bfetch\(\s*['"\x60]https?://(?!${LOOPBACK})`, "g");
+new RegExp(String.raw`\bfetch\(\s*['"\x60]https?://(?!${LOOPBACK$1})`, "g");
 var NETWORK_PROGRAMS = /* @__PURE__ */ new Map([
 	["curl", "url"],
 	["wget", "url"],
@@ -20981,6 +20983,24 @@ PROVIDER_SPECS.filter((spec) => spec.access.kind === "free").map((spec) => spec.
 Object.fromEntries(PROVIDER_SPECS.map((spec) => [spec.id, spec.vendor]));
 PROVIDER_SPECS.filter((spec) => spec.planLimits).map((spec) => spec.id);
 //#endregion
+//#region node_modules/.pnpm/@intentic+base@1.323.0/node_modules/@intentic/base/dist/async.js
+var keyedLock = () => {
+	const tails = /* @__PURE__ */ new Map();
+	return (key, task) => {
+		const next = (tails.get(key) ?? Promise.resolve()).then(task, task);
+		const tail = next.catch(() => void 0);
+		tails.set(key, tail);
+		tail.then(() => {
+			if (tails.get(key) === tail) tails.delete(key);
+		});
+		return next;
+	};
+};
+var serialLock = () => {
+	const lock = keyedLock();
+	return (task) => lock(void 0, task);
+};
+//#endregion
 //#region node_modules/.pnpm/@intentic+sandbox-contract@1.323.0/node_modules/@intentic/sandbox-contract/dist/policy/reserved-servers.js
 var DAEMON_MCP_SERVERS = {
 	ui: "control",
@@ -21643,7 +21663,6 @@ var DeployOutcomeWireSchema = _enum([
 	"refused",
 	"unknown"
 ]).catch("unknown");
-var isLiveOutcome = (outcome) => outcome === "queued" || outcome === "running";
 var StackHealthWireSchema = _enum([
 	"running",
 	"unhealthy",
@@ -21709,55 +21728,133 @@ var ManifestErrorWireSchema = looseObject({
 	repo: string(),
 	error: string()
 });
-var DeployEnvironmentsWireSchema = looseObject({
+looseObject({
 	environments: array(DeployEnvironmentWireSchema),
 	manifestErrors: array(ManifestErrorWireSchema).default([])
 });
-var DeployHistoryWireSchema = looseObject({ records: array(DeployRecordWireSchema) });
-var DeployAnswerWireSchema = looseObject({ record: DeployRecordWireSchema });
-looseObject({ grants: array(looseObject({
-	repo: string(),
-	stack: string()
-})) });
+looseObject({ record: DeployRecordWireSchema });
 var CommitWireSchema = string().regex(/^[0-9a-f]{7,64}$/u, "a commit: 7 to 64 lowercase hex characters");
-var DEPLOYS_PATHS = {
-	environments: "/deploys/environments",
-	history: "/deploys/history",
-	deploy: "/deploys/deploy",
-	rollback: "/deploys/rollback",
-	promote: "/deploys/promote",
-	grant: "/deploys/grants/grant"
+var grantDeviceOf = (connection) => connection.split("::")[0] ?? connection;
+var STACK_GRANTS_PATHS = {
+	list: "/stack-grants",
+	grant: "/stack-grants/grant",
+	revoke: "/stack-grants/revoke"
 };
-var historyPath = (ref, limit) => {
-	const query = new URLSearchParams({
-		repo: ref.repo,
-		stack: ref.stack,
-		...limit === void 0 ? {} : { limit: String(limit) }
-	});
-	return `${DEPLOYS_PATHS.history}?${query.toString()}`;
-};
-var DEPLOYS_PREDATED = "This sandbox predates managed environments: update it, and the stacks your repositories declare in .intentic/stacks.json appear here.";
-var DeploysUnavailableError = class extends Error {
-	constructor() {
-		super(DEPLOYS_PREDATED);
-		this.name = "DeploysUnavailableError";
+var StackGrantsWireSchema = looseObject({ grants: array(looseObject({
+	repo: string(),
+	stack: string(),
+	device: string(),
+	secrets: array(string()).default([]),
+	grantedBy: string().optional(),
+	grantedAt: string().optional()
+})).default([]) });
+var ManagedDeployResultWireSchema = looseObject({
+	stack: string().optional(),
+	commit: string().optional(),
+	path: string().optional(),
+	output: string().default(""),
+	digests: record(string(), string()).optional(),
+	envDigest: string().optional(),
+	healthySeconds: number$1().optional(),
+	secretNames: array(string()).default([]),
+	secretMarks: record(string(), string()).default({})
+});
+var HostStatsWireSchema = looseObject({
+	disks: array(looseObject({
+		role: string().optional(),
+		path: string(),
+		totalBytes: number$1(),
+		freeBytes: number$1()
+	})).default([]),
+	memory: looseObject({
+		totalBytes: number$1(),
+		availableBytes: number$1()
+	})
+});
+var DevicesWireSchema = looseObject({ devices: array(looseObject({
+	key: string().optional(),
+	label: string().optional(),
+	card: string().optional(),
+	hostId: string().optional(),
+	online: boolean().optional(),
+	facts: looseObject({ features: array(string()).optional() }).optional()
+})).default([]) });
+var StackOwnerWireSchema = looseObject({
+	sandbox: string(),
+	you: boolean()
+});
+var CiStatusWireSchema = _enum([
+	"queued",
+	"running",
+	"success",
+	"failed",
+	"canceled",
+	"skipped",
+	"unknown"
+]).catch("unknown");
+var CiRunWireSchema = looseObject({
+	repo: string(),
+	host: string(),
+	project: string().optional(),
+	runId: number$1(),
+	workflow: string().optional(),
+	branch: string(),
+	sha: string(),
+	status: CiStatusWireSchema,
+	url: string().optional(),
+	createdAt: number$1().optional()
+});
+var CiFeedEventWireSchema = discriminatedUnion("kind", [looseObject({
+	kind: literal("run"),
+	run: CiRunWireSchema
+}), looseObject({
+	kind: literal("job"),
+	repo: string(),
+	host: string(),
+	project: string().optional(),
+	runId: number$1(),
+	workflow: string().optional(),
+	job: string(),
+	branch: string(),
+	sha: string(),
+	status: CiStatusWireSchema,
+	url: string().optional()
+})]);
+var CiRunsWireSchema = looseObject({ runs: array(unknown()).default([]) });
+var CiDeploymentAnswerWireSchema = looseObject({
+	deploymentId: number$1().optional(),
+	url: string().optional()
+});
+var SecretMarksWireSchema = looseObject({ marks: record(string(), string()).default({}) });
+var DEPLOYS_PROVIDER = "deploys";
+var listenerDispatchPath = (provider) => `/listeners/${encodeURIComponent(provider)}/dispatch`;
+var LISTENER_DISPATCH_KEY_HEADER = "idempotency-key";
+var SANDBOX_PREDATES_MANAGED = "This sandbox predates managed deploys: update it (Sandbox ▸ Update), then deploy again. The stacks your repositories declare in .intentic/stacks.json deploy once it is updated.";
+var DaemonRefusal = class extends Error {
+	status;
+	bare;
+	constructor(status, message, bare) {
+		super(message);
+		this.status = status;
+		this.bare = bare;
+		this.name = "DaemonRefusal";
 	}
 };
-var deploysRefusal = (status, body) => {
+var refusalOf$1 = (status, body) => {
 	let message;
 	try {
 		const parsed = JSON.parse(body);
 		message = typeof parsed.message === "string" && parsed.message !== "" ? parsed.message : void 0;
 	} catch {}
-	if (status === 404 && message === void 0) return new DeploysUnavailableError();
-	if (message !== void 0) return new Error(message);
+	if (status === 404 && message === void 0) return new DaemonRefusal(status, SANDBOX_PREDATES_MANAGED, true);
+	if (message !== void 0) return new DaemonRefusal(status, message, false);
 	const line = body.trim().split("\n")[0] ?? "";
-	return new Error(line === "" ? `the sandbox answered ${status}` : line.slice(0, 500));
+	return new DaemonRefusal(status, line === "" ? `the sandbox answered ${status}` : line.slice(0, 500), false);
 };
-var readDeploys = async (response, schema) => {
+var readAnswer = async (response, schema) => {
 	const text = await response.text();
-	if (!response.ok) throw deploysRefusal(response.status, text);
-	return schema.parse(JSON.parse(text));
+	if (!response.ok) throw refusalOf$1(response.status, text);
+	return schema.parse(text === "" ? {} : JSON.parse(text));
 };
 //#endregion
 //#region src/contract.ts
@@ -21887,7 +21984,7 @@ var DeployOperationSchema = object({
 var DEVICE_CONNECTION_PREFIX = "device:";
 var deviceOf = (connection) => connection.slice(7);
 var deviceConnection = (device) => `${DEVICE_CONNECTION_PREFIX}${device}`;
-var StackNameSchema = string().regex(/^[a-z0-9][a-z0-9_-]{0,62}$/, "lowercase letters, digits, dash and underscore, starting with a letter or digit");
+var StackNameSchema$1 = string().regex(/^[a-z0-9][a-z0-9_-]{0,62}$/, "lowercase letters, digits, dash and underscore, starting with a letter or digit");
 var stackNameFor = (projectName) => {
 	const slug = projectName.toLowerCase().replaceAll(/[^a-z0-9_-]+/gu, "-").replaceAll(/^[-_]+|-+$/gu, "").slice(0, 63);
 	return slug === "" ? "app" : slug;
@@ -21896,7 +21993,7 @@ var DeviceParamSchema = object({ device: string().min(1) });
 var DeviceDeployParamSchema = object({
 	device: string().min(1),
 	repo: string().min(1),
-	stack: StackNameSchema
+	stack: StackNameSchema$1
 });
 object({
 	stack: string(),
@@ -21905,7 +22002,7 @@ object({
 });
 var DeviceEnvironmentParamSchema = object({
 	device: string().min(1),
-	stack: StackNameSchema,
+	stack: StackNameSchema$1,
 	repo: string().min(1).optional(),
 	pick: AgentRunPickSchema
 });
@@ -21926,10 +22023,8 @@ var DeployHostStackResponseSchema = object({
 	created: boolean()
 });
 var EnvironmentsOverviewSchema = object({
-	available: boolean(),
 	environments: array(DeployEnvironmentWireSchema).default([]),
-	manifestErrors: array(ManifestErrorWireSchema).default([]),
-	declaring: array(string()).default([])
+	manifestErrors: array(ManifestErrorWireSchema).default([])
 });
 var EnvironmentHistoryParamSchema = object({
 	repo: string().min(1),
@@ -21937,6 +22032,17 @@ var EnvironmentHistoryParamSchema = object({
 	limit: number().int().positive().max(200).optional()
 });
 var EnvironmentHistoryResponseSchema = object({ records: array(DeployRecordWireSchema) });
+var EnvironmentDeployParamSchema = object({
+	repo: string().min(1).max(500),
+	stack: string().min(1).max(63)
+});
+var EnvironmentRollbackParamSchema = EnvironmentDeployParamSchema.extend({ to: string().min(1).max(100).optional() });
+var EnvironmentPromoteParamSchema = object({
+	repo: string().min(1).max(500),
+	from: string().min(1).max(63),
+	to: string().min(1).max(63)
+});
+var EnvironmentAnswerSchema = object({ record: DeployRecordWireSchema });
 //#endregion
 //#region src/server/agent-turn.ts
 var TITLE_MAX = 80;
@@ -22035,7 +22141,19 @@ var environmentsContract = {
 	environmentHistory: oc$1.route({
 		method: "GET",
 		path: "/environments/history"
-	}).input(EnvironmentHistoryParamSchema).output(EnvironmentHistoryResponseSchema)
+	}).input(EnvironmentHistoryParamSchema).output(EnvironmentHistoryResponseSchema),
+	environmentDeploy: oc$1.route({
+		method: "POST",
+		path: "/environments/deploy"
+	}).input(EnvironmentDeployParamSchema).output(EnvironmentAnswerSchema),
+	environmentRollback: oc$1.route({
+		method: "POST",
+		path: "/environments/rollback"
+	}).input(EnvironmentRollbackParamSchema).output(EnvironmentAnswerSchema),
+	environmentPromote: oc$1.route({
+		method: "POST",
+		path: "/environments/promote"
+	}).input(EnvironmentPromoteParamSchema).output(EnvironmentAnswerSchema)
 };
 var deploymentsContract = {
 	...komodoContract,
@@ -22388,9 +22506,9 @@ var deviceBoard = (deps) => {
 //#endregion
 //#region src/server/device-daemon.ts
 var READ_DEADLINE_MS$1 = 6e4;
-var OP_DEADLINE_MS = 6e5;
-var DEPLOY_DEADLINE_MS = 12e5;
-var OpAnswerSchema = object({ output: string() });
+var OP_DEADLINE_MS$1 = 6e5;
+var DEPLOY_DEADLINE_MS$1 = 12e5;
+var OpAnswerSchema$1 = object({ output: string() });
 var LogsAnswerSchema = object({ text: string() });
 var DeployAnswerSchema = object({
 	stack: string(),
@@ -22407,7 +22525,7 @@ var refusalOf = (status, body) => {
 	const line = body.trim().split("\n")[0] ?? "";
 	return line === "" ? `the sandbox answered ${status}` : line.slice(0, 500);
 };
-var segment = encodeURIComponent;
+var segment$1 = encodeURIComponent;
 var daemonDevices = (api) => {
 	const call = async (path, schema, deadlineMs, body) => {
 		const response = await api.daemon.request(path, {
@@ -22420,12 +22538,12 @@ var daemonDevices = (api) => {
 		if (!response.ok) throw new Error(refusalOf(response.status, text));
 		return schema.parse(JSON.parse(text));
 	};
-	const base = (device) => `/system/devices/${segment(device)}/stacks`;
+	const base = (device) => `/system/devices/${segment$1(device)}/stacks`;
 	return {
 		stacks: (device) => call(base(device), DeviceStacksSchema, READ_DEADLINE_MS$1),
-		op: async (device, stack, op) => (await call(`${base(device)}/${segment(stack)}/ops/${op}`, OpAnswerSchema, OP_DEADLINE_MS, {})).output,
-		logs: async (device, stack, tail) => (await call(`${base(device)}/${segment(stack)}/logs?tail=${tail}`, LogsAnswerSchema, READ_DEADLINE_MS$1)).text,
-		deploy: (device, stack, repo) => call(`${base(device)}/${segment(stack)}/deploy`, DeployAnswerSchema, DEPLOY_DEADLINE_MS, { repo })
+		op: async (device, stack, op) => (await call(`${base(device)}/${segment$1(stack)}/ops/${op}`, OpAnswerSchema$1, OP_DEADLINE_MS$1, {})).output,
+		logs: async (device, stack, tail) => (await call(`${base(device)}/${segment$1(stack)}/logs?tail=${tail}`, LogsAnswerSchema, READ_DEADLINE_MS$1)).text,
+		deploy: (device, stack, repo) => call(`${base(device)}/${segment$1(stack)}/deploy`, DeployAnswerSchema, DEPLOY_DEADLINE_MS$1, { repo })
 	};
 };
 //#endregion
@@ -22475,144 +22593,129 @@ var deviceOperations = (now = Date.now) => {
 	};
 };
 //#endregion
-//#region src/environments.ts
-var triggerWords = (trigger) => {
-	if (trigger.ci !== void 0) {
-		const { branch, workflow, job } = trigger.ci;
-		if (job !== void 0 && workflow !== void 0) return `on CI job ${job} of ${workflow} passing on ${branch}`;
-		if (job !== void 0) return `on CI job ${job} passing on ${branch}`;
-		return workflow === void 0 ? `on CI passing on ${branch}` : `on CI workflow ${workflow} passing on ${branch}`;
-	}
-	if (trigger.registry !== void 0) return `pulls newer images every ${trigger.registry.every}`;
-	if (trigger.after !== void 0) return `after ${trigger.after.stack}`;
-	return `on a trigger this version does not describe`;
+//#region src/server/engine/daemon.ts
+var REFUSED_STATUSES = /* @__PURE__ */ new Set([
+	400,
+	403,
+	404,
+	409,
+	412
+]);
+var managedOutcomeOf = (status, body) => {
+	const refusal = refusalOf$1(status, body);
+	if (status === 422) return {
+		kind: "machine",
+		error: refusal.message
+	};
+	if (REFUSED_STATUSES.has(status)) return {
+		kind: "refused",
+		error: refusal.message,
+		predates: refusal.bare
+	};
+	return {
+		kind: "lost",
+		error: refusal.message
+	};
 };
-var triggersSummary = (triggers) => triggers.length === 0 ? `deploys when asked` : triggers.map(triggerWords).join(`, `);
-var TRIGGER_KIND_WORDS = {
-	manual: `by hand`,
-	ci: `CI`,
-	registry: `newer images`,
-	after: `after another stack`,
-	rollback: `rollback`,
-	promote: `promotion`,
-	"secret-change": `a secret changed`
-};
-var recordOrigin = (record) => {
-	const kind = TRIGGER_KIND_WORDS[record.trigger.kind] ?? record.trigger.kind;
-	return record.trigger.detail === void 0 || record.trigger.detail === `` ? kind : `${kind} · ${record.trigger.detail}`;
-};
-var OUTCOME_WORDS = {
-	queued: `queued`,
-	running: `deploying`,
-	succeeded: `succeeded`,
-	failed: `failed`,
-	"rolled-back": `rolled back`,
-	superseded: `superseded`,
-	refused: `refused`,
-	unknown: `unknown`
-};
-var at = (iso) => {
-	if (iso === void 0) return;
-	const parsed = Date.parse(iso);
-	return Number.isNaN(parsed) ? void 0 : parsed;
-};
-var recordSeconds = (record) => {
-	const start = at(record.startedAt);
-	const end = at(record.endedAt);
-	return start === void 0 || end === void 0 || end < start ? void 0 : Math.round((end - start) / 1e3);
-};
-var shortCommit = (commit) => commit.slice(0, 8);
-var settledRecord = (id, records) => {
-	const record = records.find((entry) => entry.id === id);
-	if (record === void 0 || isLiveOutcome(record.outcome)) return;
-	if (record.outcome === `failed`) {
-		const since = at(record.queuedAt) ?? 0;
-		if (records.some((entry) => entry.trigger.kind === `rollback` && isLiveOutcome(entry.outcome) && (at(entry.queuedAt) ?? 0) >= since)) return;
-	}
-	return record;
-};
-var HEALTH_WORDS = {
-	running: `running`,
-	unhealthy: `unhealthy`,
-	restarting: `restarting`,
-	stopped: `stopped`,
-	missing: `not on the computer`,
-	unreachable: `computer unreachable`,
-	unknown: `not read yet`
-};
-//#endregion
-//#region src/server/deploys-daemon.ts
 var READ_DEADLINE_MS = 6e4;
-var ENQUEUE_DEADLINE_MS = 12e4;
+var OP_DEADLINE_MS = 6e5;
+var DEPLOY_DEADLINE_MS = 12e5;
 var deadline = (ms, signal) => signal === void 0 ? AbortSignal.timeout(ms) : AbortSignal.any([AbortSignal.timeout(ms), signal]);
-var defined = (body) => Object.fromEntries(Object.entries(body).filter(([, value]) => value !== void 0));
-var daemonDeploys = (api) => {
-	const call = async (path, schema, ms, body, signal) => readDeploys(await api.daemon.request(path, {
+var segment = encodeURIComponent;
+var OpAnswerSchema = looseObject({ output: string().default("") });
+var stackOwner = (stack) => {
+	const parsed = StackOwnerWireSchema.safeParse(stack.owner);
+	return parsed.success ? parsed.data : void 0;
+};
+var daemonDeploys = (request, lifetime) => {
+	const call = async (path, schema, ms, body, signal) => readAnswer(await request(path, {
 		method: body === void 0 ? "GET" : "POST",
 		headers: { "content-type": "application/json" },
-		...body === void 0 ? {} : { body: JSON.stringify(defined(body)) },
-		signal: deadline(ms, signal)
+		...body === void 0 ? {} : { body: JSON.stringify(body) },
+		signal: deadline(ms, signal ?? lifetime)
 	}), schema);
+	const device = (id) => `/system/devices/${segment(id)}`;
 	return {
-		environments: (signal) => call(DEPLOYS_PATHS.environments, DeployEnvironmentsWireSchema, READ_DEADLINE_MS, void 0, signal),
-		history: async (ref, limit, signal) => (await call(historyPath(ref, limit), DeployHistoryWireSchema, READ_DEADLINE_MS, void 0, signal)).records,
-		deploy: async (request) => (await call(DEPLOYS_PATHS.deploy, DeployAnswerWireSchema, ENQUEUE_DEADLINE_MS, {
-			repo: request.repo,
-			stack: request.stack,
-			commit: request.commit,
-			reason: request.reason?.slice(0, 300)
-		})).record,
-		rollback: async (request) => (await call(DEPLOYS_PATHS.rollback, DeployAnswerWireSchema, ENQUEUE_DEADLINE_MS, {
-			repo: request.repo,
-			stack: request.stack,
-			to: request.to
-		})).record,
-		promote: async (request) => (await call(DEPLOYS_PATHS.promote, DeployAnswerWireSchema, ENQUEUE_DEADLINE_MS, {
-			repo: request.repo,
-			from: request.from,
-			to: request.to
-		})).record
+		devices: async () => (await call("/system/devices", DevicesWireSchema, READ_DEADLINE_MS)).devices,
+		stacks: (id) => call(`${device(id)}/stacks`, DeviceStacksSchema, READ_DEADLINE_MS),
+		op: async (id, name, op) => (await call(`${device(id)}/stacks/${segment(name)}/ops/${op}`, OpAnswerSchema, OP_DEADLINE_MS, {})).output,
+		hostStats: (id) => call(`${device(id)}/host-stats`, HostStatsWireSchema, READ_DEADLINE_MS),
+		deployManaged: async (id, name, input, signal) => {
+			let response;
+			try {
+				response = await request(`${device(id)}/stacks/${segment(name)}/deploy-managed`, {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify(input),
+					signal: deadline(DEPLOY_DEADLINE_MS, signal ?? lifetime)
+				});
+			} catch (error) {
+				return {
+					kind: "lost",
+					error: `The sandbox did not answer the deploy: ${errorMessage(error)}`
+				};
+			}
+			const text = await response.text().catch(() => "");
+			if (!response.ok) return managedOutcomeOf(response.status, text);
+			let raw;
+			try {
+				raw = text === "" ? {} : JSON.parse(text);
+			} catch {
+				raw = void 0;
+			}
+			const parsed = ManagedDeployResultWireSchema.safeParse(raw);
+			return parsed.success ? {
+				kind: "deployed",
+				result: parsed.data
+			} : {
+				kind: "lost",
+				error: `The sandbox's answer to the deploy could not be read: ${parsed.error.message}`
+			};
+		},
+		grants: async () => (await call(STACK_GRANTS_PATHS.list, StackGrantsWireSchema, READ_DEADLINE_MS)).grants,
+		marks: async (names) => (await call("/secrets/marks", SecretMarksWireSchema, READ_DEADLINE_MS, { names })).marks,
+		reportDeployment: (report) => call("/ci/deployments", CiDeploymentAnswerWireSchema, READ_DEADLINE_MS, report),
+		ciRuns: async () => (await call("/ci/runs", CiRunsWireSchema, READ_DEADLINE_MS)).runs.flatMap((raw) => {
+			const parsed = CiRunWireSchema.safeParse(raw);
+			return parsed.success ? [parsed.data] : [];
+		}),
+		ciFeed: async (signal) => {
+			const response = await request("/ci/feed", {
+				headers: { accept: "text/event-stream" },
+				signal
+			});
+			if (!response.ok) throw refusalOf$1(response.status, await response.text().catch(() => ""));
+			return response;
+		},
+		dispatch: async (message) => {
+			const response = await request(listenerDispatchPath(message.provider), {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+					[LISTENER_DISPATCH_KEY_HEADER]: message.id
+				},
+				body: JSON.stringify(message),
+				signal: deadline(READ_DEADLINE_MS, lifetime)
+			});
+			const text = await response.text().catch(() => "");
+			if (!response.ok) throw refusalOf$1(response.status, text);
+		}
 	};
 };
-var pause = (ms, signal) => new Promise((resolve) => {
-	if (signal?.aborted === true) {
-		resolve();
-		return;
-	}
-	const done = () => {
-		clearTimeout(timer);
-		signal?.removeEventListener("abort", done);
-		resolve();
-	};
-	const timer = setTimeout(done, ms);
-	signal?.addEventListener("abort", done, { once: true });
-});
-var awaitRecord = async (deploys, queued, options) => {
-	const now = options.now ?? Date.now;
-	const sleep = options.sleep ?? pause;
-	const until = now() + options.deadlineMs;
-	let last = queued;
-	while (options.signal?.aborted !== true && now() < until) {
-		await sleep(Math.min(options.pollMs, Math.max(until - now(), 0)), options.signal);
-		const records = await deploys.history({
-			repo: queued.repo,
-			stack: queued.stack
-		}, 20, options.signal).catch(() => void 0);
-		if (records === void 0) continue;
-		last = records.find((record) => record.id === queued.id) ?? last;
-		const ended = settledRecord(queued.id, records);
-		if (ended !== void 0) return {
-			record: ended,
-			settled: true
-		};
-	}
+//#endregion
+//#region src/server/engine/doc.ts
+var stateDoc = (api, path, schema, fallback) => {
+	const document = api.document(path, {
+		parse: (raw) => {
+			const parsed = schema.safeParse(raw);
+			return parsed.success ? parsed.data : void 0;
+		},
+		fallback
+	});
 	return {
-		record: last,
-		settled: false
+		read: () => document.read(),
+		update: (change) => document.update(change)
 	};
-};
-var declaringRepos = async (root, dirs, read) => {
-	return (await Promise.all(dirs.map(async (dir) => await read(join(dir, ".intentic", "stacks.json")) === void 0 ? void 0 : relative(root, dir)))).filter((repo) => repo !== void 0);
 };
 //#endregion
 //#region src/server/discover.ts
@@ -22631,7 +22734,7 @@ var IGNORED = /* @__PURE__ */ new Set([
 var SEGMENT = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
 var MAX_DEPTH = 4;
 var MAX_DIRS = 1e4;
-var hasGitEntry = async (dir) => {
+var hasGitEntry$1 = async (dir) => {
 	try {
 		await access(join(dir, ".git"));
 		return true;
@@ -22649,7 +22752,7 @@ var discoverRepoDirs = async (root) => {
 		for (const entry of entries) {
 			if (!entry.isDirectory() || entry.name.startsWith(".") || IGNORED.has(entry.name) || !SEGMENT.test(entry.name)) continue;
 			const child = join(dir, entry.name);
-			if (await hasGitEntry(child)) {
+			if (await hasGitEntry$1(child)) {
 				repos.push(child);
 				continue;
 			}
@@ -22660,6 +22763,2083 @@ var discoverRepoDirs = async (root) => {
 	return repos.toSorted();
 };
 var readFileOrUndefined = (path) => readFile(path, "utf8").catch(() => void 0);
+//#endregion
+//#region src/server/engine/manifest.ts
+var STACKS_MANIFEST_PATH = ".intentic/stacks.json";
+var StackNameSchema = string().regex(/^[a-z0-9][a-z0-9_-]{0,62}$/u, "lowercase letters, digits, dash and underscore, starting with a letter or digit, at most 63");
+var ComposeFilePathSchema = string().min(1).max(300).regex(/^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/u, "a path inside the repository, like docker-compose.yml or deploy/compose.yaml");
+var StackDeployModeSchema = _enum(["images", "build"]);
+var StackHookSchema = string().min(1).max(4e3);
+var StackHealthSchema = object({
+	timeoutSeconds: number$1().int().min(10).max(600).default(180),
+	http: array(string().url().max(2e3)).max(5).default([])
+}).strict();
+var StackEnvKeySchema = string().regex(/^[A-Za-z_][A-Za-z0-9_]{0,127}$/u, "a variable name: letters, digits and underscores");
+var StackEnvValueSchema = string().max(65536);
+var StackRegistrySpecSchema = object({
+	host: string().min(1).max(253),
+	username: string().min(1).max(200),
+	password: string().min(1).max(1e3)
+}).strict();
+var DeployIntervalSchema = string().regex(/^(\d{1,4})(m|h)$/u, "an interval like 15m or 6h");
+var deployIntervalMs = (interval) => {
+	const match = /^(\d{1,4})(m|h)$/u.exec(interval);
+	if (match === null) throw new Error(`"${interval}" is not an interval like 15m or 6h`);
+	const ms = Number(match[1]) * (match[2] === "h" ? 36e5 : 6e4);
+	return Math.min(Math.max(ms, 3e5), 864e5);
+};
+var DeployTriggerSchema = union([
+	object({ ci: object({
+		branch: string().min(1).max(255),
+		workflow: string().min(1).max(255).optional(),
+		job: string().min(1).max(255).optional()
+	}).strict() }).strict(),
+	object({ registry: object({ every: DeployIntervalSchema }).strict() }).strict(),
+	object({ after: object({ stack: StackNameSchema }).strict() }).strict()
+]);
+var StackSpecSchema = object({
+	name: StackNameSchema,
+	device: string().min(1).max(200),
+	compose: ComposeFilePathSchema.optional(),
+	mode: StackDeployModeSchema.default("images"),
+	env: record(StackEnvKeySchema, StackEnvValueSchema).default({}),
+	registries: array(StackRegistrySpecSchema).max(10).default([]),
+	triggers: array(DeployTriggerSchema).max(10).default([]),
+	hooks: object({
+		preDeploy: StackHookSchema.optional(),
+		postDeploy: StackHookSchema.optional()
+	}).strict().default({}),
+	health: StackHealthSchema.optional(),
+	onFailure: _enum(["rollback", "stay"]).default("rollback"),
+	onSecretChange: _enum(["redeploy", "notify"]).default("notify"),
+	description: string().max(500).optional()
+}).strict();
+var StacksManifestSchema = object({
+	$schema: string().optional(),
+	stacks: array(StackSpecSchema).max(50)
+}).strict().superRefine((manifest, ctx) => {
+	const seen = /* @__PURE__ */ new Set();
+	for (const [index, stack] of manifest.stacks.entries()) {
+		if (seen.has(stack.name)) ctx.addIssue({
+			code: "custom",
+			path: [
+				"stacks",
+				index,
+				"name"
+			],
+			message: `"${stack.name}" is declared twice`
+		});
+		seen.add(stack.name);
+	}
+	for (const [index, stack] of manifest.stacks.entries()) for (const trigger of stack.triggers) {
+		if ("after" in trigger && !seen.has(trigger.after.stack)) ctx.addIssue({
+			code: "custom",
+			path: [
+				"stacks",
+				index,
+				"triggers"
+			],
+			message: `"after" names "${trigger.after.stack}", which this file does not declare`
+		});
+		if ("after" in trigger && trigger.after.stack === stack.name) ctx.addIssue({
+			code: "custom",
+			path: [
+				"stacks",
+				index,
+				"triggers"
+			],
+			message: "a stack cannot follow itself"
+		});
+	}
+});
+var SECRET_NAME = /\{\{secret:([A-Za-z0-9_./-]+)(?:\|file)?\}\}/gu;
+var stackSecretNames = (stack) => {
+	const names = /* @__PURE__ */ new Set();
+	for (const text of [...Object.values(stack.env), ...stack.registries.map((registry) => registry.password)]) for (const match of text.matchAll(SECRET_NAME)) names.add(match[1] ?? "");
+	names.delete("");
+	return [...names].sort();
+};
+var DEPLOY_REFERENCE = /\{\{deploy:([A-Za-z0-9_./-]+)\}\}/gu;
+var withDeployFacts = (text, facts) => text.replace(DEPLOY_REFERENCE, (token, name) => {
+	switch (name) {
+		case "sha": return facts.sha;
+		case "sha8": return facts.sha.slice(0, 8);
+		case "ref": return facts.ref ?? "";
+		case "stack": return facts.stack;
+		default: return token;
+	}
+});
+var misplacedSecrets = (spec) => {
+	const refusals = [];
+	for (const [key, value] of Object.entries(spec.env)) for (const match of value.matchAll(/\{\{secret:([A-Za-z0-9_./-]+)\|file\}\}/gu)) refusals.push(`${key} reads ${match[1] ?? ""} as a file, and a stack's .env has no file to point at: drop the |file, and its value is quoted into the .env with its lines.`);
+	for (const registry of spec.registries) {
+		if (registry.host.includes("{{secret:") || registry.username.includes("{{secret:")) refusals.push(`The login for ${registry.host} names a secret outside its password: only a registry's password reads one.`);
+		if (/\{\{secret:[^}]*\|file\}\}/u.test(registry.password)) refusals.push(`The login for ${registry.host} reads its password as a file, which a registry login cannot take.`);
+	}
+	return refusals;
+};
+//#endregion
+//#region src/server/engine/git.ts
+var GitFailed = class extends Error {
+	code;
+	constructor(message, code) {
+		super(message);
+		this.code = code;
+		this.name = "GitFailed";
+	}
+};
+var QUIET_ENV = {
+	...process.env,
+	GIT_TERMINAL_PROMPT: "0",
+	GIT_ASKPASS: "echo",
+	LC_ALL: "C"
+};
+var runGit = (dir, args) => new Promise((resolve, reject) => {
+	execFile("git", [...args], {
+		cwd: dir,
+		env: QUIET_ENV,
+		maxBuffer: 16777216,
+		timeout: 12e4
+	}, (error, stdout, stderr) => {
+		if (error === null) {
+			resolve(stdout);
+			return;
+		}
+		const code = typeof error.code === "number" ? error.code : void 0;
+		reject(new GitFailed(stderr.trim() === "" ? error.message : stderr.trim(), code));
+	});
+});
+var ROOT_REPO = "root";
+var refused$1 = (message) => new ORPCError$1("BAD_REQUEST", { message });
+var hasGitEntry = async (dir) => access(join(dir, ".git")).then(() => true, () => false);
+var REPO_ID = /^(?!.*(?:^|\/)\.\.?(?:\/|$))[A-Za-z0-9][A-Za-z0-9._/-]*$/u;
+var repoFolder = async (root, repo) => {
+	if (repo !== "root" && !REPO_ID.test(repo)) throw refused$1(`"${repo}" is not a repository in this workspace: name it by its folder under the workspace, like my-app or apps/web`);
+	const [real, realRoot] = await Promise.all([realpath(repo === "root" ? root : join(root, repo)).catch(() => void 0), realpath(root)]);
+	if (real === void 0) throw refused$1(`there is no folder "${repo}" in this workspace`);
+	if (real !== realRoot && !real.startsWith(`${realRoot}${sep}`)) throw refused$1(`"${repo}" leads outside this workspace`);
+	if (!await hasGitEntry(real)) throw refused$1(`"${repo}" is not a git repository: a deploy carries a commit, so the folder must be a repository's own top`);
+	return real;
+};
+var issuesOf = (error) => error.issues.map((issue) => `${issue.path.length === 0 ? "the file" : issue.path.join(".")}: ${issue.message}`).join("; ");
+var manifestAt = async (dir, rev, git = runGit) => {
+	const spot = `${rev}:${STACKS_MANIFEST_PATH}`;
+	if (await git(dir, [
+		"cat-file",
+		"-t",
+		spot
+	]).then((stdout) => stdout.trim(), () => void 0) !== "blob") return { kind: "absent" };
+	const text = await git(dir, [
+		"cat-file",
+		"blob",
+		spot
+	]);
+	let raw;
+	try {
+		raw = JSON.parse(text);
+	} catch (error) {
+		return {
+			kind: "broken",
+			error: `${STACKS_MANIFEST_PATH} is not JSON: ${errorMessage(error)}`
+		};
+	}
+	const parsed = StacksManifestSchema.safeParse(raw);
+	return parsed.success ? {
+		kind: "read",
+		manifest: parsed.data
+	} : {
+		kind: "broken",
+		error: `${STACKS_MANIFEST_PATH}: ${issuesOf(parsed.error)}`
+	};
+};
+var workspaceRepos = async (root) => [...await hasGitEntry(root) ? [ROOT_REPO] : [], ...(await discoverRepoDirs(root)).map((dir) => relative(root, dir).split(sep).join("/"))];
+var repoDir = (root, repo) => repo === "root" ? root : join(root, repo);
+var workspaceManifests = async (root, git = runGit) => {
+	const repos = await workspaceRepos(root);
+	const read = await Promise.all(repos.map(async (repo) => ({
+		repo,
+		read: await manifestAt(repoDir(root, repo), "HEAD", git).catch((error) => ({
+			kind: "broken",
+			error: error.message
+		}))
+	})));
+	return {
+		stacks: read.flatMap(({ repo, read: found }) => found.kind === "read" ? found.manifest.stacks.map((spec) => ({
+			repo,
+			spec
+		})) : []),
+		errors: read.flatMap(({ repo, read: found }) => found.kind === "broken" ? [{
+			repo,
+			error: found.error
+		}] : [])
+	};
+};
+var headCommit = async (dir, repo, git = runGit) => (await git(dir, [
+	"rev-parse",
+	"--verify",
+	"--quiet",
+	"HEAD^{commit}"
+]).catch((error) => {
+	throw refused$1(error instanceof GitFailed && error.code === 1 ? `"${repo}" has no commits yet: commit what should run, then deploy` : `could not read "${repo}"'s last commit: ${error.message}`);
+})).trim();
+var branchOf = async (dir, git = runGit) => git(dir, [
+	"symbolic-ref",
+	"--quiet",
+	"--short",
+	"HEAD"
+]).then((stdout) => stdout.trim() || void 0, () => void 0);
+var resolvedCommit = async (dir, wanted, git) => git(dir, [
+	"rev-parse",
+	"--verify",
+	"--quiet",
+	`${wanted}^{commit}`
+]).then((stdout) => stdout.trim() || void 0, () => void 0);
+var remoteOf = async (dir, git) => {
+	const remotes = (await git(dir, ["remote"])).split("\n").map((line) => line.trim()).filter((line) => line !== "");
+	return remotes.includes("origin") ? "origin" : remotes[0];
+};
+var fetchRemote = async (dir, git = runGit) => {
+	try {
+		const remote = await remoteOf(dir, git);
+		if (remote === void 0) return "it has no remote";
+		await git(dir, [
+			"fetch",
+			"--quiet",
+			"--no-tags",
+			remote
+		]);
+		return;
+	} catch (error) {
+		return errorMessage(error);
+	}
+};
+var exactCommit = async (dir, repo, wanted, fetch, git = runGit) => {
+	if (!/^[0-9a-f]{7,64}$/u.test(wanted)) throw refused$1(`"${wanted}" is not a commit: name one by its sha, full or abbreviated`);
+	const local = await resolvedCommit(dir, wanted, git);
+	if (local !== void 0) return local;
+	const failed = await fetch();
+	const fetched = await resolvedCommit(dir, wanted, git);
+	if (fetched !== void 0) return fetched;
+	throw refused$1(failed === void 0 ? `"${repo}" has no commit ${wanted}, here or on its remote: push it, or name a commit that exists` : `"${repo}" has no commit ${wanted} here, and fetching its remote failed: ${failed}`);
+};
+var holds = async (dir, descendant, ancestor, git = runGit) => {
+	if (descendant === ancestor) return true;
+	return await git(dir, [
+		"merge-base",
+		"--is-ancestor",
+		ancestor,
+		descendant
+	]).then(() => true, (error) => error instanceof GitFailed && error.code === 1 ? false : "unknown");
+};
+//#endregion
+//#region src/server/engine/events.ts
+var AUTHOR = {
+	id: "deploys",
+	name: "Deploys"
+};
+var headOf = (error) => error === void 0 ? "" : `: ${error.split("\n")[0]?.slice(0, 300) ?? ""}`;
+var contentOf = (record) => {
+	const what = `${record.repo} ${record.stack} @ ${record.commit.slice(0, 8)} on ${record.device}`;
+	switch (record.outcome) {
+		case "succeeded": return `Deployed ${what}${record.trigger.kind === "rollback" ? " (a rollback)" : ""}`;
+		case "rolled-back": return `Deploy of ${what} failed and was rolled back${headOf(record.error)}`;
+		case "refused": return `Deploy of ${what} was refused${headOf(record.error)}`;
+		default: return `Deploy of ${what} failed${headOf(record.error)}`;
+	}
+};
+var deployEventOf = (record) => {
+	switch (record.outcome) {
+		case "succeeded": return "deploy_succeeded";
+		case "failed": return "deploy_failed";
+		case "rolled-back": return "deploy_rolled_back";
+		case "refused": return "deploy_refused";
+		default: return;
+	}
+};
+var deployMessageOf = (record, at = /* @__PURE__ */ new Date()) => {
+	const type = deployEventOf(record);
+	if (type === void 0) return;
+	return {
+		provider: DEPLOYS_PROVIDER,
+		type,
+		id: `${record.id}:${type}`,
+		channelId: `${record.repo}:${record.stack}`,
+		...record.ref === void 0 ? {} : { branch: record.ref },
+		author: AUTHOR,
+		content: contentOf(record),
+		timestamp: at.toISOString(),
+		extra: {
+			id: record.id,
+			repo: record.repo,
+			stack: record.stack,
+			commit: record.commit,
+			device: record.device,
+			outcome: record.outcome,
+			trigger: record.trigger.kind,
+			...record.rolledBackTo === void 0 ? {} : { rolledBackTo: record.rolledBackTo },
+			...record.error === void 0 ? {} : { error: record.error }
+		}
+	};
+};
+var stateWords = (state) => {
+	switch (state) {
+		case "unhealthy": return "is unhealthy (a healthcheck failing, or a container stopped beside the others)";
+		case "restarting": return "keeps restarting";
+		case "stopped": return "is stopped";
+		case "missing": return "is gone from its computer";
+		default: return `reads ${state}`;
+	}
+};
+var stackStateMessageOf = (event, at = /* @__PURE__ */ new Date()) => ({
+	provider: DEPLOYS_PROVIDER,
+	type: event.type,
+	id: `${event.repo}:${event.stack}:${event.type}:${event.since}`,
+	channelId: `${event.repo}:${event.stack}`,
+	author: AUTHOR,
+	content: event.type === "stack_recovered" ? `${event.repo} ${event.stack} on ${event.device} is running again` : `${event.repo} ${event.stack} on ${event.device} ${stateWords(event.state)} since ${event.since}`,
+	timestamp: at.toISOString(),
+	extra: {
+		repo: event.repo,
+		stack: event.stack,
+		device: event.device,
+		state: event.state,
+		since: event.since
+	}
+});
+var secretsChangedMessageOf = (fields, at = /* @__PURE__ */ new Date()) => ({
+	provider: DEPLOYS_PROVIDER,
+	type: "secrets_changed",
+	id: `${fields.repo}:${fields.stack}:secrets_changed:${fields.mark}`,
+	channelId: `${fields.repo}:${fields.stack}`,
+	author: AUTHOR,
+	content: `${fields.names.join(", ")} changed in the secret store since ${fields.repo} ${fields.stack} on ${fields.device} was last deployed: it still runs with the old value until it is deployed again`,
+	timestamp: at.toISOString(),
+	extra: {
+		repo: fields.repo,
+		stack: fields.stack,
+		device: fields.device,
+		secrets: [...fields.names]
+	}
+});
+var GIB$1 = 1024 ** 3;
+var gib = (bytes) => `${(bytes / GIB$1).toFixed(1)} GiB`;
+var hostLowMessageOf = (event, at = /* @__PURE__ */ new Date()) => {
+	const percent = event.totalBytes > 0 ? Math.round(event.freeBytes / event.totalBytes * 100) : 0;
+	const what = event.type === "host_low_memory" ? "memory" : `disk ${event.what}`;
+	return {
+		provider: DEPLOYS_PROVIDER,
+		type: event.type,
+		id: `device:${event.device}:${event.type}:${event.what}:${at.toISOString()}`,
+		channelId: `device:${event.device}`,
+		author: AUTHOR,
+		content: `${event.device} is low on ${what}: ${gib(event.freeBytes)} free of ${gib(event.totalBytes)} (${percent}%)`,
+		timestamp: at.toISOString(),
+		extra: {
+			device: event.device,
+			what: event.what,
+			freeBytes: event.freeBytes,
+			totalBytes: event.totalBytes
+		}
+	};
+};
+//#endregion
+//#region src/server/engine/records.ts
+var DeployTriggerKindSchema = _enum([
+	"manual",
+	"ci",
+	"registry",
+	"after",
+	"rollback",
+	"promote",
+	"secret-change"
+]);
+var DeployOutcomeSchema = _enum([
+	"queued",
+	"running",
+	"succeeded",
+	"failed",
+	"rolled-back",
+	"superseded",
+	"refused"
+]);
+var DigestsSchema = record(string(), string());
+var DeployRecordSchema = object({
+	id: string(),
+	repo: string(),
+	stack: string(),
+	device: string(),
+	deviceId: string().optional(),
+	commit: string(),
+	ref: string().optional(),
+	trigger: object({
+		kind: DeployTriggerKindSchema,
+		detail: string().max(300).optional(),
+		url: string().optional()
+	}),
+	outcome: DeployOutcomeSchema,
+	queuedAt: string(),
+	startedAt: string().optional(),
+	endedAt: string().optional(),
+	digests: DigestsSchema.optional(),
+	pins: DigestsSchema.optional(),
+	envDigest: string().optional(),
+	secretNames: array(string()).default([]),
+	secretMarks: record(string(), string()).optional(),
+	healthySeconds: number$1().optional(),
+	rolledBackTo: string().optional(),
+	error: string().max(4e3).optional(),
+	outputTail: string().max(2e4).optional(),
+	forgeUrl: string().optional()
+});
+var StackHealthStateSchema = _enum([
+	"running",
+	"unhealthy",
+	"restarting",
+	"stopped",
+	"missing",
+	"unreachable",
+	"unknown"
+]);
+var RecordsFileSchema = record(string(), unknown()).transform((records) => Object.fromEntries(Object.entries(records).flatMap(([id, raw]) => {
+	const parsed = DeployRecordSchema.safeParse(raw);
+	return parsed.success ? [[id, parsed.data]] : [];
+})));
+var RECORDS_PATH = "deploys.json";
+var isLive = (record) => record.outcome === "queued" || record.outcome === "running";
+var stackKey = (repo, stack) => `${repo}\u0000${stack}`;
+var newestFirst = (left, right) => right.queuedAt.localeCompare(left.queuedAt) || right.id.localeCompare(left.id);
+var minted = 0;
+var recordId = (now) => {
+	minted = (minted + 1) % 1296;
+	return `dep-${now.toString(36).padStart(9, "0")}${minted.toString(36).padStart(2, "0")}-${randomBytes(3).toString("hex")}`;
+};
+var trimmed = (records) => {
+	const seen = /* @__PURE__ */ new Map();
+	const dropped = /* @__PURE__ */ new Set();
+	for (const record of Object.values(records).toSorted(newestFirst)) {
+		if (isLive(record)) continue;
+		const key = stackKey(record.repo, record.stack);
+		const count = (seen.get(key) ?? 0) + 1;
+		seen.set(key, count);
+		if (count > 50) dropped.add(record.id);
+	}
+	return dropped.size === 0 ? records : Object.fromEntries(Object.entries(records).filter(([id]) => !dropped.has(id)));
+};
+var deploysStore = (file) => ({
+	all: async () => Object.values(await file.read()).toSorted(newestFirst),
+	get: async (id) => (await file.read())[id],
+	put: async (record, supersede) => {
+		const replaced = [];
+		await file.update((current) => {
+			replaced.length = 0;
+			const ended = (record.outcome === "queued" && supersede !== void 0 ? Object.values(current).filter((held) => held.outcome === "queued" && held.id !== record.id && held.repo === record.repo && held.stack === record.stack) : []).map((held) => supersede?.(held) ?? held);
+			replaced.push(...ended);
+			return trimmed({
+				...current,
+				...Object.fromEntries(ended.map((entry) => [entry.id, entry])),
+				[record.id]: record
+			});
+		});
+		return replaced;
+	},
+	update: async (id, change) => {
+		let changed;
+		await file.update((current) => {
+			const record = current[id];
+			if (record === void 0) {
+				changed = void 0;
+				return current;
+			}
+			changed = change(record);
+			return trimmed({
+				...current,
+				[id]: changed
+			});
+		});
+		return changed;
+	}
+});
+//#endregion
+//#region src/server/engine/devices.ts
+var ENVIRONMENT_SEPARATOR = "::";
+var NATIVE = "native";
+var resolveDevice = (named, rows) => {
+	const at = named.indexOf(ENVIRONMENT_SEPARATOR);
+	const card = (at === -1 ? named : named.slice(0, at)).toLowerCase();
+	const environment = at === -1 ? NATIVE : named.slice(at + 2);
+	const owning = rows.filter((row) => row.card?.toLowerCase() === card);
+	const cardId = owning[0]?.card;
+	if (cardId === void 0) return;
+	const id = environment === NATIVE ? cardId : `${cardId}${ENVIRONMENT_SEPARATOR}${environment}`;
+	return {
+		id,
+		row: owning.find((row) => row.hostId === id) ?? (environment === NATIVE ? owning.find((row) => row.hostId === void 0) : void 0)
+	};
+};
+var NEEDED = [
+	["stacks", "read or drive Docker compose stacks"],
+	["programs", "receive what this sandbox sends"],
+	["stacks-managed", "take a stack this sandbox manages"]
+];
+var deviceCan = (row, feature) => {
+	const features = row?.facts?.features;
+	return features === void 0 ? void 0 : features.includes(feature);
+};
+var deviceProblems = (named, resolved) => {
+	if (resolved === void 0) return [`"${named}" is not a computer paired with this sandbox: pair it on Devices, or name another in the stacks manifest.`];
+	return NEEDED.filter(([feature]) => deviceCan(resolved.row, feature) === false).map(([, to]) => `The agent on "${resolved.id}" is too old to ${to}: update it there (\`intentic-machine upgrade\`, or Update on its Devices card).`);
+};
+var deviceOnline = (resolved) => resolved.row?.online !== false;
+//#endregion
+//#region src/server/engine/run.ts
+var ERROR_MAX = 4e3;
+var OUTPUT_MAX = 2e4;
+var clipped = (text) => text.length > ERROR_MAX ? `${text.slice(0, 3999)}…` : text;
+var tailOf$1 = (text) => text.length > OUTPUT_MAX ? text.slice(-2e4) : text;
+var refusedWith = (error, spec, secretNames, deviceId) => ({
+	fields: {
+		outcome: "refused",
+		error: clipped(error),
+		...secretNames === void 0 ? {} : { secretNames: [...secretNames] },
+		...deviceId === void 0 ? {} : { deviceId }
+	},
+	spec,
+	brokenOnMachine: false
+});
+var listedNames = (names) => {
+	const quoted = names.map((name) => `"${name}"`);
+	return quoted.length <= 1 ? quoted[0] ?? "" : `${quoted.slice(0, -1).join(", ")} and ${quoted.at(-1) ?? ""}`;
+};
+var declaredAt = async (deps, record) => {
+	const at = `"${record.repo}" at ${record.commit.slice(0, 12)}`;
+	let dir;
+	try {
+		dir = await repoFolder(deps.root, record.repo);
+	} catch (error) {
+		return { refusal: errorMessage(error) };
+	}
+	const read = await manifestAt(dir, record.commit, deps.git ?? runGit).catch((error) => ({
+		kind: "broken",
+		error: error.message
+	}));
+	if (read.kind === "absent") return { refusal: `${at} has no ${STACKS_MANIFEST_PATH}: nothing there declares "${record.stack}".` };
+	if (read.kind === "broken") return { refusal: `${at}: ${read.error}` };
+	const spec = read.manifest.stacks.find((declared) => declared.name === record.stack);
+	return spec === void 0 ? { refusal: `${at} does not declare "${record.stack}" in ${STACKS_MANIFEST_PATH}.` } : { spec };
+};
+var placedOn = async (deps, spec) => {
+	try {
+		return resolveDevice(spec.device, await deps.daemon.devices());
+	} catch {
+		return { id: spec.device };
+	}
+};
+var listedOn = async (deps, id, spec) => {
+	try {
+		const found = (await deps.daemon.stacks(id)).stacks.find((stack) => stack.name === spec.name);
+		const owner = found === void 0 ? void 0 : stackOwner(found);
+		if (owner !== void 0 && !owner.you) return {
+			kind: "refused",
+			error: `"${spec.name}" on "${spec.device}" was deployed by another sandbox (${owner.sandbox}): only that one may deploy it. Deploy it under another name, or have it taken down there first.`
+		};
+		return {
+			kind: "ok",
+			unmanaged: found !== void 0 && !found.managed
+		};
+	} catch (error) {
+		if (error instanceof DaemonRefusal && error.status !== 502 && error.status < 500) return {
+			kind: "refused",
+			error: error.bare ? SANDBOX_PREDATES_MANAGED : error.message
+		};
+		return {
+			kind: "failed",
+			error: errorMessage(error)
+		};
+	}
+};
+var ungrantedOf = async (deps, record, id, names) => {
+	if (names.length === 0) return [];
+	try {
+		const grant = (await deps.daemon.grants()).find((entry) => entry.repo === record.repo && entry.stack === record.stack && entry.device === grantDeviceOf(id));
+		return names.filter((name) => !(grant?.secrets ?? []).includes(name));
+	} catch (error) {
+		return error instanceof DaemonRefusal && error.bare ? "predates" : void 0;
+	}
+};
+var inputOf = (spec, record, adopt) => {
+	const facts = {
+		sha: record.commit,
+		ref: record.ref,
+		stack: spec.name
+	};
+	const env = Object.fromEntries(Object.entries(spec.env).map(([key, value]) => [key, withDeployFacts(value, facts)]));
+	const registries = spec.registries.map((registry) => ({
+		host: withDeployFacts(registry.host, facts),
+		username: withDeployFacts(registry.username, facts),
+		password: withDeployFacts(registry.password, facts)
+	}));
+	const hooks = spec.hooks.preDeploy !== void 0 || spec.hooks.postDeploy !== void 0 ? spec.hooks : void 0;
+	const reason = `${record.trigger.kind}${record.trigger.detail === void 0 ? "" : `: ${record.trigger.detail}`}`.slice(0, 200);
+	return {
+		repo: record.repo,
+		commit: record.commit,
+		...spec.compose === void 0 ? {} : { composeFile: spec.compose },
+		mode: spec.mode,
+		...Object.keys(env).length === 0 ? {} : { env },
+		...registries.length === 0 ? {} : { registries },
+		...hooks === void 0 ? {} : { hooks },
+		...spec.health === void 0 ? {} : { health: spec.health },
+		...record.pins === void 0 ? {} : { pins: record.pins },
+		...adopt ? { adopt: true } : {},
+		reason
+	};
+};
+var attemptDeploy = async (deps, record, firstHere) => {
+	const declared = await declaredAt(deps, record);
+	if ("refusal" in declared) return refusedWith(declared.refusal);
+	const { spec } = declared;
+	const secretNames = stackSecretNames(spec);
+	const resolved = await placedOn(deps, spec);
+	const problems = deviceProblems(spec.device, resolved);
+	if (resolved === void 0 || problems.length > 0) return refusedWith(problems.join(" "), spec, void 0, resolved?.id);
+	const { id } = resolved;
+	const misplaced = misplacedSecrets(spec);
+	if (misplaced.length > 0) return refusedWith(misplaced.join(" "), spec, secretNames, id);
+	const ungranted = await ungrantedOf(deps, record, id, secretNames);
+	if (ungranted === "predates") return refusedWith(SANDBOX_PREDATES_MANAGED, spec, secretNames, id);
+	if (ungranted !== void 0 && ungranted.length > 0) return refusedWith(`${listedNames(ungranted)} ${ungranted.length === 1 ? "is" : "are"} not granted to "${spec.name}" on "${id}": only the owner lets a stack receive a secret (Grant on the Deployments board, or an agent's \`secrets grant-stack ${record.repo} ${spec.name} ${id} ${ungranted.join(" ")}\` asks them on a card).`, spec, secretNames, id);
+	const listed = await listedOn(deps, id, spec);
+	if (listed.kind !== "ok") return listed.kind === "refused" ? refusedWith(listed.error, spec, secretNames, id) : {
+		fields: {
+			outcome: "failed",
+			error: clipped(listed.error),
+			deviceId: id
+		},
+		spec,
+		brokenOnMachine: false
+	};
+	const outcome = await deps.daemon.deployManaged(id, spec.name, inputOf(spec, record, firstHere && listed.unmanaged), deps.lifetime);
+	if (deps.lifetime?.aborted === true && outcome.kind !== "deployed") return {
+		fields: { outcome: "running" },
+		spec,
+		brokenOnMachine: false,
+		interrupted: true
+	};
+	switch (outcome.kind) {
+		case "deployed": {
+			const { result } = outcome;
+			return {
+				fields: {
+					outcome: "succeeded",
+					deviceId: id,
+					secretNames: result.secretNames.length > 0 ? [...result.secretNames].sort() : secretNames,
+					...Object.keys(result.secretMarks).length === 0 ? {} : { secretMarks: { ...result.secretMarks } },
+					...result.digests === void 0 ? {} : { digests: result.digests },
+					...result.envDigest === void 0 ? {} : { envDigest: result.envDigest },
+					...result.healthySeconds === void 0 ? {} : { healthySeconds: result.healthySeconds },
+					outputTail: tailOf$1(result.output)
+				},
+				spec,
+				brokenOnMachine: false
+			};
+		}
+		case "refused": return refusedWith(outcome.predates ? SANDBOX_PREDATES_MANAGED : outcome.error, spec, secretNames, id);
+		default: return {
+			fields: {
+				outcome: "failed",
+				error: clipped(outcome.error),
+				secretNames,
+				deviceId: id
+			},
+			spec,
+			brokenOnMachine: outcome.kind === "machine"
+		};
+	}
+};
+//#endregion
+//#region src/server/engine/lanes.ts
+var createRecordBook = (deps) => {
+	const listeners = /* @__PURE__ */ new Set();
+	const endings = /* @__PURE__ */ new Set();
+	const handling = /* @__PURE__ */ new Set();
+	const stamp = () => new Date(deps.now()).toISOString();
+	const publish = (record) => {
+		for (const listener of listeners) try {
+			listener(record);
+		} catch (error) {
+			deps.logger.warn(`deploys: a listener failed on ${record.id}: ${errorMessage(error)}`);
+		}
+	};
+	const settle = (record) => {
+		for (const ending of [...endings]) ending(record);
+	};
+	const announce = async (record) => {
+		const message = deployMessageOf(record, new Date(deps.now()));
+		if (message !== void 0) await deps.dispatch(message).catch((error) => deps.logger.warn(`deploys: the event for ${record.id} could not be dispatched: ${errorMessage(error)}`));
+	};
+	const write = async (id, change) => {
+		const record = await deps.store.update(id, (current) => ({
+			...current,
+			...change
+		}));
+		if (record !== void 0) publish(record);
+		return record;
+	};
+	const end = async (id, change) => {
+		const record = await write(id, {
+			...change,
+			endedAt: stamp()
+		});
+		if (record !== void 0) {
+			await announce(record);
+			settle(record);
+		}
+		return record;
+	};
+	const supersededBy = (newer) => (waiting) => ({
+		...waiting,
+		outcome: "superseded",
+		endedAt: stamp(),
+		error: `A newer deploy (${newer.id}, at ${newer.commit.slice(0, 12)}) replaced it while it waited.`
+	});
+	return {
+		store: deps.store,
+		now: deps.now,
+		logger: deps.logger,
+		stamp,
+		listeners,
+		endings,
+		handling,
+		publish,
+		settle,
+		write,
+		end,
+		supersededBy
+	};
+};
+var lastGood = async (book, repo, stack, except) => (await book.store.all()).find((record) => record.repo === repo && record.stack === stack && record.outcome === "succeeded" && record.id !== except);
+var ended = (tried) => tried.fields;
+var rollBack = async (book, run, failed, previous) => {
+	const record = {
+		id: recordId(book.now()),
+		repo: failed.repo,
+		stack: failed.stack,
+		device: previous.device,
+		commit: previous.commit,
+		...previous.ref === void 0 ? {} : { ref: previous.ref },
+		trigger: {
+			kind: "rollback",
+			detail: `after ${failed.id} failed, back to ${previous.id}`
+		},
+		outcome: "running",
+		queuedAt: book.stamp(),
+		startedAt: book.stamp(),
+		secretNames: [],
+		...previous.digests === void 0 ? {} : { pins: previous.digests }
+	};
+	await book.store.put(record);
+	book.publish(record);
+	const tried = await attemptDeploy(run, record, false);
+	if (tried.interrupted === true) return;
+	return book.end(record.id, ended(tried));
+};
+var endFailed = async (book, run, record, tried) => {
+	const wants = tried.brokenOnMachine && tried.spec?.onFailure === "rollback" && record.trigger.kind !== "rollback";
+	const previous = wants ? await lastGood(book, record.repo, record.stack, record.id) : void 0;
+	const said = tried.fields.error ?? "The deploy failed.";
+	if (previous === void 0) {
+		const nothing = wants ? " Nothing to roll back to: no earlier deploy of this stack from here came up." : "";
+		await book.end(record.id, {
+			...ended(tried),
+			error: `${said}${nothing}`
+		});
+		return;
+	}
+	await book.write(record.id, {
+		...ended(tried),
+		endedAt: book.stamp()
+	});
+	const back = await rollBack(book, run, record, previous);
+	if (back === void 0 && run.lifetime?.aborted === true) return;
+	if (back?.outcome === "succeeded") {
+		await book.end(record.id, {
+			outcome: "rolled-back",
+			rolledBackTo: previous.id
+		});
+		return;
+	}
+	await book.end(record.id, { error: `${said} Going back to ${previous.commit.slice(0, 12)} (${previous.id}) failed too: see ${back?.id ?? "its record"}.` });
+};
+var executeRecord = async (book, run, record) => {
+	book.handling.add(record.id);
+	try {
+		const tried = await attemptDeploy(run, record, await lastGood(book, record.repo, record.stack) === void 0).catch((error) => ({
+			fields: {
+				outcome: "failed",
+				error: `The deploy stopped on an error of this extension's own: ${errorMessage(error)}`
+			},
+			brokenOnMachine: false
+		}));
+		if (tried.interrupted === true) return;
+		if (tried.fields.outcome === "failed") await endFailed(book, run, record, tried);
+		else await book.end(record.id, ended(tried));
+	} finally {
+		book.handling.delete(record.id);
+	}
+};
+var createLanes = (book, run) => {
+	const lanes = /* @__PURE__ */ new Map();
+	const pending = /* @__PURE__ */ new Set();
+	const state = { stopped: false };
+	const drain = async (key) => {
+		while (!state.stopped) {
+			const next = (await book.store.all()).find((record) => record.outcome === "queued" && stackKey(record.repo, record.stack) === key);
+			if (next === void 0) return;
+			const claimed = await book.store.update(next.id, (record) => record.outcome === "queued" ? {
+				...record,
+				outcome: "running",
+				startedAt: book.stamp()
+			} : record);
+			if (claimed?.outcome === "running" && claimed.id === next.id) {
+				book.publish(claimed);
+				await executeRecord(book, run, claimed);
+			}
+		}
+	};
+	const kick = (key) => {
+		pending.add(key);
+		if (state.stopped || lanes.has(key)) return;
+		const lane = (async () => {
+			try {
+				while (pending.has(key) && !state.stopped) {
+					pending.delete(key);
+					await drain(key);
+				}
+			} catch (error) {
+				book.logger.warn(`deploys: a stack's lane stopped on an error: ${errorMessage(error)}`);
+			} finally {
+				lanes.delete(key);
+			}
+		})();
+		lanes.set(key, lane);
+	};
+	const stop = async () => {
+		state.stopped = true;
+		await Promise.allSettled([...lanes.values()]);
+	};
+	return {
+		kick,
+		stop
+	};
+};
+//#endregion
+//#region src/server/engine/engine.ts
+var RESTARTED = "The sandbox restarted during this deploy, so how it ended on the computer is unknown: check the stack there, then deploy again.";
+var refused = (message) => new ORPCError$1("BAD_REQUEST", { message });
+var missing = (message) => new ORPCError$1("NOT_FOUND", { message });
+var declaredStack = async (dir, ref, rev, at, git) => {
+	const read = await manifestAt(dir, rev, git);
+	if (read.kind === "absent") throw missing(`"${ref.repo}" ${at} has no ${STACKS_MANIFEST_PATH}, so it declares no stacks.`);
+	if (read.kind === "broken") throw refused(`"${ref.repo}" ${at}: ${read.error}`);
+	const spec = read.manifest.stacks.find((stack) => stack.name === ref.stack);
+	if (spec === void 0) {
+		const names = read.manifest.stacks.map((stack) => stack.name);
+		throw missing(`"${ref.repo}" ${at} does not declare "${ref.stack}"${names.length === 0 ? "" : `: it declares ${names.join(", ")}`}.`);
+	}
+	return spec;
+};
+var enqueueWith = async (book, deps, kick, request) => {
+	const git = deps.git ?? runGit;
+	const dir = await repoFolder(deps.root, request.repo);
+	const commit = request.commit === void 0 ? await headCommit(dir, request.repo, git) : await exactCommit(dir, request.repo, request.commit, () => deps.fetchRemote(dir), git);
+	const spec = await declaredStack(dir, request, commit, `at ${commit.slice(0, 12)}`, git);
+	const ref = request.ref ?? (request.commit === void 0 ? await branchOf(dir, git) : void 0);
+	const record = {
+		id: recordId(book.now()),
+		repo: request.repo,
+		stack: spec.name,
+		device: spec.device,
+		commit,
+		...ref === void 0 ? {} : { ref },
+		trigger: request.trigger,
+		outcome: "queued",
+		queuedAt: book.stamp(),
+		secretNames: [],
+		...request.pins === void 0 || Object.keys(request.pins).length === 0 ? {} : { pins: { ...request.pins } }
+	};
+	for (const waiting of await book.store.put(record, book.supersededBy(record))) {
+		book.publish(waiting);
+		book.settle(waiting);
+	}
+	book.publish(record);
+	kick(stackKey(record.repo, record.stack));
+	return record;
+};
+var settledIn = (book, id, signal) => new Promise((resolve, reject) => {
+	const done = (record) => {
+		book.endings.delete(listen);
+		signal?.removeEventListener("abort", aborted);
+		resolve(record);
+	};
+	const listen = (record) => {
+		if (record.id === id) done(record);
+	};
+	const aborted = () => {
+		book.endings.delete(listen);
+		reject(new ORPCError$1("CLIENT_CLOSED_REQUEST", { message: "Stopped waiting for the deploy; it carries on." }));
+	};
+	if (signal?.aborted === true) {
+		aborted();
+		return;
+	}
+	book.endings.add(listen);
+	signal?.addEventListener("abort", aborted, { once: true });
+	book.store.get(id).then((record) => {
+		if (record === void 0) {
+			book.endings.delete(listen);
+			reject(missing(`No deploy is named "${id}".`));
+		} else if (!isLive(record) && !book.handling.has(id)) done(record);
+	}, reject);
+});
+var stackRecords = async (book, ref) => (await book.store.all()).filter((record) => record.repo === ref.repo && record.stack === ref.stack);
+var rollbackRequest = async (book, ref, detail) => {
+	const good = (await stackRecords(book, ref)).filter((record) => record.outcome === "succeeded");
+	const target = ref.to === void 0 ? good[1] : good.find((record) => record.id === ref.to);
+	if (target === void 0) throw new ORPCError$1("CONFLICT", { message: ref.to === void 0 ? `"${ref.stack}" has no earlier successful deploy to go back to.` : `"${ref.to}" is not a successful deploy of "${ref.stack}": its history lists them.` });
+	const trigger = {
+		kind: "rollback",
+		detail: `to ${target.id}${detail === void 0 ? "" : `, ${detail}`}`.slice(0, 300)
+	};
+	return {
+		repo: ref.repo,
+		stack: ref.stack,
+		commit: target.commit,
+		ref: target.ref,
+		pins: target.digests,
+		trigger
+	};
+};
+var promoteRequest = async (book, repo, from, to, detail) => {
+	const source = await lastGood(book, repo, from);
+	if (source === void 0) throw new ORPCError$1("CONFLICT", { message: `"${from}" has no successful deploy to promote: deploy it first.` });
+	const trigger = {
+		kind: "promote",
+		detail: `from ${from} (${source.id})${detail === void 0 ? "" : `, ${detail}`}`.slice(0, 300)
+	};
+	return {
+		repo,
+		stack: to,
+		commit: source.commit,
+		ref: source.ref,
+		pins: source.digests,
+		trigger
+	};
+};
+var recover = async (book, kick) => {
+	const records = await book.store.all();
+	for (const record of records.filter((entry) => entry.outcome === "running")) await book.end(record.id, {
+		outcome: "failed",
+		error: RESTARTED
+	});
+	const kept = /* @__PURE__ */ new Map();
+	for (const record of records.filter((entry) => entry.outcome === "queued")) {
+		const key = stackKey(record.repo, record.stack);
+		const newer = kept.get(key);
+		if (newer === void 0) {
+			kept.set(key, record);
+			continue;
+		}
+		const ended = await book.store.update(record.id, book.supersededBy(newer));
+		if (ended !== void 0) {
+			book.publish(ended);
+			book.settle(ended);
+		}
+	}
+	for (const key of kept.keys()) kick(key);
+};
+var createDeploysEngine = (deps) => {
+	const now = deps.now ?? Date.now;
+	const book = createRecordBook({
+		store: deps.store,
+		dispatch: deps.daemon.dispatch,
+		logger: deps.logger,
+		now
+	});
+	const lanes = createLanes(book, {
+		root: deps.root,
+		daemon: deps.daemon,
+		git: deps.git,
+		lifetime: deps.lifetime
+	});
+	const states = /* @__PURE__ */ new Map();
+	const changedSecrets = /* @__PURE__ */ new Map();
+	const forgeProblems = /* @__PURE__ */ new Map();
+	const enqueue = (request) => enqueueWith(book, deps, lanes.kick, request);
+	return {
+		start: () => recover(book, lanes.kick),
+		stop: lanes.stop,
+		enqueue,
+		settled: (id, signal) => settledIn(book, id, signal),
+		records: () => deps.store.all(),
+		history: async (ref, limit = 50) => (await stackRecords(book, ref)).toSorted(newestFirst).slice(0, limit),
+		rollback: async (ref, detail) => enqueue(await rollbackRequest(book, ref, detail)),
+		promote: async (repo, from, to, detail) => enqueue(await promoteRequest(book, repo, from, to, detail)),
+		onDeployRecord: (listener) => {
+			book.listeners.add(listener);
+			return () => void book.listeners.delete(listener);
+		},
+		setStackState: (repo, stack, state, since, ownedElsewhere = false) => {
+			states.set(stackKey(repo, stack), {
+				state,
+				...since === void 0 ? {} : { since },
+				ownedElsewhere
+			});
+		},
+		stackState: (repo, stack) => states.get(stackKey(repo, stack)) ?? {
+			state: "unknown",
+			ownedElsewhere: false
+		},
+		setSecretsChanged: (repo, stack, names) => {
+			if (names.length === 0) changedSecrets.delete(stackKey(repo, stack));
+			else changedSecrets.set(stackKey(repo, stack), [...names].sort());
+		},
+		secretsChanged: (repo, stack) => changedSecrets.get(stackKey(repo, stack)) ?? [],
+		setForgeProblem: (repo, problem) => {
+			if (problem === void 0) forgeProblems.delete(repo);
+			else forgeProblems.set(repo, problem);
+		},
+		forgeProblem: (repo) => forgeProblems.get(repo),
+		noteForgeUrl: async (id, url) => {
+			await book.write(id, { forgeUrl: url });
+		}
+	};
+};
+//#endregion
+//#region src/server/engine/environments.ts
+var environmentOf = (deps, declared, records, grants, rows, sandboxProblem) => {
+	const { repo, spec } = declared;
+	const own = records.filter((record) => record.repo === repo && record.stack === spec.name);
+	const secrets = stackSecretNames(spec);
+	const resolved = rows === void 0 ? { id: spec.device } : resolveDevice(spec.device, rows);
+	const granted = grants?.find((grant) => resolved !== void 0 && grant.repo === repo && grant.stack === spec.name && grant.device === grantDeviceOf(resolved.id))?.secrets ?? [];
+	const state = deps.engine.stackState(repo, spec.name);
+	const forge = deps.engine.forgeProblem(repo);
+	const current = own.find((record) => record.outcome === "succeeded");
+	const active = own.find((record) => record.outcome === "running") ?? own.find((record) => record.outcome === "queued");
+	return {
+		repo,
+		stack: spec.name,
+		device: spec.device,
+		...resolved === void 0 ? {} : { deviceId: resolved.id },
+		mode: spec.mode,
+		...spec.description === void 0 ? {} : { description: spec.description },
+		triggers: spec.triggers,
+		secrets,
+		ungranted: secrets.filter((name) => !granted.includes(name)),
+		secretsChanged: [...deps.engine.secretsChanged(repo, spec.name)],
+		...current === void 0 ? {} : { current },
+		...active === void 0 ? {} : { active },
+		...own[0] === void 0 ? {} : { latest: own[0] },
+		state: state.state,
+		...state.since === void 0 ? {} : { stateSince: state.since },
+		ownedElsewhere: state.ownedElsewhere,
+		problems: [
+			...sandboxProblem === void 0 ? [] : [sandboxProblem],
+			...deviceProblems(spec.device, resolved),
+			...forge === void 0 ? [] : [forge]
+		]
+	};
+};
+var deployEnvironments = async (deps) => {
+	const manifests = await workspaceManifests(deps.root, deps.git ?? runGit);
+	if (manifests.stacks.length === 0) return {
+		environments: [],
+		manifestErrors: [...manifests.errors]
+	};
+	let sandboxProblem;
+	const [records, grants, rows] = await Promise.all([
+		deps.engine.records(),
+		deps.daemon.grants().catch((error) => {
+			if (error instanceof DaemonRefusal && error.bare) sandboxProblem = SANDBOX_PREDATES_MANAGED;
+		}),
+		deps.daemon.devices().catch(() => void 0)
+	]);
+	return {
+		environments: manifests.stacks.map((declared) => environmentOf(deps, declared, records, grants, rows, sandboxProblem)),
+		manifestErrors: [...manifests.errors]
+	};
+};
+//#endregion
+//#region src/server/engine/ci-feed.ts
+var CATCH_UP_SLACK_MS = 36e5;
+var BACKOFF = {
+	floorMs: 1e3,
+	capMs: 6e4
+};
+var PREDATES_PAUSE_MS = 6e5;
+var passOfRun = (run) => ({
+	host: run.host,
+	repo: run.repo,
+	branch: run.branch,
+	sha: run.sha,
+	runId: run.runId,
+	...run.workflow === void 0 ? {} : { workflow: run.workflow },
+	...run.url === void 0 ? {} : { url: run.url }
+});
+var passOfFrame = (frame) => {
+	if (frame.kind === "run") return frame.run.status === "success" ? passOfRun(frame.run) : void 0;
+	if (frame.status !== "success") return;
+	return {
+		host: frame.host,
+		repo: frame.repo,
+		branch: frame.branch,
+		sha: frame.sha,
+		runId: frame.runId,
+		job: frame.job,
+		...frame.workflow === void 0 ? {} : { workflow: frame.workflow },
+		...frame.url === void 0 ? {} : { url: frame.url }
+	};
+};
+async function* feedFrames(body) {
+	const decoder = new TextDecoder();
+	let buffered = "";
+	const reader = body.getReader();
+	try {
+		while (true) {
+			const { done, value } = await reader.read();
+			buffered += done ? decoder.decode() : decoder.decode(value, { stream: true });
+			const lines = buffered.split("\n");
+			buffered = done ? "" : lines.pop() ?? "";
+			for (const line of lines) {
+				const trimmed = line.replace(/\r$/u, "");
+				if (!trimmed.startsWith("data:")) continue;
+				let raw;
+				try {
+					raw = JSON.parse(trimmed.slice(5).trim());
+				} catch {
+					continue;
+				}
+				const parsed = CiFeedEventWireSchema.safeParse(raw);
+				if (parsed.success) yield parsed.data;
+			}
+			if (done) return;
+		}
+	} finally {
+		reader.releaseLock();
+	}
+}
+var pause = (ms, signal) => new Promise((resolve) => {
+	if (signal.aborted) {
+		resolve();
+		return;
+	}
+	const done = () => {
+		clearTimeout(timer);
+		signal.removeEventListener("abort", done);
+		resolve();
+	};
+	const timer = setTimeout(done, ms);
+	signal.addEventListener("abort", done, { once: true });
+});
+var createCiFeed = (deps) => {
+	const now = deps.now ?? Date.now;
+	const backoff = deps.backoff ?? BACKOFF;
+	let running;
+	const noteSeen = async () => {
+		const at = now();
+		await deps.store.update((current) => ({
+			...current,
+			feedSeenAt: at
+		})).catch(() => void 0);
+	};
+	const catchUp = async () => {
+		const seen = (await deps.store.read()).feedSeenAt;
+		if (seen === void 0) return;
+		const missed = (await deps.daemon.ciRuns()).filter((run) => run.status === "success" && (run.createdAt ?? 0) >= seen - CATCH_UP_SLACK_MS).toSorted((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0));
+		for (const run of missed) await deps.onPass(passOfRun(run));
+	};
+	const loop = async (signal) => {
+		let wait = backoff.floorMs;
+		let predatesSaid = false;
+		while (!signal.aborted) {
+			try {
+				const response = await deps.daemon.ciFeed(signal);
+				if (response.body === null) throw new Error("the CI feed answered no stream");
+				await catchUp().catch((error) => deps.logger.warn(`deploys: the CI runs missed while the feed was down could not be read: ${errorMessage(error)}`));
+				await noteSeen();
+				for await (const frame of feedFrames(response.body)) {
+					wait = backoff.floorMs;
+					const pass = passOfFrame(frame);
+					if (pass !== void 0) await deps.onPass(pass);
+				}
+			} catch (error) {
+				if (signal.aborted) break;
+				if (error instanceof DaemonRefusal && error.bare) {
+					if (!predatesSaid) {
+						predatesSaid = true;
+						deps.logger.warn("deploys: this sandbox serves no CI feed (it predates managed deploys): CI triggers wait for it to be updated");
+					}
+					await pause(PREDATES_PAUSE_MS, signal);
+					continue;
+				}
+				deps.logger.warn(`deploys: the CI feed dropped: ${errorMessage(error)}`);
+			}
+			if (signal.aborted) break;
+			await noteSeen();
+			await pause(wait, signal);
+			wait = Math.min(wait * 2, backoff.capMs);
+		}
+	};
+	return {
+		running: () => running !== void 0,
+		start: () => {
+			if (running !== void 0) return;
+			const controller = new AbortController();
+			running = {
+				controller,
+				loop: loop(controller.signal)
+			};
+		},
+		stop: async () => {
+			const was = running;
+			running = void 0;
+			if (was === void 0) return;
+			was.controller.abort();
+			await was.loop.catch(() => void 0);
+			await noteSeen();
+		}
+	};
+};
+//#endregion
+//#region src/server/engine/watch-store.ts
+var WatchedStackSchema = object({
+	repo: string(),
+	stack: string(),
+	state: StackHealthStateSchema,
+	since: string(),
+	reads: number$1().int().nonnegative(),
+	told: _enum(["ok", "bad"])
+});
+var WatchedHostSchema = object({
+	device: string(),
+	low: array(string())
+});
+var RegistryCheckSchema = object({
+	repo: string(),
+	stack: string(),
+	checkedAt: string()
+});
+var ForgeReportSchema = object({
+	id: string(),
+	deployment: number$1().optional(),
+	reported: string()
+});
+var ToldMarksSchema = object({
+	repo: string(),
+	stack: string(),
+	record: string(),
+	told: record(string(), string())
+});
+var DeployWatchFileSchema = object({
+	stacks: array(WatchedStackSchema).default([]),
+	hosts: array(WatchedHostSchema).default([]),
+	registry: array(RegistryCheckSchema).default([]),
+	forge: array(ForgeReportSchema).default([]),
+	marks: array(ToldMarksSchema).default([]),
+	feedSeenAt: number$1().optional()
+});
+var WATCH_PATH = "deploy-watch.json";
+var emptyWatch = () => ({
+	stacks: [],
+	hosts: [],
+	registry: [],
+	forge: [],
+	marks: []
+});
+//#endregion
+//#region src/server/engine/forge.ts
+var forgeStateOf = (record) => {
+	switch (record.outcome) {
+		case "running": return "in_progress";
+		case "succeeded": return "success";
+		case "failed":
+		case "rolled-back":
+		case "refused": return "failure";
+		case "superseded": return "inactive";
+		default: return;
+	}
+};
+var LOOPBACK = /^(?:localhost|127\.\d+\.\d+\.\d+|\[::1\]|0\.0\.0\.0)$/iu;
+var environmentUrlOf = (spec) => {
+	for (const url of spec?.health?.http ?? []) {
+		const parsed = URL.canParse(url) ? new URL(url) : void 0;
+		if (parsed !== void 0 && !LOOPBACK.test(parsed.hostname)) return parsed.origin;
+	}
+};
+var descriptionOf = (record) => {
+	const said = record.error?.split("\n")[0] ?? (record.outcome === "running" ? `Deploying ${record.commit.slice(0, 8)} by Intentic` : `Deploy ${record.outcome}`);
+	return said.length > 140 ? `${said.slice(0, 139)}…` : said;
+};
+var boardLinkOf = (base, record) => `${base.replace(/\/+$/u, "")}/ext/deployments?repo=${encodeURIComponent(record.repo)}&stack=${encodeURIComponent(record.stack)}`;
+var scopeRefusal = (error) => error instanceof DaemonRefusal && (error.status === 401 || error.status === 403);
+var notMapped = (error) => error instanceof DaemonRefusal && (error.status === 404 || error.bare);
+var createForgeReports = (deps) => {
+	const git = deps.git ?? runGit;
+	const inOrder = keyedLock();
+	const logged = /* @__PURE__ */ new Set();
+	const specOf = async (record) => {
+		const read = await repoFolder(deps.root, record.repo).then((dir) => manifestAt(dir, record.commit, git)).catch(() => void 0);
+		return read?.kind === "read" ? read.manifest.stacks.find((stack) => stack.name === record.stack) : void 0;
+	};
+	const report = async (record) => {
+		const state = forgeStateOf(record);
+		const held = (await deps.store.read()).forge.find((entry) => entry.id === record.id);
+		if (state === void 0 || held?.reported === state || held === void 0 && state === "inactive" || !/^[0-9a-f]{40,64}$/u.test(record.commit)) return;
+		const environmentUrl = environmentUrlOf(await specOf(record));
+		const base = deps.publicUrl?.();
+		let answer;
+		try {
+			answer = await deps.daemon.reportDeployment({
+				repo: record.repo,
+				sha: record.commit,
+				environment: record.stack,
+				state,
+				production: !record.stack.includes("staging"),
+				description: descriptionOf(record),
+				...environmentUrl === void 0 ? {} : { environmentUrl },
+				...base === void 0 ? {} : { logUrl: boardLinkOf(base, record) },
+				...held?.deployment === void 0 ? {} : { deploymentId: held.deployment }
+			});
+		} catch (error) {
+			if (notMapped(error)) return;
+			if (scopeRefusal(error)) deps.engine.setForgeProblem(record.repo, `The forge refused this repository's deploy reports: ${errorMessage(error)}`);
+			if (!logged.has(record.repo)) {
+				logged.add(record.repo);
+				deps.logger.warn(`deploys: the forge was not told of ${record.id}: ${errorMessage(error)}`);
+			}
+			return;
+		}
+		logged.delete(record.repo);
+		deps.engine.setForgeProblem(record.repo, void 0);
+		const deployment = answer.deploymentId ?? held?.deployment;
+		const kept = {
+			id: record.id,
+			...deployment === void 0 ? {} : { deployment },
+			reported: state
+		};
+		await deps.store.update((current) => ({
+			...current,
+			forge: [...current.forge.filter((entry) => entry.id !== record.id), kept].slice(-200)
+		}));
+		if (answer.url !== void 0 && record.forgeUrl === void 0) await deps.engine.noteForgeUrl(record.id, answer.url);
+	};
+	return { recorded: (record) => inOrder(record.id, () => report(record)).catch((error) => deps.logger.warn(`deploys: a forge report for ${record.id} stopped: ${errorMessage(error)}`)) };
+};
+//#endregion
+//#region src/server/engine/monitor.ts
+var stackHealthOf = (found) => {
+	if (found === void 0) return "missing";
+	const { services } = found;
+	if (services.some((service) => service.state === "restarting")) return "restarting";
+	if (!services.some((service) => service.state === "running")) return "stopped";
+	const finished = (service) => service.state === "exited" && service.status.startsWith("Exited (0)");
+	return services.some((service) => service.health === "unhealthy" || service.state !== "running" && !finished(service)) ? "unhealthy" : "running";
+};
+var BAD = /* @__PURE__ */ new Set([
+	"unhealthy",
+	"restarting",
+	"stopped",
+	"missing"
+]);
+var READS_TO_TELL = 2;
+var stepped = (held, read, records, at) => {
+	const { repo, spec } = read.declared;
+	const own = records.filter((record) => record.repo === repo && record.stack === spec.name);
+	const deploying = own.some((record) => record.outcome === "queued" || record.outcome === "running");
+	const same = held?.state === read.state;
+	const entry = {
+		repo,
+		stack: spec.name,
+		state: read.state,
+		since: same ? held.since : at,
+		reads: deploying ? 0 : same ? held.reads + 1 : 1,
+		told: held?.told ?? "ok"
+	};
+	if (deploying || read.ownedElsewhere || entry.reads < READS_TO_TELL) return { entry };
+	const base = {
+		repo,
+		stack: spec.name,
+		device: spec.device,
+		state: read.state,
+		since: entry.since
+	};
+	const cameUp = own.some((record) => record.outcome === "succeeded");
+	if (BAD.has(read.state) && entry.told === "ok" && cameUp) return {
+		entry: {
+			...entry,
+			told: "bad"
+		},
+		event: {
+			...base,
+			type: "stack_unhealthy"
+		}
+	};
+	if (read.state === "running" && entry.told === "bad") return {
+		entry: {
+			...entry,
+			told: "ok"
+		},
+		event: {
+			...base,
+			type: "stack_recovered"
+		}
+	};
+	return { entry };
+};
+var placed = (stacks, rows) => {
+	const byDevice = /* @__PURE__ */ new Map();
+	for (const declared of stacks) {
+		const resolved = resolveDevice(declared.spec.device, rows);
+		if (resolved !== void 0) {
+			const entry = byDevice.get(resolved.id) ?? {
+				row: resolved.row,
+				stacks: []
+			};
+			entry.stacks.push(declared);
+			byDevice.set(resolved.id, entry);
+		}
+	}
+	return byDevice;
+};
+var GIB = 1024 ** 3;
+var diskLow = (disk) => disk.freeBytes < disk.totalBytes * .1 || disk.freeBytes < 5 * GIB;
+var diskClear = (disk) => disk.freeBytes >= disk.totalBytes * .12 && disk.freeBytes >= 6 * GIB;
+var memoryLow = (memory) => memory.availableBytes < memory.totalBytes * .05;
+var memoryClear = (memory) => memory.availableBytes >= memory.totalBytes * .08;
+var hostStepped = (device, held, stats) => {
+	const low = new Set(held);
+	const events = [];
+	const seen = /* @__PURE__ */ new Set();
+	const measured = [];
+	for (const disk of stats.disks.filter((candidate) => candidate.totalBytes > 0)) {
+		const volume = `${disk.totalBytes}:${disk.freeBytes}`;
+		if (seen.has(volume)) continue;
+		seen.add(volume);
+		const event = {
+			type: "host_low_disk",
+			device,
+			what: disk.path,
+			freeBytes: disk.freeBytes,
+			totalBytes: disk.totalBytes
+		};
+		measured.push({
+			key: `disk:${disk.path}`,
+			isLow: diskLow(disk),
+			isClear: diskClear(disk),
+			event
+		});
+	}
+	if (stats.memory.totalBytes > 0) {
+		const event = {
+			type: "host_low_memory",
+			device,
+			what: "memory",
+			freeBytes: stats.memory.availableBytes,
+			totalBytes: stats.memory.totalBytes
+		};
+		measured.push({
+			key: "memory",
+			isLow: memoryLow(stats.memory),
+			isClear: memoryClear(stats.memory),
+			event
+		});
+	}
+	for (const { key, isLow, isClear, event } of measured) if (isLow && !low.has(key)) {
+		low.add(key);
+		events.push(event);
+	} else if (isClear) low.delete(key);
+	return {
+		low: [...low].sort(),
+		events
+	};
+};
+var createMonitor = (deps) => {
+	const tell = async (message) => {
+		await deps.daemon.dispatch(message).catch((error) => deps.logger.warn(`deploys: a ${message.type} event could not be dispatched: ${errorMessage(error)}`));
+	};
+	const restore = async () => {
+		for (const held of (await deps.store.read()).stacks) deps.engine.setStackState(held.repo, held.stack, held.state, held.since);
+	};
+	const listed = async (id, row) => {
+		if (row?.online === false) return;
+		try {
+			return await deps.daemon.stacks(id);
+		} catch (error) {
+			deps.logger.warn(`deploys: the monitor could not read the stacks on ${id}: ${errorMessage(error)}`);
+			return;
+		}
+	};
+	const readStacks = async (stacks, rows) => {
+		const reads = [];
+		for (const [id, { row, stacks: here }] of placed(stacks, rows)) {
+			const list = await listed(id, row);
+			for (const declared of here) {
+				const found = list?.stacks.find((stack) => stack.name === declared.spec.name);
+				const owner = found === void 0 ? void 0 : stackOwner(found);
+				reads.push({
+					declared,
+					state: list === void 0 ? "unreachable" : stackHealthOf(found),
+					ownedElsewhere: owner !== void 0 && !owner.you
+				});
+			}
+		}
+		if (reads.length === 0) return;
+		const records = await deps.engine.records();
+		const at = new Date(deps.now()).toISOString();
+		const events = [];
+		const entries = [];
+		await deps.store.update((current) => {
+			entries.length = 0;
+			events.length = 0;
+			for (const read of reads) {
+				const { entry, event } = stepped(current.stacks.find((entry) => entry.repo === read.declared.repo && entry.stack === read.declared.spec.name), read, records, at);
+				entries.push(entry);
+				events.push(...event === void 0 ? [] : [event]);
+			}
+			return JSON.stringify(entries) === JSON.stringify(current.stacks) ? current : {
+				...current,
+				stacks: [...entries]
+			};
+		});
+		for (const [index, entry] of entries.entries()) deps.engine.setStackState(entry.repo, entry.stack, entry.state, entry.since, reads[index]?.ownedElsewhere);
+		for (const event of events) await tell(stackStateMessageOf(event, new Date(deps.now())));
+	};
+	const readHosts = async (stacks, rows) => {
+		const readings = [];
+		for (const [id, { row }] of placed(stacks, rows)) {
+			if (!deviceOnline({
+				id,
+				row
+			}) || deviceCan(row, "host-stats") !== true) continue;
+			try {
+				readings.push({
+					device: id,
+					stats: await deps.daemon.hostStats(id)
+				});
+			} catch (error) {
+				deps.logger.warn(`deploys: the monitor could not read how full ${id} is: ${errorMessage(error)}`);
+			}
+		}
+		if (readings.length === 0) return;
+		const events = [];
+		await deps.store.update((current) => {
+			events.length = 0;
+			const hosts = current.hosts.filter((host) => !readings.some((reading) => reading.device === host.device));
+			for (const { device, stats } of readings) {
+				const stepping = hostStepped(device, current.hosts.find((host) => host.device === device)?.low ?? [], stats);
+				hosts.push({
+					device,
+					low: stepping.low
+				});
+				events.push(...stepping.events);
+			}
+			return JSON.stringify(hosts) === JSON.stringify(current.hosts) ? current : {
+				...current,
+				hosts
+			};
+		});
+		for (const event of events) await tell(hostLowMessageOf(event, new Date(deps.now())));
+	};
+	return {
+		restore,
+		readStacks,
+		readHosts
+	};
+};
+//#endregion
+//#region src/server/engine/registry.ts
+var imagesMoved = (output) => /\bContainer\s+\S+\s+(?:Recreated?|Created)\b/u.test(output);
+var freshAt = (check, current) => Math.max(check === void 0 ? 0 : Date.parse(check.checkedAt), Date.parse(current.endedAt ?? current.queuedAt));
+var createRegistryChecks = (deps) => {
+	const pullable = (watched, records, rows) => {
+		const { spec } = watched.declared;
+		const own = records.filter((record) => record.repo === watched.repo && record.stack === spec.name);
+		const current = own.find((record) => record.outcome === "succeeded");
+		const resolved = resolveDevice(spec.device, rows);
+		const busy = own.some((record) => record.outcome === "queued" || record.outcome === "running");
+		if (current === void 0 || resolved === void 0 || busy || !deviceOnline(resolved) || deps.engine.stackState(watched.repo, spec.name).ownedElsewhere) return;
+		return {
+			id: resolved.id,
+			current
+		};
+	};
+	const pullOne = async (watched, id, current) => {
+		const { repo } = watched;
+		const { spec } = watched.declared;
+		let output;
+		try {
+			output = await deps.daemon.op(id, spec.name, "pull");
+		} catch (error) {
+			deps.logger.warn(`deploys: the registry check could not pull ${repo} ${spec.name} on ${id}: ${errorMessage(error)}`);
+			return;
+		}
+		if (!imagesMoved(output)) return;
+		const trigger = {
+			kind: "registry",
+			detail: `newer images behind its tags (pulled every ${watched.every})`
+		};
+		try {
+			return await deps.engine.enqueue({
+				repo,
+				stack: spec.name,
+				commit: current.commit,
+				ref: current.ref,
+				trigger
+			});
+		} catch (error) {
+			deps.logger.warn(`deploys: newer images of ${repo} ${spec.name} were pulled but their deploy could not queue: ${errorMessage(error)}`);
+			return;
+		}
+	};
+	const check = async (stacks, rows) => {
+		const watched = stacks.flatMap((declared) => declared.spec.triggers.flatMap((trigger) => "registry" in trigger ? [{
+			repo: declared.repo,
+			declared,
+			every: trigger.registry.every,
+			everyMs: deployIntervalMs(trigger.registry.every)
+		}] : []).slice(0, 1));
+		if (watched.length === 0) return [];
+		const [file, records] = await Promise.all([deps.store.read(), deps.engine.records()]);
+		const queued = [];
+		const checked = [];
+		for (const one of watched) {
+			const held = file.registry.find((entry) => entry.repo === one.repo && entry.stack === one.declared.spec.name);
+			const ready = pullable(one, records, rows);
+			if (ready === void 0 || deps.now() - freshAt(held, ready.current) < one.everyMs) {
+				checked.push(...held === void 0 ? [] : [held]);
+				continue;
+			}
+			checked.push({
+				repo: one.repo,
+				stack: one.declared.spec.name,
+				checkedAt: new Date(deps.now()).toISOString()
+			});
+			const record = await pullOne(one, ready.id, ready.current);
+			queued.push(...record === void 0 ? [] : [record]);
+		}
+		await deps.store.update((current) => ({
+			...current,
+			registry: checked
+		}));
+		return queued;
+	};
+	return { check };
+};
+//#endregion
+//#region src/server/engine/rotation.ts
+var ABSENT = "absent";
+var MARKS_PER_CALL = 200;
+var changeId = (fresh) => createHash("sha256").update(fresh.map(([name, mark]) => `${name}=${mark}`).join("\n")).digest("hex").slice(0, 16);
+var createRotationWatch = (deps) => {
+	const redeploy = async (repo, stack, names) => {
+		const own = (await deps.engine.records()).filter((record) => record.repo === repo && record.stack === stack);
+		if (own.some((record) => record.outcome === "queued")) return true;
+		const target = own.find((record) => record.outcome === "running") ?? own.find((record) => record.outcome === "succeeded");
+		if (target === void 0) return true;
+		const trigger = {
+			kind: "secret-change",
+			detail: `${names.join(", ")} changed in the secret store`.slice(0, 300)
+		};
+		try {
+			await deps.engine.enqueue({
+				repo,
+				stack,
+				commit: target.commit,
+				ref: target.ref,
+				pins: target.pins,
+				trigger
+			});
+			return true;
+		} catch (error) {
+			deps.logger.warn(`deploys: a rotated secret's redeploy of ${repo} ${stack} could not queue: ${errorMessage(error)}`);
+			return false;
+		}
+	};
+	const notify = async (repo, spec, fresh) => {
+		const message = secretsChangedMessageOf({
+			repo,
+			stack: spec.name,
+			device: spec.device,
+			names: fresh.map(([name]) => name),
+			mark: changeId(fresh)
+		});
+		try {
+			await deps.daemon.dispatch(message);
+			return true;
+		} catch (error) {
+			deps.logger.warn(`deploys: a rotated secret's event for ${repo} ${spec.name} could not be dispatched: ${errorMessage(error)}`);
+			return false;
+		}
+	};
+	const marksNow = async (names) => {
+		const marks = /* @__PURE__ */ new Map();
+		for (let start = 0; start < names.length; start += MARKS_PER_CALL) {
+			const chunk = names.slice(start, start + MARKS_PER_CALL);
+			const answered = await deps.daemon.marks(chunk);
+			for (const name of chunk) marks.set(name, answered[name] ?? ABSENT);
+		}
+		return marks;
+	};
+	const check = async (stacks) => {
+		const records = await deps.engine.records();
+		const watched = stacks.flatMap((declared) => {
+			const current = records.find((record) => record.repo === declared.repo && record.stack === declared.spec.name && record.outcome === "succeeded");
+			return current?.secretMarks === void 0 || Object.keys(current.secretMarks).length === 0 ? [] : [{
+				declared,
+				current
+			}];
+		});
+		if (watched.length === 0) return;
+		const now = await marksNow([...new Set(watched.flatMap(({ current }) => Object.keys(current.secretMarks)))].sort());
+		const file = await deps.store.read();
+		for (const { declared, current } of watched) {
+			const { repo, spec } = declared;
+			const held = file.marks.find((entry) => entry.repo === repo && entry.stack === spec.name && entry.record === current.id)?.told ?? {};
+			const changed = [];
+			const fresh = [];
+			for (const [name, deployed] of Object.entries(current.secretMarks).toSorted(([a], [b]) => a.localeCompare(b))) {
+				const mark = now.get(name) ?? ABSENT;
+				if (mark !== deployed) {
+					changed.push(name);
+					fresh.push(...held[name] === mark ? [] : [[name, mark]]);
+				}
+			}
+			deps.engine.setSecretsChanged(repo, spec.name, changed);
+			if (fresh.length === 0) continue;
+			const names = fresh.map(([name]) => name);
+			if (spec.onSecretChange === "redeploy" ? await redeploy(repo, spec.name, names) : await notify(repo, spec, fresh)) {
+				deps.logger.info?.(`deploys: ${names.join(", ")} changed under ${repo} ${spec.name} (${spec.onSecretChange})`);
+				await deps.store.update((watch) => {
+					const others = watch.marks.filter((entry) => !(entry.repo === repo && entry.stack === spec.name));
+					return {
+						...watch,
+						marks: [...others, {
+							repo,
+							stack: spec.name,
+							record: current.id,
+							told: {
+								...held,
+								...Object.fromEntries(fresh)
+							}
+						}]
+					};
+				});
+			}
+		}
+	};
+	return { check };
+};
+//#endregion
+//#region src/server/engine/triggers.ts
+var ciTriggerMatches = (trigger, pass) => {
+	if (trigger.branch !== pass.branch) return false;
+	if (trigger.workflow !== void 0 && pass.workflow !== void 0 && trigger.workflow !== pass.workflow) return false;
+	return trigger.job === void 0 ? pass.job === void 0 : pass.job === trigger.job;
+};
+var ciDetail = (pass) => {
+	return `${pass.job === void 0 ? "the run" : `job "${pass.job}"`}${pass.workflow === void 0 ? "" : ` of "${pass.workflow}"`} passed on ${pass.branch} (run ${pass.runId})`.slice(0, 300);
+};
+var standingOf = (records, repo, stack) => {
+	const own = records.filter((record) => record.repo === repo && record.stack === stack);
+	return [own.find((record) => record.outcome === "running") ?? own.find((record) => record.outcome === "queued"), own.find((record) => record.outcome === "succeeded")].filter((record) => record !== void 0);
+};
+var sameImages = (left, right) => JSON.stringify(Object.entries(left ?? {}).toSorted()) === JSON.stringify(Object.entries(right ?? {}).toSorted());
+var HEARD_KEPT = 2e3;
+var createDeployTriggers = (deps) => {
+	const git = deps.git ?? runGit;
+	const inOrder = keyedLock();
+	const heard = /* @__PURE__ */ new Set();
+	const hear = (key) => {
+		if (heard.has(key)) return false;
+		heard.add(key);
+		if (heard.size > HEARD_KEPT) heard.delete(heard.values().next().value);
+		return true;
+	};
+	const supersedes = async (dir, records, request) => {
+		for (const record of standingOf(records, request.repo, request.stack)) {
+			if (record.commit === request.commit) {
+				if (request.pins === void 0 || sameImages(record.digests ?? record.pins, request.pins)) return record;
+				continue;
+			}
+			const held = await holds(dir, record.commit, request.commit, git);
+			if (held === "unknown") deps.logger.warn(`deploys: could not tell whether ${record.commit.slice(0, 12)} holds ${request.commit.slice(0, 12)}; deploying`);
+			else if (held) return record;
+		}
+	};
+	const declared = async (repo, wanted) => {
+		const dir = await repoFolder(deps.root, repo);
+		const read = await manifestAt(dir, "HEAD", git);
+		return {
+			dir,
+			stacks: read.kind === "read" ? read.manifest.stacks.filter(wanted) : []
+		};
+	};
+	const enqueueUnlessHeld = async (dir, request) => {
+		const records = await deps.engine.records();
+		const ciAlready = request.trigger.kind === "ci" && records.some((record) => record.repo === request.repo && record.stack === request.stack && record.commit === request.commit && record.trigger.kind === "ci");
+		const held = ciAlready ? void 0 : await supersedes(dir, records, request);
+		if (ciAlready || held !== void 0) {
+			deps.logger.info?.(`deploys: skipped ${request.repo} ${request.stack} at ${request.commit.slice(0, 12)} (${request.trigger.kind}): ${ciAlready ? "CI already deployed this commit here" : `it already runs or waits on this commit or a newer one (${held?.id ?? ""})`}`);
+			return;
+		}
+		return await deps.engine.enqueue(request);
+	};
+	const ciPassedNow = async (pass) => {
+		const { dir, stacks } = await declared(pass.repo, (spec) => spec.triggers.some((trigger) => "ci" in trigger && ciTriggerMatches(trigger.ci, pass)));
+		if (stacks.length === 0) return [];
+		const commit = await exactCommit(dir, pass.repo, pass.sha, () => deps.fetchRemote(dir), git);
+		const queued = [];
+		for (const spec of stacks) {
+			const trigger = {
+				kind: "ci",
+				detail: ciDetail(pass),
+				...pass.url === void 0 ? {} : { url: pass.url }
+			};
+			try {
+				const record = await enqueueUnlessHeld(dir, {
+					repo: pass.repo,
+					stack: spec.name,
+					commit,
+					ref: pass.branch,
+					trigger
+				});
+				queued.push(...record === void 0 ? [] : [record]);
+			} catch (error) {
+				deps.logger.warn(`deploys: a passing CI run could not queue ${pass.repo} ${spec.name} at ${commit.slice(0, 12)}: ${errorMessage(error)}`);
+			}
+		}
+		return queued;
+	};
+	const followNow = async (record) => {
+		const { dir, stacks } = await declared(record.repo, (spec) => spec.triggers.some((trigger) => "after" in trigger && trigger.after.stack === record.stack));
+		const queued = [];
+		for (const spec of stacks) {
+			const trigger = {
+				kind: "after",
+				detail: `after ${record.stack} (${record.id})`
+			};
+			try {
+				const request = {
+					repo: record.repo,
+					stack: spec.name,
+					commit: record.commit,
+					ref: record.ref,
+					pins: record.digests,
+					trigger
+				};
+				const queuedOne = await enqueueUnlessHeld(dir, request);
+				queued.push(...queuedOne === void 0 ? [] : [queuedOne]);
+			} catch (error) {
+				deps.logger.warn(`deploys: a promotion after ${record.id} could not queue ${spec.name}: ${errorMessage(error)}`);
+			}
+		}
+		return queued;
+	};
+	return {
+		ciPassed: (pass) => {
+			const key = `${pass.host}:${pass.repo}:${pass.runId}:${pass.job === void 0 ? "run" : `job:${pass.job}`}`;
+			if (!hear(key)) return Promise.resolve([]);
+			return inOrder(pass.repo, () => ciPassedNow(pass)).catch((error) => {
+				heard.delete(key);
+				deps.logger.warn(`deploys: a passing CI run of ${pass.repo} at ${pass.sha.slice(0, 12)} was not read for deploys: ${errorMessage(error)}`);
+				return [];
+			});
+		},
+		recorded: (record) => {
+			if (record.outcome !== "succeeded" || record.trigger.kind === "rollback" || !hear(`after:${record.id}`)) return Promise.resolve([]);
+			return inOrder(record.repo, () => followNow(record)).catch((error) => {
+				deps.logger.warn(`deploys: the stacks following ${record.id} were not read: ${errorMessage(error)}`);
+				return [];
+			});
+		}
+	};
+};
+//#endregion
+//#region src/server/engine/watch.ts
+var EVERY_MS = 6e4;
+var HOSTS_EVERY = 5;
+var hasCiTrigger = (stacks) => stacks.some(({ spec }) => spec.triggers.some((trigger) => "ci" in trigger));
+var createDeployWatch = (deps) => {
+	const now = deps.now ?? Date.now;
+	const git = deps.git ?? runGit;
+	const triggers = createDeployTriggers({
+		root: deps.root,
+		engine: deps.engine,
+		fetchRemote: deps.fetchRemote,
+		logger: deps.logger,
+		git
+	});
+	const forge = createForgeReports({
+		root: deps.root,
+		engine: deps.engine,
+		daemon: deps.daemon,
+		store: deps.store,
+		publicUrl: deps.publicUrl,
+		logger: deps.logger,
+		git
+	});
+	const monitor = createMonitor({
+		engine: deps.engine,
+		daemon: deps.daemon,
+		store: deps.store,
+		logger: deps.logger,
+		now
+	});
+	const registry = createRegistryChecks({
+		engine: deps.engine,
+		daemon: deps.daemon,
+		store: deps.store,
+		logger: deps.logger,
+		now
+	});
+	const rotation = createRotationWatch({
+		engine: deps.engine,
+		daemon: deps.daemon,
+		store: deps.store,
+		logger: deps.logger
+	});
+	const feed = createCiFeed({
+		daemon: deps.daemon,
+		store: deps.store,
+		onPass: (pass) => triggers.ciPassed(pass),
+		logger: deps.logger,
+		now,
+		...deps.feedBackoff === void 0 ? {} : { backoff: deps.feedBackoff }
+	});
+	const serially = serialLock();
+	const inFlight = /* @__PURE__ */ new Set();
+	const track = (work) => {
+		inFlight.add(work);
+		work.finally(() => inFlight.delete(work));
+	};
+	const stops = [];
+	let passes = 0;
+	let stopped = false;
+	const step = async (name, work) => {
+		try {
+			await work();
+		} catch (error) {
+			deps.logger.warn(`deploys: the ${name} step stopped on an error: ${errorMessage(error)}`);
+		}
+	};
+	const passNow = async (options = {}) => {
+		const { stacks } = await workspaceManifests(deps.root, git);
+		if (stacks.length === 0) {
+			await feed.stop();
+			return;
+		}
+		if (hasCiTrigger(stacks) && !stopped) feed.start();
+		else await feed.stop();
+		const rows = await deps.daemon.devices().catch((error) => {
+			deps.logger.warn(`deploys: the computers could not be listed: ${errorMessage(error)}`);
+			return [];
+		});
+		await step("monitor", () => monitor.readStacks(stacks, rows));
+		await step("registry", () => registry.check(stacks, rows));
+		await step("secrets", () => rotation.check(stacks));
+		if (options.hosts === true) await step("servers", () => monitor.readHosts(stacks, rows));
+	};
+	const pass = (options) => serially(() => passNow(options)).catch((error) => deps.logger.warn(`deploys: a watch pass stopped on an error: ${errorMessage(error)}`));
+	return {
+		start: async () => {
+			stopped = false;
+			stops.push(deps.engine.onDeployRecord((record) => {
+				track(triggers.recorded(record));
+				track(forge.recorded(record));
+			}));
+			await monitor.restore().catch((error) => deps.logger.warn(`deploys: what the monitor last read could not be restored: ${errorMessage(error)}`));
+			const tick = () => {
+				const hosts = passes % (deps.hostsEvery ?? HOSTS_EVERY) === 0;
+				passes += 1;
+				track(pass({ hosts }));
+			};
+			tick();
+			const timer = setInterval(tick, deps.everyMs ?? EVERY_MS);
+			timer.unref?.();
+			stops.push(() => clearInterval(timer));
+		},
+		stop: async () => {
+			stopped = true;
+			for (const stop of stops.splice(0)) stop();
+			await feed.stop();
+			await Promise.allSettled([...inFlight]);
+			await feed.stop();
+		},
+		pass,
+		ciPassed: (ciPass) => triggers.ciPassed(ciPass),
+		feedOpen: feed.running
+	};
+};
+//#endregion
+//#region src/server/engine/index.ts
+var createDeploys = (options) => {
+	const git = options.git ?? runGit;
+	const fetch = options.fetchRemote ?? ((dir) => fetchRemote(dir, git));
+	const engine = createDeploysEngine({
+		root: options.root,
+		store: deploysStore(options.records),
+		daemon: options.daemon,
+		logger: options.logger,
+		fetchRemote: fetch,
+		git,
+		lifetime: options.lifetime,
+		...options.now === void 0 ? {} : { now: options.now }
+	});
+	const watch = createDeployWatch({
+		root: options.root,
+		engine,
+		daemon: options.daemon,
+		store: options.watchStore,
+		logger: options.logger,
+		fetchRemote: fetch,
+		publicUrl: options.publicUrl,
+		git,
+		...options.now === void 0 ? {} : { now: options.now },
+		...options.everyMs === void 0 ? {} : { everyMs: options.everyMs },
+		...options.feedBackoff === void 0 ? {} : { feedBackoff: options.feedBackoff }
+	});
+	return {
+		engine,
+		watch,
+		daemon: options.daemon,
+		environments: () => deployEnvironments({
+			root: options.root,
+			daemon: options.daemon,
+			engine,
+			git
+		}),
+		start: async () => {
+			await watch.start();
+			await engine.start();
+		},
+		stop: async () => {
+			await watch.stop();
+			await engine.stop();
+		}
+	};
+};
+var backendDeploys = (api, lifetime, publicUrl) => createDeploys({
+	root: api.workspaceRoot,
+	daemon: daemonDeploys((path, init) => api.daemon.request(path, init), lifetime),
+	records: stateDoc(api, RECORDS_PATH, RecordsFileSchema, () => ({})),
+	watchStore: stateDoc(api, WATCH_PATH, DeployWatchFileSchema, emptyWatch),
+	logger: {
+		warn: (message) => api.log(message),
+		info: (message) => api.log(message)
+	},
+	lifetime,
+	publicUrl
+});
 //#endregion
 //#region src/server/komodo-client.ts
 var BODY_TAIL = 300;
@@ -22995,9 +25175,65 @@ var fileNativeStore = (path, legacy) => {
 	};
 };
 //#endregion
+//#region src/environments.ts
+var triggerWords = (trigger) => {
+	if (trigger.ci !== void 0) {
+		const { branch, workflow, job } = trigger.ci;
+		if (job !== void 0 && workflow !== void 0) return `on CI job ${job} of ${workflow} passing on ${branch}`;
+		if (job !== void 0) return `on CI job ${job} passing on ${branch}`;
+		return workflow === void 0 ? `on CI passing on ${branch}` : `on CI workflow ${workflow} passing on ${branch}`;
+	}
+	if (trigger.registry !== void 0) return `pulls newer images every ${trigger.registry.every}`;
+	if (trigger.after !== void 0) return `after ${trigger.after.stack}`;
+	return `on a trigger this version does not describe`;
+};
+var triggersSummary = (triggers) => triggers.length === 0 ? `deploys when asked` : triggers.map(triggerWords).join(`, `);
+var TRIGGER_KIND_WORDS = {
+	manual: `by hand`,
+	ci: `CI`,
+	registry: `newer images`,
+	after: `after another stack`,
+	rollback: `rollback`,
+	promote: `promotion`,
+	"secret-change": `a secret changed`
+};
+var recordOrigin = (record) => {
+	const kind = TRIGGER_KIND_WORDS[record.trigger.kind] ?? record.trigger.kind;
+	return record.trigger.detail === void 0 || record.trigger.detail === `` ? kind : `${kind} · ${record.trigger.detail}`;
+};
+var OUTCOME_WORDS = {
+	queued: `queued`,
+	running: `deploying`,
+	succeeded: `succeeded`,
+	failed: `failed`,
+	"rolled-back": `rolled back`,
+	superseded: `superseded`,
+	refused: `refused`,
+	unknown: `unknown`
+};
+var at = (iso) => {
+	if (iso === void 0) return;
+	const parsed = Date.parse(iso);
+	return Number.isNaN(parsed) ? void 0 : parsed;
+};
+var recordSeconds = (record) => {
+	const start = at(record.startedAt);
+	const end = at(record.endedAt);
+	return start === void 0 || end === void 0 || end < start ? void 0 : Math.round((end - start) / 1e3);
+};
+var shortCommit = (commit) => commit.slice(0, 8);
+var HEALTH_WORDS = {
+	running: `running`,
+	unhealthy: `unhealthy`,
+	restarting: `restarting`,
+	stopped: `stopped`,
+	missing: `not on the computer`,
+	unreachable: `computer unreachable`,
+	unknown: `not read yet`
+};
+//#endregion
 //#region src/server/tools.ts
 var WAIT_DEADLINE_MS = 54e4;
-var WAIT_POLL_MS = 3e3;
 var text = (body, isError = false) => ({
 	content: [{
 		type: "text",
@@ -23074,24 +25310,31 @@ var STACK_REF_PROPERTIES = {
 		description: "The stack's name in that repository's .intentic/stacks.json."
 	}
 };
+var awaitRecord = async (environments, queued, signal) => {
+	try {
+		return {
+			record: await environments.settled(queued.id, signal),
+			settled: true
+		};
+	} catch {
+		return {
+			record: (await environments.history(queued, 20).catch(() => [])).find((record) => record.id === queued.id) ?? queued,
+			settled: false
+		};
+	}
+};
 var deploymentTools = (deps) => {
-	const waiting = {
-		deadlineMs: WAIT_DEADLINE_MS,
-		pollMs: WAIT_POLL_MS,
-		sleep: pause,
-		...deps.wait
-	};
+	const deadlineMs = deps.wait?.deadlineMs ?? WAIT_DEADLINE_MS;
 	const run = async (enqueue, wait, context) => {
 		try {
 			const queued = await enqueue();
 			if (!wait) return recordAnswer(queued, false, false);
-			const signals = [context?.signal, deps.lifetime].filter((signal) => signal !== void 0);
-			const { record, settled } = await awaitRecord(deps.deploys, queued, {
-				deadlineMs: waiting.deadlineMs,
-				pollMs: waiting.pollMs,
-				sleep: waiting.sleep,
-				...signals.length === 0 ? {} : { signal: AbortSignal.any(signals) }
-			});
+			const signals = [
+				AbortSignal.timeout(deadlineMs),
+				context?.signal,
+				deps.lifetime
+			].filter((signal) => signal !== void 0);
+			const { record, settled } = await awaitRecord(deps.environments, queued, AbortSignal.any(signals));
 			return recordAnswer(record, settled, true);
 		} catch (error) {
 			return text(errorMessage(error), true);
@@ -23115,7 +25358,7 @@ var environmentTools = (deps, run) => [
 		call: async (args, context) => {
 			const repo = stringArg(args, "repo");
 			try {
-				const read = await deps.deploys.environments(context?.signal);
+				const read = await deps.environments.environments();
 				const environments = read.environments.filter((environment) => repo === void 0 || environment.repo === repo).map(environmentFacts);
 				const manifestErrors = read.manifestErrors.filter((error) => repo === void 0 || error.repo === repo);
 				if (environments.length === 0 && manifestErrors.length === 0) return text(repo === void 0 ? "No repository in this workspace declares stacks (.intentic/stacks.json). A repository without one deploys as a plain compose stack: deploy_targets and deploy_to_device." : `"${repo}" declares no stacks (.intentic/stacks.json).`);
@@ -23130,7 +25373,7 @@ var environmentTools = (deps, run) => [
 	},
 	{
 		name: "deploy_environment",
-		description: "Deploy a managed environment (a stack its repository declares in .intentic/stacks.json) at a commit: the repository's COMMITTED HEAD as this workspace has it when none is named, so commit first. The daemon renders the stack's secrets under the owner's grant, runs it on its computer, checks it comes up healthy and rolls it back by itself when the manifest says so. One deploy runs per stack; a newer one queued behind it replaces an older one still waiting. Refused, with the reason, when a secret it reads is not granted yet (the owner gets a card for it) or its computer cannot take it. Waits for the end by default and answers how it went, with compose's output on a failure.",
+		description: "Deploy a managed environment (a stack its repository declares in .intentic/stacks.json) at a commit: the repository's COMMITTED HEAD as this workspace has it when none is named, so commit first. The sandbox fills the stack's secrets under the owner's grant, runs it on its computer, checks it comes up healthy and rolls it back by itself when the manifest says so. One deploy runs per stack; a newer one queued behind it replaces an older one still waiting. Refused, with the reason, when a secret it reads is not granted yet (ask the owner with `secrets grant-stack <repo> <stack> <device> NAME...`, which puts a card in front of them) or its computer cannot take it. Waits for the end by default and answers how it went, with compose's output on a failure.",
 		effect: "write",
 		inputSchema: {
 			type: "object",
@@ -23155,7 +25398,7 @@ var environmentTools = (deps, run) => [
 			const commit = stringArg(args, "commit");
 			if (repo === void 0 || stack === void 0) return text("name the repo and the stack", true);
 			if (commit !== void 0 && !CommitWireSchema.safeParse(commit).success) return text(`"${commit}" is not a commit: 7 to 64 lowercase hex characters`, true);
-			return run(() => deps.deploys.deploy({
+			return run(() => deps.environments.deploy({
 				repo,
 				stack,
 				commit,
@@ -23184,10 +25427,11 @@ var environmentTools = (deps, run) => [
 			const repo = stringArg(args, "repo");
 			const stack = stringArg(args, "stack");
 			if (repo === void 0 || stack === void 0) return text("name the repo and the stack", true);
-			return run(() => deps.deploys.rollback({
+			return run(() => deps.environments.rollback({
 				repo,
 				stack,
-				to: stringArg(args, "to")
+				to: stringArg(args, "to"),
+				reason: askedBy(void 0, context)
 			}), waitArg(args), context);
 		}
 	},
@@ -23221,10 +25465,11 @@ var environmentTools = (deps, run) => [
 			const from = stringArg(args, "from");
 			const to = stringArg(args, "to");
 			if (repo === void 0 || from === void 0 || to === void 0) return text("name the repo, the stack to promote from and the stack to promote to", true);
-			return run(() => deps.deploys.promote({
+			return run(() => deps.environments.promote({
 				repo,
 				from,
-				to
+				to,
+				reason: askedBy(void 0, context)
 			}), waitArg(args), context);
 		}
 	},
@@ -23250,10 +25495,10 @@ var environmentTools = (deps, run) => [
 			if (repo === void 0 || stack === void 0) return text("name the repo and the stack", true);
 			const asked = typeof args["limit"] === "number" && Number.isFinite(args["limit"]) ? Math.trunc(args["limit"]) : 10;
 			try {
-				const records = await deps.deploys.history({
+				const records = await deps.environments.history({
 					repo,
 					stack
-				}, Math.min(Math.max(asked, 1), 200), context?.signal);
+				}, Math.min(Math.max(asked, 1), 200));
 				if (records.length === 0) return text(`${repo} ${stack} has not been deployed from this sandbox yet.`);
 				const listed = records.map((record) => {
 					const seconds = recordSeconds(record);
@@ -23373,7 +25618,7 @@ var composeTools = (deps) => [
 				const linked = (await deps.store.links(deviceConnection(device)))[repo];
 				const project = (await repoLinks(deps.scan, await deps.repoDirs(), [], {})).find((entry) => entry.repo === repo)?.projectName;
 				const stack = stringArg(args, "stack") ?? linked ?? (project === void 0 ? void 0 : stackNameFor(project));
-				if (stack === void 0 || !StackNameSchema.safeParse(stack).success) return text(`"${repo}" is not a workspace repository with a compose file at its root, or "${stack ?? ""}" is not a stack name`, true);
+				if (stack === void 0 || !StackNameSchema$1.safeParse(stack).success) return text(`"${repo}" is not a workspace repository with a compose file at its root, or "${stack ?? ""}" is not a stack name`, true);
 				const { settled } = await deps.board.startDeploy(device, repo, stack);
 				const ended = await settled;
 				if (ended.error !== void 0) return text(`The deploy of ${repo} to ${stack} on ${device} failed: ${ended.error}`, true);
@@ -23412,6 +25657,13 @@ var OPERATIONS = {
 		pull: ["PullStack", "DeployStack"]
 	}
 };
+var BOARD = "from the Deployments board";
+var originOf = (request) => {
+	const origin = request.headers.get("origin");
+	if (origin === null || !URL.canParse(origin)) return;
+	const url = new URL(origin);
+	return url.protocol === "https:" || url.protocol === "http:" ? url.origin : void 0;
+};
 var activateServer = (api, _context, fetchFn = fetch) => {
 	const i = implement(deploymentsContract);
 	const lifetime = new AbortController();
@@ -23422,7 +25674,29 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 	};
 	const repoDirs = () => discoverRepoDirs(api.workspaceRoot);
 	const devices = daemonDevices(api);
-	const deploys = daemonDeploys(api);
+	let boardOrigin;
+	const deploys = backendDeploys(api, lifetime.signal, () => boardOrigin);
+	const environments = {
+		environments: () => deploys.environments(),
+		history: (ref, limit) => deploys.engine.history(ref, limit),
+		deploy: (request) => deploys.engine.enqueue({
+			repo: request.repo,
+			stack: request.stack,
+			commit: request.commit,
+			trigger: {
+				kind: "manual",
+				...request.reason === void 0 ? {} : { detail: request.reason.slice(0, 300) }
+			}
+		}),
+		rollback: (request) => deploys.engine.rollback({
+			repo: request.repo,
+			stack: request.stack,
+			to: request.to
+		}, request.reason),
+		promote: (request) => deploys.engine.promote(request.repo, request.from, request.to, request.reason),
+		settled: (id, signal) => deploys.engine.settled(id, signal)
+	};
+	const started = deploys.start().catch((error) => api.log(`deploys: the engine did not start: ${errorMessage(error)}`));
 	const board = deviceBoard({
 		daemon: devices,
 		store,
@@ -23568,34 +25842,43 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 		}),
 		deviceDeploy: i.deviceDeploy.handler(({ input }) => board.deploy(input.device, input.repo, input.stack)),
 		deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick)),
-		environments: i.environments.handler(async ({ signal }) => {
+		environments: i.environments.handler(async () => {
 			try {
-				const read = await deploys.environments(signal);
+				const read = await deploys.environments();
 				return {
-					available: true,
 					environments: read.environments,
-					manifestErrors: read.manifestErrors,
-					declaring: []
+					manifestErrors: read.manifestErrors
 				};
 			} catch (error) {
-				if (error instanceof DeploysUnavailableError) return {
-					available: false,
-					environments: [],
-					manifestErrors: [],
-					declaring: await declaringRepos(api.workspaceRoot, await repoDirs(), scan.read)
-				};
 				throw new ORPCError$1("BAD_GATEWAY", { message: errorMessage(error) });
 			}
 		}),
-		environmentHistory: i.environmentHistory.handler(async ({ input, signal }) => ({ records: await upstream(deploys.history({
+		environmentHistory: i.environmentHistory.handler(async ({ input }) => ({ records: [...await deploys.engine.history({
 			repo: input.repo,
 			stack: input.stack
-		}, input.limit, signal)) }))
+		}, input.limit)] })),
+		environmentDeploy: i.environmentDeploy.handler(async ({ input }) => ({ record: await environments.deploy({
+			repo: input.repo,
+			stack: input.stack,
+			reason: BOARD
+		}) })),
+		environmentRollback: i.environmentRollback.handler(async ({ input }) => ({ record: await environments.rollback({
+			repo: input.repo,
+			stack: input.stack,
+			to: input.to,
+			reason: BOARD
+		}) })),
+		environmentPromote: i.environmentPromote.handler(async ({ input }) => ({ record: await environments.promote({
+			repo: input.repo,
+			from: input.from,
+			to: input.to,
+			reason: BOARD
+		}) }))
 	});
 	api.tools.serve(() => deploymentTools({
 		board,
 		daemon: devices,
-		deploys,
+		environments,
 		store,
 		scan,
 		repoDirs,
@@ -23603,11 +25886,14 @@ var activateServer = (api, _context, fetchFn = fetch) => {
 	}));
 	const handler = new OpenAPIHandler(router);
 	api.routes.mount(async (request) => {
+		boardOrigin = originOf(request) ?? boardOrigin;
 		const { matched, response } = await handler.handle(request, { prefix: "/" });
 		return matched ? response : void 0;
 	});
-	return { deactivate: () => {
+	return { deactivate: async () => {
 		lifetime.abort();
+		await started;
+		await deploys.stop();
 	} };
 };
 //#endregion

@@ -52,7 +52,7 @@ const TRIGGER_KIND_WORDS: Readonly<Record<string, string>> = {
     "secret-change": `a secret changed`,
 };
 
-// What started a record, in one line: its kind in words, then the daemon's own detail (who, which run, from where).
+// What started a record, in one line: its kind in words, then the engine's own detail (who, which run, from where).
 export const recordOrigin = (record: Pick<DeployRecordWire, `trigger`>): string => {
     const kind = TRIGGER_KIND_WORDS[record.trigger.kind] ?? record.trigger.kind;
     return record.trigger.detail === undefined || record.trigger.detail === `` ? kind : `${kind} · ${record.trigger.detail}`;

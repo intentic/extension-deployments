@@ -8,8 +8,7 @@ import { deploymentsContract } from "./contract.js";
 import { deviceBoard } from "./device-board.js";
 import { daemonDevices } from "./device-daemon.js";
 import { deviceOperations } from "./device-operations.js";
-import { DeploysUnavailableError } from "../deploysWire.js";
-import { daemonDeploys, declaringRepos } from "./deploys-daemon.js";
+import { backendDeploys } from "./engine/index.js";
 import { discoverRepoDirs, readFileOrUndefined } from "./discover.js";
 import { type FetchFn, komodoClient, type KomodoConnection } from "./komodo-client.js";
 import { HostStackConflict, planHostStack, runFromHostFolder } from "./komodo-host-stack.js";
@@ -17,7 +16,7 @@ import { deployAlerts, deploymentResource, serverEntry, stackResource } from "./
 import { repoLinks } from "./komodo-repos.js";
 import { fileKomodoStore, komodoStorePath, legacyKomodoStorePath } from "./komodo-store.js";
 import { fileNativeStore, legacyNativeStorePath, nativeStorePath } from "./native-store.js";
-import { deploymentTools } from "./tools.js";
+import { deploymentTools, type EnvironmentsService } from "./tools.js";
 import { plainText } from "@intentic/base/plain-text";
 
 // Deployments backend for one connected komodo capability. The credential never reaches the browser: the backend reads
@@ -57,6 +56,19 @@ const OPERATIONS = {
     },
 } as const;
 
+// What a press from the board says started it: the backend sees its own token, not the person behind the board.
+const BOARD = "from the Deployments board";
+
+// The browser's own origin, from a request the board made: what a link back to this board is built on.
+const originOf = (request: Request): string | undefined => {
+    const origin = request.headers.get("origin");
+    if (origin === null || !URL.canParse(origin)) {
+        return undefined;
+    }
+    const url = new URL(origin);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.origin : undefined;
+};
+
 export const activateServer = (api: ExtensionServerApi, _context: ExtensionServerContext, fetchFn: FetchFn = fetch): ServerActivation => {
     const i = implement(deploymentsContract);
     // Ended by `deactivate`: every wait a tool holds on a deploy stops with it, and its timer with it.
@@ -65,7 +77,26 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
     const scan = { root: api.workspaceRoot, read: readFileOrUndefined };
     const repoDirs = () => discoverRepoDirs(api.workspaceRoot);
     const devices = daemonDevices(api);
-    const deploys = daemonDeploys(api);
+    // The address the board was last opened at: the base of the link a forge's deployment points back to.
+    let boardOrigin: string | undefined;
+    const deploys = backendDeploys(api, lifetime.signal, () => boardOrigin);
+    // The managed environments as the board and the agent's tools reach them: the engine's own calls.
+    const environments: EnvironmentsService = {
+        environments: () => deploys.environments(),
+        history: (ref, limit) => deploys.engine.history(ref, limit),
+        deploy: (request) =>
+            deploys.engine.enqueue({
+                repo: request.repo,
+                stack: request.stack,
+                commit: request.commit,
+                trigger: { kind: "manual", ...(request.reason === undefined ? {} : { detail: request.reason.slice(0, 300) }) },
+            }),
+        rollback: (request) => deploys.engine.rollback({ repo: request.repo, stack: request.stack, to: request.to }, request.reason),
+        promote: (request) => deploys.engine.promote(request.repo, request.from, request.to, request.reason),
+        settled: (id, signal) => deploys.engine.settled(id, signal),
+    };
+    // Recovery and the watch start once activation answers; deactivation waits for them.
+    const started = deploys.start().catch((error: unknown) => api.log(`deploys: the engine did not start: ${errorMessage(error)}`));
     const board = deviceBoard({
         daemon: devices,
         store,
@@ -246,7 +277,7 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
             const managed = await deploys
                 .environments()
                 .then((read) => read.environments.find((environment) => environment.deviceId === input.device && environment.stack === input.id)?.repo)
-                // allow(silent-catch): an older sandbox, or one that cannot read them now, has no managed stack to point the fix at
+                // allow(silent-catch): a workspace whose manifests cannot be read now has no managed stack to point the fix at
                 .catch(() => undefined);
             return board.fix(input.device, input.id, input.pick, managed);
         }),
@@ -257,37 +288,45 @@ export const activateServer = (api: ExtensionServerApi, _context: ExtensionServe
         }),
         deviceDeploy: i.deviceDeploy.handler(({ input }) => board.deploy(input.device, input.repo, input.stack)),
         deviceEnvironment: i.deviceEnvironment.handler(({ input }) => board.environment(input.device, input.stack, input.repo, input.pick)),
-        // The managed environments (deploys-daemon.ts). A sandbox from before them is a state the board draws, not an
-        // error: it says "update this sandbox" only when a repository here declares stacks it would run.
-        environments: i.environments.handler(async ({ signal }) => {
+        // The managed environments (engine/): read, and pressed, through this backend's own engine.
+        environments: i.environments.handler(async () => {
             try {
-                const read = await deploys.environments(signal);
-                return { available: true, environments: read.environments, manifestErrors: read.manifestErrors, declaring: [] };
+                const read = await deploys.environments();
+                return { environments: read.environments, manifestErrors: read.manifestErrors };
             } catch (error) {
-                if (error instanceof DeploysUnavailableError) {
-                    return { available: false, environments: [], manifestErrors: [], declaring: await declaringRepos(api.workspaceRoot, await repoDirs(), scan.read) };
-                }
                 throw new ORPCError("BAD_GATEWAY", { message: errorMessage(error) });
             }
         }),
-        environmentHistory: i.environmentHistory.handler(async ({ input, signal }) => ({
-            records: await upstream(deploys.history({ repo: input.repo, stack: input.stack }, input.limit, signal)),
+        environmentHistory: i.environmentHistory.handler(async ({ input }) => ({
+            records: [...(await deploys.engine.history({ repo: input.repo, stack: input.stack }, input.limit))],
+        })),
+        environmentDeploy: i.environmentDeploy.handler(async ({ input }) => ({
+            record: await environments.deploy({ repo: input.repo, stack: input.stack, reason: BOARD }),
+        })),
+        environmentRollback: i.environmentRollback.handler(async ({ input }) => ({
+            record: await environments.rollback({ repo: input.repo, stack: input.stack, to: input.to, reason: BOARD }),
+        })),
+        environmentPromote: i.environmentPromote.handler(async ({ input }) => ({
+            record: await environments.promote({ repo: input.repo, from: input.from, to: input.to, reason: BOARD }),
         })),
     });
 
     // The agent's `deployments` server (tools.ts): what lets a fix turn deploy its fix.
-    api.tools.serve(() => deploymentTools({ board, daemon: devices, deploys, store, scan, repoDirs, lifetime: lifetime.signal }));
+    api.tools.serve(() => deploymentTools({ board, daemon: devices, environments, store, scan, repoDirs, lifetime: lifetime.signal }));
 
     const handler = new OpenAPIHandler(router);
     api.routes.mount(async (request) => {
+        boardOrigin = originOf(request) ?? boardOrigin;
         const { matched, response } = await handler.handle(request, { prefix: "/" });
         return matched ? response : undefined;
     });
 
     // Lets the host reload this extension alone (a rebuild, an update, a toggle) rather than restarting every backend.
     return {
-        deactivate: () => {
+        deactivate: async () => {
             lifetime.abort();
+            await started;
+            await deploys.stop();
         },
     };
 };

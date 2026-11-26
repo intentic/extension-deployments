@@ -1,40 +1,49 @@
 import { errorMessage } from "@intentic/base/errors";
 import type { ToolCallContext, ToolDefinition } from "@intentic/extension-api";
 import { DEVICE_CONNECTION_PREFIX, deviceConnection, deviceOf, stackNameFor, StackNameSchema } from "../contract.js";
-import { CommitWireSchema, type DeployEnvironmentWire, type DeployRecordWire } from "../deploysWire.js";
+import { CommitWireSchema, type DeployEnvironmentsWire, type DeployEnvironmentWire, type DeployRecordWire, type StackRefWire } from "../deploysWire.js";
 import { HEALTH_WORDS, OUTCOME_WORDS, recordOrigin, recordSeconds, shortCommit, triggersSummary } from "../environments.js";
 import type { DeviceBoard } from "./device-board.js";
 import type { DeviceDaemon } from "./device-daemon.js";
-import { awaitRecord, type DeploysDaemon, pause } from "./deploys-daemon.js";
 import type { KomodoStore } from "./komodo-store.js";
 import { repoLinks, type RepoScanDeps } from "./komodo-repos.js";
 import { stackState } from "./native-overview.js";
 
 // THE AGENT'S DEPLOY TOOLS, one `deployments` server in every turn: what lets a fix turn redeploy its own fix. Two kinds:
 // - MANAGED ENVIRONMENTS (`environments`, `deploy_environment`, `rollback_environment`, `promote_environment`,
-//   `environment_history`): the stacks a repository declares in `.intentic/stacks.json`, deployed by the daemon's own
-//   engine with their secrets rendered under the owner's grant, kept in a history and rolled back. A deploy is queued and
-//   then watched through the stack's history, within the host's ten-minute tool deadline; one that outlasts it answers
+//   `environment_history`): the stacks a repository declares in `.intentic/stacks.json`, deployed by this backend's own
+//   engine (engine/) with their secrets filled by the daemon under the owner's grant, kept in a history and rolled back.
+//   A deploy is queued and then waited for, within the host's ten-minute tool deadline; one that outlasts it answers
 //   that it is still running and names its record rather than failing, since it carries on regardless.
 // - A PLAIN COMPOSE STACK (`deploy_targets`, `device_stacks`, `deploy_to_device`): a repository without a stacks manifest,
 //   packed from its committed HEAD and started on a computer, the same deploy the board's button starts.
 
+// The managed environments as the tools (and the board's routes) reach them: the engine's own calls (server.ts).
+export interface EnvironmentsService {
+    readonly environments: () => Promise<DeployEnvironmentsWire>;
+    readonly history: (ref: StackRefWire, limit?: number) => Promise<readonly DeployRecordWire[]>;
+    readonly deploy: (request: StackRefWire & { readonly commit?: string | undefined; readonly reason?: string | undefined }) => Promise<DeployRecordWire>;
+    readonly rollback: (request: StackRefWire & { readonly to?: string | undefined; readonly reason?: string | undefined }) => Promise<DeployRecordWire>;
+    readonly promote: (request: { readonly repo: string; readonly from: string; readonly to: string; readonly reason?: string | undefined }) => Promise<DeployRecordWire>;
+    // The record once the engine is done with it (a rollback it set off included); rejects when `signal` ends the wait.
+    readonly settled: (id: string, signal?: AbortSignal) => Promise<DeployRecordWire>;
+}
+
 export interface ToolDeps {
     readonly board: DeviceBoard;
     readonly daemon: DeviceDaemon;
-    readonly deploys: DeploysDaemon;
+    readonly environments: EnvironmentsService;
     readonly store: KomodoStore;
     readonly scan: RepoScanDeps;
     readonly repoDirs: () => Promise<string[]>;
-    // How long a waiting tool watches a deploy, and how often it looks; tests shorten both.
-    readonly wait?: { readonly deadlineMs: number; readonly pollMs: number; readonly sleep?: (ms: number, signal?: AbortSignal) => Promise<void> };
+    // How long a waiting tool waits for a deploy; tests shorten it.
+    readonly wait?: { readonly deadlineMs: number };
     // Aborted when the backend deactivates, so no wait outlives it.
     readonly lifetime?: AbortSignal;
 }
 
 // Under the host's ten-minute deadline for one tool call, with room for the queueing call before it and the answer after.
 const WAIT_DEADLINE_MS = 9 * 60_000;
-const WAIT_POLL_MS = 3_000;
 // The end of what compose and the hooks printed, as much as a tool answer carries.
 const OUTPUT_TAIL = 4_000;
 
@@ -129,22 +138,32 @@ const STACK_REF_PROPERTIES = {
     stack: { type: "string", description: "The stack's name in that repository's .intentic/stacks.json." },
 };
 
+// How a queued record came out: the record as the engine left it (`settled`), or as it stands when the wait ran out.
+export const awaitRecord = async (
+    environments: Pick<EnvironmentsService, "settled" | "history">,
+    queued: DeployRecordWire,
+    signal: AbortSignal,
+): Promise<{ readonly record: DeployRecordWire; readonly settled: boolean }> => {
+    try {
+        return { record: await environments.settled(queued.id, signal), settled: true };
+    } catch {
+        // The wait ended (its deadline, the call's own signal, the backend stopping); the deploy carries on.
+        const now = await environments.history(queued, 20).catch((): readonly DeployRecordWire[] => []);
+        return { record: now.find((record) => record.id === queued.id) ?? queued, settled: false };
+    }
+};
+
 export const deploymentTools = (deps: ToolDeps): readonly ToolDefinition[] => {
-    const waiting = { deadlineMs: WAIT_DEADLINE_MS, pollMs: WAIT_POLL_MS, sleep: pause, ...deps.wait };
-    // Queues with `enqueue`, then watches the record when asked to, inside the call's own deadline.
+    const deadlineMs = deps.wait?.deadlineMs ?? WAIT_DEADLINE_MS;
+    // Queues with `enqueue`, then waits for the record when asked to, inside the call's own deadline.
     const run = async (enqueue: () => Promise<DeployRecordWire>, wait: boolean, context: ToolCallContext | undefined) => {
         try {
             const queued = await enqueue();
             if (!wait) {
                 return recordAnswer(queued, false, false);
             }
-            const signals = [context?.signal, deps.lifetime].filter((signal): signal is AbortSignal => signal !== undefined);
-            const { record, settled } = await awaitRecord(deps.deploys, queued, {
-                deadlineMs: waiting.deadlineMs,
-                pollMs: waiting.pollMs,
-                sleep: waiting.sleep,
-                ...(signals.length === 0 ? {} : { signal: AbortSignal.any(signals) }),
-            });
+            const signals = [AbortSignal.timeout(deadlineMs), context?.signal, deps.lifetime].filter((signal): signal is AbortSignal => signal !== undefined);
+            const { record, settled } = await awaitRecord(deps.environments, queued, AbortSignal.any(signals));
             return recordAnswer(record, settled, true);
         } catch (error) {
             return text(errorMessage(error), true);
@@ -169,7 +188,7 @@ const environmentTools = (deps: ToolDeps, run: Runner): readonly ToolDefinition[
         call: async (args, context) => {
             const repo = stringArg(args, "repo");
             try {
-                const read = await deps.deploys.environments(context?.signal);
+                const read = await deps.environments.environments();
                 const environments = read.environments.filter((environment) => repo === undefined || environment.repo === repo).map(environmentFacts);
                 const manifestErrors = read.manifestErrors.filter((error) => repo === undefined || error.repo === repo);
                 if (environments.length === 0 && manifestErrors.length === 0) {
@@ -188,7 +207,7 @@ const environmentTools = (deps: ToolDeps, run: Runner): readonly ToolDefinition[
     {
         name: "deploy_environment",
         description:
-            "Deploy a managed environment (a stack its repository declares in .intentic/stacks.json) at a commit: the repository's COMMITTED HEAD as this workspace has it when none is named, so commit first. The daemon renders the stack's secrets under the owner's grant, runs it on its computer, checks it comes up healthy and rolls it back by itself when the manifest says so. One deploy runs per stack; a newer one queued behind it replaces an older one still waiting. Refused, with the reason, when a secret it reads is not granted yet (the owner gets a card for it) or its computer cannot take it. Waits for the end by default and answers how it went, with compose's output on a failure.",
+            "Deploy a managed environment (a stack its repository declares in .intentic/stacks.json) at a commit: the repository's COMMITTED HEAD as this workspace has it when none is named, so commit first. The sandbox fills the stack's secrets under the owner's grant, runs it on its computer, checks it comes up healthy and rolls it back by itself when the manifest says so. One deploy runs per stack; a newer one queued behind it replaces an older one still waiting. Refused, with the reason, when a secret it reads is not granted yet (ask the owner with `secrets grant-stack <repo> <stack> <device> NAME...`, which puts a card in front of them) or its computer cannot take it. Waits for the end by default and answers how it went, with compose's output on a failure.",
         effect: "write",
         inputSchema: {
             type: "object",
@@ -211,7 +230,7 @@ const environmentTools = (deps: ToolDeps, run: Runner): readonly ToolDefinition[
             if (commit !== undefined && !CommitWireSchema.safeParse(commit).success) {
                 return text(`"${commit}" is not a commit: 7 to 64 lowercase hex characters`, true);
             }
-            return run(() => deps.deploys.deploy({ repo, stack, commit, reason: askedBy(stringArg(args, "reason"), context) }), waitArg(args), context);
+            return run(() => deps.environments.deploy({ repo, stack, commit, reason: askedBy(stringArg(args, "reason"), context) }), waitArg(args), context);
         },
     },
     {
@@ -235,7 +254,7 @@ const environmentTools = (deps: ToolDeps, run: Runner): readonly ToolDefinition[
             if (repo === undefined || stack === undefined) {
                 return text("name the repo and the stack", true);
             }
-            return run(() => deps.deploys.rollback({ repo, stack, to: stringArg(args, "to") }), waitArg(args), context);
+            return run(() => deps.environments.rollback({ repo, stack, to: stringArg(args, "to"), reason: askedBy(undefined, context) }), waitArg(args), context);
         },
     },
     {
@@ -261,7 +280,7 @@ const environmentTools = (deps: ToolDeps, run: Runner): readonly ToolDefinition[
             if (repo === undefined || from === undefined || to === undefined) {
                 return text("name the repo, the stack to promote from and the stack to promote to", true);
             }
-            return run(() => deps.deploys.promote({ repo, from, to }), waitArg(args), context);
+            return run(() => deps.environments.promote({ repo, from, to, reason: askedBy(undefined, context) }), waitArg(args), context);
         },
     },
     {
@@ -286,7 +305,7 @@ const environmentTools = (deps: ToolDeps, run: Runner): readonly ToolDefinition[
             }
             const asked = typeof args["limit"] === "number" && Number.isFinite(args["limit"]) ? Math.trunc(args["limit"]) : 10;
             try {
-                const records = await deps.deploys.history({ repo, stack }, Math.min(Math.max(asked, 1), 200), context?.signal);
+                const records = await deps.environments.history({ repo, stack }, Math.min(Math.max(asked, 1), 200));
                 if (records.length === 0) {
                     return text(`${repo} ${stack} has not been deployed from this sandbox yet.`);
                 }

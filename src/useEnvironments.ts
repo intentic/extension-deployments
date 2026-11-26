@@ -3,19 +3,23 @@ import { computed } from "vue";
 import { type EnvironmentHistoryResponse, EnvironmentHistoryResponseSchema, type EnvironmentsOverview, EnvironmentsOverviewSchema } from "./contract";
 import {
     DeployAnswerWireSchema,
-    DeployGrantsWireSchema,
+    type DeployEnvironmentWire,
     type DeployRecordWire,
-    DEPLOYS_PATHS,
-    readDeploys,
+    ENVIRONMENT_PATHS,
+    grantDeviceOf,
+    readAnswer,
+    refusalOf,
+    STACK_GRANTS_PATHS,
+    type StackGrantSetWire,
+    StackGrantsWireSchema,
     type StackRefWire,
 } from "./deploysWire";
 import { host } from "./host";
 
-// The managed environments on the board: read through this extension's backend (which says "update this sandbox" for
-// one that predates them, and only when a repository here declares stacks), and pressed straight at the daemon AS THE
-// PERSON PRESSING, through `api.sandbox` (the manifest's `permissions.sandbox`): the deploy's record names them, and
-// the daemon holds them to their own role. A grant above all: it is the owner's (or Full access's, or whoever holds the
-// Secrets right), which no extension token can lift, so it is only ever a person's press here.
+// The managed environments on the board: read and pressed (deploy, roll back, promote) through this extension's
+// backend, whose engine deploys them (src/server/engine/). A GRANT is the one press that goes straight to the daemon AS
+// THE PERSON PRESSING, through `api.sandbox` (the manifest's `permissions.sandbox`): it is the owner's (or Full
+// access's, or whoever holds the Secrets right), which no extension token can lift, so it is only ever a person's press.
 
 // Polls fast while something is deploying, so its row moves when it lands; slowly otherwise.
 const POLL_MS = 15_000;
@@ -28,6 +32,13 @@ const post = (payload: Readonly<Record<string, unknown>>): RequestInit => ({
     headers: { "content-type": `application/json` },
     body: JSON.stringify(Object.fromEntries(Object.entries(payload).filter(([, value]) => value !== undefined))),
 });
+
+// What a press on "Grant" asks the daemon for: the stack's ungranted names, on its device card; nothing when there is
+// nothing to grant, or no computer the manifest's name resolves to.
+export const grantOf = (environment: DeployEnvironmentWire): StackGrantSetWire | undefined =>
+    environment.deviceId === undefined || environment.ungranted.length === 0
+        ? undefined
+        : { repo: environment.repo, stack: environment.stack, device: grantDeviceOf(environment.deviceId), secrets: [...environment.ungranted] };
 
 export function useEnvironments(enabled: () => boolean) {
     const api = host();
@@ -44,25 +55,45 @@ export function useEnvironments(enabled: () => boolean) {
     const invalidate = (): Promise<void> => queryClient.invalidateQueries({ queryKey: api.sandbox.key(`deploy-environments`) });
 
     const press = async (path: string, payload: Readonly<Record<string, unknown>>): Promise<DeployRecordWire> =>
-        (await readDeploys(await api.sandbox.request(path, post(payload)), DeployAnswerWireSchema)).record;
+        (await readAnswer(await api.backend.request(path, post(payload)), DeployAnswerWireSchema)).record;
 
-    // The repository's committed HEAD; the daemon queues it and answers its record at once.
+    // The repository's committed HEAD; the engine queues it and answers its record at once.
     const deploy = useMutation({
-        mutationFn: (ref: StackRefWire) => press(DEPLOYS_PATHS.deploy, { repo: ref.repo, stack: ref.stack }),
+        mutationFn: (ref: StackRefWire) => press(ENVIRONMENT_PATHS.deploy, { repo: ref.repo, stack: ref.stack }),
         onSuccess: invalidate,
     });
     // To the deploy before the current one, or to the record named.
     const rollback = useMutation({
-        mutationFn: (input: StackRefWire & { readonly to?: string | undefined }) => press(DEPLOYS_PATHS.rollback, { repo: input.repo, stack: input.stack, to: input.to }),
+        mutationFn: (input: StackRefWire & { readonly to?: string | undefined }) => press(ENVIRONMENT_PATHS.rollback, { repo: input.repo, stack: input.stack, to: input.to }),
         onSuccess: invalidate,
     });
     const promote = useMutation({
-        mutationFn: (input: { readonly repo: string; readonly from: string; readonly to: string }) => press(DEPLOYS_PATHS.promote, input),
+        mutationFn: (input: { readonly repo: string; readonly from: string; readonly to: string }) => press(ENVIRONMENT_PATHS.promote, input),
         onSuccess: invalidate,
     });
-    // Exactly the secrets the stack's manifest reads at HEAD, on the computer it names.
+    // Exactly the names the stack reads and is not granted yet, on the computer its manifest names (its device card).
     const grant = useMutation({
-        mutationFn: async (ref: StackRefWire) => readDeploys(await api.sandbox.request(DEPLOYS_PATHS.grant, post({ repo: ref.repo, stack: ref.stack })), DeployGrantsWireSchema),
+        mutationFn: async (environment: DeployEnvironmentWire) => {
+            const set = grantOf(environment);
+            if (set === undefined) {
+                throw new Error(`"${environment.device}" is not a computer paired with this sandbox, so there is nothing to grant it on yet.`);
+            }
+            return readAnswer(await api.sandbox.request(STACK_GRANTS_PATHS.grant, post({ ...set })), StackGrantsWireSchema);
+        },
+        onSuccess: invalidate,
+    });
+    // The grant taken back, on every name it held for the stack on that computer.
+    const revoke = useMutation({
+        mutationFn: async (environment: DeployEnvironmentWire) => {
+            if (environment.deviceId === undefined) {
+                throw new Error(`"${environment.device}" is not a computer paired with this sandbox, so it holds no grant here.`);
+            }
+            const ref = { repo: environment.repo, stack: environment.stack, device: grantDeviceOf(environment.deviceId) };
+            const response = await api.sandbox.request(STACK_GRANTS_PATHS.revoke, post(ref));
+            if (!response.ok) {
+                throw refusalOf(response.status, await response.text());
+            }
+        },
         onSuccess: invalidate,
     });
 
@@ -74,6 +105,7 @@ export function useEnvironments(enabled: () => boolean) {
         rollback,
         promote,
         grant,
+        revoke,
     };
 }
 
