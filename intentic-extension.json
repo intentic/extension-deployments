@@ -34,6 +34,9 @@
     ]
   },
   "contributes": {
+    "modelRoles": [
+      { "id": "deployment-fix", "label": "Deployment fixes", "explanation": "The agent started by Fix on a deployment that is down.", "icon": "server", "setup": "high" }
+    ],
     "capabilities": [
       {
         "id": "komodo",

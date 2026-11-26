@@ -14,7 +14,10 @@ your repositories declare in `.intentic/stacks.json`.
 - Show the estate: servers, stacks, deployments, and the state each is in.
 - Join a running thing back to the repository it was built from.
 - Notice incidents and carry them to the rail as a badge.
-- Act on what is running: deploy, restart, start, stop, pull-and-deploy, and start an agent to fix a broken one.
+- Act on what is running: deploy, restart, start, stop, pull-and-deploy, and start an agent to fix a broken one. That
+  agent runs as the **Deployment fixes** job the manifest declares (`contributes.modelRoles`, `deployment-fix`,
+  suggested High), which the owner puts on a model setup in Sandbox ▸ Agent ▸ Models; the sandbox's own table held it
+  until 2026-11-26, under the same id.
 - Run a sandbox from a host folder: point a Komodo stack at a folder already on one of its servers (what
   `ic sandbox compose <slug> --out <dir>` writes there), with `files_on_host` and `run_directory`, created by
   name (default `intentic-<slug>`), then deployed. Running the same folder again redeploys its stack; a name another

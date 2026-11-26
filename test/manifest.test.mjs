@@ -52,3 +52,12 @@ test(`the agent contribution is a Claude Code plugin`, async (t) => {
     }
     await access(here(`${plugin}/.claude-plugin/plugin.json`), constants.R_OK);
 });
+
+/* (2026-11-26) The job this extension starts runs for, declared here since the sandbox's own table stopped listing it, under
+   the id that table gave it: the owner's stored choice of setup names it, so it never changes. */
+test(`declares its model role under the id a stored choice names`, () => {
+    assert.deepEqual(
+        manifest.contributes?.modelRoles?.map((role) => [role.id, role.setup]),
+        [[`deployment-fix`, `high`]],
+    );
+});
